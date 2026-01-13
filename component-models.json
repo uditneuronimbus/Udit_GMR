@@ -833,17 +833,17 @@
         "label": "Section Subtitle"
       },
       {
-        "component": "reference",
+        "component": "image",
         "name": "redCubeImage",
         "label": "Red Cube Image"
       },
       {
-        "component": "reference",
+        "component": "image",
         "name": "blueCubeImage",
         "label": "Blue Cube Image"
       },
       {
-        "component": "reference",
+        "component": "image",
         "name": "yellowCubeImage",
         "label": "Yellow Cube Image"
       }
