@@ -30,21 +30,6 @@
           }
         }
       }
-    },
-    {
-      "title": "Governance List Item",
-      "id": "governance-list-item",
-      "plugins": {
-        "xwalk": {
-          "page": {
-            "resourceType": "core/franklin/components/block/v1/block/item",
-            "template": {
-              "name": "governance-list-item",
-              "model": "governance-list-item"
-            }
-          }
-        }
-      }
     }
   ],
   "models": [
@@ -75,15 +60,10 @@
           "component": "items",
           "name": "bulletPoints",
           "label": "Bullet Points List",
-          "model": "governance-list-item"
+          "fields": [
+            { "component": "text", "name": "pointText", "label": "Bullet Point Text" }
+          ]
         }
-      ]
-    },
-    {
-      "id": "governance-list-item",
-      "itemLabel": "pointText",
-      "fields": [
-        { "component": "text", "name": "pointText", "label": "Bullet Point Text" }
       ]
     }
   ],
