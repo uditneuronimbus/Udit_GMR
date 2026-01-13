@@ -1520,31 +1520,53 @@
           }
         },
         {
-          "title": "Values and Beliefs",
-          "id": "values-and-beliefs",
+          "title": "Corporate Governance",
+          "id": "corporate-governance",
+          "groups": [
+            "governance-section"
+          ],
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "values-and-beliefs",
-                  "model": "values-and-beliefs",
-                  "filter": "values-and-beliefs"
+                  "name": "corporate-governance",
+                  "model": "corporate-governance",
+                  "filter": "governance-section-filter"
                 }
               }
             }
           }
         },
         {
-          "title": "Value Card",
-          "id": "value-cards",
+          "title": "Governance Section",
+          "id": "governance-section",
+          "groups": [
+            "governance-list-item"
+          ],
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "governance-section",
+                  "model": "governance-section",
+                  "filter": "governance-item-filter"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Governance List Item",
+          "id": "governance-list-item",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "value-cards",
-                  "model": "value-cards"
+                  "name": "governance-list-item",
+                  "model": "governance-list-item"
                 }
               }
             }

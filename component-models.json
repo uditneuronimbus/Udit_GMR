@@ -2708,43 +2708,58 @@
     ]
   },
   {
-    "id": "values-and-beliefs",
+    "id": "corporate-governance",
     "fields": [
       {
+        "component": "richtext",
+        "name": "introMainText",
+        "label": "Intro Paragraphs"
+      },
+      {
         "component": "text",
-        "name": "sectionTitle",
-        "label": "Section Title",
-        "valueType": "string",
-        "comment": "Internal label for the container"
+        "name": "sectionSubtitle",
+        "label": "Section Subtitle"
       }
     ]
   },
   {
-    "id": "value-cards",
+    "id": "governance-section",
+    "itemLabel": "categoryTitle",
     "fields": [
       {
-        "component": "reference",
-        "name": "backgroundImage",
-        "label": "Card Background Image",
-        "valueType": "string"
+        "component": "text",
+        "name": "categoryTitle",
+        "label": "Category Title"
       },
+      {
+        "component": "select",
+        "name": "colorTheme",
+        "label": "Section Color",
+        "options": [
+          {
+            "name": "Red",
+            "value": "red"
+          },
+          {
+            "name": "Yellow",
+            "value": "yellow"
+          },
+          {
+            "name": "Blue",
+            "value": "blue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "governance-list-item",
+    "itemLabel": "pointText",
+    "fields": [
       {
         "component": "text",
-        "name": "title",
-        "label": "Value Title (e.g. Humility)",
-        "valueType": "string"
-      },
-      {
-        "component": "richtext",
-        "name": "quoteDescription",
-        "label": "Quote Description",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "quoteAuthor",
-        "label": "Quote Author",
-        "valueType": "string"
+        "name": "pointText",
+        "label": "Bullet Point Text"
       }
     ]
   }
