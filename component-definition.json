@@ -500,6 +500,21 @@
           }
         },
         {
+          "title": "Governance List Item",
+          "id": "governance-list-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "governance-list-item",
+                  "model": "governance-list-item"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Factsheet",
           "id": "factsheet",
           "plugins": {

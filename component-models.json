@@ -884,13 +884,17 @@
         "component": "items",
         "name": "bulletPoints",
         "label": "Bullet Points List",
-        "fields": [
-          {
-            "component": "text",
-            "name": "pointText",
-            "label": "Bullet Point Text"
-          }
-        ]
+        "model": "governance-list-item"
+      }
+    ]
+  },
+  {
+    "id": "governance-list-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "pointText",
+        "label": "Bullet Point Text"
       }
     ]
   },
