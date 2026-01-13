@@ -2,7 +2,7 @@
     max-width: 100%;
 }
 .listed-companies-container {
-    background: #06c;
+    background: var(--blue);
     background: linear-gradient(180deg, #06c 0, #1e3c6b 100%);
     padding: 10.938rem 0;
     margin-top: -10rem;
@@ -51,7 +51,7 @@
     position: absolute;
     content: "";
     bottom: 0;
-    background: #134b8f;
+    background: var(--blue);
     width: 90%;
     margin: auto;
     left: 0;
@@ -123,7 +123,7 @@
 .price {
     font-weight: 700;
     font-size: 1.05rem;
-    color: #000;
+    color: var(--black);
     min-width: 85px;
 
 }
@@ -151,7 +151,7 @@
 
 /* States */
 .companiesStock .loading {
-    color: #777;
+    color: var(--black);
     font-style: italic;
     text-align: center;
     padding: 20px;

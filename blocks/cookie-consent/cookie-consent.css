@@ -4,9 +4,9 @@
   bottom: 20px;
   left: 20px;
   z-index: 9999;
-  background-color: #f3f4f6;
-  color: #333;
-  border: 1px solid #ddd;
+  background-color: var(--white);
+  color: var(--charcoal);
+  border: 1px solid var(--light-grey);
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 12px;
@@ -17,7 +17,7 @@
 }
 
 .cookie-manage-btn:hover {
-  background-color: #e5e7eb;
+  background-color: var(--light-grey);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
@@ -28,7 +28,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: white;
+  background: var(--white);
   box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
   z-index: 10000; max-width: 1310px;
     width: 100%; margin: auto;
@@ -75,7 +75,7 @@
 }
 
 .cookie-row.open {
-  border-color: #3b82f6;
+  border-color: var(--royal-blue);
 }
 
 .cookie-row-header {
@@ -93,18 +93,18 @@
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(-blue);
   font-size: 16px;
 }
 
 .accordion-arrow {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--charcoal);
   transition: transform 0.3s ease;
 }
 
 .always-enabled {
-  background-color: #f5f5f5;padding: 12px;
+  background-color: var(--white); padding: 12px;
   font-size: 0.875rem;
   font-weight: 500;
 }
@@ -113,7 +113,7 @@
 .toggle {
   display: flex;
   gap: 4px;
-  background: #D9D9D9;
+  background: #d9d9d9;
     border-radius: 8px;
   padding: 4px;
   min-width: 100px;
@@ -128,7 +128,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #6b7280;
+  color: var(--black);
   flex: 1;
 }
 
@@ -138,7 +138,7 @@
 
 .toggle button.active {
   background: var(--white);
-  color: #1f2937;
+  color: var(--blue);
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
@@ -165,7 +165,7 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 20px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--light-grey);
 }
 
 .footer-actions-left,
