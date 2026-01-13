@@ -820,6 +820,96 @@
     ]
   },
   {
+    "id": "corporate-governance",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "introMainText",
+        "label": "Intro Paragraphs"
+      },
+      {
+        "component": "text",
+        "name": "sectionSubtitle",
+        "label": "Section Subtitle"
+      }
+    ]
+  },
+  {
+    "id": "governance-section",
+    "itemLabel": "categoryTitle",
+    "fields": [
+      {
+        "component": "text",
+        "name": "categoryTitle",
+        "label": "Category Title"
+      },
+      {
+        "component": "select",
+        "name": "colorTheme",
+        "label": "Section Color",
+        "options": [
+          {
+            "name": "Red",
+            "value": "red"
+          },
+          {
+            "name": "Yellow",
+            "value": "yellow"
+          },
+          {
+            "name": "Blue",
+            "value": "blue"
+          }
+        ]
+      },
+      {
+        "component": "image",
+        "name": "imagePrimary",
+        "label": "Primary Image / Cube Icon"
+      },
+      {
+        "component": "image",
+        "name": "imageSecondary",
+        "label": "Secondary Image (Optional)"
+      },
+      {
+        "component": "image",
+        "name": "imageTertiary",
+        "label": "Third Image (Optional)"
+      },
+      {
+        "component": "text",
+        "name": "point1",
+        "label": "Point 1 (Optional)"
+      },
+      {
+        "component": "text",
+        "name": "point2",
+        "label": "Point 2 (Optional)"
+      },
+      {
+        "component": "text",
+        "name": "point3",
+        "label": "Point 3 (Optional)"
+      },
+      {
+        "component": "text",
+        "name": "point4",
+        "label": "Point 4 (Optional)"
+      },
+      {
+        "component": "text",
+        "name": "point5",
+        "label": "Point 5 (Optional)"
+      },
+      {
+        "component": "text",
+        "name": "point6",
+        "label": "Point 6 (Optional)"
+      }
+    ]
+  },
+  {
     "id": "factsheet",
     "fields": [
       {
@@ -975,6 +1065,13 @@
     "id": "footerbottom",
     "fields": [
       {
+        "component": "richtext",
+        "name": "text1",
+        "value": "",
+        "label": "Text1",
+        "valueType": "string"
+      },
+      {
         "component": "reference",
         "valueType": "string",
         "name": "image",
@@ -983,9 +1080,9 @@
       },
       {
         "component": "richtext",
-        "name": "text",
+        "name": "text2",
         "value": "",
-        "label": "Text",
+        "label": "Text2",
         "valueType": "string"
       }
     ]
@@ -1579,6 +1676,32 @@
         "component": "aem-content",
         "name": "watch-video-link",
         "label": "Watch Video Link URL",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "hero",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
         "valueType": "string"
       }
     ]

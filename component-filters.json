@@ -45,7 +45,8 @@
       "common-cards",
       "listing-filter",
       "values-and-beliefs",
-      "our-presence"
+      "our-presence",
+      "corporate-governance"
     ]
   },
   {
@@ -128,6 +129,12 @@
     "id": "only-common-items",
     "components": [
       "common-card-item"
+    ]
+  },
+  {
+    "id": "corporate-governance",
+    "components": [
+      "governance-section"
     ]
   },
   {
