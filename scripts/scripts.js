@@ -11,21 +11,18 @@ import {
   loadSections,
   loadCSS,
 } from "./aem.js";
-// Add these lines after existing imports from "./aem.js"
+
+// Metadata helper
 const getMetadata = (name) => {
   const meta = document.querySelector(`meta[name="${name}"]`);
   return meta ? meta.content : null;
 };
 
-
 /**
- * Moves all the attributes from a given elmenet to another given element.
- * @param {Element} from the element to copy attributes from
- * @param {Element} to the element to copy attributes to
+ * Moves all the attributes from a given element to another given element.
  */
 export function moveAttributes(from, to, attributes) {
   if (!attributes) {
-    // eslint-disable-next-line no-param-reassign
     attributes = [...from.attributes].map(({ nodeName }) => nodeName);
   }
   attributes.forEach((attr) => {
@@ -38,9 +35,7 @@ export function moveAttributes(from, to, attributes) {
 }
 
 /**
- * Move instrumentation attributes from a given element to another given element.
- * @param {Element} from the element to copy attributes from
- * @param {Element} to the element to copy attributes to
+ * Move instrumentation attributes.
  */
 export function moveInstrumentation(from, to) {
   moveAttributes(
@@ -56,38 +51,34 @@ export function moveInstrumentation(from, to) {
 }
 
 /**
- * load fonts.css and set a session storage flag
+ * Load fonts.css
  */
 async function loadFonts() {
   await loadCSS(`${window.hlx.codeBasePath}/styles/fonts.css`);
   try {
-    if (!window.location.hostname.includes("localhost"))
+    if (!window.location.hostname.includes("localhost")) {
       sessionStorage.setItem("fonts-loaded", "true");
+    }
   } catch (e) {
-    // do nothing
+    // ignore
   }
 }
 
 /**
- * Builds all synthetic blocks in a container element.
- * @param {Element} main The container element
+ * Auto blocks
  */
 function buildAutoBlocks() {
   try {
-    // TODO: add auto block, if needed
+    // no-op
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error("Auto Blocking failed", error);
   }
 }
 
 /**
- * Decorates the main element.
- * @param {Element} main The main element
+ * Decorate main
  */
-// eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
-  // hopefully forward compatible button decoration
   decorateButtons(main);
   decorateIcons(main);
   buildAutoBlocks(main);
@@ -95,41 +86,21 @@ export function decorateMain(main) {
   decorateBlocks(main);
 }
 
-// /**
-//  * Loads everything needed to get to LCP.
-//  * @param {Element} doc The container element
-//  */
-// async function loadEager(doc) {
-//   document.documentElement.lang = "en";
-//   decorateTemplateAndTheme();
-//   const main = doc.querySelector("main");
-//   if (main) {
-//     decorateMain(main);
-//     document.body.classList.add("appear");
-//     await loadSection(main.querySelector(".section"), waitForFirstImage);
-//   }
-
-//   try {
-//     /* if desktop (proxy for fast connection) or fonts already loaded, load fonts.css */
-//     if (window.innerWidth >= 900 || sessionStorage.getItem("fonts-loaded")) {
-//       loadFonts();
-//     }
-//   } catch (e) {
-//     // do nothing
-//   }
-// }
-
+/**
+ * Load eager
+ */
 async function loadEager(doc) {
   document.documentElement.lang = "en";
   decorateTemplateAndTheme();
+
   const main = doc.querySelector("main");
   if (main) {
     decorateMain(main);
     document.body.classList.add("appear");
-    
-    // ???? Wait for Target propositions if enabled (before LCP section)
-    if (getMetadata('target') === 'true') {
-      await new Promise(resolve => {
+
+    // Adobe Target wait (if enabled)
+    if (getMetadata("target") === "true") {
+      await new Promise((resolve) => {
         if (window.alloy) return resolve();
         const checkAlloy = () => {
           if (window.alloy) resolve();
@@ -138,7 +109,7 @@ async function loadEager(doc) {
         checkAlloy();
       });
     }
-    
+
     await loadSection(main.querySelector(".section"), waitForFirstImage);
   }
 
@@ -147,13 +118,12 @@ async function loadEager(doc) {
       loadFonts();
     }
   } catch (e) {
-    // do nothing
+    // ignore
   }
 }
 
 /**
- * Loads everything that doesn't need to be delayed.
- * @param {Element} doc The container element
+ * Load lazy
  */
 async function loadLazy(doc) {
   const main = doc.querySelector("main");
@@ -171,152 +141,104 @@ async function loadLazy(doc) {
 }
 
 /**
- * Loads everything that happens a lot later,
- * without impacting the user experience.
+ * Load delayed (Bhashini removed)
  */
 function loadDelayed() {
-  // window.setTimeout(() => {
-  // ✅ Step 2: container add karo (where plugin should appear)
-  addBhashiniContainer();
-
-  // ✅ Step 1: script add karo (bottom of body)
-  loadBhashiniScript();
-
-  // existing delayed logic
   import("./delayed.js");
-  // }, 300);
 }
-// ???? ADOBE TARGET INTEGRATION (using existing window.alloy)
+
+/* ---------------- ADOBE TARGET ---------------- */
+
 const onDecoratedElement = (fn) => {
-  if (document.querySelector('[data-block-status="loaded"],[data-section-status="loaded"]')) {
+  if (
+    document.querySelector(
+      '[data-block-status="loaded"],[data-section-status="loaded"]'
+    )
+  ) {
     fn();
     return;
   }
+
   const observer = new MutationObserver((mutations) => {
-    if (mutations.some((m) => m.target.tagName === 'BODY' || 
-      m.target.dataset?.sectionStatus === 'loaded' || 
-      m.target.dataset?.blockStatus === 'loaded')) {
+    if (
+      mutations.some(
+        (m) =>
+          m.target.tagName === "BODY" ||
+          m.target.dataset?.sectionStatus === "loaded" ||
+          m.target.dataset?.blockStatus === "loaded"
+      )
+    ) {
       fn();
       observer.disconnect();
     }
   });
-  observer.observe(document.querySelector('main'), { 
-    subtree: true, 
-    attributes: true, 
-    attributeFilter: ['data-block-status', 'data-section-status'] 
+
+  observer.observe(document.querySelector("main"), {
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["data-block-status", "data-section-status"],
   });
   observer.observe(document.body, { childList: true });
 };
 
 const getAndApplyTargetPropositions = async () => {
   if (!window.alloy) {
-    console.warn('? window.alloy not available');
+    console.warn("window.alloy not available");
     return;
   }
-  
+
   try {
-    console.log('???? Fetching Target propositions...');
-    
-    // MARK RETURNING USER IN PROFILE
-    const isReturning = window.isReturningUser || localStorage.getItem('returning-user');
-    
-    const response = await window.alloy('sendEvent', { 
+    const isReturning =
+      window.isReturningUser || localStorage.getItem("returning-user");
+
+    const response = await window.alloy("sendEvent", {
       renderDecisions: false,
-      decisionScopes: ['__view__'],
+      decisionScopes: ["__view__"],
       xdm: {
-        eventType: 'web.webpagedetails.pageViews',
+        eventType: "web.webpagedetails.pageViews",
         profile: {
-          isReturningUser: !!isReturning  // true/false for Target
-        }
-      }
+          isReturningUser: !!isReturning,
+        },
+      },
     });
-    
+
     const { propositions } = response;
-    console.log('???? Propositions:', propositions?.length || 0);
-    
+
     onDecoratedElement(async () => {
-      await window.alloy('applyPropositions', { propositions });
-      console.log('? Target applied!');
-      
+      await window.alloy("applyPropositions", { propositions });
+
       setTimeout(() => {
-        window.alloy('sendEvent', {
-          xdm: { 
-            eventType: 'decisioning.propositionDisplay',
+        window.alloy("sendEvent", {
+          xdm: {
+            eventType: "decisioning.propositionDisplay",
             profile: { isReturningUser: !!isReturning },
-            _experience: { decisioning: { propositions } }
-          }
+            _experience: { decisioning: { propositions } },
+          },
         });
-        console.log('???? Display events + returning user sent');
       }, 1000);
     });
   } catch (error) {
-    console.error('? Target error:', error);
+    console.error("Target error:", error);
   }
 };
 
-
-// Auto-trigger Target if metadata present
-if (getMetadata('target') === 'true' || getMetadata('personalization')) {
+// Auto-trigger Target
+if (getMetadata("target") === "true" || getMetadata("personalization")) {
   getAndApplyTargetPropositions();
 }
 
+/* -------- Returning User Flag -------- */
 
-function loadBhashiniScript() {
-  // prevent multiple load
-  if (document.getElementById("bhashini-script")) return;
-
-  const script = document.createElement("script");
-  script.id = "bhashini-script";
-  script.src =
-    "https://translation-plugin.bhashini.co.in/v3/website_translation_utility.js";
-  script.defer = true;
-
-  document.body.appendChild(script);
-}
-function addBhashiniContainer() {
-  if (document.querySelector(".bhashini-plugin-container")) return;
-
-  const container = document.createElement("div");
-  container.className = "bhashini-plugin-container";
-
-  // Add inside header
-  const header = document.querySelector("header");
-
-  if (header) {
-    // header ke end me add hoga
-    header.appendChild(container);
-  } else {
-    // fallback (agar header abhi load nahi hua)
-    document.body.prepend(container);
-  }
-}
-
-const KEY = 'returning-user';
+const KEY = "returning-user";
 if (!localStorage.getItem(KEY)) {
-  localStorage.setItem(KEY, 'true');
-}
-else {
+  localStorage.setItem(KEY, "true");
+} else {
   window.isReturningUser = true;
 }
 
-// function addBhashiniContainer() {
-//   // prevent duplicate
-//   if (document.querySelector(".bhashini-plugin-container")) return;
-
-//   const container = document.createElement("div");
-//   container.className = "bhashini-plugin-container";
-
-//   // 🔥 target: header > .default-content-wrapper
-//   const headerWrapper = document.querySelector(".primary-header");
-
-//   if (headerWrapper) {
-//     headerWrapper.appendChild(container);
-//   } else {
-//     // fallback (in case header not yet rendered)
-//     document.body.prepend(container);
-//   }
-// }
-
+/**
+ * Load page
+ */
 async function loadPage() {
   await loadEager(document);
   await loadLazy(document);

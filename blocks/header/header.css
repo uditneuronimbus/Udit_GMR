@@ -355,7 +355,7 @@ header.header-wrapper:before { position:absolute; content: ''; height: 56px; wid
 }
 
 .search-wrapper {
-    position: absolute;
+    position: static;
     top: 10px;
     right: 0;
     width: 180px;

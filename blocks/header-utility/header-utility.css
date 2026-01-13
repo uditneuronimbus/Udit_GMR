@@ -164,3 +164,221 @@ button.bhashini-dropdown-btn {
 .utility-icons .icon-btn:hover svg path[fill] {
   fill: var(--yellow);
 }
+
+/* ======================================================
+   ACCESSIBILITY MODAL STYLES
+   ====================================================== */
+.accessibility-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-top: 80px; /* Adjust based on your header height */
+}
+
+.accessibility-modal-content {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 300px;
+  margin-right: 20px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.accessibility-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.accessibility-modal-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.accessibility-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accessibility-modal-close:hover {
+  color: #333;
+}
+
+.accessibility-modal-body {
+  padding: 20px;
+}
+
+.accessibility-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.accessibility-option-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.accessibility-option-btn:hover {
+  background-color: #e9ecef;
+  border-color: #ced4da;
+}
+
+.accessibility-option-btn.active {
+  background-color: #e7f4ff;
+  border-color: #007bff;
+}
+
+.option-icon {
+  font-size: 18px;
+  margin-right: 12px;
+  width: 24px;
+  text-align: center;
+}
+
+.option-text {
+  flex: 1;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.option-toggle {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  position: relative;
+}
+
+.accessibility-option-btn.active .option-toggle {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.accessibility-option-btn.active .option-toggle::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+}
+
+.accessibility-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.accessibility-reset-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.accessibility-reset-btn:hover {
+  background-color: #5a6268;
+}
+
+.reset-icon {
+  font-size: 16px;
+}
+
+/* Accessibility option effects */
+body.bigger-text {
+  font-size: 1.2em;
+}
+
+body.bigger-text h1,
+body.bigger-text h2,
+body.bigger-text h3,
+body.bigger-text h4,
+body.bigger-text h5,
+body.bigger-text h6 {
+  font-size: 1.3em;
+}
+
+body.highlight-links a {
+  background-color: yellow;
+  padding: 2px 4px;
+  border-radius: 2px;
+  font-weight: bold;
+}
+
+body.dark-mode {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+body.dark-mode .accessibility-modal-content {
+  background-color: #2d2d2d;
+  color: #ffffff;
+}
+
+body.dark-mode .accessibility-modal-header {
+  border-bottom-color: #444;
+}
+
+body.dark-mode .accessibility-modal-header h3 {
+  color: #ffffff;
+}
+
+body.dark-mode .accessibility-option-btn {
+  background-color: #3d3d3d;
+  border-color: #555;
+  color: #ffffff;
+}
+
+body.dark-mode .accessibility-option-btn:hover {
+  background-color: #4d4d4d;
+  border-color: #666;
+}
+
+body.dark-mode .option-text {
+  color: #ffffff;
+}
+
+body.dark-mode .accessibility-reset-btn {
+  background-color: #495057;
+}
