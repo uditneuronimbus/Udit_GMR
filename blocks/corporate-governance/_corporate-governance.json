@@ -3,7 +3,6 @@
     {
       "title": "Corporate Governance",
       "id": "corporate-governance",
-      "groups": ["governance-section"],
       "plugins": {
         "xwalk": {
           "page": {
@@ -20,11 +19,10 @@
     {
       "title": "Governance Section",
       "id": "governance-section",
-      "groups": ["governance-list-item"],
       "plugins": {
         "xwalk": {
           "page": {
-            "resourceType": "core/franklin/components/block/v1/block",
+            "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
               "name": "governance-section",
               "model": "governance-section",
@@ -55,7 +53,13 @@
       "id": "corporate-governance",
       "fields": [
         { "component": "richtext", "name": "introMainText", "label": "Intro Paragraphs" },
-        { "component": "text", "name": "sectionSubtitle", "label": "Section Subtitle" }
+        { "component": "text", "name": "sectionSubtitle", "label": "Section Subtitle" },
+        {
+          "component": "reference",
+          "name": "centerGraphic",
+          "label": "Central 3D Cube Image",
+          "valueType": "string"
+        }
       ]
     },
     {
@@ -64,9 +68,7 @@
       "fields": [
         { "component": "text", "name": "categoryTitle", "label": "Category Title" },
         {
-          "component": "select",
-          "name": "colorTheme",
-          "label": "Section Color",
+          "component": "select", "name": "colorTheme", "label": "Section Color",
           "options": [
             { "name": "Red", "value": "red" },
             { "name": "Yellow", "value": "yellow" },

@@ -831,6 +831,12 @@
         "component": "text",
         "name": "sectionSubtitle",
         "label": "Section Subtitle"
+      },
+      {
+        "component": "reference",
+        "name": "centerGraphic",
+        "label": "Central 3D Cube Image",
+        "valueType": "string"
       }
     ]
   },
