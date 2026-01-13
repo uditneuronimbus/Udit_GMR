@@ -45,7 +45,10 @@
       "common-cards",
       "listing-filter",
       "values-and-beliefs",
-      "our-presence"
+      "our-presence",
+      "corporate-governance",
+      "internal-slider",
+      "inner-slider-horizontal"
     ]
   },
   {
@@ -128,6 +131,12 @@
     "id": "only-common-items",
     "components": [
       "common-card-item"
+    ]
+  },
+  {
+    "id": "corporate-governance",
+    "components": [
+      "governance-section"
     ]
   },
   {
@@ -227,9 +236,21 @@
     "components": []
   },
   {
+    "id": "inner-slider-horizontal",
+    "components": [
+      "inner-slider-horizontal-item"
+    ]
+  },
+  {
     "id": "innovation-cards",
     "components": [
       "innovation-card-item"
+    ]
+  },
+  {
+    "id": "internal-slider",
+    "components": [
+      "internal-slider-item"
     ]
   },
   {
