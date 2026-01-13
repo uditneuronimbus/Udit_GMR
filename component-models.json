@@ -834,8 +834,20 @@
       },
       {
         "component": "reference",
-        "name": "centerGraphic",
-        "label": "Central 3D Cube Image",
+        "name": "redCubeImage",
+        "label": "Red Cube Image (Technology)",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "blueCubeImage",
+        "label": "Blue Cube Image (Process)",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "yellowCubeImage",
+        "label": "Yellow Cube Image (People)",
         "valueType": "string"
       }
     ]
@@ -867,6 +879,12 @@
             "value": "blue"
           }
         ]
+      },
+      {
+        "component": "items",
+        "name": "bulletPoints",
+        "label": "Bullet Points List",
+        "model": "governance-list-item"
       }
     ]
   },

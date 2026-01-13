@@ -25,8 +25,7 @@
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
               "name": "governance-section",
-              "model": "governance-section",
-              "filter": "governance-item-filter"
+              "model": "governance-section"
             }
           }
         }
@@ -54,12 +53,9 @@
       "fields": [
         { "component": "richtext", "name": "introMainText", "label": "Intro Paragraphs" },
         { "component": "text", "name": "sectionSubtitle", "label": "Section Subtitle" },
-        {
-          "component": "reference",
-          "name": "centerGraphic",
-          "label": "Central 3D Cube Image",
-          "valueType": "string"
-        }
+        { "component": "reference", "name": "redCubeImage", "label": "Red Cube Image (Technology)", "valueType": "string" },
+        { "component": "reference", "name": "blueCubeImage", "label": "Blue Cube Image (Process)", "valueType": "string" },
+        { "component": "reference", "name": "yellowCubeImage", "label": "Yellow Cube Image (People)", "valueType": "string" }
       ]
     },
     {
@@ -74,6 +70,12 @@
             { "name": "Yellow", "value": "yellow" },
             { "name": "Blue", "value": "blue" }
           ]
+        },
+        {
+          "component": "items",
+          "name": "bulletPoints",
+          "label": "Bullet Points List",
+          "model": "governance-list-item"
         }
       ]
     },
@@ -86,7 +88,6 @@
     }
   ],
   "filters": [
-    { "id": "governance-section-filter", "components": ["governance-section"] },
-    { "id": "governance-item-filter", "components": ["governance-list-item"] }
+    { "id": "governance-section-filter", "components": ["governance-section"] }
   ]
 }

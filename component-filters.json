@@ -138,12 +138,6 @@
     ]
   },
   {
-    "id": "governance-item-filter",
-    "components": [
-      "governance-list-item"
-    ]
-  },
-  {
     "id": "factsheet",
     "components": [
       "factsheet-item"

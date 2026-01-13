@@ -493,8 +493,7 @@
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
                   "name": "governance-section",
-                  "model": "governance-section",
-                  "filter": "governance-item-filter"
+                  "model": "governance-section"
                 }
               }
             }
