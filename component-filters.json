@@ -132,9 +132,15 @@
     ]
   },
   {
-    "id": "gov-section-filter",
+    "id": "governance-section-filter",
     "components": [
       "governance-section"
+    ]
+  },
+  {
+    "id": "governance-item-filter",
+    "components": [
+      "governance-list-item"
     ]
   },
   {
