@@ -9,7 +9,7 @@
 .businesses-section-wrapper .accordion-header .accordion-button .accordion-icon .plus-icon{color:var(--yellow)}
 .businesses-section-wrapper .accordion-collapse{transition:height .35s ease}
 .businesses-section-wrapper .accordion-body{padding:0 1rem 1.5rem 0}
-.business-accordion-wrapper{margin:0 auto;padding:6rem;background:var(--white);border-radius:10px;position:relative;z-index:2}
+.business-accordion-wrapper{margin:0 auto;padding:6rem;background:var(--white);border-radius:10px;margin-top: -4rem;position:relative;z-index:2}
 .business-accordion-header{margin-bottom:4rem}
 .business-accordion-header h2{font-size:2.8rem;font-weight:400;color:var(--blue);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
 .business-accordion-header h2 .subtitle{display:inline-block;font-size:2rem;font-weight:300;font-style:italic;color:var(--turquoise);font-family:var(--font-secondary);position:relative}
