@@ -830,7 +830,7 @@
       {
         "component": "text",
         "name": "sectionSubtitle",
-        "label": "Section Subtitle (e.g. Building Blocks)"
+        "label": "Section Subtitle"
       }
     ]
   },
@@ -841,7 +841,7 @@
       {
         "component": "text",
         "name": "categoryTitle",
-        "label": "Category Title (Technology / People / Process)"
+        "label": "Category Title"
       },
       {
         "component": "select",
@@ -2708,58 +2708,43 @@
     ]
   },
   {
-    "id": "corporate-governance",
+    "id": "values-and-beliefs",
     "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "valueType": "string",
+        "comment": "Internal label for the container"
+      }
+    ]
+  },
+  {
+    "id": "value-cards",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "backgroundImage",
+        "label": "Card Background Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Value Title (e.g. Humility)",
+        "valueType": "string"
+      },
       {
         "component": "richtext",
-        "name": "introMainText",
-        "label": "Intro Paragraphs"
+        "name": "quoteDescription",
+        "label": "Quote Description",
+        "valueType": "string"
       },
       {
         "component": "text",
-        "name": "sectionSubtitle",
-        "label": "Section Subtitle"
-      }
-    ]
-  },
-  {
-    "id": "governance-section",
-    "itemLabel": "categoryTitle",
-    "fields": [
-      {
-        "component": "text",
-        "name": "categoryTitle",
-        "label": "Category Title"
-      },
-      {
-        "component": "select",
-        "name": "colorTheme",
-        "label": "Section Color",
-        "options": [
-          {
-            "name": "Red",
-            "value": "red"
-          },
-          {
-            "name": "Yellow",
-            "value": "yellow"
-          },
-          {
-            "name": "Blue",
-            "value": "blue"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "governance-list-item",
-    "itemLabel": "pointText",
-    "fields": [
-      {
-        "component": "text",
-        "name": "pointText",
-        "label": "Bullet Point Text"
+        "name": "quoteAuthor",
+        "label": "Quote Author",
+        "valueType": "string"
       }
     ]
   }

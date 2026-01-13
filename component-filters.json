@@ -323,15 +323,9 @@
     ]
   },
   {
-    "id": "governance-section-filter",
+    "id": "values-and-beliefs",
     "components": [
-      "governance-section"
-    ]
-  },
-  {
-    "id": "governance-item-filter",
-    "components": [
-      "governance-list-item"
+      "value-cards"
     ]
   }
 ]
