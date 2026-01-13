@@ -132,15 +132,9 @@
     ]
   },
   {
-    "id": "governance-section-filter",
+    "id": "corporate-governance",
     "components": [
       "governance-section"
-    ]
-  },
-  {
-    "id": "governance-item-filter",
-    "components": [
-      "governance-list-item"
     ]
   },
   {

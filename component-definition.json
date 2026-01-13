@@ -471,9 +471,6 @@
         {
           "title": "Corporate Governance",
           "id": "corporate-governance",
-          "groups": [
-            "governance-section"
-          ],
           "plugins": {
             "xwalk": {
               "page": {
@@ -481,7 +478,7 @@
                 "template": {
                   "name": "corporate-governance",
                   "model": "corporate-governance",
-                  "filter": "governance-section-filter"
+                  "filter": "corporate-governance"
                 }
               }
             }
@@ -490,32 +487,13 @@
         {
           "title": "Governance Section",
           "id": "governance-section",
-          "groups": [
-            "governance-list-item"
-          ],
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "governance-section",
-                  "model": "governance-section",
-                  "filter": "governance-item-filter"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Governance List Item",
-          "id": "governance-list-item",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "governance-list-item",
-                  "model": "governance-list-item"
+                  "name": "governance-section",
+                  "model": "governance-section"
                 }
               }
             }

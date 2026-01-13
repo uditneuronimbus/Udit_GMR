@@ -863,21 +863,49 @@
         ]
       },
       {
-        "component": "items",
-        "name": "items",
-        "label": "Bullet Points",
-        "model": "governance-list-item"
-      }
-    ]
-  },
-  {
-    "id": "governance-list-item",
-    "itemLabel": "pointText",
-    "fields": [
+        "component": "image",
+        "name": "imagePrimary",
+        "label": "Primary Image / Cube Icon"
+      },
+      {
+        "component": "image",
+        "name": "imageSecondary",
+        "label": "Secondary Image (Optional)"
+      },
+      {
+        "component": "image",
+        "name": "imageTertiary",
+        "label": "Third Image (Optional)"
+      },
       {
         "component": "text",
-        "name": "pointText",
-        "label": "Bullet Point Text"
+        "name": "point1",
+        "label": "Point 1 (Optional)"
+      },
+      {
+        "component": "text",
+        "name": "point2",
+        "label": "Point 2 (Optional)"
+      },
+      {
+        "component": "text",
+        "name": "point3",
+        "label": "Point 3 (Optional)"
+      },
+      {
+        "component": "text",
+        "name": "point4",
+        "label": "Point 4 (Optional)"
+      },
+      {
+        "component": "text",
+        "name": "point5",
+        "label": "Point 5 (Optional)"
+      },
+      {
+        "component": "text",
+        "name": "point6",
+        "label": "Point 6 (Optional)"
       }
     ]
   },
