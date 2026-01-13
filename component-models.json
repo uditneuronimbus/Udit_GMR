@@ -1854,6 +1854,43 @@
     ]
   },
   {
+    "id": "inner-slider-horizontal",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "defaultValue": "GMR’s Journey"
+      }
+    ]
+  },
+  {
+    "id": "inner-slider-horizontal-item",
+    "itemLabel": "year",
+    "fields": [
+      {
+        "component": "text",
+        "name": "year",
+        "label": "Year (e.g. 2024)"
+      },
+      {
+        "component": "text",
+        "name": "slideTitle",
+        "label": "Slide Title"
+      },
+      {
+        "component": "richtext",
+        "name": "slideDescription",
+        "label": "Slide Description"
+      },
+      {
+        "component": "image",
+        "name": "slideImage",
+        "label": "Slide Image"
+      }
+    ]
+  },
+  {
     "id": "innovation-cards",
     "fields": [
       {

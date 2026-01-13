@@ -47,7 +47,8 @@
       "values-and-beliefs",
       "our-presence",
       "corporate-governance",
-      "internal-slider"
+      "internal-slider",
+      "inner-slider-horizontal"
     ]
   },
   {
@@ -233,6 +234,12 @@
   {
     "id": "inner-banner",
     "components": []
+  },
+  {
+    "id": "inner-slider-horizontal",
+    "components": [
+      "inner-slider-horizontal-item"
+    ]
   },
   {
     "id": "innovation-cards",
