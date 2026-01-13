@@ -1854,6 +1854,43 @@
     ]
   },
   {
+    "id": "inner-slider-horizontal",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "defaultValue": "GMR’s Journey"
+      }
+    ]
+  },
+  {
+    "id": "inner-slider-horizontal-item",
+    "itemLabel": "year",
+    "fields": [
+      {
+        "component": "text",
+        "name": "year",
+        "label": "Year (e.g. 2024)"
+      },
+      {
+        "component": "text",
+        "name": "slideTitle",
+        "label": "Slide Title"
+      },
+      {
+        "component": "richtext",
+        "name": "slideDescription",
+        "label": "Slide Description"
+      },
+      {
+        "component": "image",
+        "name": "slideImage",
+        "label": "Slide Image"
+      }
+    ]
+  },
+  {
     "id": "innovation-cards",
     "fields": [
       {
@@ -1896,6 +1933,61 @@
         "valueType": "string",
         "name": "ctaText",
         "label": "CTA Text"
+      }
+    ]
+  },
+  {
+    "id": "internal-slider",
+    "fields": [
+      {
+        "component": "text",
+        "name": "eyebrowText",
+        "label": "Eyebrow Label (e.g. Airports)",
+        "defaultValue": "Airports"
+      },
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "defaultValue": "GMR Group's ‘First-in-India’ Achievements"
+      },
+      {
+        "component": "text",
+        "name": "sectionSubtitle",
+        "label": "Section Description"
+      }
+    ]
+  },
+  {
+    "id": "internal-slider-item",
+    "itemLabel": "slideTitle",
+    "fields": [
+      {
+        "component": "text",
+        "name": "badgeText",
+        "label": "Badge / Category Label",
+        "defaultValue": "Airports"
+      },
+      {
+        "component": "text",
+        "name": "slideTitle",
+        "label": "Slide Title"
+      },
+      {
+        "component": "richtext",
+        "name": "slideDescription",
+        "label": "Slide Description"
+      },
+      {
+        "component": "reference",
+        "name": "slideImage",
+        "label": "Slide Image"
+      },
+      {
+        "component": "text",
+        "name": "slideIndex",
+        "label": "Slide Index (01, 02, etc)",
+        "defaultValue": "01"
       }
     ]
   },

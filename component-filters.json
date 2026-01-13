@@ -46,7 +46,9 @@
       "listing-filter",
       "values-and-beliefs",
       "our-presence",
-      "corporate-governance"
+      "corporate-governance",
+      "internal-slider",
+      "inner-slider-horizontal"
     ]
   },
   {
@@ -234,9 +236,21 @@
     "components": []
   },
   {
+    "id": "inner-slider-horizontal",
+    "components": [
+      "inner-slider-horizontal-item"
+    ]
+  },
+  {
     "id": "innovation-cards",
     "components": [
       "innovation-card-item"
+    ]
+  },
+  {
+    "id": "internal-slider",
+    "components": [
+      "internal-slider-item"
     ]
   },
   {
