@@ -132,7 +132,7 @@
     ]
   },
   {
-    "id": "governance-section-filter",
+    "id": "gov-section-filter",
     "components": [
       "governance-section"
     ]

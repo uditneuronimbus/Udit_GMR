@@ -835,20 +835,17 @@
       {
         "component": "reference",
         "name": "redCubeImage",
-        "label": "Red Cube Image (Technology)",
-        "valueType": "string"
+        "label": "Red Cube Image"
       },
       {
         "component": "reference",
         "name": "blueCubeImage",
-        "label": "Blue Cube Image (Process)",
-        "valueType": "string"
+        "label": "Blue Cube Image"
       },
       {
         "component": "reference",
         "name": "yellowCubeImage",
-        "label": "Yellow Cube Image (People)",
-        "valueType": "string"
+        "label": "Yellow Cube Image"
       }
     ]
   },

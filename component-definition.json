@@ -478,7 +478,7 @@
                 "template": {
                   "name": "corporate-governance",
                   "model": "corporate-governance",
-                  "filter": "governance-section-filter"
+                  "filter": "gov-section-filter"
                 }
               }
             }

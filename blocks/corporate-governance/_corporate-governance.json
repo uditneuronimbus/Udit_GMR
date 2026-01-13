@@ -10,7 +10,7 @@
             "template": {
               "name": "corporate-governance",
               "model": "corporate-governance",
-              "filter": "governance-section-filter"
+              "filter": "gov-section-filter"
             }
           }
         }
@@ -51,49 +51,20 @@
     {
       "id": "corporate-governance",
       "fields": [
-        {
-          "component": "richtext",
-          "name": "introMainText",
-          "label": "Intro Paragraphs"
-        },
-        {
-          "component": "text",
-          "name": "sectionSubtitle",
-          "label": "Section Subtitle"
-        },
-        {
-          "component": "reference",
-          "name": "redCubeImage",
-          "label": "Red Cube Image (Technology)",
-          "valueType": "string"
-        },
-        {
-          "component": "reference",
-          "name": "blueCubeImage",
-          "label": "Blue Cube Image (Process)",
-          "valueType": "string"
-        },
-        {
-          "component": "reference",
-          "name": "yellowCubeImage",
-          "label": "Yellow Cube Image (People)",
-          "valueType": "string"
-        }
+        { "component": "richtext", "name": "introMainText", "label": "Intro Paragraphs" },
+        { "component": "text", "name": "sectionSubtitle", "label": "Section Subtitle" },
+        { "component": "reference", "name": "redCubeImage", "label": "Red Cube Image" },
+        { "component": "reference", "name": "blueCubeImage", "label": "Blue Cube Image" },
+        { "component": "reference", "name": "yellowCubeImage", "label": "Yellow Cube Image" }
       ]
     },
     {
       "id": "governance-section",
       "itemLabel": "categoryTitle",
       "fields": [
+        { "component": "text", "name": "categoryTitle", "label": "Category Title" },
         {
-          "component": "text",
-          "name": "categoryTitle",
-          "label": "Category Title"
-        },
-        {
-          "component": "select",
-          "name": "colorTheme",
-          "label": "Section Color",
+          "component": "select", "name": "colorTheme", "label": "Section Color",
           "options": [
             { "name": "Red", "value": "red" },
             { "name": "Yellow", "value": "yellow" },
@@ -111,18 +82,11 @@
     {
       "id": "governance-list-item",
       "fields": [
-        {
-          "component": "text",
-          "name": "pointText",
-          "label": "Bullet Point Text"
-        }
+        { "component": "text", "name": "pointText", "label": "Bullet Point Text" }
       ]
     }
   ],
   "filters": [
-    {
-      "id": "governance-section-filter",
-      "components": ["governance-section"]
-    }
+    { "id": "gov-section-filter", "components": ["governance-section"] }
   ]
 }
