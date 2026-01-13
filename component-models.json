@@ -1942,7 +1942,7 @@
         "label": "Slide Description"
       },
       {
-        "component": "image",
+        "component": "reference",
         "name": "slideImage",
         "label": "Slide Image"
       },
