@@ -465,7 +465,7 @@
     ]
   },
   {
-    "id": "listing-item",
+    "id": "award-listing-item",
     "itemLabel": "title",
     "fields": [
       {
@@ -2640,7 +2640,7 @@
     ]
   },
   {
-    "id": "listing-item",
+    "id": "partner-listing-item",
     "itemLabel": "title",
     "fields": [
       {

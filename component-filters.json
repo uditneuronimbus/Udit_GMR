@@ -86,7 +86,7 @@
   {
     "id": "only-awards-items",
     "components": [
-      "listing-item"
+      "award-listing-item"
     ]
   },
   {
@@ -318,7 +318,7 @@
   {
     "id": "only-partners-items",
     "components": [
-      "listing-item"
+      "partner-listing-item"
     ]
   },
   {

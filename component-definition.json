@@ -253,15 +253,15 @@
           }
         },
         {
-          "title": "Listing Item",
-          "id": "listing-item",
+          "title": "Award Listing Item",
+          "id": "award-listing-item",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "listing-item",
-                  "model": "listing-item"
+                  "name": "award-listing-item",
+                  "model": "award-listing-item"
                 }
               }
             }
@@ -1464,15 +1464,15 @@
           }
         },
         {
-          "title": "Listing Item",
-          "id": "listing-item",
+          "title": "Partner Listing Item",
+          "id": "partner-listing-item",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "listing-item",
-                  "model": "listing-item"
+                  "name": "partner-listing-item",
+                  "model": "partner-listing-item"
                 }
               }
             }

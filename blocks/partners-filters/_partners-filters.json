@@ -17,15 +17,15 @@
       }
     },
     {
-      "title": "Listing Item",
-      "id": "listing-item",
+      "title": "Partner Listing Item",
+      "id": "partner-listing-item",
       "plugins": {
         "xwalk": {
           "page": {
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
-              "name": "listing-item",
-              "model": "listing-item"
+              "name": "partner-listing-item",
+              "model": "partner-listing-item"
             }
           }
         }
@@ -52,7 +52,7 @@
       ]
     },
     {
-      "id": "listing-item",
+      "id": "partner-listing-item",
       "itemLabel": "title",
       "fields": [
         {
@@ -98,7 +98,7 @@
   "filters": [
     {
       "id": "only-partners-items",
-      "components": ["listing-item"]
+      "components": ["partner-listing-item"]
     }
   ]
 }
