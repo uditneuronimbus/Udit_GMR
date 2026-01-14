@@ -1,6 +1,7 @@
 /* BLOCK ROOT — MANDATORY */
 .our-approach {
   padding: 80px 0;
+  background: #E0E0E0;
 }
 
 /* WRAPPER */
@@ -39,10 +40,11 @@
 
 /* IMAGE BELOW */
 .our-approach .our-approach-image img {
-  width: 100%;
-  height: auto;
+  width: 930px;
+  height: 650px;
   display: block;
   border-radius: 14px;
+  margin-left: 145px;
 }
 
 /* MOBILE */

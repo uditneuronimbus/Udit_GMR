@@ -23,22 +23,21 @@
 /* Slider */
 .mfl-slider {
   position: relative;
-  display: flex;
-  align-items: center;
 }
 
 .mfl-slides {
   width: 100%;
 }
 
-/* Card */
+/* Card layout */
 .mfl-card {
   display: grid;
-  grid-template-columns: 40% 60%;
+  grid-template-columns: 45% 55%;
   gap: 48px;
   align-items: center;
 }
 
+/* Image */
 .mfl-image img {
   width: 100%;
   border-radius: 16px;
@@ -46,10 +45,12 @@
 }
 
 /* Content */
-.mfl-content h3 {
-  font-size: 28px;
-  font-weight: 500;
-  margin-bottom: 16px;
+.mfl-subtitle {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #777;
+  margin-bottom: 12px;
 }
 
 .mfl-message {
@@ -59,39 +60,32 @@
   margin-bottom: 24px;
 }
 
-.mfl-name {
-  font-size: 20px;
-  font-weight: 500;
-  color: #003366;
-}
-
-.mfl-designation {
+.mfl-author {
   font-size: 16px;
-  color: #666;
+  font-weight: 500;
+  color: #000;
 }
 
 /* Navigation */
+.mfl-navigation {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 32px;
+  gap: 12px;
+}
+
 .mfl-nav {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
   border: 1px solid #f0b04f;
   background: transparent;
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  font-size: 20px;
   cursor: pointer;
 }
 
 .mfl-nav.next {
   background: #f0b04f;
   color: #fff;
-}
-
-.mfl-nav.prev {
-  margin-right: 16px;
-}
-
-.mfl-nav.next {
-  margin-left: 16px;
 }
 
 /* Responsive */
