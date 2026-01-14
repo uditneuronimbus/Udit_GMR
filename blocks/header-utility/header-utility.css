@@ -164,7 +164,6 @@ button.bhashini-dropdown-btn {
 .utility-icons .icon-btn:hover svg path[fill] {
   fill: var(--yellow);
 }
-.font-size-dot { opacity: 0;}
-.font-size-level-1 .font-size-dot.dot3 { opacity: 1; }
-.font-size-level-2 .font-size-dot.dot2, .font-size-level-2 .font-size-dot.dot3 { opacity: 1; }
-.font-size-level-3 .font-size-dot.dot1, .font-size-level-3 .font-size-dot.dot2, .font-size-level-3 .font-size-dot.dot3 { opacity: 1; }
+.font-size-level-1 .font-size-dot.dot3 { background-color: var(--yellow)!important; }
+.font-size-level-2 .font-size-dot.dot2, .font-size-level-2 .font-size-dot.dot3 { background-color: var(--yellow)!important; }
+.font-size-level-3 .font-size-dot.dot1, .font-size-level-3 .font-size-dot.dot2, .font-size-level-3 .font-size-dot.dot3 { background-color: var(--yellow)!important; }

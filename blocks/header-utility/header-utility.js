@@ -158,8 +158,8 @@ function initAccessibilityModal() {
           <div class="accessibility-options" style="display: flex; flex-direction: row; gap: 12px; margin-bottom: 20px;">
             <!-- Font Size with 3-step toggle -->
             <div class="accessibility-font-size" style="display: flex; justify-content: center; flex-direction: column; align-items: center; width: 100%; padding: 12px 16px; background-color: var(--white); border: 1px solid var(--light-grey); border-radius: 16px; cursor: pointer; transition: all 0.2s ease; text-align: left; position: relative;">
-              <div style="display: flex; align-items: center; margin-bottom: 8px;">
-                <span class="option-icon" style="font-size: 18px; margin-right: 12px; width: 24px; text-align: center; font-weight: bold;">
+              <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 8px;">
+                <span class="option-icon" style="font-size: 18px; margin-right: 12px; width: 32px; text-align: center; font-weight: bold;">
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_1836_2719)">
 <path d="M16.6666 16H20.6666V25.3333H24.6666V16H28.6666V12H16.6666V16ZM20.6666 5.33334H3.33325V9.33334H9.99992V25.3333H13.9999V9.33334H20.6666V5.33334Z" fill="#003366"/>
@@ -171,16 +171,18 @@ function initAccessibilityModal() {
 </defs>
 </svg>
 </span>
-                
-                <div class="font-size-dots" id="font-size-dots" style="display: flex; gap: 4px; position: absolute;top:10px;right:10px;">
-                  <span class="font-size-dot dot1" data-level="1" style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--yellow); cursor: pointer;"></span>
-                  <span class="font-size-dot dot2" data-level="2" style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--yellow); cursor: pointer;"></span>
-                  <span class="font-size-dot dot3" data-level="3" style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--yellow); cursor: pointer;"></span>
-                </div>
+<span class="option-text" style="font-size: 1rem; text-align: center; color: var(--blue); font-weight: 500;">Bigger Text</span>
+<span class="option-checkmark" style="display: none; width: 10px; height: 10px; border-radius: 100px; background-color: var(--yellow); position: absolute;top:10px;right:10px;"></span>
               </div>
               <div style="display: flex; justify-content: space-between; gap: 8px; align-items: center;">
                 <button class="font-size-btn font-size-decrease" style="background: none; border: 1px solid #ddd; border-radius: 4px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: var(--charcoal);">-</button>
-                <span class="font-size-label" id="font-size-label" style="font-size: 14px; color: var(--charcoal);">Normal</span>
+                <span class="font-size-label" id="font-size-label" style="font-size: 14px; color: var(--charcoal);">
+                  <div class="font-size-dots" id="font-size-dots" style="display: flex; gap: 4px;">
+                  <span class="font-size-dot dot1" data-level="1" style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--light-grey); cursor: pointer;"></span>
+                  <span class="font-size-dot dot2" data-level="2" style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--light-grey); cursor: pointer;"></span>
+                  <span class="font-size-dot dot3" data-level="3" style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--light-grey); cursor: pointer;"></span>
+                </div>
+                </span>
                 <button class="font-size-btn font-size-increase" style="background: none; border: 1px solid #ddd; border-radius: 4px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: var(--charcoal);">+</button>
               </div>
             </div>
@@ -197,7 +199,7 @@ function initAccessibilityModal() {
 </g>
 </svg>
 </span>
-              <span class="option-text" style="font-size: 1rem; color: var(--blue); font-weight: 500;">Highlight Links</span>
+              <span class="option-text" style="font-size: 1rem; text-align: center; color: var(--blue); font-weight: 500;">Highlight Links</span>
               <span class="option-checkmark" style="display: none; width: 10px; height: 10px; border-radius: 100px; background-color: var(--yellow); position: absolute;top:10px;right:10px;"></span>
             </button>
             
@@ -212,7 +214,7 @@ function initAccessibilityModal() {
 <path d="M16.0001 29.3333C14.1556 29.3333 12.4223 28.9833 10.8001 28.2833C9.17786 27.5833 7.76675 26.6333 6.56675 25.4333C5.36675 24.2333 4.41675 22.8222 3.71675 21.2C3.01675 19.5778 2.66675 17.8444 2.66675 16C2.66675 14.1556 3.01675 12.4222 3.71675 10.8C4.41675 9.17777 5.36675 7.76666 6.56675 6.56666C7.76675 5.36666 9.17786 4.41666 10.8001 3.71666C12.4223 3.01666 14.1556 2.66666 16.0001 2.66666C17.8445 2.66666 19.5779 3.01666 21.2001 3.71666C22.8223 4.41666 24.2334 5.36666 25.4334 6.56666C26.6334 7.76666 27.5834 9.17777 28.2834 10.8C28.9834 12.4222 29.3334 14.1556 29.3334 16C29.3334 17.8444 28.9834 19.5778 28.2834 21.2C27.5834 22.8222 26.6334 24.2333 25.4334 25.4333C24.2334 26.6333 22.8223 27.5833 21.2001 28.2833C19.5779 28.9833 17.8445 29.3333 16.0001 29.3333ZM17.3334 26.5667C19.9779 26.2333 22.1945 25.0722 23.9834 23.0833C25.7723 21.0944 26.6667 18.7333 26.6667 16C26.6667 13.2667 25.7723 10.9056 23.9834 8.91666C22.1945 6.92777 19.9779 5.76666 17.3334 5.43333V26.5667Z" fill="#003366"/>
 </g>
 </svg></span>
-              <span class="option-text" style="font-size: 1rem; color: var(--blue); font-weight: 500;">Dark Mode</span>
+              <span class="option-text" style="font-size: 1rem; text-align: center; color: var(--blue); font-weight: 500;">Dark Mode</span>
               <span class="option-checkmark" style="display: none; width: 10px; height: 10px; border-radius: 100px; background-color: var(--yellow); position: absolute;top:10px;right:10px;"></span>
             </button>
           </div>
@@ -274,28 +276,19 @@ function initAccessibilityModal() {
       
       /* Active font size dot */
       .font-size-dot.active {
-        background-color: #007bff !important;
+        background-color: var(--royal-blue) !important;
       }
       
       /* Highlight Links Styles */
       .highlight-links-active a {
-        background-color: #ffff00 !important;
-        color: #000000 !important;
-        padding: 2px 4px !important;
-        border-radius: 3px !important;
-        font-weight: bold !important;
-        text-decoration: underline !important;
-      }
-      
-      .highlight-links-active a:hover {
-        background-color: #ffeb3b !important;
-        text-decoration: none !important;
+        background-color: var(--yellow) !important;
+        color: var(--black) !important;
       }
       
       /* Dark Mode - SPECIFIC COLOR INVERTER */
       .dark-mode-active {
         /* Background and text color inversion */
-        background-color: #121212 !important;
+        background-color: var(--black) !important;
         color: var(--white) !important;
       }
       
@@ -636,7 +629,7 @@ function setupAccessibilityModalEvents() {
 // Font size functionality
 let currentFontSizeLevel = 0;
 const fontSizeLevels = [
-  { level: 0, className: '', label: 'Normal' },
+  { level: 0, className: '' },
   { level: 1, className: 'font-size-level-1', label: 'Large' },
   { level: 2, className: 'font-size-level-2', label: 'Larger' },
   { level: 3, className: 'font-size-level-3', label: 'Largest' }
