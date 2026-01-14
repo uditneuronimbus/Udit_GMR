@@ -99,8 +99,8 @@ export default function decorate(block) {
   // Skip rows that are just placeholders
   const isPlaceholder =
     cols.every(col => col.textContent?.trim() === '') || // empty row
-    cols[4]?.textContent?.trim() === 'Description Text' || // placeholder description
-    cols[2]?.textContent?.trim() === 'Award/Partner Image'; // placeholder image
+    //cols[4]?.textContent?.trim() === 'Description Text' || // placeholder description
+    //cols[2]?.textContent?.trim() === 'Award/Partner Image'; // placeholder image
 
   if (isPlaceholder) return;
 
