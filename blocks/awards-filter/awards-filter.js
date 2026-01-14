@@ -5,16 +5,42 @@ export default function decorate(block) {
   /* ===============================
      CONFIG (DEFENSIVE)
   =============================== */
-  const allAwardsLabel =
+  const allAwardsLabel = 
     children[1]?.textContent?.trim() || "All Awards";
-  const filterPanelTitle =
+  const filterPanelTitle = 
     children[2]?.textContent?.trim() || "Filter by Year and Category";
-  const defaultYear =
+  const defaultYear = 
     children[3]?.textContent?.trim() || "";
   const items = children.slice(4);
 
+  // Check if we're in AEM author mode (Universal Editor)
+  const isAuthorMode = document.body.classList.contains('universal-editor-edit') || 
+                      document.body.classList.contains('aem-AuthorLayer-Edit') ||
+                      window.location.href.includes('/editor.html');
+
   /* ===============================
-     RUNTIME STRUCTURE
+     AEM-AUTHOR MODE: Show raw content
+  =============================== */
+  if (isAuthorMode) {
+    // Add some styling for author visibility
+    block.classList.add('awards-author-mode');
+    
+    // Hide the filter controls in author mode (they won't work anyway)
+    const yearLabel = children[3]?.previousElementSibling;
+    if (yearLabel) yearLabel.style.display = 'none';
+    children[3].style.display = 'none';
+    
+    // Add a visual indicator for authors
+    const authorNote = document.createElement('div');
+    authorNote.className = 'awards-author-note';
+    authorNote.innerHTML = '<p><strong>Awards List Component</strong><br>Filter UI will be visible in publish/preview mode.</p>';
+    block.insertBefore(authorNote, children[0]);
+    
+    return; // Stop execution in author mode
+  }
+
+  /* ===============================
+     RUNTIME STRUCTURE (PUBLISH MODE ONLY)
   =============================== */
   const section = document.createElement("section");
   section.className = "awards-filter-runtime";
@@ -35,7 +61,6 @@ export default function decorate(block) {
 
   const yearSelect = document.createElement("select");
   yearSelect.className = "year-filter";
-  yearSelect.innerHTML = `<option value="">All Years</option>`;
   aside.appendChild(yearSelect);
 
   const categoryList = document.createElement("ul");
@@ -69,147 +94,87 @@ export default function decorate(block) {
     const cols = [...item.children];
     if (!cols.length) return;
 
-    // SAFE lookups
     const category = cols[0]?.textContent?.trim().toLowerCase() || "";
     const year = cols[1]?.textContent?.trim() || "";
-    const title = cols[3]?.textContent?.trim() || "";
-    
-    // Get image and description for dropdown
+
+    // Safely get image/picture element
     let imageEl = null;
     if (cols[2]) {
       imageEl = cols[2].querySelector("img") || cols[2].querySelector("picture");
     }
-    
+
+    const title = cols[3]?.textContent?.trim() || "";
     const description = cols[4]?.innerHTML?.trim() || "";
 
-    if (!title) return; // Need at least a title
+    if (!category && !year && !title && !description && !imageEl) return;
 
     if (year) years.add(year);
     if (category) categories.add(category);
 
-    /* ===============================
-       CREATE AWARD CARD WITH DROPDOWN
-    =============================== */
     const card = document.createElement("article");
     card.className = "award-card";
     card.dataset.year = year;
     card.dataset.category = category;
 
-    /* ---------- Card Header (Always Visible) ---------- */
-    const cardHeader = document.createElement("div");
-    cardHeader.className = "award-card-header";
-    
-    // Title
-    const titleEl = document.createElement("h3");
-    titleEl.textContent = title;
-    cardHeader.appendChild(titleEl);
-    
-    // Year badge
-    if (year) {
-      const yearBadge = document.createElement("span");
-      yearBadge.className = "award-year";
-      yearBadge.textContent = year;
-      cardHeader.appendChild(yearBadge);
-    }
-    
-    // Category badge
-    if (category) {
-      const categoryBadge = document.createElement("span");
-      categoryBadge.className = "award-category";
-      categoryBadge.textContent = category;
-      cardHeader.appendChild(categoryBadge);
-    }
-    
-    // Dropdown toggle button
-    const toggleBtn = document.createElement("button");
-    toggleBtn.className = "award-toggle";
-    toggleBtn.setAttribute("aria-expanded", "false");
-    toggleBtn.innerHTML = `
-      <span class="toggle-icon">▼</span>
-      <span class="sr-only">Show details</span>
-    `;
-    cardHeader.appendChild(toggleBtn);
-    
-    card.appendChild(cardHeader);
-
-    /* ---------- Dropdown Content (Hidden by Default) ---------- */
-    const dropdownContent = document.createElement("div");
-    dropdownContent.className = "award-dropdown-content";
-    dropdownContent.style.display = "none";
-    
-    // Add image if exists
+    // Image block
     if (imageEl) {
       const imgWrap = document.createElement("div");
-      imgWrap.className = "award-image-dropdown";
-      imgWrap.appendChild(imageEl.cloneNode(true));
-      dropdownContent.appendChild(imgWrap);
+      imgWrap.className = "award-img";
+      // Clone the image/picture with all its children
+      const clonedImage = imageEl.cloneNode(true);
+      // Preserve all attributes including AEM's data-cmp-* attributes
+      Array.from(imageEl.attributes).forEach(attr => {
+        clonedImage.setAttribute(attr.name, attr.value);
+      });
+      imgWrap.appendChild(clonedImage);
+      card.appendChild(imgWrap);
     }
-    
-    // Add description if exists
-    if (description) {
-      const descEl = document.createElement("div");
-      descEl.className = "award-description-dropdown";
-      descEl.innerHTML = description;
-      dropdownContent.appendChild(descEl);
-    }
-    
-    // If no image or description, show a message
-    if (!imageEl && !description) {
-      const noContent = document.createElement("p");
-      noContent.className = "no-details";
-      noContent.textContent = "No additional details available";
-      dropdownContent.appendChild(noContent);
-    }
-    
-    card.appendChild(dropdownContent);
 
-    /* ---------- Add to DOM ---------- */
+    // Content block
+    const content = document.createElement("div");
+    content.className = "award-content";
+
+    if (title) {
+      const h3 = document.createElement("h3");
+      h3.textContent = title;
+      content.appendChild(h3);
+    }
+
+    if (description) {
+      const desc = document.createElement("div");
+      desc.className = "award-description";
+      // Use textContent for safety, or innerHTML if you trust the AEM content
+      desc.innerHTML = description;
+      content.appendChild(desc);
+    }
+
+    card.appendChild(content);
     list.appendChild(card);
     cards.push(card);
-
-    /* ---------- Dropdown Toggle Functionality ---------- */
-    toggleBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
-      const dropdown = card.querySelector(".award-dropdown-content");
-      
-      if (isExpanded) {
-        // Close dropdown
-        dropdown.style.display = "none";
-        toggleBtn.setAttribute("aria-expanded", "false");
-        toggleBtn.querySelector(".toggle-icon").textContent = "▼";
-      } else {
-        // Open dropdown
-        dropdown.style.display = "block";
-        toggleBtn.setAttribute("aria-expanded", "true");
-        toggleBtn.querySelector(".toggle-icon").textContent = "▲";
-        
-        // Close other open dropdowns (optional)
-        document.querySelectorAll(".award-toggle[aria-expanded='true']").forEach(otherBtn => {
-          if (otherBtn !== toggleBtn) {
-            otherBtn.setAttribute("aria-expanded", "false");
-            otherBtn.querySelector(".toggle-icon").textContent = "▼";
-            otherBtn.closest(".award-card").querySelector(".award-dropdown-content").style.display = "none";
-          }
-        });
-      }
-    });
   });
 
   /* ===============================
      FILTER POPULATION
   =============================== */
-  [...years]
-    .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }))
-    .forEach((y) => {
-      const opt = document.createElement("option");
-      opt.value = y;
-      opt.textContent = y;
-      if (y === defaultYear) opt.selected = true;
-      yearSelect.appendChild(opt);
-    });
+  // Years
+  const sortedYears = Array.from(years).sort((a, b) =>
+    b.localeCompare(a, undefined, { numeric: true })
+  );
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "All Years";
+  yearSelect.appendChild(defaultOption);
 
-  [...categories]
+  sortedYears.forEach((y) => {
+    const opt = document.createElement("option");
+    opt.value = y;
+    opt.textContent = y;
+    if (y === defaultYear) opt.selected = true;
+    yearSelect.appendChild(opt);
+  });
+
+  // Categories
+  Array.from(categories)
     .sort()
     .forEach((cat) => {
       const li = document.createElement("li");
@@ -228,33 +193,39 @@ export default function decorate(block) {
     cards.forEach((card) => {
       const yearMatch = !yearVal || card.dataset.year === yearVal;
       const catMatch = catVal === "all" || card.dataset.category === catVal;
-
       card.style.display = yearMatch && catMatch ? "" : "none";
     });
   }
 
-  // Event listeners
   yearSelect.addEventListener("change", applyFilter);
 
   categoryList.addEventListener("click", (e) => {
     if (e.target.tagName !== "LI") return;
 
-    categoryList
-      .querySelectorAll("li")
-      .forEach((li) => li.classList.remove("active"));
-
+    categoryList.querySelectorAll("li").forEach((li) =>
+      li.classList.remove("active")
+    );
     e.target.classList.add("active");
     applyFilter();
   });
 
   /* ===============================
-     FINAL AEM-SAFE RENDER
+     AEM-SAFE RENDER
+     Hide original content but don't delete it
   =============================== */
-  // Clear block safely
-  while (block.firstChild) {
-    block.removeChild(block.firstChild);
-  }
+  // Hide the original table content but keep it in DOM for AEM
+  block.classList.add('awards-block-processed');
   
+  // Hide all children except the first one (which might be a wrapper)
+  Array.from(block.children).forEach(child => {
+    if (!child.classList.contains('awards-author-note')) {
+      child.style.display = 'none';
+    }
+  });
+  
+  // Append our runtime UI AFTER the original content
   block.appendChild(section);
+
+  // Initial filter
   applyFilter();
 }
