@@ -30,14 +30,12 @@ export default function decorate(block) {
     authorNote.className = 'awards-author-note';
     authorNote.innerHTML = `
       <p><strong>🏆 Awards List Component</strong></p>
-      <p><small>• Edit award items in the table below</small></p>
       <p><small>• Each award item has 6 columns: Category, Year, Award Image, Title, Description, Partner Image+Description</small></p>
       <p><small>• Filter UI appears in publish mode</small></p>
     `;
     block.insertBefore(authorNote, children[0]);
     
-    // Process all children
-    // Keep all original content visible in author mode
+    // Process all children - keep all original content visible in author mode
     return; // Stop execution in author mode
   }
 
@@ -86,21 +84,15 @@ export default function decorate(block) {
   section.appendChild(container);
 
   /* ===============================
-     DATA COLLECTION (SAFE) - Updated for 6 columns per award item
+     DATA COLLECTION (SAFE) - Updated for 6 columns in single row
   =============================== */
   const years = new Set();
   const categories = new Set();
   const cards = [];
 
-  // Process items in groups of 2 (main award + partner info)
-  for (let i = 0; i < items.length; i += 2) {
-    const mainAward = items[i];
-    const partnerInfo = items[i + 1]; // This contains partner image and description
-    
-    if (!mainAward) continue;
-    
-    const cols = [...mainAward.children];
-    if (!cols.length) continue;
+  items.forEach((item) => {
+    const cols = [...item.children];
+    if (!cols.length || cols.length < 6) return;
 
     const category = cols[0]?.textContent?.trim().toLowerCase() || "";
     const year = cols[1]?.textContent?.trim() || "";
@@ -114,23 +106,21 @@ export default function decorate(block) {
     const title = cols[3]?.textContent?.trim() || "";
     const description = cols[4]?.innerHTML?.trim() || "";
 
-    // Get partner info if available
+    // Safely get partner image and description from columns 5 and 6
     let partnerImageEl = null;
     let partnerDescription = "";
     
-    if (partnerInfo) {
-      const partnerCols = [...partnerInfo.children];
-      // Partner image is in the first column of partner row
-      if (partnerCols[0]) {
-        partnerImageEl = partnerCols[0].querySelector("img") || partnerCols[0].querySelector("picture");
-      }
-      // Partner description is in the second column of partner row
-      if (partnerCols[1]) {
-        partnerDescription = partnerCols[1]?.innerHTML?.trim() || "";
-      }
+    if (cols[5]) {
+      // Column 5 contains partner image
+      partnerImageEl = cols[5].querySelector("img") || cols[5].querySelector("picture");
+    }
+    
+    if (cols[6]) {
+      // Column 6 contains partner description
+      partnerDescription = cols[6]?.innerHTML?.trim() || "";
     }
 
-    if (!category && !year && !title && !description && !awardImageEl) continue;
+    if (!category && !year && !title && !description && !awardImageEl) return;
 
     if (year) years.add(year);
     if (category) categories.add(category);
@@ -198,7 +188,7 @@ export default function decorate(block) {
     card.appendChild(content);
     list.appendChild(card);
     cards.push(card);
-  }
+  });
 
   /* ===============================
      FILTER POPULATION
