@@ -3,20 +3,22 @@ export default function decorate(block) {
   if (children.length < 5) return;
 
   /* ===============================
-     CONFIG ROWS
+     CONFIG (DEFENSIVE)
   =============================== */
 
   const allAwardsLabel =
     children[1]?.textContent?.trim() || "All Awards";
+
   const filterPanelTitle =
     children[2]?.textContent?.trim() || "Filter by Year and Category";
+
   const defaultYear =
     children[3]?.textContent?.trim() || "";
 
-  const awardItems = children.slice(4);
+  const items = children.slice(4);
 
   /* ===============================
-     WRAPPER
+     RUNTIME STRUCTURE
   =============================== */
 
   const section = document.createElement("section");
@@ -28,9 +30,7 @@ export default function decorate(block) {
   const layout = document.createElement("div");
   layout.className = "awards-layout";
 
-  /* ===============================
-     FILTER PANEL
-  =============================== */
+  /* ---------- FILTER PANEL ---------- */
 
   const aside = document.createElement("aside");
   aside.className = "awards-filter-panel";
@@ -55,9 +55,7 @@ export default function decorate(block) {
 
   aside.appendChild(categoryList);
 
-  /* ===============================
-     LIST
-  =============================== */
+  /* ---------- LIST ---------- */
 
   const list = document.createElement("div");
   list.className = "awards-list";
@@ -68,41 +66,53 @@ export default function decorate(block) {
   section.appendChild(container);
 
   /* ===============================
-     DATA COLLECTION
+     DATA COLLECTION (SAFE)
   =============================== */
 
   const years = new Set();
   const categories = new Set();
   const cards = [];
 
-  awardItems.forEach((item) => {
-    const cells = [...item.children];
-    if (!cells.length) return;
+  items.forEach((item) => {
+    const cols = [...item.children];
+    if (!cols.length) return;
 
-    const category = cells[0]?.textContent?.trim().toLowerCase();
-    const year = cells[1]?.textContent?.trim();
-    const img = cells[2]?.querySelector("img");
-    const title = cells[3]?.textContent?.trim();
-    const desc = cells[4]?.innerHTML?.trim();
+    // SAFE lookups
+    const category =
+      cols[0]?.textContent?.trim().toLowerCase() || "";
 
-    // ❗ allow description-only items
-    if (!title && !desc) return;
+    const year =
+      cols[1]?.textContent?.trim() || "";
+
+    const imageEl =
+      cols[2]?.querySelector("img") || null;
+
+    const title =
+      cols[3]?.textContent?.trim() || "";
+
+    const description =
+      cols[4]?.innerHTML?.trim() || "";
+
+    // Do NOT drop valid content
+    if (!category && !year && !title && !description && !imageEl) return;
 
     if (year) years.add(year);
     if (category) categories.add(category);
 
     const card = document.createElement("article");
     card.className = "award-card";
-    card.dataset.year = year || "";
-    card.dataset.category = category || "";
+    card.dataset.year = year;
+    card.dataset.category = category;
 
-    if (img) {
+    /* ---------- Image ---------- */
+    if (imageEl) {
       const imgWrap = document.createElement("div");
       imgWrap.className = "award-img";
-      imgWrap.appendChild(img.cloneNode(true));
+      imgWrap.appendChild(imageEl.cloneNode(true));
       card.appendChild(imgWrap);
     }
 
+    /* ---------- Content ---------- */
     const content = document.createElement("div");
     content.className = "award-content";
 
@@ -112,10 +122,10 @@ export default function decorate(block) {
       content.appendChild(h3);
     }
 
-    if (desc) {
-      const p = document.createElement("p");
-      p.innerHTML = desc;
-      content.appendChild(p);
+    if (description) {
+      const desc = document.createElement("p");
+      desc.innerHTML = description;
+      content.appendChild(desc);
     }
 
     card.appendChild(content);
@@ -124,11 +134,11 @@ export default function decorate(block) {
   });
 
   /* ===============================
-     POPULATE FILTERS
+     FILTER POPULATION
   =============================== */
 
   [...years]
-    .sort((a, b) => b - a)
+    .sort((a, b) => b.localeCompare(a))
     .forEach((y) => {
       const opt = document.createElement("option");
       opt.value = y;
@@ -166,15 +176,17 @@ export default function decorate(block) {
 
   categoryList.addEventListener("click", (e) => {
     if (e.target.tagName !== "LI") return;
+
     categoryList
       .querySelectorAll("li")
       .forEach((li) => li.classList.remove("active"));
+
     e.target.classList.add("active");
     applyFilter();
   });
 
   /* ===============================
-     FINAL RENDER (AEM SAFE)
+     FINAL AEM-SAFE RENDER
   =============================== */
 
   block.innerHTML = "";
