@@ -629,7 +629,7 @@ function setupAccessibilityModalEvents() {
 // Font size functionality
 let currentFontSizeLevel = 0;
 const fontSizeLevels = [
-  { level: 0, className: '' },
+  { level: 0, className: '', label: 'Normal' },
   { level: 1, className: 'font-size-level-1', label: 'Large' },
   { level: 2, className: 'font-size-level-2', label: 'Larger' },
   { level: 3, className: 'font-size-level-3', label: 'Largest' }
