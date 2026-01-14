@@ -35,6 +35,7 @@ export default function decorate(block) {
 
   const yearSelect = document.createElement("select");
   yearSelect.className = "year-filter";
+  yearSelect.innerHTML = `<option value="">All Years</option>`;
   aside.appendChild(yearSelect);
 
   const categoryList = document.createElement("ul");
@@ -68,80 +69,147 @@ export default function decorate(block) {
     const cols = [...item.children];
     if (!cols.length) return;
 
+    // SAFE lookups
     const category = cols[0]?.textContent?.trim().toLowerCase() || "";
     const year = cols[1]?.textContent?.trim() || "";
-
-    // Safely get image/picture element
+    const title = cols[3]?.textContent?.trim() || "";
+    
+    // Get image and description for dropdown
     let imageEl = null;
     if (cols[2]) {
       imageEl = cols[2].querySelector("img") || cols[2].querySelector("picture");
     }
-
-    const title = cols[3]?.textContent?.trim() || "";
+    
     const description = cols[4]?.innerHTML?.trim() || "";
 
-    if (!category && !year && !title && !description && !imageEl) return;
+    if (!title) return; // Need at least a title
 
     if (year) years.add(year);
     if (category) categories.add(category);
 
+    /* ===============================
+       CREATE AWARD CARD WITH DROPDOWN
+    =============================== */
     const card = document.createElement("article");
     card.className = "award-card";
     card.dataset.year = year;
     card.dataset.category = category;
 
-    // Image block
+    /* ---------- Card Header (Always Visible) ---------- */
+    const cardHeader = document.createElement("div");
+    cardHeader.className = "award-card-header";
+    
+    // Title
+    const titleEl = document.createElement("h3");
+    titleEl.textContent = title;
+    cardHeader.appendChild(titleEl);
+    
+    // Year badge
+    if (year) {
+      const yearBadge = document.createElement("span");
+      yearBadge.className = "award-year";
+      yearBadge.textContent = year;
+      cardHeader.appendChild(yearBadge);
+    }
+    
+    // Category badge
+    if (category) {
+      const categoryBadge = document.createElement("span");
+      categoryBadge.className = "award-category";
+      categoryBadge.textContent = category;
+      cardHeader.appendChild(categoryBadge);
+    }
+    
+    // Dropdown toggle button
+    const toggleBtn = document.createElement("button");
+    toggleBtn.className = "award-toggle";
+    toggleBtn.setAttribute("aria-expanded", "false");
+    toggleBtn.innerHTML = `
+      <span class="toggle-icon">▼</span>
+      <span class="sr-only">Show details</span>
+    `;
+    cardHeader.appendChild(toggleBtn);
+    
+    card.appendChild(cardHeader);
+
+    /* ---------- Dropdown Content (Hidden by Default) ---------- */
+    const dropdownContent = document.createElement("div");
+    dropdownContent.className = "award-dropdown-content";
+    dropdownContent.style.display = "none";
+    
+    // Add image if exists
     if (imageEl) {
       const imgWrap = document.createElement("div");
-      imgWrap.className = "award-img";
+      imgWrap.className = "award-image-dropdown";
       imgWrap.appendChild(imageEl.cloneNode(true));
-      card.appendChild(imgWrap);
+      dropdownContent.appendChild(imgWrap);
     }
-
-    // Content block
-    const content = document.createElement("div");
-    content.className = "award-content";
-
-    if (title) {
-      const h3 = document.createElement("h3");
-      h3.textContent = title;
-      content.appendChild(h3);
-    }
-
+    
+    // Add description if exists
     if (description) {
-      const desc = document.createElement("div");
-      desc.className = "award-description";
-      desc.innerHTML = description; // safe because authored in AEM
-      content.appendChild(desc);
+      const descEl = document.createElement("div");
+      descEl.className = "award-description-dropdown";
+      descEl.innerHTML = description;
+      dropdownContent.appendChild(descEl);
     }
+    
+    // If no image or description, show a message
+    if (!imageEl && !description) {
+      const noContent = document.createElement("p");
+      noContent.className = "no-details";
+      noContent.textContent = "No additional details available";
+      dropdownContent.appendChild(noContent);
+    }
+    
+    card.appendChild(dropdownContent);
 
-    card.appendChild(content);
+    /* ---------- Add to DOM ---------- */
     list.appendChild(card);
     cards.push(card);
+
+    /* ---------- Dropdown Toggle Functionality ---------- */
+    toggleBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+      const dropdown = card.querySelector(".award-dropdown-content");
+      
+      if (isExpanded) {
+        // Close dropdown
+        dropdown.style.display = "none";
+        toggleBtn.setAttribute("aria-expanded", "false");
+        toggleBtn.querySelector(".toggle-icon").textContent = "▼";
+      } else {
+        // Open dropdown
+        dropdown.style.display = "block";
+        toggleBtn.setAttribute("aria-expanded", "true");
+        toggleBtn.querySelector(".toggle-icon").textContent = "▲";
+        
+        // Close other open dropdowns (optional)
+        document.querySelectorAll(".award-toggle[aria-expanded='true']").forEach(otherBtn => {
+          if (otherBtn !== toggleBtn) {
+            otherBtn.setAttribute("aria-expanded", "false");
+            otherBtn.querySelector(".toggle-icon").textContent = "▼";
+            otherBtn.closest(".award-card").querySelector(".award-dropdown-content").style.display = "none";
+          }
+        });
+      }
+    });
   });
 
   /* ===============================
      FILTER POPULATION
   =============================== */
-  // Years
-  const sortedYears = Array.from(years).sort((a, b) =>
-    b.localeCompare(a, undefined, { numeric: true })
-  );
-  const defaultOption = document.createElement("option");
-  defaultOption.value = "";
-  defaultOption.textContent = "All Years";
-  yearSelect.appendChild(defaultOption);
+  [...years]
+    .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }))
+    .forEach((y) => {
+      const opt = document.createElement("option");
+      opt.value = y;
+      opt.textContent = y;
+      if (y === defaultYear) opt.selected = true;
+      yearSelect.appendChild(opt);
+    });
 
-  sortedYears.forEach((y) => {
-    const opt = document.createElement("option");
-    opt.value = y;
-    opt.textContent = y;
-    if (y === defaultYear) opt.selected = true;
-    yearSelect.appendChild(opt);
-  });
-
-  // Categories
-  Array.from(categories)
+  [...categories]
     .sort()
     .forEach((cat) => {
       const li = document.createElement("li");
@@ -160,28 +228,33 @@ export default function decorate(block) {
     cards.forEach((card) => {
       const yearMatch = !yearVal || card.dataset.year === yearVal;
       const catMatch = catVal === "all" || card.dataset.category === catVal;
+
       card.style.display = yearMatch && catMatch ? "" : "none";
     });
   }
 
+  // Event listeners
   yearSelect.addEventListener("change", applyFilter);
 
   categoryList.addEventListener("click", (e) => {
     if (e.target.tagName !== "LI") return;
 
-    categoryList.querySelectorAll("li").forEach((li) =>
-      li.classList.remove("active")
-    );
+    categoryList
+      .querySelectorAll("li")
+      .forEach((li) => li.classList.remove("active"));
+
     e.target.classList.add("active");
     applyFilter();
   });
 
   /* ===============================
-     AEM-SAFE RENDER
+     FINAL AEM-SAFE RENDER
   =============================== */
-  while (block.firstChild) block.removeChild(block.firstChild);
+  // Clear block safely
+  while (block.firstChild) {
+    block.removeChild(block.firstChild);
+  }
+  
   block.appendChild(section);
-
-  // Initial filter
   applyFilter();
 }
