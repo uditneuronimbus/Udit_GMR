@@ -856,16 +856,6 @@
     "itemLabel": "categoryTitle",
     "fields": [
       {
-        "component": "reference",
-        "name": "imagePrimary",
-        "label": "Primary Image / Cube Icon"
-      },
-      {
-        "component": "text",
-        "name": "categoryTitle",
-        "label": "Category Title"
-      },
-      {
         "component": "select",
         "name": "colorTheme",
         "label": "Section Color",
@@ -883,6 +873,16 @@
             "value": "blue"
           }
         ]
+      },
+      {
+        "component": "reference",
+        "name": "imagePrimary",
+        "label": "Primary Image / Cube Icon"
+      },
+      {
+        "component": "text",
+        "name": "categoryTitle",
+        "label": "Category Title"
       },
       {
         "component": "text",
