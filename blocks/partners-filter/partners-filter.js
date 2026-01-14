@@ -3,6 +3,7 @@ export default function decorate(block) {
   if (children.length < 3) return;
 
   // Get configuration from block structure
+  // Assuming first child has sectionTitle, second has filterPanelTitle
   const sectionTitle = children[0]?.textContent?.trim() || "Our Partners";
   const filterPanelTitle = children[1]?.textContent?.trim() || "Filter by Category";
   const items = children.slice(2);
@@ -18,8 +19,8 @@ export default function decorate(block) {
     authorNote.innerHTML = `
       <p><strong>🤝 Partners List Component</strong></p>
       <p><small>• Edit partner items in the table below</small></p>
-      <p><small>• Filter UI appears in publish mode</small></p>
-      <p><small>• Item types: Airports, Energy, Transportation, GMR Varalakshmi Foundation, EPC</small></p>
+      <p><small>• Fields are organized in dropdown sections</small></p>
+      <p><small>• Item categories: Airports, Energy, Transportation, Foundation, EPC</small></p>
     `;
     block.insertBefore(authorNote, children[0]);
     
@@ -37,7 +38,7 @@ export default function decorate(block) {
   }
 
   /* =========================
-     RUNTIME STRUCTURE - ADDED TO EXISTING BLOCK
+     RUNTIME STRUCTURE
   ========================= */
   const section = document.createElement("div");
   section.className = "partners-filter-runtime";
@@ -138,7 +139,7 @@ export default function decorate(block) {
   block.insertBefore(section, block.firstChild);
 
   /* =========================
-     DATA COLLECTION - USE EXISTING DATA
+     DATA COLLECTION
   ========================= */
   const categories = new Set();
   const cardsDesktop = [];
@@ -158,12 +159,39 @@ export default function decorate(block) {
     const cols = [...item.children];
     if (!cols.length) return;
 
-    const category = cols[0]?.textContent?.trim().toLowerCase() || "";
+    // New structure with dropdowns: fields are now in 5 columns
+    // Column 0: Basic Information dropdown (contains itemType and title)
+    // Column 1: Media & Content dropdown (contains image and description)
+    // Column 2: Advanced Settings dropdown (contains link)
+    
+    // Extract data from the new structure
+    let category = "";
+    let title = "";
     let imageEl = null;
-    if (cols[1]) imageEl = cols[1].querySelector("img") || cols[1].querySelector("picture");
-    const title = cols[2]?.textContent?.trim() || "";
-    const description = cols[3]?.innerHTML?.trim() || "";
-    const link = cols[4]?.textContent?.trim() || "";
+    let description = "";
+    let link = "";
+
+    // Get data from Basic Information dropdown (col 0)
+    if (cols[0]) {
+      const basicInfoCols = [...cols[0].children];
+      if (basicInfoCols.length >= 1) category = basicInfoCols[0]?.textContent?.trim().toLowerCase() || "";
+      if (basicInfoCols.length >= 2) title = basicInfoCols[1]?.textContent?.trim() || "";
+    }
+
+    // Get data from Media & Content dropdown (col 1)
+    if (cols[1]) {
+      const mediaContentCols = [...cols[1].children];
+      if (mediaContentCols.length >= 1) {
+        imageEl = mediaContentCols[0].querySelector("img") || mediaContentCols[0].querySelector("picture");
+      }
+      if (mediaContentCols.length >= 2) description = mediaContentCols[1]?.innerHTML?.trim() || "";
+    }
+
+    // Get data from Advanced Settings dropdown (col 2)
+    if (cols[2]) {
+      const advancedCols = [...cols[2].children];
+      if (advancedCols.length >= 1) link = advancedCols[0]?.textContent?.trim() || "";
+    }
 
     if (!category && !title && !description && !imageEl) return;
 
@@ -373,8 +401,4 @@ export default function decorate(block) {
       closeModal();
     }
   });
-
-  // Note: Original data remains in the DOM but is not used in the runtime UI
-  // The runtime UI creates its own cards from the original data
-  // Original block content remains untouched for authoring/SEO purposes
 }
