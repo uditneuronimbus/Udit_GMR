@@ -140,12 +140,12 @@ export default function decorate(block) {
     content.appendChild(h3);
   }
 
-  // if (description) {
-  //   const desc = document.createElement("div");
-  //   desc.className = "award-description";
-  //   desc.innerHTML = description;
-  //   content.appendChild(desc);
-  // }
+  if (description) {
+    const desc = document.createElement("div");
+    desc.className = "award-description";
+    desc.innerHTML = description;
+    content.appendChild(desc);
+  }
 
   card.appendChild(content);
   list.appendChild(card);
