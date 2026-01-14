@@ -22,10 +22,8 @@ export default function decorate(block) {
      AEM-AUTHOR MODE: Show only the authoring structure
   =============================== */
   if (isAuthorMode) {
-    // Add some styling for author visibility
     block.classList.add('awards-author-mode');
     
-    // Add a visual indicator for authors
     const authorNote = document.createElement('div');
     authorNote.className = 'awards-author-note';
     authorNote.innerHTML = `
@@ -34,10 +32,6 @@ export default function decorate(block) {
       <p><small>• Filter UI appears in publish mode</small></p>
     `;
     block.insertBefore(authorNote, children[0]);
-    
-    // Process all children
-    
-    
     return; // Stop execution in author mode
   }
 
@@ -93,65 +87,56 @@ export default function decorate(block) {
   const cards = [];
 
   items.forEach((item) => {
-  const cols = [...item.children];
-  if (!cols.length) return;
+    const cols = [...item.children];
+    if (!cols.length) return;
 
-  const category = cols[0]?.textContent?.trim().toLowerCase() || "";
-  const year = cols[1]?.textContent?.trim() || "";
+    const category = cols[0]?.textContent?.trim().toLowerCase() || "";
+    const year = cols[1]?.textContent?.trim() || "";
 
-  // Safely get image/picture element
-  let imageEl = null;
-  if (cols[2]) {
-    imageEl = cols[2].querySelector("img") || cols[2].querySelector("picture");
-  }
+    // Safely get image/picture element
+    let imageEl = null;
+    if (cols[2]) {
+      imageEl = cols[2].querySelector("img") || cols[2].querySelector("picture");
+    }
 
-  const title = cols[3]?.textContent?.trim() || "";
-  const description = cols[4]?.innerHTML?.trim() || "";
+    const title = cols[3]?.textContent?.trim() || "";
 
-  if (!category && !year && !title && !description && !imageEl) return;
+    // Skip description entirely
 
-  if (year) years.add(year);
-  if (category) categories.add(category);
+    if (!category && !year && !title && !imageEl) return;
 
-  const card = document.createElement("article");
-  card.className = "award-card";
-  card.dataset.year = year;
-  card.dataset.category = category;
+    if (year) years.add(year);
+    if (category) categories.add(category);
 
-  // Image block
-  if (imageEl) {
-    const imgWrap = document.createElement("div");
-    imgWrap.className = "award-img";
-    const clonedImage = imageEl.cloneNode(true);
-    Array.from(imageEl.attributes).forEach(attr => {
-      clonedImage.setAttribute(attr.name, attr.value);
-    });
-    imgWrap.appendChild(clonedImage);
-    card.appendChild(imgWrap);
-  }
+    const card = document.createElement("article");
+    card.className = "award-card";
+    card.dataset.year = year;
+    card.dataset.category = category;
 
-  // Content block
-  const content = document.createElement("div");
-  content.className = "award-content";
+    // Image block
+    if (imageEl) {
+      const imgWrap = document.createElement("div");
+      imgWrap.className = "award-img";
+      const clonedImage = imageEl.cloneNode(true);
+      Array.from(imageEl.attributes).forEach(attr => {
+        clonedImage.setAttribute(attr.name, attr.value);
+      });
+      imgWrap.appendChild(clonedImage);
+      card.appendChild(imgWrap);
+    }
 
-  if (title) {
-    const h3 = document.createElement("h3");
-    h3.textContent = title;
-    content.appendChild(h3);
-  }
-
-  // if (description) {
-  //   const desc = document.createElement("div");
-  //   desc.className = "award-description";
-  //   desc.innerHTML = description;
-  //   content.appendChild(desc);
-  // }
-
-  card.appendChild(content);
-  list.appendChild(card);
-  cards.push(card);
-});
-
+    // Content block (title only)
+    const content = document.createElement("div");
+    content.className = "award-content";
+    if (title) {
+      const h3 = document.createElement("h3");
+      h3.textContent = title;
+      content.appendChild(h3);
+    }
+    card.appendChild(content);
+    list.appendChild(card);
+    cards.push(card);
+  });
 
   /* ===============================
      FILTER POPULATION
@@ -211,16 +196,18 @@ export default function decorate(block) {
 
   /* ===============================
      AEM-SAFE RENDER
-     Hide original content but don't delete it
+     Hide original content recursively
   =============================== */
+  function hideOriginalContent(el) {
+    el.style.display = 'none';
+    Array.from(el.children).forEach(hideOriginalContent);
+  }
+
+  hideOriginalContent(block);
+
   // Mark block as processed
   block.classList.add('awards-block-processed');
-  
-  // Hide all original content in publish mode
-  Array.from(block.children).forEach(child => {
-    child.style.display = 'none';
-  });
-  
+
   // Append our runtime UI
   block.appendChild(section);
 
