@@ -36,48 +36,7 @@ export default function decorate(block) {
     block.insertBefore(authorNote, children[0]);
     
     // Process all children
-    children.forEach((child, index) => {
-      if (index < 4) {
-        // Hide config rows completely (labels, title, default year)
-        child.style.display = 'none';
-      } else if (index === 4) {
-        // Show the "award-listing-item" header
-        child.style.display = 'block';
-        child.style.fontWeight = 'bold';
-        child.style.color = '#007bff';
-        child.style.margin = '10px 0';
-        child.style.padding = '10px';
-        child.style.background = '#f0f8ff';
-        child.style.borderLeft = '4px solid #007bff';
-        child.style.borderRadius = '4px';
-      } else {
-        // Show award items but clean up placeholders
-        child.style.display = 'block';
-        child.style.margin = '15px 0';
-        child.style.padding = '15px';
-        child.style.background = '#fff';
-        child.style.border = '1px solid #e0e0e0';
-        child.style.borderRadius = '4px';
-        
-        // Clean up placeholder text in table cells
-        const cells = [...child.children];
-        cells.forEach((cell, cellIndex) => {
-          if (cell.textContent?.trim() === 'Award/Partner Image') {
-            cell.style.fontStyle = 'italic';
-            cell.style.color = '#666';
-            cell.style.background = '#f5f5f5';
-            cell.style.padding = '8px';
-            cell.innerHTML = '<em>Add award/partner image here</em>';
-          } else if (cell.textContent?.trim() === 'Description Text') {
-            cell.style.fontStyle = 'italic';
-            cell.style.color = '#666';
-            cell.style.background = '#f5f5f5';
-            cell.style.padding = '8px';
-            cell.innerHTML = '<em>Add description text here</em>';
-          }
-        });
-      }
-    });
+    
     
     return; // Stop execution in author mode
   }
