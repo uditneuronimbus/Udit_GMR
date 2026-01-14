@@ -45,6 +45,11 @@
           "component": "text",
           "name": "sectionSubtitle",
           "label": "Section Subtitle"
+        },
+        {
+          "component": "reference",
+          "name": "desktopImage",
+          "label": "Desktop Image"
         }
       ]
     },
@@ -52,6 +57,11 @@
       "id": "governance-section",
       "itemLabel": "categoryTitle",
       "fields": [
+        {
+          "component": "reference",
+          "name": "imagePrimary",
+          "label": "Primary Image / Cube Icon"
+        },
         {
           "component": "text",
           "name": "categoryTitle",
@@ -66,21 +76,6 @@
             { "name": "Yellow", "value": "yellow" },
             { "name": "Blue", "value": "blue" }
           ]
-        },
-        {
-          "component": "image",
-          "name": "imagePrimary",
-          "label": "Primary Image / Cube Icon"
-        },
-        {
-          "component": "image",
-          "name": "imageSecondary",
-          "label": "Secondary Image (Optional)"
-        },
-        {
-          "component": "image",
-          "name": "imageTertiary",
-          "label": "Third Image (Optional)"
         },
         {
           "component": "text",
