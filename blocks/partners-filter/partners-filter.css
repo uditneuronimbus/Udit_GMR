@@ -408,7 +408,9 @@
   color: #0066cc;
 }
 
-/* Hide original content in publish mode */
-.partners-filter-runtime + * {
-  display: none;
+/* Original block content styling for author mode */
+.partners-author-mode .block-content {
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
 }
