@@ -2625,28 +2625,17 @@
     "id": "partners-filter",
     "fields": [
       {
-        "component": "dropdown",
-        "name": "generalSettings",
-        "label": "General Settings",
-        "defaultOpen": true,
-        "fields": [
-          {
-            "component": "text",
-            "name": "sectionTitle",
-            "label": "Section Title (Main Heading)",
-            "valueType": "string",
-            "placeholder": "Enter section title",
-            "required": true
-          },
-          {
-            "component": "text",
-            "name": "filterPanelTitle",
-            "label": "Filter Sidebar Title",
-            "valueType": "string",
-            "defaultValue": "Filter by Category",
-            "placeholder": "Enter filter panel title"
-          }
-        ]
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title (Main Heading)",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "filterPanelTitle",
+        "label": "Filter Sidebar Title",
+        "valueType": "string",
+        "defaultValue": "Filter by Year and Category"
       }
     ]
   },
@@ -2655,89 +2644,56 @@
     "itemLabel": "title",
     "fields": [
       {
-        "component": "dropdown",
-        "name": "basicInfo",
-        "label": "Basic Information",
-        "defaultOpen": true,
-        "fields": [
+        "component": "select",
+        "name": "itemType",
+        "label": "Item Category",
+        "valueType": "string",
+        "options": [
           {
-            "component": "select",
-            "name": "itemType",
-            "label": "Item Category",
-            "valueType": "string",
-            "options": [
-              {
-                "name": "Airports",
-                "value": "airports"
-              },
-              {
-                "name": "Energy",
-                "value": "energy"
-              },
-              {
-                "name": "Transportation",
-                "value": "transportation"
-              },
-              {
-                "name": "GMR Varalakshmi Foundation",
-                "value": "foundation"
-              },
-              {
-                "name": "EPC",
-                "value": "epc"
-              }
-            ],
-            "defaultValue": "airports",
-            "required": true
+            "name": "Airports",
+            "value": "airports"
           },
           {
-            "component": "text",
-            "name": "title",
-            "label": "Title / Heading",
-            "valueType": "string",
-            "placeholder": "Enter partner title",
-            "required": true
+            "name": "Energy",
+            "value": "energy"
+          },
+          {
+            "name": "Transportation",
+            "value": "Transportation "
+          },
+          {
+            "name": "GMR Varalakshmi Foundation",
+            "value": "foundation"
+          },
+          {
+            "name": "EPC",
+            "value": "epc"
           }
         ]
       },
       {
-        "component": "dropdown",
-        "name": "mediaContent",
-        "label": "Media & Content",
-        "defaultOpen": false,
-        "fields": [
-          {
-            "component": "reference",
-            "name": "image",
-            "label": "Partner Image",
-            "valueType": "string",
-            "helpText": "Select or upload a partner logo/image"
-          },
-          {
-            "component": "richtext",
-            "name": "description",
-            "label": "Description Text",
-            "valueType": "string",
-            "placeholder": "Enter partner description",
-            "helpText": "Add detailed information about the partner"
-          }
-        ]
+        "component": "reference",
+        "name": "image",
+        "label": "Award/Partner Image",
+        "valueType": "string"
       },
       {
-        "component": "dropdown",
-        "name": "advancedSettings",
-        "label": "Advanced Settings",
-        "defaultOpen": false,
-        "fields": [
-          {
-            "component": "text",
-            "name": "link",
-            "label": "Detail Page URL",
-            "valueType": "string",
-            "placeholder": "https://example.com/partner-details",
-            "helpText": "Optional link to partner detail page"
-          }
-        ]
+        "component": "text",
+        "name": "title",
+        "label": "Title / Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "link",
+        "label": "Detail Page URL",
+        "valueType": "string"
       }
     ]
   },
