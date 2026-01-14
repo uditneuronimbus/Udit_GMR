@@ -196,19 +196,19 @@ export default function decorate(block) {
 
   /* ===============================
      AEM-SAFE RENDER
-     Hide original content recursively
+     Hide only original content, NOT runtime section
   =============================== */
-  function hideOriginalContent(el) {
-    el.style.display = 'none';
-    Array.from(el.children).forEach(hideOriginalContent);
-  }
-
-  hideOriginalContent(block);
+  Array.from(block.children).forEach((child) => {
+    // Only hide if it is NOT our new runtime section
+    if (!child.classList.contains('awards-filter-runtime')) {
+      child.style.display = 'none';
+    }
+  });
 
   // Mark block as processed
   block.classList.add('awards-block-processed');
 
-  // Append our runtime UI
+  // Append runtime UI
   block.appendChild(section);
 
   // Initial filter
