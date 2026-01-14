@@ -145,64 +145,95 @@ export default async function decorate(block) {
    ====================================================== */
 function initAccessibilityModal() {
   console.log("Initializing accessibility modal...");
-  
+
   // Create modal HTML - NO BACKGROUND OVERLAY
   const modalHTML = `
-    <div class="accessibility-modal" id="accessibility-modal" style="display: none; position: fixed; top: 80px; right: 20px; z-index: 9999; width: 300px;">
-      <div class="accessibility-modal-content" style="background-color: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); width: 100%; max-height: 80vh; overflow-y: auto; border: 1px solid #e5e5e5;">
-        <div class="accessibility-modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid #e5e5e5; background-color: #f8f9fa;">
-          <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #333;">Accessibility Options</h3>
-          <button class="accessibility-modal-close" aria-label="Close accessibility options" style="background: none; border: none; font-size: 24px; line-height: 1; cursor: pointer; color: #666; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">&times;</button>
+    <div class="accessibility-modal" id="accessibility-modal" style="display: none; position: fixed; top: 60px; right: 20px; z-index: 9999; width: 100%;max-width:500px;">
+      <div class="accessibility-modal-content" style="background-color: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); width: 100%; max-height: 80vh; overflow-y: auto; border: 1px solid var(--light-grey);">
+        <div class="accessibility-modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; border-bottom: 1px solid var(--light-grey); background-color: var(--white);">
+          <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: var(--charcoal);">Accessibility Options</h3>
+          <button class="accessibility-modal-close" aria-label="Close accessibility options" style="background: none; border: none; font-size: 2rem; line-height: 1; cursor: pointer; color: var(--yellow); padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">&times;</button>
         </div>
         <div class="accessibility-modal-body" style="padding: 20px;">
-          <div class="accessibility-options" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+          <div class="accessibility-options" style="display: flex; flex-direction: row; gap: 12px; margin-bottom: 20px;">
             <!-- Font Size with 3-step toggle -->
-            <div class="accessibility-font-size" style="margin-bottom: 16px;">
+            <div class="accessibility-font-size" style="display: flex; justify-content: center; flex-direction: column; align-items: center; width: 100%; padding: 12px 16px; background-color: var(--white); border: 1px solid var(--light-grey); border-radius: 16px; cursor: pointer; transition: all 0.2s ease; text-align: left; position: relative;">
               <div style="display: flex; align-items: center; margin-bottom: 8px;">
-                <span class="option-icon" style="font-size: 18px; margin-right: 12px; width: 24px; text-align: center; font-weight: bold;">A+</span>
-                <span class="option-text" style="flex: 1; font-size: 14px; color: #333; font-weight: 500;">Font Size</span>
-                <div class="font-size-dots" id="font-size-dots" style="display: flex; gap: 4px;">
-                  <span class="font-size-dot" data-level="1" style="width: 8px; height: 8px; border-radius: 50%; background-color: #ddd; cursor: pointer;"></span>
-                  <span class="font-size-dot" data-level="2" style="width: 8px; height: 8px; border-radius: 50%; background-color: #ddd; cursor: pointer;"></span>
-                  <span class="font-size-dot" data-level="3" style="width: 8px; height: 8px; border-radius: 50%; background-color: #ddd; cursor: pointer;"></span>
+                <span class="option-icon" style="font-size: 18px; margin-right: 12px; width: 24px; text-align: center; font-weight: bold;">
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1836_2719)">
+<path d="M16.6666 16H20.6666V25.3333H24.6666V16H28.6666V12H16.6666V16ZM20.6666 5.33334H3.33325V9.33334H9.99992V25.3333H13.9999V9.33334H20.6666V5.33334Z" fill="#003366"/>
+</g>
+<defs>
+<clipPath id="clip0_1836_2719">
+<rect width="32" height="32" fill="white"/>
+</clipPath>
+</defs>
+</svg>
+</span>
+                
+                <div class="font-size-dots" id="font-size-dots" style="display: flex; gap: 4px; position: absolute;top:10px;right:10px;">
+                  <span class="font-size-dot dot1" data-level="1" style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--yellow); cursor: pointer;"></span>
+                  <span class="font-size-dot dot2" data-level="2" style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--yellow); cursor: pointer;"></span>
+                  <span class="font-size-dot dot3" data-level="3" style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--yellow); cursor: pointer;"></span>
                 </div>
               </div>
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <button class="font-size-btn font-size-decrease" style="background: none; border: 1px solid #ddd; border-radius: 4px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: #333;">-</button>
-                <span class="font-size-label" id="font-size-label" style="font-size: 14px; color: #666;">Normal</span>
-                <button class="font-size-btn font-size-increase" style="background: none; border: 1px solid #ddd; border-radius: 4px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: #333;">+</button>
+              <div style="display: flex; justify-content: space-between; gap: 8px; align-items: center;">
+                <button class="font-size-btn font-size-decrease" style="background: none; border: 1px solid #ddd; border-radius: 4px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: var(--charcoal);">-</button>
+                <span class="font-size-label" id="font-size-label" style="font-size: 14px; color: var(--charcoal);">Normal</span>
+                <button class="font-size-btn font-size-increase" style="background: none; border: 1px solid #ddd; border-radius: 4px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: var(--charcoal);">+</button>
               </div>
             </div>
             
             <!-- Highlight Links -->
-            <button class="accessibility-option-btn" data-option="highlight-links" style="display: flex; align-items: center; width: 100%; padding: 12px 16px; background-color: #f8f9fa; border: 1px solid #e5e5e5; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; text-align: left; position: relative;">
-              <span class="option-icon" style="font-size: 18px; margin-right: 12px; width: 24px; text-align: center;">🔗</span>
-              <span class="option-text" style="flex: 1; font-size: 14px; color: #333; font-weight: 500;">Highlight Links</span>
-              <span class="option-checkmark" style="display: none; width: 20px; height: 20px; border-radius: 4px; background-color: #007bff; position: relative; margin-left: 8px;">
-                <svg style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; fill: white;" viewBox="0 0 24 24">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-                </svg>
-              </span>
+            <button class="accessibility-option-btn" data-option="highlight-links" style="display: flex; justify-content: center; flex-direction: column; align-items: center; width: 100%; padding: 12px 16px; background-color: var(--white); border: 1px solid var(--light-grey); border-radius: 16px; cursor: pointer; transition: all 0.2s ease; text-align: left; position: relative;">
+              <span class="option-icon" style="font-size: 18px; margin-right: 12px; width: 24px; text-align: center;">
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="mask0_1836_2723" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="32" height="32">
+<rect width="32" height="32" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_1836_2723)">
+<path d="M9.33341 22.6667C7.48897 22.6667 5.91675 22.0167 4.61675 20.7167C3.31675 19.4167 2.66675 17.8444 2.66675 16C2.66675 14.1556 3.31675 12.5833 4.61675 11.2833C5.91675 9.98334 7.48897 9.33334 9.33341 9.33334H13.3334C13.7112 9.33334 14.0279 9.46111 14.2834 9.71667C14.539 9.97222 14.6667 10.2889 14.6667 10.6667C14.6667 11.0444 14.539 11.3611 14.2834 11.6167C14.0279 11.8722 13.7112 12 13.3334 12H9.33341C8.2223 12 7.27786 12.3889 6.50008 13.1667C5.7223 13.9444 5.33341 14.8889 5.33341 16C5.33341 17.1111 5.7223 18.0556 6.50008 18.8333C7.27786 19.6111 8.2223 20 9.33341 20H13.3334C13.7112 20 14.0279 20.1278 14.2834 20.3833C14.539 20.6389 14.6667 20.9556 14.6667 21.3333C14.6667 21.7111 14.539 22.0278 14.2834 22.2833C14.0279 22.5389 13.7112 22.6667 13.3334 22.6667H9.33341ZM12.0001 17.3333C11.6223 17.3333 11.3056 17.2056 11.0501 16.95C10.7945 16.6944 10.6667 16.3778 10.6667 16C10.6667 15.6222 10.7945 15.3056 11.0501 15.05C11.3056 14.7944 11.6223 14.6667 12.0001 14.6667H20.0001C20.3779 14.6667 20.6945 14.7944 20.9501 15.05C21.2056 15.3056 21.3334 15.6222 21.3334 16C21.3334 16.3778 21.2056 16.6944 20.9501 16.95C20.6945 17.2056 20.3779 17.3333 20.0001 17.3333H12.0001ZM18.6667 22.6667C18.289 22.6667 17.9723 22.5389 17.7167 22.2833C17.4612 22.0278 17.3334 21.7111 17.3334 21.3333C17.3334 20.9556 17.4612 20.6389 17.7167 20.3833C17.9723 20.1278 18.289 20 18.6667 20H22.6667C23.7779 20 24.7223 19.6111 25.5001 18.8333C26.2779 18.0556 26.6667 17.1111 26.6667 16C26.6667 14.8889 26.2779 13.9444 25.5001 13.1667C24.7223 12.3889 23.7779 12 22.6667 12H18.6667C18.289 12 17.9723 11.8722 17.7167 11.6167C17.4612 11.3611 17.3334 11.0444 17.3334 10.6667C17.3334 10.2889 17.4612 9.97222 17.7167 9.71667C17.9723 9.46111 18.289 9.33334 18.6667 9.33334H22.6667C24.5112 9.33334 26.0834 9.98334 27.3834 11.2833C28.6834 12.5833 29.3334 14.1556 29.3334 16C29.3334 17.8444 28.6834 19.4167 27.3834 20.7167C26.0834 22.0167 24.5112 22.6667 22.6667 22.6667H18.6667Z" fill="#003366"/>
+</g>
+</svg>
+</span>
+              <span class="option-text" style="font-size: 1rem; color: var(--blue); font-weight: 500;">Highlight Links</span>
+              <span class="option-checkmark" style="display: none; width: 10px; height: 10px; border-radius: 100px; background-color: var(--yellow); position: absolute;top:10px;right:10px;"></span>
             </button>
             
             <!-- Dark Mode -->
-            <button class="accessibility-option-btn" data-option="dark-mode" style="display: flex; align-items: center; width: 100%; padding: 12px 16px; background-color: #f8f9fa; border: 1px solid #e5e5e5; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; text-align: left; position: relative;">
-              <span class="option-icon" style="font-size: 18px; margin-right: 12px; width: 24px; text-align: center;">🌙</span>
-              <span class="option-text" style="flex: 1; font-size: 14px; color: #333; font-weight: 500;">Dark Mode</span>
-              <span class="option-checkmark" style="display: none; width: 20px; height: 20px; border-radius: 4px; background-color: #007bff; position: relative; margin-left: 8px;">
-                <svg style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; fill: white;" viewBox="0 0 24 24">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-                </svg>
-              </span>
+            <button class="accessibility-option-btn" data-option="dark-mode" style="display: flex; justify-content: center; flex-direction: column; align-items: center; width: 100%; padding: 12px 16px; background-color: var(--white); border: 1px solid var(--light-grey); border-radius: 16px; cursor: pointer; transition: all 0.2s ease; text-align: left; position: relative;">
+              <span class="option-icon" style="font-size: 18px; width: 32px; text-align: center;">
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="mask0_1836_2729" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="32" height="32">
+<rect width="32" height="32" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_1836_2729)">
+<path d="M16.0001 29.3333C14.1556 29.3333 12.4223 28.9833 10.8001 28.2833C9.17786 27.5833 7.76675 26.6333 6.56675 25.4333C5.36675 24.2333 4.41675 22.8222 3.71675 21.2C3.01675 19.5778 2.66675 17.8444 2.66675 16C2.66675 14.1556 3.01675 12.4222 3.71675 10.8C4.41675 9.17777 5.36675 7.76666 6.56675 6.56666C7.76675 5.36666 9.17786 4.41666 10.8001 3.71666C12.4223 3.01666 14.1556 2.66666 16.0001 2.66666C17.8445 2.66666 19.5779 3.01666 21.2001 3.71666C22.8223 4.41666 24.2334 5.36666 25.4334 6.56666C26.6334 7.76666 27.5834 9.17777 28.2834 10.8C28.9834 12.4222 29.3334 14.1556 29.3334 16C29.3334 17.8444 28.9834 19.5778 28.2834 21.2C27.5834 22.8222 26.6334 24.2333 25.4334 25.4333C24.2334 26.6333 22.8223 27.5833 21.2001 28.2833C19.5779 28.9833 17.8445 29.3333 16.0001 29.3333ZM17.3334 26.5667C19.9779 26.2333 22.1945 25.0722 23.9834 23.0833C25.7723 21.0944 26.6667 18.7333 26.6667 16C26.6667 13.2667 25.7723 10.9056 23.9834 8.91666C22.1945 6.92777 19.9779 5.76666 17.3334 5.43333V26.5667Z" fill="#003366"/>
+</g>
+</svg></span>
+              <span class="option-text" style="font-size: 1rem; color: var(--blue); font-weight: 500;">Dark Mode</span>
+              <span class="option-checkmark" style="display: none; width: 10px; height: 10px; border-radius: 100px; background-color: var(--yellow); position: absolute;top:10px;right:10px;"></span>
             </button>
           </div>
-          <div class="accessibility-actions" style="display: flex; justify-content: center;">
-            <button class="accessibility-reset-btn" id="accessibility-reset" style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background-color 0.2s ease;">
-              <span class="reset-icon" style="font-size: 16px;">↺</span>
-              <span class="reset-text" style="font-size: 14px;">Reset</span>
-            </button>
-          </div>
+          
         </div>
+        <div class="accessibility-actions" style="display: flex;padding: 16px 20px;box-shadow: 0px -1px 4px rgba(0, 0, 0, 0.12);">
+            <button class="accessibility-reset-btn" id="accessibility-reset" style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--blue); color: var(--white); border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background-color 0.2s ease;">
+              <span class="reset-icon" style="font-size: 16px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1836_2735)">
+<path d="M17.65 6.35C16.2 4.9 14.21 4 12 4C7.58001 4 4.01001 7.58 4.01001 12C4.01001 16.42 7.58001 20 12 20C15.73 20 18.84 17.45 19.73 14H17.65C16.83 16.33 14.61 18 12 18C8.69001 18 6.00001 15.31 6.00001 12C6.00001 8.69 8.69001 6 12 6C13.66 6 15.14 6.69 16.22 7.78L13 11H20V4L17.65 6.35Z" fill="white"/>
+</g>
+<defs>
+<clipPath id="clip0_1836_2735">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+</defs>
+</svg></span>
+              <span class="reset-text" style="font-size: 1rem;">Reset</span>
+            </button>
+          </div>
       </div>
     </div>
     
@@ -265,7 +296,7 @@ function initAccessibilityModal() {
       .dark-mode-active {
         /* Background and text color inversion */
         background-color: #121212 !important;
-        color: #ffffff !important;
+        color: var(--white) !important;
       }
       
       /* Specific color inversions */
@@ -441,7 +472,7 @@ function initAccessibilityModal() {
       /* Modal specific fixes for dark mode */
       .dark-mode-active .accessibility-modal-content {
         background-color: #2d2d2d !important;
-        color: #ffffff !important;
+        color: var(--white) !important;
         border-color: #555 !important;
       }
       
@@ -451,21 +482,21 @@ function initAccessibilityModal() {
       }
       
       .dark-mode-active .accessibility-modal-header h3 {
-        color: #ffffff !important;
+        color: var(--white) !important;
       }
       
       .dark-mode-active .accessibility-option-btn {
         background-color: #3d3d3d !important;
         border-color: #555 !important;
-        color: #ffffff !important;
+        color: var(--white) !important;
       }
       
       .dark-mode-active .accessibility-option-btn .option-text {
-        color: #ffffff !important;
+        color: var(--white) !important;
       }
       
       .dark-mode-active .option-icon {
-        color: #ffffff !important;
+        color: var(--white) !important;
       }
       
       .dark-mode-active .accessibility-reset-btn {
@@ -473,12 +504,12 @@ function initAccessibilityModal() {
       }
       
       .dark-mode-active .font-size-btn {
-        border-color: #555 !important;
-        color: #ffffff !important;
+        border-color: var(--charcoal) !important;
+        color: var(--white) !important;
       }
       
       .dark-mode-active #font-size-label {
-        color: #ffffff !important;
+        color: var(--white) !important;
       }
       
       .dark-mode-active .font-size-dot:not(.active) {
@@ -487,8 +518,7 @@ function initAccessibilityModal() {
       
       /* Active button styles */
       .accessibility-option-btn.active {
-        background-color: #e7f4ff !important;
-        border-color: #007bff !important;
+        box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.10);
       }
       
       .accessibility-option-btn.active .option-checkmark {
@@ -496,15 +526,14 @@ function initAccessibilityModal() {
       }
       
       .dark-mode-active .accessibility-option-btn.active {
-        background-color: #1a3a5f !important;
-        border-color: #4dabf7 !important;
+        box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.10);
       }
     </style>
   `;
 
   // Add modal to body
   document.body.insertAdjacentHTML('beforeend', modalHTML);
-  
+
   console.log("Modal HTML added to body");
 
   // Wait a bit for DOM to be ready, then set up event listeners
@@ -515,23 +544,23 @@ function initAccessibilityModal() {
 
 function setupAccessibilityModalEvents() {
   console.log("Setting up accessibility modal events...");
-  
+
   // Get elements
   const accessibilityBtn = document.getElementById('accessibility-button');
   const modal = document.getElementById('accessibility-modal');
-  
+
   if (!accessibilityBtn) {
     console.error("Accessibility button not found!");
     return;
   }
-  
+
   if (!modal) {
     console.error("Accessibility modal not found!");
     return;
   }
-  
+
   console.log("Found accessibility button and modal:", accessibilityBtn, modal);
-  
+
   const closeBtn = modal.querySelector('.accessibility-modal-close');
   const resetBtn = document.getElementById('accessibility-reset');
   const optionButtons = modal.querySelectorAll('.accessibility-option-btn');
@@ -544,7 +573,7 @@ function setupAccessibilityModalEvents() {
   loadAccessibilityPreferences();
 
   // Toggle modal visibility
-  accessibilityBtn.addEventListener('click', function(e) {
+  accessibilityBtn.addEventListener('click', function (e) {
     e.preventDefault();
     e.stopPropagation();
     console.log("Accessibility button clicked!");
@@ -552,30 +581,30 @@ function setupAccessibilityModalEvents() {
   });
 
   // Close modal when clicking close button
-  closeBtn.addEventListener('click', function() {
+  closeBtn.addEventListener('click', function () {
     modal.style.display = 'none';
   });
 
   // Close modal with Escape key
-  document.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && modal.style.display === 'block') {
       modal.style.display = 'none';
     }
   });
 
   // Handle font size increase
-  fontSizeIncreaseBtn.addEventListener('click', function() {
+  fontSizeIncreaseBtn.addEventListener('click', function () {
     increaseFontSize();
   });
 
   // Handle font size decrease
-  fontSizeDecreaseBtn.addEventListener('click', function() {
+  fontSizeDecreaseBtn.addEventListener('click', function () {
     decreaseFontSize();
   });
 
   // Handle font size dot clicks
   fontSizeDots.forEach(dot => {
-    dot.addEventListener('click', function() {
+    dot.addEventListener('click', function () {
       const level = parseInt(this.getAttribute('data-level'));
       setFontSizeLevel(level);
     });
@@ -583,7 +612,7 @@ function setupAccessibilityModalEvents() {
 
   // Handle option button clicks - whole button is clickable
   optionButtons.forEach(button => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function () {
       const option = this.getAttribute('data-option');
       console.log("Option clicked:", option);
       toggleAccessibilityOption(option, this);
@@ -591,7 +620,7 @@ function setupAccessibilityModalEvents() {
   });
 
   // Handle reset button - ENHANCED WITH DEBUGGING
-  resetBtn.addEventListener('click', function() {
+  resetBtn.addEventListener('click', function () {
     console.log("Reset button clicked - starting reset process");
     resetAccessibilityOptions();
     // Close modal after reset
@@ -600,7 +629,7 @@ function setupAccessibilityModalEvents() {
       console.log("Modal closed after reset");
     }, 300);
   });
-  
+
   console.log("Accessibility modal events setup complete");
 }
 
@@ -638,9 +667,9 @@ function updateFontSize() {
   const html = document.documentElement;
   const body = document.body;
   const modal = document.getElementById('accessibility-modal');
-  
+
   if (!modal) return;
-  
+
   // Remove all font size classes
   fontSizeLevels.forEach(fontLevel => {
     if (fontLevel.level > 0) {
@@ -648,7 +677,7 @@ function updateFontSize() {
       body.classList.remove(fontLevel.className);
     }
   });
-  
+
   // Add current font size class
   if (currentFontSizeLevel > 0) {
     const currentLevel = fontSizeLevels[currentFontSizeLevel];
@@ -660,7 +689,7 @@ function updateFontSize() {
     fontSizeLabel.textContent = 'Normal';
     localStorage.removeItem('accessibility-font-size');
   }
-  
+
   // Update dots
   const dots = modal.querySelectorAll('.font-size-dot');
   dots.forEach((dot, index) => {
@@ -679,10 +708,10 @@ function toggleAccessibilityOption(option, button) {
   const html = document.documentElement;
   const body = document.body;
   const isActive = button.classList.contains('active');
-  
+
   console.log(`Toggling ${option}: currently ${isActive ? 'active' : 'inactive'}`);
-  
-  switch(option) {
+
+  switch (option) {
     case 'highlight-links':
       if (isActive) {
         // Remove link highlighting
@@ -700,7 +729,7 @@ function toggleAccessibilityOption(option, button) {
         console.log("Highlight links enabled");
       }
       break;
-      
+
     case 'dark-mode':
       if (isActive) {
         // Remove dark mode
@@ -725,11 +754,11 @@ function loadAccessibilityPreferences() {
   const html = document.documentElement;
   const body = document.body;
   const modal = document.getElementById('accessibility-modal');
-  
+
   if (!modal) return;
-  
+
   console.log("Loading accessibility preferences...");
-  
+
   // Font Size
   const savedFontSize = localStorage.getItem('accessibility-font-size');
   if (savedFontSize !== null) {
@@ -737,7 +766,7 @@ function loadAccessibilityPreferences() {
     updateFontSize();
     console.log(`Loaded: Font Size Level ${currentFontSizeLevel}`);
   }
-  
+
   // Highlight Links
   if (localStorage.getItem('accessibility-highlight-links') === 'true') {
     body.classList.add('highlight-links-active');
@@ -746,7 +775,7 @@ function loadAccessibilityPreferences() {
     if (highlightBtn) highlightBtn.classList.add('active');
     console.log("Loaded: Highlight Links enabled");
   }
-  
+
   // Dark Mode
   if (localStorage.getItem('accessibility-dark-mode') === 'true') {
     body.classList.add('dark-mode-active');
@@ -844,7 +873,7 @@ function initBhashini(container) {
     script.id = "bhashini-script";
     script.src = "https://translation-plugin.bhashini.co.in/v3/website_translation_utility.js";
     script.defer = true;
-    script.onload = function() {
+    script.onload = function () {
       console.log("Bhashini script loaded");
       setTimeout(() => setupBhashiniLanguageMonitoring(), 1000);
     };
@@ -863,9 +892,9 @@ async function fetchStockData() {
   const API_URL = "https://gmr.itsneobot.com:4000/api/share/get-latest-share-price";
   const AUTH_TOKEN = "U2FsdGVkX1+IAunex0zJueoZQpRBfpUm/DSQSMufK69HpTEh4abfdnhz0fQ+jbSmPrqojCZOhYZ6/mvA28aQxw";
 
-  const CACHE_KEY      = "header-stock-data";
+  const CACHE_KEY = "header-stock-data";
   const CACHE_TIME_KEY = "header-stock-data-time";
-  const CACHE_TTL      = 60 * 1000; // 60 seconds
+  const CACHE_TTL = 60 * 1000; // 60 seconds
 
   try {
     // 1️⃣ Check localStorage cache first (survives page refresh)
@@ -975,21 +1004,21 @@ function setupBhashiniLanguageMonitoring() {
   console.log("Setting up Bhashini language monitoring");
 
   const originalSetItem = localStorage.setItem;
-  localStorage.setItem = function(key, value) {
+  localStorage.setItem = function (key, value) {
     originalSetItem.apply(this, arguments);
     if (key === 'preferredLanguage') {
       updateLanguageIndicator(value);
     }
   };
 
-  window.addEventListener('storage', function(e) {
+  window.addEventListener('storage', function (e) {
     if (e.key === 'preferredLanguage') {
       updateLanguageIndicator(e.newValue);
     }
   });
 
   if (window.BhashiniTranslationUtility) {
-    window.BhashiniTranslationUtility.onLanguageChange = function(lang) {
+    window.BhashiniTranslationUtility.onLanguageChange = function (lang) {
       updateLanguageIndicator(lang);
     };
   }
