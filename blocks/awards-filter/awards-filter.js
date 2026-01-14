@@ -25,42 +25,59 @@ export default function decorate(block) {
     // Add some styling for author visibility
     block.classList.add('awards-author-mode');
     
-    // Hide the configuration rows (labels, title, default year)
-    // But show the award-listing-item and all award items
+    // Add a visual indicator for authors
+    const authorNote = document.createElement('div');
+    authorNote.className = 'awards-author-note';
+    authorNote.innerHTML = `
+      <p><strong>🏆 Awards List Component</strong></p>
+      <p><small>• Edit award items in the table below</small></p>
+      <p><small>• Filter UI appears in publish mode</small></p>
+    `;
+    block.insertBefore(authorNote, children[0]);
+    
+    // Process all children
     children.forEach((child, index) => {
-      if (index >= 0 && index <= 3) {
-        // Hide config rows (they're used for labels only)
+      if (index < 4) {
+        // Hide config rows completely (labels, title, default year)
         child.style.display = 'none';
       } else if (index === 4) {
         // Show the "award-listing-item" header
         child.style.display = 'block';
         child.style.fontWeight = 'bold';
         child.style.color = '#007bff';
-        child.style.marginBottom = '10px';
+        child.style.margin = '10px 0';
         child.style.padding = '10px';
         child.style.background = '#f0f8ff';
         child.style.borderLeft = '4px solid #007bff';
+        child.style.borderRadius = '4px';
       } else {
-        // Show all award items (rows 5+)
-        child.style.display = 'table-row'; // or 'block' depending on structure
+        // Show award items but clean up placeholders
+        child.style.display = 'block';
+        child.style.margin = '15px 0';
+        child.style.padding = '15px';
+        child.style.background = '#fff';
+        child.style.border = '1px solid #e0e0e0';
+        child.style.borderRadius = '4px';
         
-        // Make award items more visible in author mode
-        child.style.border = '1px dashed #ddd';
-        child.style.marginBottom = '5px';
-        child.style.padding = '8px';
-        child.style.background = '#f9f9f9';
+        // Clean up placeholder text in table cells
+        const cells = [...child.children];
+        cells.forEach((cell, cellIndex) => {
+          if (cell.textContent?.trim() === 'Award/Partner Image') {
+            cell.style.fontStyle = 'italic';
+            cell.style.color = '#666';
+            cell.style.background = '#f5f5f5';
+            cell.style.padding = '8px';
+            cell.innerHTML = '<em>Add award/partner image here</em>';
+          } else if (cell.textContent?.trim() === 'Description Text') {
+            cell.style.fontStyle = 'italic';
+            cell.style.color = '#666';
+            cell.style.background = '#f5f5f5';
+            cell.style.padding = '8px';
+            cell.innerHTML = '<em>Add description text here</em>';
+          }
+        });
       }
     });
-    
-    // Add a visual indicator for authors
-    const authorNote = document.createElement('div');
-    authorNote.className = 'awards-author-note';
-    authorNote.innerHTML = `
-      <p><strong>🏆 Awards List Component</strong></p>
-      <p><small>• "award-listing-item" header and table rows below are authorable</small></p>
-      <p><small>• Filter UI will appear in publish/preview mode</small></p>
-    `;
-    block.insertBefore(authorNote, children[0]);
     
     return; // Stop execution in author mode
   }
@@ -125,6 +142,10 @@ export default function decorate(block) {
 
     const category = cols[0]?.textContent?.trim().toLowerCase() || "";
     const year = cols[1]?.textContent?.trim() || "";
+
+    // Skip placeholder rows in publish mode
+    if (cols[2]?.textContent?.trim() === 'Award/Partner Image') return;
+    if (cols[4]?.textContent?.trim() === 'Description Text') return;
 
     // Safely get image/picture element
     let imageEl = null;
@@ -241,16 +262,12 @@ export default function decorate(block) {
      AEM-SAFE RENDER
      Hide original content but don't delete it
   =============================== */
-  // Hide the original table content but keep it in DOM for AEM
+  // Mark block as processed
   block.classList.add('awards-block-processed');
   
-  // Only hide the first 4 rows (config rows) in publish mode
-  // Keep "award-listing-item" and award items in DOM but hidden
-  Array.from(block.children).forEach((child, index) => {
-    if (index < 4) {
-      // Hide config rows
-      child.style.display = 'none';
-    }
+  // Hide all original content in publish mode
+  Array.from(block.children).forEach(child => {
+    child.style.display = 'none';
   });
   
   // Append our runtime UI
