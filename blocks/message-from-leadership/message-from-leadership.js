@@ -6,18 +6,12 @@ export default function decorate(block) {
   const prevBtn = runtime.querySelector('.mfl-prev');
   const nextBtn = runtime.querySelector('.mfl-next');
 
-  /* ==============================
-     1️⃣ Collect item components
-     ============================== */
-  const items = [...block.children].filter((child) =>
-    child.dataset?.aueModel === 'message-from-leadership-item'
+  const items = [...block.children].filter(
+    (child) => child.dataset?.aueModel === 'message-from-leadership-item'
   );
 
   if (!items.length) return;
 
-  /* ==============================
-     2️⃣ Build slides
-     ============================== */
   items.forEach((item) => {
     const cells = [...item.children];
     if (cells.length < 4) return;
@@ -28,14 +22,14 @@ export default function decorate(block) {
     const designation = cells[3].textContent.trim();
 
     const slide = document.createElement('div');
-    slide.className = 'mfl-slide';
+    slide.className = 'mfl-card';
 
     slide.innerHTML = `
       <div class="mfl-image">
         ${image ? image.outerHTML : ''}
       </div>
       <div class="mfl-content">
-        <h4 class="mfl-subtitle">${subtitle}</h4>
+        <div class="mfl-subtitle">${subtitle}</div>
         <div class="mfl-message">${message}</div>
         <div class="mfl-author">${designation}</div>
       </div>
@@ -44,9 +38,6 @@ export default function decorate(block) {
     slidesWrapper.append(slide);
   });
 
-  /* ==============================
-     3️⃣ Slider logic
-     ============================== */
   let index = 0;
   const slides = [...slidesWrapper.children];
 
