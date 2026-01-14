@@ -5,7 +5,7 @@ export default function decorate(block) {
   /* ===============================
      CONFIG (DEFENSIVE)
   =============================== */
-  // Extract config data BEFORE we modify anything
+  // Extract config data
   const allAwardsLabel = 
     children[1]?.textContent?.trim() || "All Awards";
   const filterPanelTitle = 
@@ -31,73 +31,89 @@ export default function decorate(block) {
     authorNote.className = 'awards-author-note';
     authorNote.innerHTML = `
       <p><strong>🏆 Awards List Component</strong></p>
-      <p><small>• Each award item has 6 columns: Category, Year, Award Image, Title, Description, Partner Image+Description</small></p>
+      <p><small>• Edit award items in the table below</small></p>
       <p><small>• Filter UI appears in publish mode</small></p>
     `;
     block.insertBefore(authorNote, children[0]);
+    
+    // In author mode, just style the table for better visibility
+    items.forEach((item, index) => {
+      item.classList.add('award-item-author');
+      
+      // Add labels to each column for clarity
+      const cols = [...item.children];
+      if (cols.length >= 6) {
+        const labels = ['Category', 'Year', 'Award Image', 'Title', 'Description', 'Partner Image', 'Partner Description'];
+        cols.forEach((col, colIndex) => {
+          const label = document.createElement('span');
+          label.className = 'column-label';
+          label.textContent = labels[colIndex] || `Column ${colIndex + 1}`;
+          col.insertBefore(label, col.firstChild);
+        });
+      }
+    });
     
     return; // Stop execution in author mode
   }
 
   /* ===============================
-     RUNTIME STRUCTURE (PUBLISH MODE ONLY)
-     Collect data BEFORE we hide anything
+     PUBLISH MODE: Build the runtime UI
   =============================== */
+  // First, extract all data before modifying anything
   const years = new Set();
   const categories = new Set();
-  const cardsData = []; // Store data first, then render
+  const cardsData = [];
 
-  // First pass: Collect all data from original content
+  // Extract data from all award items
   items.forEach((item) => {
     const cols = [...item.children];
-    if (!cols.length) return;
+    if (cols.length < 5) return; // Need at least basic info
 
-    // Debug logging to see what we're getting
-    console.log('Processing item with columns:', cols.length);
-    cols.forEach((col, index) => {
-      console.log(`Column ${index}:`, col.innerHTML);
-    });
-
-    // Extract data with defensive checks
+    // Extract data
     const category = cols[0]?.textContent?.trim().toLowerCase() || "";
     const year = cols[1]?.textContent?.trim() || "";
-
-    // Award image - check if column exists and has content
+    
+    // Award image
     let awardImageEl = null;
-    if (cols[2] && cols[2].children.length > 0) {
+    if (cols[2]) {
+      // Remove any column labels that might have been added in author mode
+      const label = cols[2].querySelector('.column-label');
+      if (label) label.remove();
+      
       awardImageEl = cols[2].querySelector("img") || cols[2].querySelector("picture");
     }
 
     const title = cols[3]?.textContent?.trim() || "";
     const description = cols[4]?.innerHTML?.trim() || "";
-
-    // Partner image and description - check multiple possible locations
+    
+    // Partner image and description
     let partnerImageEl = null;
     let partnerDescription = "";
     
-    // Try column 5 for partner image
-    if (cols[5] && cols[5].children.length > 0) {
+    // Partner image (column 5)
+    if (cols[5]) {
+      // Remove any column labels
+      const label = cols[5].querySelector('.column-label');
+      if (label) label.remove();
+      
       partnerImageEl = cols[5].querySelector("img") || cols[5].querySelector("picture");
     }
     
-    // Try column 6 for partner description, fall back to column 5 if it contains text
+    // Partner description (column 6)
     if (cols[6]) {
+      // Remove any column labels
+      const label = cols[6].querySelector('.column-label');
+      if (label) label.remove();
+      
       partnerDescription = cols[6].innerHTML?.trim() || "";
-    } else if (cols[5] && !partnerImageEl && cols[5].textContent?.trim()) {
-      // If column 5 doesn't have an image but has text, use it as description
-      partnerDescription = cols[5].innerHTML?.trim() || "";
     }
 
     // Skip if no meaningful data
-    if (!category && !year && !title && !description && !awardImageEl && !partnerImageEl && !partnerDescription) {
-      console.log('Skipping item - no meaningful data');
-      return;
-    }
+    if (!category && !year && !title) return;
 
     if (year) years.add(year);
     if (category) categories.add(category);
 
-    // Store data for rendering
     cardsData.push({
       category,
       year,
@@ -109,13 +125,7 @@ export default function decorate(block) {
     });
   });
 
-  console.log('Collected cards data:', cardsData.length);
-  console.log('Years:', Array.from(years));
-  console.log('Categories:', Array.from(categories));
-
-  /* ===============================
-     BUILD RUNTIME UI
-  =============================== */
+  // Build the runtime UI
   const section = document.createElement("section");
   section.className = "awards-filter-runtime";
 
@@ -148,7 +158,7 @@ export default function decorate(block) {
 
   aside.appendChild(categoryList);
 
-  /* ---------- LIST ---------- */
+  /* ---------- AWARDS LIST ---------- */
   const list = document.createElement("div");
   list.className = "awards-list";
 
@@ -157,42 +167,38 @@ export default function decorate(block) {
   container.appendChild(layout);
   section.appendChild(container);
 
-  // Now render all cards from collected data
+  // Build award cards from collected data
   const cards = [];
-  cardsData.forEach((data) => {
+  cardsData.forEach((data, index) => {
     const card = document.createElement("article");
     card.className = "award-card";
     card.dataset.year = data.year;
     card.dataset.category = data.category;
 
-    // Award Image block
+    // Award Image
+    const imgWrap = document.createElement("div");
+    imgWrap.className = "award-img";
     if (data.awardImageEl) {
-      const imgWrap = document.createElement("div");
-      imgWrap.className = "award-img";
       const clonedImage = data.awardImageEl.cloneNode(true);
-      // Clone all attributes
       Array.from(data.awardImageEl.attributes).forEach(attr => {
         clonedImage.setAttribute(attr.name, attr.value);
       });
       imgWrap.appendChild(clonedImage);
-      card.appendChild(imgWrap);
-    } else {
-      // Add empty placeholder if no image
-      const imgWrap = document.createElement("div");
-      imgWrap.className = "award-img empty";
-      card.appendChild(imgWrap);
     }
+    card.appendChild(imgWrap);
 
-    // Award Content block
+    // Content wrapper
     const content = document.createElement("div");
     content.className = "award-content";
 
+    // Title
     if (data.title) {
       const h3 = document.createElement("h3");
       h3.textContent = data.title;
       content.appendChild(h3);
     }
 
+    // Description
     if (data.description) {
       const desc = document.createElement("div");
       desc.className = "award-description";
@@ -200,11 +206,12 @@ export default function decorate(block) {
       content.appendChild(desc);
     }
 
-    // Partner Information Block (if available)
+    // Partner info (only if we have partner data)
     if (data.partnerImageEl || data.partnerDescription) {
       const partnerBlock = document.createElement("div");
       partnerBlock.className = "award-partner-info";
       
+      // Partner image
       if (data.partnerImageEl) {
         const partnerImgWrap = document.createElement("div");
         partnerImgWrap.className = "partner-img";
@@ -216,6 +223,7 @@ export default function decorate(block) {
         partnerBlock.appendChild(partnerImgWrap);
       }
       
+      // Partner description
       if (data.partnerDescription) {
         const partnerDesc = document.createElement("div");
         partnerDesc.className = "partner-description";
@@ -231,13 +239,12 @@ export default function decorate(block) {
     cards.push(card);
   });
 
-  /* ===============================
-     FILTER POPULATION
-  =============================== */
-  // Years
+  /* ---------- FILTER POPULATION ---------- */
+  // Years dropdown
   const sortedYears = Array.from(years).sort((a, b) =>
     b.localeCompare(a, undefined, { numeric: true })
   );
+  
   const defaultOption = document.createElement("option");
   defaultOption.value = "";
   defaultOption.textContent = "All Years";
@@ -251,7 +258,7 @@ export default function decorate(block) {
     yearSelect.appendChild(opt);
   });
 
-  // Categories
+  // Categories list
   Array.from(categories)
     .sort()
     .forEach((cat) => {
@@ -261,9 +268,7 @@ export default function decorate(block) {
       categoryList.appendChild(li);
     });
 
-  /* ===============================
-     FILTER LOGIC
-  =============================== */
+  /* ---------- FILTER LOGIC ---------- */
   function applyFilter() {
     const yearVal = yearSelect.value;
     const catVal = categoryList.querySelector(".active")?.dataset.category || "all";
@@ -287,21 +292,15 @@ export default function decorate(block) {
     applyFilter();
   });
 
-  /* ===============================
-     AEM-SAFE RENDER
-     Now hide original content AFTER we've extracted all data
-  =============================== */
-  // Mark block as processed
-  block.classList.add('awards-block-processed');
+  /* ---------- CLEAN UP ---------- */
+  // Clear the entire block content first
+  while (block.firstChild) {
+    block.removeChild(block.firstChild);
+  }
   
-  // Hide all original content in publish mode
-  Array.from(block.children).forEach(child => {
-    child.style.display = 'none';
-  });
-  
-  // Append our runtime UI
+  // Append our new structure
   block.appendChild(section);
 
-  // Initial filter
+  // Apply initial filter
   applyFilter();
 }
