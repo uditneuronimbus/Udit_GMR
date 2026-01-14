@@ -96,14 +96,6 @@ export default function decorate(block) {
   const cols = [...item.children];
   if (!cols.length) return;
 
-  // Skip rows that are just placeholders
-  const isPlaceholder =
-    cols.every(col => col.textContent?.trim() === '') || // empty row
-    //cols[4]?.textContent?.trim() === 'Description Text' || // placeholder description
-    //cols[2]?.textContent?.trim() === 'Award/Partner Image'; // placeholder image
-
-  if (isPlaceholder) return;
-
   const category = cols[0]?.textContent?.trim().toLowerCase() || "";
   const year = cols[1]?.textContent?.trim() || "";
 
