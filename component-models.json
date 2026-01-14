@@ -169,6 +169,18 @@
             "value": "no-margin"
           },
           {
+            "name": "Default Section",
+            "value": "Default-section"
+          },
+          {
+            "name": "Background Gray",
+            "value": "bg-gray"
+          },
+          {
+            "name": "Background White",
+            "value": "bg-white"
+          },
+          {
             "name": "Background Blue",
             "value": "bg-primary"
           }
