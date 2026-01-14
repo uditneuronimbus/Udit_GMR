@@ -1,42 +1,34 @@
-/* Awards block styles for author mode */
-.awards-author-mode .award-item-author {
+/* Author Mode Styling */
+.awards-author-mode {
   border: 2px dashed #ccc;
-  margin: 10px 0;
-  padding: 10px;
+  padding: 20px;
   background: #f9f9f9;
 }
 
-.awards-author-mode .column-label {
-  display: block;
-  font-size: 11px;
-  font-weight: bold;
-  color: #666;
-  background: #eee;
-  padding: 2px 5px;
-  margin-bottom: 5px;
-  border-radius: 3px;
-}
-
-.awards-author-mode .awards-author-note {
-  background: #e6f7ff;
-  border: 1px solid #91d5ff;
-  padding: 10px;
+.awards-author-note {
+  background: #e3f2fd;
+  border-left: 4px solid #2196f3;
+  padding: 15px;
   margin-bottom: 20px;
   border-radius: 4px;
-  font-size: 14px;
 }
 
-/* Hide the author note in publish mode */
-.awards-block-processed .awards-author-note {
-  display: none;
+.awards-author-note p {
+  margin: 0;
+  color: #0d47a1;
 }
 
-/* Publish mode styles */
+/* Hide original content in publish mode */
+.awards-block-processed > *:not(.awards-filter-runtime):not(.awards-author-note) {
+  display: none !important;
+}
+
+/* Show our runtime UI */
 .awards-filter-runtime {
-  display: block;
-  width: 100%;
+  display: block !important;
 }
 
+/* Awards Filter UI Styling */
 .awards-layout {
   display: grid;
   grid-template-columns: 250px 1fr;
@@ -52,14 +44,16 @@
 .awards-filter-panel h4 {
   margin-top: 0;
   margin-bottom: 15px;
+  color: #333;
 }
 
 .year-filter {
   width: 100%;
-  padding: 8px;
+  padding: 8px 12px;
   margin-bottom: 20px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  font-size: 14px;
 }
 
 .category-filter {
@@ -69,80 +63,67 @@
 }
 
 .category-filter li {
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 4px;
+  padding: 10px 15px;
   margin-bottom: 5px;
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .category-filter li:hover {
-  background: #e9ecef;
+  background: #f0f0f0;
+  border-color: #ddd;
 }
 
 .category-filter li.active {
   background: #007bff;
   color: white;
+  border-color: #007bff;
 }
 
 .awards-list {
   display: grid;
-  grid-template-columns: 1fr;
   gap: 20px;
 }
 
 .award-card {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
   border: 1px solid #eee;
   border-radius: 8px;
+  overflow: hidden;
   background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .award-img {
-  flex: 0 0 150px;
+  width: 100%;
 }
 
-.award-img img {
+.award-img img,
+.award-img picture {
   width: 100%;
   height: auto;
-  border-radius: 4px;
+  display: block;
 }
 
 .award-content {
-  flex: 1;
+  padding: 20px;
 }
 
 .award-content h3 {
   margin-top: 0;
   margin-bottom: 10px;
+  color: #333;
 }
 
 .award-description {
-  margin-bottom: 15px;
-}
-
-.award-partner-info {
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 1px solid #eee;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.partner-img {
-  flex: 0 0 80px;
-}
-
-.partner-img img {
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
-}
-
-.partner-description {
-  flex: 1;
-  font-size: 14px;
   color: #666;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .awards-layout {
+    grid-template-columns: 1fr;
+  }
 }
