@@ -461,7 +461,7 @@ hr {
 .container,
 .businesses-section.block,
 .listed-companies-wrapper,
-.global-leaders-aviation-wrapper {
+.global-leaders-aviation-wrapper, .default-section .default-content-wrapper {
     max-width: 1440px;
     width: 100%;
     margin: 0 auto;
@@ -501,7 +501,7 @@ hr {
     font-size: var(--fs-medium);
     font-weight: var(--fw-semi-bold);
 }
-.spacer {
+.spacer, .default-section, .page-corporate-governance .overlay-banner-container {
     padding: 80px 0;
 }
 
@@ -581,3 +581,12 @@ hr {
         padding-right: 10px;
     }
 }
+
+/* Corporate Governance page css */
+.page-corporate-governance .banner-overlay { margin: 0;}
+.page-corporate-governance .banner-overlay-text { background: none;}
+.page-corporate-governance .banner-overlay-text .col-md-7 { flex: 0 0 auto; width: 100%;}
+.page-corporate-governance .banner-overlay-text .col-md-7 .sec-title.mb-4 { margin-top: 55px; margin-bottom: 2.5rem !important; position: relative; }
+.page-corporate-governance .banner-overlay-text .col-md-7 .sec-title.mb-4:before { position: absolute; content: ''; top:-55px; left:0; background: url(../img/wlogo.svg); background-repeat: no-repeat; width: 108px; height: 40px; background-size: cover; }
+
+/* Corporate Governance page css */

@@ -12,15 +12,36 @@ import {
   loadCSS,
 } from "./aem.js";
 
-// Metadata helper
+/* ===============================
+   METADATA HELPER
+   =============================== */
 const getMetadata = (name) => {
   const meta = document.querySelector(`meta[name="${name}"]`);
   return meta ? meta.content : null;
 };
 
+/* ===============================
+   PAGE SLUG → BODY CLASS
+   =============================== */
 /**
- * Moves all the attributes from a given element to another given element.
+ * Adds page slug as body class
+ * "/"                     → page-home
+ * "/about-us"             → page-about-us
+ * "/services/web-design"  → page-web-design
  */
+function addPageSlugClass() {
+  const path = window.location.pathname
+    .replace(/\/$/, "") // remove trailing slash
+    .split("/")
+    .filter(Boolean);
+
+  const slug = path.length ? path[path.length - 1] : "home";
+  document.body.classList.add(`page-${slug.toLowerCase()}`);
+}
+
+/* ===============================
+   ATTRIBUTE HELPERS
+   =============================== */
 export function moveAttributes(from, to, attributes) {
   if (!attributes) {
     attributes = [...from.attributes].map(({ nodeName }) => nodeName);
@@ -34,9 +55,6 @@ export function moveAttributes(from, to, attributes) {
   });
 }
 
-/**
- * Move instrumentation attributes.
- */
 export function moveInstrumentation(from, to) {
   moveAttributes(
     from,
@@ -50,9 +68,9 @@ export function moveInstrumentation(from, to) {
   );
 }
 
-/**
- * Load fonts.css
- */
+/* ===============================
+   LOAD FONTS
+   =============================== */
 async function loadFonts() {
   await loadCSS(`${window.hlx.codeBasePath}/styles/fonts.css`);
   try {
@@ -64,9 +82,9 @@ async function loadFonts() {
   }
 }
 
-/**
- * Auto blocks
- */
+/* ===============================
+   AUTO BLOCKS
+   =============================== */
 function buildAutoBlocks() {
   try {
     // no-op
@@ -75,9 +93,9 @@ function buildAutoBlocks() {
   }
 }
 
-/**
- * Decorate main
- */
+/* ===============================
+   DECORATE MAIN
+   =============================== */
 export function decorateMain(main) {
   decorateButtons(main);
   decorateIcons(main);
@@ -86,9 +104,9 @@ export function decorateMain(main) {
   decorateBlocks(main);
 }
 
-/**
- * Load eager
- */
+/* ===============================
+   LOAD EAGER
+   =============================== */
 async function loadEager(doc) {
   document.documentElement.lang = "en";
   decorateTemplateAndTheme();
@@ -96,6 +114,9 @@ async function loadEager(doc) {
   const main = doc.querySelector("main");
   if (main) {
     decorateMain(main);
+
+    /* ✅ ADD BODY CLASSES EARLY */
+    addPageSlugClass();
     document.body.classList.add("appear");
 
     // Adobe Target wait (if enabled)
@@ -122,9 +143,9 @@ async function loadEager(doc) {
   }
 }
 
-/**
- * Load lazy
- */
+/* ===============================
+   LOAD LAZY
+   =============================== */
 async function loadLazy(doc) {
   const main = doc.querySelector("main");
   await loadSections(main);
@@ -140,15 +161,16 @@ async function loadLazy(doc) {
   loadFonts();
 }
 
-/**
- * Load delayed (Bhashini removed)
- */
+/* ===============================
+   LOAD DELAYED (Bhashini Removed)
+   =============================== */
 function loadDelayed() {
   import("./delayed.js");
 }
 
-/* ---------------- ADOBE TARGET ---------------- */
-
+/* ===============================
+   ADOBE TARGET
+   =============================== */
 const onDecoratedElement = (fn) => {
   if (
     document.querySelector(
@@ -222,13 +244,9 @@ const getAndApplyTargetPropositions = async () => {
   }
 };
 
-// Auto-trigger Target
-if (getMetadata("target") === "true" || getMetadata("personalization")) {
-  getAndApplyTargetPropositions();
-}
-
-/* -------- Returning User Flag -------- */
-
+/* ===============================
+   RETURNING USER FLAG
+   =============================== */
 const KEY = "returning-user";
 if (!localStorage.getItem(KEY)) {
   localStorage.setItem(KEY, "true");
@@ -236,9 +254,9 @@ if (!localStorage.getItem(KEY)) {
   window.isReturningUser = true;
 }
 
-/**
- * Load page
- */
+/* ===============================
+   LOAD PAGE
+   =============================== */
 async function loadPage() {
   await loadEager(document);
   await loadLazy(document);

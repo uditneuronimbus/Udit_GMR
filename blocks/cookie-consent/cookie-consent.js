@@ -430,7 +430,108 @@ function openConsentModal(block) {
 }
 
 /* ===============================
-   6. ENTRY POINT - AEM SAFE PATTERN
+   6. COOKIE POLICY LINK HANDLER
+   =============================== */
+
+function findCookieConsentBlock() {
+  // Find the cookie consent block by its marker class
+  const blocks = document.querySelectorAll('.cookie-consent-component');
+  if (blocks.length > 0) return blocks[0];
+  
+  // Alternative: look for the hidden data container
+  const dataContainers = document.querySelectorAll('.cookie-consent-data');
+  if (dataContainers.length > 0) {
+    return dataContainers[0].closest('.block') || dataContainers[0].parentElement;
+  }
+  
+  return null;
+}
+
+function setupCookiePolicyLinks() {
+  // Find all links with title containing "Cookies Policies" (exact match)
+  const allLinks = document.querySelectorAll('a[title]');
+  
+  allLinks.forEach(link => {
+    const title = link.getAttribute('title') || '';
+    
+    // Check if this is exactly "Cookies Policies" (case-insensitive)
+    if (title.toLowerCase() === 'cookies policies') {
+      
+      // Check if we've already added a handler
+      if (link.dataset.cookieHandlerAdded) return;
+      
+      // Mark as processed
+      link.dataset.cookieHandlerAdded = 'true';
+      
+      // Add click event listener
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        console.log('[Cookies] Cookie policy link clicked');
+        
+        const block = findCookieConsentBlock();
+        
+        if (block) {
+          // Remove any existing modal first
+          document.querySelectorAll('.cookie-consent-modal').forEach(m => m.remove());
+          
+          // Open the consent modal
+          openConsentModal(block);
+          
+          // Optional: Scroll to modal
+          setTimeout(() => {
+            const modal = document.querySelector('.cookie-consent-modal');
+            if (modal) {
+              modal.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+              });
+            }
+          }, 100);
+        } else {
+          console.warn('[Cookies] Cookie consent block not found');
+        }
+        
+        return false;
+      });
+    }
+  });
+}
+
+// Setup MutationObserver to handle dynamically added links
+function setupLinkObserver() {
+  if (typeof MutationObserver !== 'undefined') {
+    const observer = new MutationObserver((mutations) => {
+      let shouldSetupLinks = false;
+      
+      mutations.forEach((mutation) => {
+        if (mutation.addedNodes.length) {
+          // Check if any added nodes are links or contain links
+          mutation.addedNodes.forEach(node => {
+            if (node.nodeType === 1) { // Element node
+              if (node.tagName === 'A' || node.querySelector('a')) {
+                shouldSetupLinks = true;
+              }
+            }
+          });
+        }
+      });
+      
+      if (shouldSetupLinks) {
+        setupCookiePolicyLinks();
+      }
+    });
+    
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  }
+}
+
+/* ===============================
+   7. ENTRY POINT - AEM SAFE PATTERN
    =============================== */
 
 export default function decorate(block) {
@@ -480,4 +581,18 @@ export default function decorate(block) {
     // First time visitor or no saved consent
     openConsentModal(block);
   }
+  
+  // Setup cookie policy links
+  setTimeout(() => {
+    setupCookiePolicyLinks();
+    setupLinkObserver();
+  }, 500);
 }
+
+// Make openConsentModal available globally for debugging if needed
+window.openCookieConsentModal = function() {
+  const block = findCookieConsentBlock();
+  if (block) {
+    openConsentModal(block);
+  }
+};
