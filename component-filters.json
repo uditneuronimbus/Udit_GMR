@@ -47,7 +47,9 @@
       "values-and-beliefs",
       "our-presence",
       "corporate-governance",
-      "header"
+      "header",
+      "partners-filters",
+      "awards-filter"
     ]
   },
   {
@@ -79,6 +81,12 @@
       "image",
       "text",
       "richtext"
+    ]
+  },
+  {
+    "id": "only-awards-items",
+    "components": [
+      "listing-item"
     ]
   },
   {
@@ -269,12 +277,6 @@
     ]
   },
   {
-    "id": "only-listing-items",
-    "components": [
-      "listing-item"
-    ]
-  },
-  {
     "id": "message-from-leadership",
     "components": [
       "message-from-leadership-item"
@@ -311,6 +313,12 @@
     "id": "page-tabs",
     "components": [
       "page-tab-item"
+    ]
+  },
+  {
+    "id": "only-partners-items",
+    "components": [
+      "listing-item"
     ]
   },
   {

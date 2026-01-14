@@ -1,16 +1,16 @@
 {
   "definitions": [
     {
-      "title": "Listing Filter",
-      "id": "listing-filter",
+      "title": "Partners Filter",
+      "id": "partners-filter",
       "plugins": {
         "xwalk": {
           "page": {
             "resourceType": "core/franklin/components/block/v1/block",
             "template": {
-              "name": "listing-filter",
-              "model": "listing-filter",
-              "filter": "only-listing-items"
+              "name": "partners-filter",
+              "model": "partners-filter",
+              "filter": "only-partners-items"
             }
           }
         }
@@ -34,7 +34,7 @@
   ],
   "models": [
     {
-      "id": "listing-filter",
+      "id": "partners-filter",
       "fields": [
         {
           "component": "text",
@@ -44,35 +44,10 @@
         },
         {
           "component": "text",
-          "name": "allAwardsLabel",
-          "label": "All Awards Button Text",
-          "valueType": "string",
-          "defaultValue": "All Awards"
-        },
-        {
-          "component": "select",
-          "name": "viewType",
-          "label": "View Type",
-          "valueType": "string",
-          "options": [
-            { "name": "Awards (List View)", "value": "awards" },
-            { "name": "Partners (Grid View)", "value": "partners" }
-          ],
-          "defaultValue": "awards"
-        },
-        {
-          "component": "text",
           "name": "filterPanelTitle",
           "label": "Filter Sidebar Title",
           "valueType": "string",
           "defaultValue": "Filter by Year and Category"
-        },
-        {
-          "component": "text",
-          "name": "defaultYear",
-          "label": "Initial Year to Show",
-          "valueType": "string",
-          "defaultValue": "2026"
         }
       ]
     },
@@ -86,20 +61,12 @@
           "label": "Item Category",
           "valueType": "string",
           "options": [
-            { "name": "Corporate", "value": "corporate" },
-            { "name": "Airports & Aero Services", "value": "airports" },
+            { "name": "Airports", "value": "airports" },
             { "name": "Energy", "value": "energy" },
-            { "name": "Sports", "value": "sports" },
-            { "name": "Foundation", "value": "foundation" },
-            { "name": "Transport & Urban Infrastructure ", "value": "Transport " },
-            { "name": "Other Services", "value": "others" }
+            { "name": "Transportation", "value": "Transportation " },
+            { "name": "GMR Varalakshmi Foundation", "value": "foundation" },
+            { "name": "EPC", "value": "epc" }
           ]
-        },
-        {
-          "component": "text",
-          "name": "year",
-          "label": "Year (e.g. 2026)",
-          "valueType": "string"
         },
         {
           "component": "reference",
@@ -130,7 +97,7 @@
   ],
   "filters": [
     {
-      "id": "only-listing-items",
+      "id": "only-partners-items",
       "components": ["listing-item"]
     }
   ]
