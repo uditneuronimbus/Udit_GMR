@@ -19,21 +19,47 @@ export default function decorate(block) {
                       window.location.href.includes('/editor.html');
 
   /* ===============================
-     AEM-AUTHOR MODE: Show raw content
+     AEM-AUTHOR MODE: Show only the authoring structure
   =============================== */
   if (isAuthorMode) {
     // Add some styling for author visibility
     block.classList.add('awards-author-mode');
     
-    // Hide the filter controls in author mode (they won't work anyway)
-    const yearLabel = children[3]?.previousElementSibling;
-    if (yearLabel) yearLabel.style.display = 'none';
-    children[3].style.display = 'none';
+    // Hide the configuration rows (labels, title, default year)
+    // But show the award-listing-item and all award items
+    children.forEach((child, index) => {
+      if (index >= 0 && index <= 3) {
+        // Hide config rows (they're used for labels only)
+        child.style.display = 'none';
+      } else if (index === 4) {
+        // Show the "award-listing-item" header
+        child.style.display = 'block';
+        child.style.fontWeight = 'bold';
+        child.style.color = '#007bff';
+        child.style.marginBottom = '10px';
+        child.style.padding = '10px';
+        child.style.background = '#f0f8ff';
+        child.style.borderLeft = '4px solid #007bff';
+      } else {
+        // Show all award items (rows 5+)
+        child.style.display = 'table-row'; // or 'block' depending on structure
+        
+        // Make award items more visible in author mode
+        child.style.border = '1px dashed #ddd';
+        child.style.marginBottom = '5px';
+        child.style.padding = '8px';
+        child.style.background = '#f9f9f9';
+      }
+    });
     
     // Add a visual indicator for authors
     const authorNote = document.createElement('div');
     authorNote.className = 'awards-author-note';
-    authorNote.innerHTML = '<p><strong>Awards List Component</strong><br>Filter UI will be visible in publish/preview mode.</p>';
+    authorNote.innerHTML = `
+      <p><strong>🏆 Awards List Component</strong></p>
+      <p><small>• "award-listing-item" header and table rows below are authorable</small></p>
+      <p><small>• Filter UI will appear in publish/preview mode</small></p>
+    `;
     block.insertBefore(authorNote, children[0]);
     
     return; // Stop execution in author mode
@@ -90,7 +116,10 @@ export default function decorate(block) {
   const categories = new Set();
   const cards = [];
 
-  items.forEach((item) => {
+  items.forEach((item, index) => {
+    // Skip the first item (the "award-listing-item" header)
+    if (index === 0) return;
+    
     const cols = [...item.children];
     if (!cols.length) return;
 
@@ -143,7 +172,6 @@ export default function decorate(block) {
     if (description) {
       const desc = document.createElement("div");
       desc.className = "award-description";
-      // Use textContent for safety, or innerHTML if you trust the AEM content
       desc.innerHTML = description;
       content.appendChild(desc);
     }
@@ -216,14 +244,16 @@ export default function decorate(block) {
   // Hide the original table content but keep it in DOM for AEM
   block.classList.add('awards-block-processed');
   
-  // Hide all children except the first one (which might be a wrapper)
-  Array.from(block.children).forEach(child => {
-    if (!child.classList.contains('awards-author-note')) {
+  // Only hide the first 4 rows (config rows) in publish mode
+  // Keep "award-listing-item" and award items in DOM but hidden
+  Array.from(block.children).forEach((child, index) => {
+    if (index < 4) {
+      // Hide config rows
       child.style.display = 'none';
     }
   });
   
-  // Append our runtime UI AFTER the original content
+  // Append our runtime UI
   block.appendChild(section);
 
   // Initial filter
