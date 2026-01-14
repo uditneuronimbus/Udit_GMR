@@ -31,13 +31,13 @@ export default function decorate(block) {
     authorNote.innerHTML = `
       <p><strong>🏆 Awards List Component</strong></p>
       <p><small>• Edit award items in the table below</small></p>
+      <p><small>• Each award item has 6 columns: Category, Year, Award Image, Title, Description, Partner Image+Description</small></p>
       <p><small>• Filter UI appears in publish mode</small></p>
     `;
     block.insertBefore(authorNote, children[0]);
     
     // Process all children
-    
-    
+    // Keep all original content visible in author mode
     return; // Stop execution in author mode
   }
 
@@ -86,72 +86,119 @@ export default function decorate(block) {
   section.appendChild(container);
 
   /* ===============================
-     DATA COLLECTION (SAFE)
+     DATA COLLECTION (SAFE) - Updated for 6 columns per award item
   =============================== */
   const years = new Set();
   const categories = new Set();
   const cards = [];
 
-  items.forEach((item) => {
-  const cols = [...item.children];
-  if (!cols.length) return;
+  // Process items in groups of 2 (main award + partner info)
+  for (let i = 0; i < items.length; i += 2) {
+    const mainAward = items[i];
+    const partnerInfo = items[i + 1]; // This contains partner image and description
+    
+    if (!mainAward) continue;
+    
+    const cols = [...mainAward.children];
+    if (!cols.length) continue;
 
-  const category = cols[0]?.textContent?.trim().toLowerCase() || "";
-  const year = cols[1]?.textContent?.trim() || "";
+    const category = cols[0]?.textContent?.trim().toLowerCase() || "";
+    const year = cols[1]?.textContent?.trim() || "";
 
-  // Safely get image/picture element
-  let imageEl = null;
-  if (cols[2]) {
-    imageEl = cols[2].querySelector("img") || cols[2].querySelector("picture");
+    // Safely get award image/picture element
+    let awardImageEl = null;
+    if (cols[2]) {
+      awardImageEl = cols[2].querySelector("img") || cols[2].querySelector("picture");
+    }
+
+    const title = cols[3]?.textContent?.trim() || "";
+    const description = cols[4]?.innerHTML?.trim() || "";
+
+    // Get partner info if available
+    let partnerImageEl = null;
+    let partnerDescription = "";
+    
+    if (partnerInfo) {
+      const partnerCols = [...partnerInfo.children];
+      // Partner image is in the first column of partner row
+      if (partnerCols[0]) {
+        partnerImageEl = partnerCols[0].querySelector("img") || partnerCols[0].querySelector("picture");
+      }
+      // Partner description is in the second column of partner row
+      if (partnerCols[1]) {
+        partnerDescription = partnerCols[1]?.innerHTML?.trim() || "";
+      }
+    }
+
+    if (!category && !year && !title && !description && !awardImageEl) continue;
+
+    if (year) years.add(year);
+    if (category) categories.add(category);
+
+    const card = document.createElement("article");
+    card.className = "award-card";
+    card.dataset.year = year;
+    card.dataset.category = category;
+
+    // Award Image block
+    if (awardImageEl) {
+      const imgWrap = document.createElement("div");
+      imgWrap.className = "award-img";
+      const clonedImage = awardImageEl.cloneNode(true);
+      Array.from(awardImageEl.attributes).forEach(attr => {
+        clonedImage.setAttribute(attr.name, attr.value);
+      });
+      imgWrap.appendChild(clonedImage);
+      card.appendChild(imgWrap);
+    }
+
+    // Award Content block
+    const content = document.createElement("div");
+    content.className = "award-content";
+
+    if (title) {
+      const h3 = document.createElement("h3");
+      h3.textContent = title;
+      content.appendChild(h3);
+    }
+
+    if (description) {
+      const desc = document.createElement("div");
+      desc.className = "award-description";
+      desc.innerHTML = description;
+      content.appendChild(desc);
+    }
+
+    // Partner Information Block (if available)
+    if (partnerImageEl || partnerDescription) {
+      const partnerBlock = document.createElement("div");
+      partnerBlock.className = "award-partner-info";
+      
+      if (partnerImageEl) {
+        const partnerImgWrap = document.createElement("div");
+        partnerImgWrap.className = "partner-img";
+        const clonedPartnerImage = partnerImageEl.cloneNode(true);
+        Array.from(partnerImageEl.attributes).forEach(attr => {
+          clonedPartnerImage.setAttribute(attr.name, attr.value);
+        });
+        partnerImgWrap.appendChild(clonedPartnerImage);
+        partnerBlock.appendChild(partnerImgWrap);
+      }
+      
+      if (partnerDescription) {
+        const partnerDesc = document.createElement("div");
+        partnerDesc.className = "partner-description";
+        partnerDesc.innerHTML = partnerDescription;
+        partnerBlock.appendChild(partnerDesc);
+      }
+      
+      content.appendChild(partnerBlock);
+    }
+
+    card.appendChild(content);
+    list.appendChild(card);
+    cards.push(card);
   }
-
-  const title = cols[3]?.textContent?.trim() || "";
-  const description = cols[4]?.innerHTML?.trim() || "";
-
-  if (!category && !year && !title && !description && !imageEl) return;
-
-  if (year) years.add(year);
-  if (category) categories.add(category);
-
-  const card = document.createElement("article");
-  card.className = "award-card";
-  card.dataset.year = year;
-  card.dataset.category = category;
-
-  // Image block
-  if (imageEl) {
-    const imgWrap = document.createElement("div");
-    imgWrap.className = "award-img";
-    const clonedImage = imageEl.cloneNode(true);
-    Array.from(imageEl.attributes).forEach(attr => {
-      clonedImage.setAttribute(attr.name, attr.value);
-    });
-    imgWrap.appendChild(clonedImage);
-    card.appendChild(imgWrap);
-  }
-
-  // Content block
-  const content = document.createElement("div");
-  content.className = "award-content";
-
-  if (title) {
-    const h3 = document.createElement("h3");
-    h3.textContent = title;
-    content.appendChild(h3);
-  }
-
-  if (description) {
-    const desc = document.createElement("div");
-    desc.className = "award-description";
-    desc.innerHTML = description;
-    content.appendChild(desc);
-  }
-
-  card.appendChild(content);
-  list.appendChild(card);
-  cards.push(card);
-});
-
 
   /* ===============================
      FILTER POPULATION
