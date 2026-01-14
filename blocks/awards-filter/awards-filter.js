@@ -1,21 +1,34 @@
 export default function decorate(block) {
-  const children = [...block.children];
-  if (children.length < 5) return;
+  const rows = [...block.querySelectorAll(":scope > div")];
+  if (!rows.length) return;
 
   /* ===============================
-     CONFIG (DEFENSIVE)
+     READ CONFIG ROWS (SAFE)
   =============================== */
+
   const allAwardsLabel =
-    children[1]?.textContent?.trim() || "All Awards";
+    rows[0]?.textContent?.trim() || "All Awards";
+
   const filterPanelTitle =
-    children[2]?.textContent?.trim() || "Filter by Year and Category";
+    rows[1]?.textContent?.trim() || "Filter by Year and Category";
+
   const defaultYear =
-    children[3]?.textContent?.trim() || "";
-  const items = children.slice(4);
+    rows[2]?.textContent?.trim() || "";
+
+  /* ===============================
+     FIND award-listing-item BLOCKS
+  =============================== */
+
+  const itemBlocks = rows.filter(
+    (row) => row.classList.contains("award-listing-item")
+  );
+
+  if (!itemBlocks.length) return;
 
   /* ===============================
      RUNTIME STRUCTURE
   =============================== */
+
   const section = document.createElement("section");
   section.className = "awards-filter-runtime";
 
@@ -26,6 +39,7 @@ export default function decorate(block) {
   layout.className = "awards-layout";
 
   /* ---------- FILTER PANEL ---------- */
+
   const aside = document.createElement("aside");
   aside.className = "awards-filter-panel";
 
@@ -50,6 +64,7 @@ export default function decorate(block) {
   aside.appendChild(categoryList);
 
   /* ---------- LIST ---------- */
+
   const list = document.createElement("div");
   list.className = "awards-list";
 
@@ -59,35 +74,22 @@ export default function decorate(block) {
   section.appendChild(container);
 
   /* ===============================
-     DATA COLLECTION (SAFE)
+     DATA COLLECTION (FRANKLIN SAFE)
   =============================== */
+
   const years = new Set();
   const categories = new Set();
   const cards = [];
 
-  items.forEach((item) => {
+  itemBlocks.forEach((item) => {
     const cols = [...item.children];
-    if (!cols.length) return;
+    if (cols.length < 3) return;
 
-    // SAFE lookups with better null handling
     const category = cols[0]?.textContent?.trim().toLowerCase() || "";
     const year = cols[1]?.textContent?.trim() || "";
-    
-    // Get image safely - clone the element if it exists
-    let imageEl = null;
-    if (cols[2]) {
-      imageEl = cols[2].querySelector("img");
-      // If no img tag, check if it's a picture element
-      if (!imageEl && cols[2].querySelector("picture")) {
-        imageEl = cols[2].querySelector("picture");
-      }
-    }
-    
+    const imageEl = cols[2]?.querySelector("img") || null;
     const title = cols[3]?.textContent?.trim() || "";
     const description = cols[4]?.innerHTML?.trim() || "";
-
-    // Skip only if truly empty
-    if (!category && !year && !title && !description && !imageEl) return;
 
     if (year) years.add(year);
     if (category) categories.add(category);
@@ -97,16 +99,13 @@ export default function decorate(block) {
     card.dataset.year = year;
     card.dataset.category = category;
 
-    /* ---------- Image ---------- */
     if (imageEl) {
       const imgWrap = document.createElement("div");
       imgWrap.className = "award-img";
-      // Clone the entire element (img or picture)
       imgWrap.appendChild(imageEl.cloneNode(true));
       card.appendChild(imgWrap);
     }
 
-    /* ---------- Content ---------- */
     const content = document.createElement("div");
     content.className = "award-content";
 
@@ -117,10 +116,9 @@ export default function decorate(block) {
     }
 
     if (description) {
-      const desc = document.createElement("div");
-      desc.className = "award-description";
-      desc.innerHTML = description;
-      content.appendChild(desc);
+      const p = document.createElement("p");
+      p.innerHTML = description;
+      content.appendChild(p);
     }
 
     card.appendChild(content);
@@ -129,11 +127,11 @@ export default function decorate(block) {
   });
 
   /* ===============================
-     FILTER POPULATION
+     POPULATE FILTERS
   =============================== */
-  // Sort years descending
-  Array.from(years)
-    .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }))
+
+  [...years]
+    .sort((a, b) => b.localeCompare(a))
     .forEach((y) => {
       const opt = document.createElement("option");
       opt.value = y;
@@ -142,32 +140,31 @@ export default function decorate(block) {
       yearSelect.appendChild(opt);
     });
 
-  // Sort categories alphabetically
-  Array.from(categories)
-    .sort()
-    .forEach((cat) => {
-      const li = document.createElement("li");
-      li.dataset.category = cat;
-      li.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
-      categoryList.appendChild(li);
-    });
+  categories.forEach((cat) => {
+    const li = document.createElement("li");
+    li.dataset.category = cat;
+    li.textContent = cat;
+    categoryList.appendChild(li);
+  });
 
   /* ===============================
      FILTER LOGIC
   =============================== */
+
   function applyFilter() {
     const yearVal = yearSelect.value;
-    const catVal = categoryList.querySelector(".active")?.dataset.category || "all";
+    const catVal =
+      categoryList.querySelector(".active")?.dataset.category || "all";
 
     cards.forEach((card) => {
       const yearMatch = !yearVal || card.dataset.year === yearVal;
-      const catMatch = catVal === "all" || card.dataset.category === catVal;
+      const catMatch =
+        catVal === "all" || card.dataset.category === catVal;
 
       card.style.display = yearMatch && catMatch ? "" : "none";
     });
   }
 
-  // Event listeners with error handling
   yearSelect.addEventListener("change", applyFilter);
 
   categoryList.addEventListener("click", (e) => {
@@ -182,15 +179,9 @@ export default function decorate(block) {
   });
 
   /* ===============================
-     AEM-SAFE RENDER - FIXED
+     FINAL RENDER (SAFE)
   =============================== */
-  // Instead of clearing innerHTML, use a safer approach
-  while (block.firstChild) {
-    block.removeChild(block.firstChild);
-  }
-  
-  block.appendChild(section);
-  
-  // Trigger initial filter
+
+  block.replaceChildren(section);
   applyFilter();
 }
