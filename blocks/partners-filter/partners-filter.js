@@ -22,24 +22,13 @@ export default function decorate(block) {
       <p><small>• Item types: Airports, Energy, Transportation, GMR Varalakshmi Foundation, EPC</small></p>
     `;
     block.insertBefore(authorNote, children[0]);
-    
-    // Add a wrapper class to the original content for author mode styling
-    const originalContent = document.createElement('div');
-    originalContent.className = 'block-content';
-    
-    // Move original children to the wrapper
-    while (block.children.length > 1) { // Keep the author note
-      originalContent.appendChild(block.children[1]);
-    }
-    block.appendChild(originalContent);
-    
     return;
   }
 
   /* =========================
-     RUNTIME STRUCTURE - ADDED TO EXISTING BLOCK
+     RUNTIME STRUCTURE
   ========================= */
-  const section = document.createElement("div");
+  const section = document.createElement("section");
   section.className = "partners-filter-runtime";
 
   const container = document.createElement("div");
@@ -133,12 +122,10 @@ export default function decorate(block) {
   container.appendChild(desktopLayout);
   container.appendChild(mobileLayout);
   section.appendChild(container);
-
-  // Insert the runtime UI at the beginning of the block
-  block.insertBefore(section, block.firstChild);
+  block.appendChild(section);
 
   /* =========================
-     DATA COLLECTION - USE EXISTING DATA
+     DATA COLLECTION
   ========================= */
   const categories = new Set();
   const cardsDesktop = [];
@@ -153,7 +140,6 @@ export default function decorate(block) {
     "epc": "EPC"
   };
 
-  // Create cards from original items
   items.forEach((item, index) => {
     const cols = [...item.children];
     if (!cols.length) return;
@@ -350,6 +336,11 @@ export default function decorate(block) {
   /* =========================
      INITIALIZATION
   ========================= */
+  // Hide original content
+  Array.from(block.children).forEach(child => {
+    if (child !== section) child.style.display = "none";
+  });
+
   // Set initial state to show ALL partners
   currentCategory = "all";
   
@@ -373,8 +364,4 @@ export default function decorate(block) {
       closeModal();
     }
   });
-
-  // Note: Original data remains in the DOM but is not used in the runtime UI
-  // The runtime UI creates its own cards from the original data
-  // Original block content remains untouched for authoring/SEO purposes
 }
