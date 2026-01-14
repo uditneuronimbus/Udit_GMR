@@ -1,79 +1,92 @@
 export default function decorate(block) {
-  const rows = [...block.children];
-  if (!rows.length) return;
+  const children = [...block.children];
+  if (children.length < 5) return;
 
-  /* ==============================
-     1️⃣ Read Config
-     ============================== */
-  const configCells = [...rows[0].children];
+  /* ===============================
+     CONFIG ROWS
+  =============================== */
 
-  const sectionTitle = configCells[0]?.textContent?.trim();
   const allAwardsLabel =
-    configCells[1]?.textContent?.trim() || "All Awards";
+    children[1]?.textContent?.trim() || "All Awards";
   const filterPanelTitle =
-    configCells[2]?.textContent?.trim() || "Filter by Year and Category";
+    children[2]?.textContent?.trim() || "Filter by Year and Category";
   const defaultYear =
-    configCells[3]?.textContent?.trim() || "";
+    children[3]?.textContent?.trim() || "";
 
-  const itemRows = rows.slice(1);
+  const awardItems = children.slice(4);
 
-  /* ==============================
-     2️⃣ Hide authored rows (AEM SAFE)
-     ============================== */
-  rows.forEach((row) => (row.style.display = "none"));
+  /* ===============================
+     WRAPPER
+  =============================== */
 
-  /* ==============================
-     3️⃣ Runtime Wrapper
-     ============================== */
   const section = document.createElement("section");
   section.className = "awards-filter-runtime";
 
-  section.innerHTML = `
-    <div class="container">
-      ${sectionTitle ? `<h2 class="sec-title">${sectionTitle}</h2>` : ""}
+  const container = document.createElement("div");
+  container.className = "container";
 
-      <div class="awards-layout">
-        <aside class="awards-filter-panel">
-          <h4>${filterPanelTitle}</h4>
+  const layout = document.createElement("div");
+  layout.className = "awards-layout";
 
-          <select class="year-filter">
-            <option value="">All Years</option>
-          </select>
+  /* ===============================
+     FILTER PANEL
+  =============================== */
 
-          <ul class="category-filter">
-            <li class="active" data-category="all">${allAwardsLabel}</li>
-          </ul>
-        </aside>
+  const aside = document.createElement("aside");
+  aside.className = "awards-filter-panel";
 
-        <div class="awards-list"></div>
-      </div>
-    </div>
-  `;
+  const h4 = document.createElement("h4");
+  h4.textContent = filterPanelTitle;
+  aside.appendChild(h4);
 
-  block.after(section);
+  const yearSelect = document.createElement("select");
+  yearSelect.className = "year-filter";
+  yearSelect.innerHTML = `<option value="">All Years</option>`;
+  aside.appendChild(yearSelect);
 
-  const yearSelect = section.querySelector(".year-filter");
-  const categoryList = section.querySelector(".category-filter");
-  const awardsList = section.querySelector(".awards-list");
+  const categoryList = document.createElement("ul");
+  categoryList.className = "category-filter";
+
+  const allLi = document.createElement("li");
+  allLi.textContent = allAwardsLabel;
+  allLi.dataset.category = "all";
+  allLi.classList.add("active");
+  categoryList.appendChild(allLi);
+
+  aside.appendChild(categoryList);
+
+  /* ===============================
+     LIST
+  =============================== */
+
+  const list = document.createElement("div");
+  list.className = "awards-list";
+
+  layout.appendChild(aside);
+  layout.appendChild(list);
+  container.appendChild(layout);
+  section.appendChild(container);
+
+  /* ===============================
+     DATA COLLECTION
+  =============================== */
 
   const years = new Set();
   const categories = new Set();
   const cards = [];
 
-  /* ==============================
-     4️⃣ Build Award Cards
-     ============================== */
-  itemRows.forEach((row) => {
-    const cells = [...row.children];
+  awardItems.forEach((item) => {
+    const cells = [...item.children];
     if (!cells.length) return;
 
-    const category = cells[0]?.textContent?.trim()?.toLowerCase();
+    const category = cells[0]?.textContent?.trim().toLowerCase();
     const year = cells[1]?.textContent?.trim();
     const img = cells[2]?.querySelector("img");
     const title = cells[3]?.textContent?.trim();
-    const description = cells[4]?.innerHTML?.trim();
+    const desc = cells[4]?.innerHTML?.trim();
 
-    if (!title) return;
+    // ❗ allow description-only items
+    if (!title && !desc) return;
 
     if (year) years.add(year);
     if (category) categories.add(category);
@@ -83,21 +96,37 @@ export default function decorate(block) {
     card.dataset.year = year || "";
     card.dataset.category = category || "";
 
-    card.innerHTML = `
-      ${img ? `<div class="award-img">${img.outerHTML}</div>` : ""}
-      <div class="award-content">
-        <h3>${title}</h3>
-        ${description ? `<p>${description}</p>` : ""}
-      </div>
-    `;
+    if (img) {
+      const imgWrap = document.createElement("div");
+      imgWrap.className = "award-img";
+      imgWrap.appendChild(img.cloneNode(true));
+      card.appendChild(imgWrap);
+    }
 
-    awardsList.appendChild(card);
+    const content = document.createElement("div");
+    content.className = "award-content";
+
+    if (title) {
+      const h3 = document.createElement("h3");
+      h3.textContent = title;
+      content.appendChild(h3);
+    }
+
+    if (desc) {
+      const p = document.createElement("p");
+      p.innerHTML = desc;
+      content.appendChild(p);
+    }
+
+    card.appendChild(content);
+    list.appendChild(card);
     cards.push(card);
   });
 
-  /* ==============================
-     5️⃣ Populate Filters
-     ============================== */
+  /* ===============================
+     POPULATE FILTERS
+  =============================== */
+
   [...years]
     .sort((a, b) => b - a)
     .forEach((y) => {
@@ -111,24 +140,25 @@ export default function decorate(block) {
   categories.forEach((cat) => {
     const li = document.createElement("li");
     li.dataset.category = cat;
-    li.textContent = cat.replace(/-/g, " ");
+    li.textContent = cat;
     categoryList.appendChild(li);
   });
 
-  /* ==============================
-     6️⃣ Filtering Logic
-     ============================== */
+  /* ===============================
+     FILTER LOGIC
+  =============================== */
+
   function applyFilter() {
-    const selectedYear = yearSelect.value;
-    const activeCat =
+    const yearVal = yearSelect.value;
+    const catVal =
       categoryList.querySelector(".active")?.dataset.category || "all";
 
     cards.forEach((card) => {
-      const yearMatch = !selectedYear || card.dataset.year === selectedYear;
+      const yearMatch = !yearVal || card.dataset.year === yearVal;
       const catMatch =
-        activeCat === "all" || card.dataset.category === activeCat;
+        catVal === "all" || card.dataset.category === catVal;
 
-      card.style.display = yearMatch && catMatch ? "grid" : "none";
+      card.style.display = yearMatch && catMatch ? "" : "none";
     });
   }
 
@@ -143,8 +173,12 @@ export default function decorate(block) {
     applyFilter();
   });
 
-  /* ==============================
-     7️⃣ Init
-     ============================== */
+  /* ===============================
+     FINAL RENDER (AEM SAFE)
+  =============================== */
+
+  block.innerHTML = "";
+  block.appendChild(section);
+
   applyFilter();
 }
