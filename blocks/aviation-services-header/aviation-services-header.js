@@ -35,7 +35,34 @@ export default function decorate(block) {
   const ul = runtime.querySelector(".aviation-tabs-list");
 
   /* ================================
-     4️⃣ Build tabs (TEXT ONLY)
+     4️⃣ Helper function to get clean path (without domain)
+     ================================ */
+  const getCleanPath = (url) => {
+    if (!url) return '';
+    
+    let path = url;
+    
+    // Remove protocol and domain if present
+    path = path.replace(/^(https?:\/\/)?[^\/]+/, '');
+    
+    // Remove trailing slash
+    path = path.replace(/\/$/, '');
+    
+    // Ensure it starts with / if not empty
+    if (path && !path.startsWith('/')) {
+      path = '/' + path;
+    }
+    
+    return path;
+  };
+
+  /* ================================
+     5️⃣ Get current page path
+     ================================ */
+  const currentPath = getCleanPath(window.location.href);
+
+  /* ================================
+     6️⃣ Build tabs (TEXT ONLY)
      ================================ */
   itemRows.forEach((row) => {
     const cells = [...row.children];
@@ -47,7 +74,17 @@ export default function decorate(block) {
     if (!label || !link) return;
 
     const li = document.createElement("li");
-    if (isActive) li.classList.add("active");
+    
+    // Get clean path from link
+    const linkPath = getCleanPath(link);
+    
+    // Check if current page path matches link path
+    const isCurrentPage = currentPath === linkPath;
+    
+    // Add active class if either authored as active OR current page matches
+    if (isActive || isCurrentPage) {
+      li.classList.add("active");
+    }
 
     const a = document.createElement("a");
     a.href = link;
