@@ -14,24 +14,7 @@
   padding: 0 32px;
 }
 
-/* Section Title */
-.mfl-title {
-  font-size: 42px;
-  font-weight: 500;
-  margin-bottom: 48px;
-  color: #0b1f33;
-}
-
-/* Slider wrapper */
-.mfl-slider {
-  position: relative;
-}
-
-.mfl-slides {
-  width: 100%;
-}
-
-/* Card layout */
+/* Card */
 .mfl-card {
   display: grid;
   grid-template-columns: 45% 55%;
@@ -48,6 +31,13 @@
 }
 
 /* Content */
+.mfl-title {
+  font-size: 42px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  color: #0b1f33;
+}
+
 .mfl-subtitle {
   font-size: 14px;
   text-transform: uppercase;
@@ -69,33 +59,31 @@
   color: #000;
 }
 
-/* Navigation (matches first image) */
-.mfl-nav {
+/* Navigation */
+.mfl-navigation {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.mfl-navigation button {
   width: 44px;
   height: 44px;
   border-radius: 6px;
   border: 1px solid #f0b04f;
   background: transparent;
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.mfl-nav.next {
+.mfl-navigation .mfl-next {
   background: #f0b04f;
   color: #fff;
 }
 
-/* Navigation container */
-.mfl-navigation {
-  display: flex;
-  justify-content: flex-start;
-  gap: 12px;
-  margin-top: 32px;
-}
-
-/* Slide visibility */
+/* Slides */
 .mfl-slide {
   display: none;
 }
