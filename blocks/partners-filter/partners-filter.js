@@ -76,38 +76,22 @@ export default function decorate(block) {
     card.dataset.category = category;
 
     if (image) {
-  // In AEM editor, images might be in a different location
-  const isAEMEditor = document.body.classList.contains('cq-wcm-edit');
+  // Get AEM component path if available
+  const cardPath = card.dataset.cqComponentPath || card.dataset.componentPath;
   
-  if (isAEMEditor) {
-    // Find the image in common AEM editor locations
-    let editorImage = image;
+  if (cardPath) {
+    // Find image that belongs to this component
+    const componentImage = document.querySelector(`[data-cq-component-path="${cardPath}"] img`);
     
-    // If image is not where we expect, look for it
-    if (!card.contains(image)) {
-      // Check common AEM editor image containers
-      const possibleContainers = [
-        '.cq-Editable-dom img',
-        '.image img',
-        '.cq-image img',
-        `[data-path*="${card.dataset.cqPath}"] img`
-      ];
-      
-      for (const selector of possibleContainers) {
-        const foundImage = document.querySelector(selector);
-        if (foundImage && !foundImage.closest('.partner-img')) {
-          editorImage = foundImage;
-          break;
-        }
-      }
+    if (componentImage && !card.contains(componentImage)) {
+      // Move image from wherever it is into the card
+      const imgWrap = document.createElement("div");
+      imgWrap.className = "partner-img";
+      imgWrap.appendChild(componentImage);
+      card.appendChild(imgWrap);
     }
-    
-    const imgWrap = document.createElement("div");
-    imgWrap.className = "partner-img";
-    imgWrap.appendChild(editorImage);
-    card.appendChild(imgWrap);
   } else {
-    // Normal (publish) behavior
+    // Fallback to original logic
     const imgWrap = document.createElement("div");
     imgWrap.className = "partner-img";
     imgWrap.appendChild(image.cloneNode(true));
