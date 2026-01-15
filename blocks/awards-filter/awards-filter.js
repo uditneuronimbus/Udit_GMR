@@ -171,7 +171,7 @@ export default function decorate(block) {
 
       if (image) {
         // Get the dropdown/container
-        const dropdown = card.closest('.partner-listing-item') || card.parentElement;
+        const dropdown = card.closest('.award-listing-item') || card.parentElement;
 
         // If image is outside dropdown, move it inside
         if (dropdown && !dropdown.contains(image)) {
@@ -188,7 +188,7 @@ export default function decorate(block) {
         } else {
           // Image is already in correct container
           const imgWrap = document.createElement("div");
-          imgWrap.className = "partner-img";
+          imgWrap.className = "award-img";
           imgWrap.appendChild(image.cloneNode(true));
           card.appendChild(imgWrap);
         }
