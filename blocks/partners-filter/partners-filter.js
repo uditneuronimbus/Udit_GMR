@@ -29,7 +29,7 @@ export default function decorate(block) {
      RUNTIME STRUCTURE
   ========================= */
   const section = document.createElement("section");
-  section.className = "partners-filter-runtime";
+  section.className = "partners-filter-runtime bg-gray";
 
   const container = document.createElement("div");
   container.className = "container";
