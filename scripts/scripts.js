@@ -216,8 +216,8 @@ const getAndApplyTargetPropositions = async () => {
       window.isReturningUser || localStorage.getItem("returning-user");
 
     const response = await window.alloy("sendEvent", {
-      renderDecisions: false,
-      decisionScopes: ["__view__"],
+      renderDecisions: true,
+      decisionScopes: ["target-global-mbox"],
       xdm: {
         eventType: "web.webpagedetails.pageViews",
         profile: {
@@ -225,6 +225,7 @@ const getAndApplyTargetPropositions = async () => {
         },
       },
     });
+    console.log("🎯 Target Response:", response);
 
     const { propositions } = response;
     console.log('Propositions: ', propositions.length || 0);
