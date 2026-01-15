@@ -169,19 +169,22 @@ export default function decorate(block) {
       card.dataset.year = year;
       card.dataset.category = category;
       
-      if (imageEl) {
+        if (imageEl) {
   const imgWrap = document.createElement("div");
   imgWrap.className = "award-img";
 
-  // Get actual image or picture
-  const media = imageEl.querySelector("picture, img");
+  const temp = document.createElement("div");
+  temp.appendChild(imageEl.cloneNode(true));
+
+  const media = temp.querySelector("picture, img");
 
   if (media) {
-    imgWrap.appendChild(media.cloneNode(true));
+    imgWrap.appendChild(media);
   }
 
   card.appendChild(imgWrap);
 }
+
       
       const content = document.createElement("div");
       content.className = "award-content";
