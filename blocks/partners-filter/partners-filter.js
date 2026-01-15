@@ -76,11 +76,23 @@ export default function decorate(block) {
     card.dataset.category = category;
 
     if (image) {
-      const imgWrap = document.createElement("div");
-      imgWrap.className = "partner-img";
-      imgWrap.appendChild(image.cloneNode(true));
-      card.appendChild(imgWrap);
-    }
+  // Get the dropdown/container
+  const dropdown = card.closest('.partner-listing-item') || card.parentElement;
+
+  // Create wrapper
+  const imgWrap = document.createElement("div");
+  imgWrap.className = "partner-img";
+
+  // Remove image from its current position (outside)
+  if (image.parentNode) {
+    image.parentNode.removeChild(image);
+  }
+
+  // Append image inside card dropdown
+  imgWrap.appendChild(image);
+  card.appendChild(imgWrap);
+}
+
 
     const content = document.createElement("div");
     content.className = "partner-content";
