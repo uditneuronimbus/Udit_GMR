@@ -76,26 +76,46 @@ export default function decorate(block) {
     card.dataset.category = category;
 
     if (image) {
-  // Get the dropdown/container
+  // Check if we're in AEM editor
+  const isAEMEditor = document.body.classList.contains('cq-wcm-edit');
+  
+  // Get dropdown container
   const dropdown = card.closest('.partner-listing-item') || card.parentElement;
   
-  // If image is outside dropdown, move it inside
-  if (dropdown && !dropdown.contains(image)) {
-    const imgWrap = document.createElement("div");
-    imgWrap.className = "partner-img";
+  // Create wrapper
+  const imgWrap = document.createElement("div");
+  imgWrap.className = "partner-img";
+  
+  if (isAEMEditor) {
+    // In AEM editor: clone image and hide original
+    const clonedImage = image.cloneNode(true);
+    imgWrap.appendChild(clonedImage);
+    card.appendChild(imgWrap);
     
-    // Remove from current location and add to card
+    // Hide the original image
+    image.style.cssText = `
+      display: none !important;
+      visibility: hidden !important;
+      position: absolute !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    `;
+    
+    // Optional: Move to hidden area to keep AEM editing intact
+    if (!image.closest('.cq-editable-hidden')) {
+      const hiddenContainer = document.createElement('div');
+      hiddenContainer.className = 'cq-editable-hidden';
+      hiddenContainer.style.cssText = 'display: none !important;';
+      image.parentNode.insertBefore(hiddenContainer, image);
+      hiddenContainer.appendChild(image);
+    }
+    
+  } else {
+    // In publish mode: move the actual image
     if (image.parentNode) {
       image.parentNode.removeChild(image);
     }
-    
     imgWrap.appendChild(image);
-    card.appendChild(imgWrap);
-  } else {
-    // Image is already in correct container
-    const imgWrap = document.createElement("div");
-    imgWrap.className = "partner-img";
-    imgWrap.appendChild(image.cloneNode(true));
     card.appendChild(imgWrap);
   }
 }
