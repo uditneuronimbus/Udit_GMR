@@ -25,13 +25,12 @@ export default function decorate(block) {
   }
 
   /* ================================
-     3️⃣ Hide authored rows (AEM SAFE)
+     3️⃣ Clear block and build new structure
   ================================ */
-  children.forEach(child => child.style.display = "none");
-
-  /* ================================
-     4️⃣ Runtime wrapper with mobile layout
-  ================================ */
+  // Clear block content
+  block.innerHTML = '';
+  
+  // Create runtime container
   const runtime = document.createElement("section");
   runtime.className = "partners-filter-runtime bg-gray";
   
@@ -81,7 +80,7 @@ export default function decorate(block) {
   block.appendChild(runtime);
 
   /* ================================
-     5️⃣ DOM References
+     4️⃣ DOM References
   ================================ */
   const desktopList = runtime.querySelector('.desktop-layout .partners-list');
   const mobileList = runtime.querySelector('.mobile-layout .partners-list');
@@ -95,12 +94,13 @@ export default function decorate(block) {
   const closeModalBtn = runtime.querySelector('.close-modal');
 
   /* ================================
-     6️⃣ Data Collection & Card Building
+     5️⃣ Data Collection & Card Building
   ================================ */
   const categories = new Set();
   const cardsDesktop = [];
   const cardsMobile = [];
 
+  // Process items from the original children array
   items.forEach((item) => {
     const cols = [...item.children];
     if (!cols.length) return;
@@ -177,7 +177,7 @@ export default function decorate(block) {
   });
 
   /* ================================
-     7️⃣ Populate Filters
+     6️⃣ Populate Filters
   ================================ */
   const sortedCategories = Array.from(categories).sort();
 
@@ -197,7 +197,7 @@ export default function decorate(block) {
   });
 
   /* ================================
-     8️⃣ State Management
+     7️⃣ State Management
   ================================ */
   const state = {
     category: "all",
@@ -205,7 +205,7 @@ export default function decorate(block) {
   };
 
   /* ================================
-     9️⃣ Filter Functions
+     8️⃣ Filter Functions
   ================================ */
   function filterByCategory(category, cards) {
     state.category = category;
@@ -255,7 +255,7 @@ export default function decorate(block) {
   }
 
   /* ================================
-     🔟 Event Listeners
+     9️⃣ Event Listeners
   ================================ */
   // Desktop Filters
   categoryListDesktop.addEventListener("click", (e) => {
@@ -309,7 +309,7 @@ export default function decorate(block) {
   });
 
   /* ================================
-     1️⃣1️⃣ Initialize
+     1️⃣0️⃣ Initialize
   ================================ */
   // Show all cards by default
   filterByCategory("all", cardsDesktop);
