@@ -75,25 +75,13 @@ export default function decorate(block) {
     card.className = "partner-card";
     card.dataset.category = category;
 
-    if (image) {
-  // Check if we're in AEM author mode
-  const isAEMAuthor = document.body.classList.contains('cq-wcm-edit') || 
-                      document.body.classList.contains('aem-AuthorLayer-Edit');
+    if (image && image.parentNode) {
+  const imgWrap = document.createElement("div");
+  imgWrap.className = "partner-img";
   
-  // Only wrap if not already wrapped or in specific conditions
-  if (!image.closest('.partner-img') || !isAEMAuthor) {
-    const imgWrap = document.createElement("div");
-    imgWrap.className = "partner-img";
-    
-    // In author mode, move the image; otherwise clone
-    if (isAEMAuthor && image.parentNode) {
-      imgWrap.appendChild(image);
-    } else {
-      imgWrap.appendChild(image.cloneNode(true));
-    }
-    
-    card.appendChild(imgWrap);
-  }
+  // Move the actual image instead of cloning it
+  imgWrap.appendChild(image);
+  card.appendChild(imgWrap);
 }
 
     const content = document.createElement("div");
