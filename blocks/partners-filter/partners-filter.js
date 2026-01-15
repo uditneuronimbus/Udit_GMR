@@ -75,18 +75,43 @@ export default function decorate(block) {
     card.className = "partner-card";
     card.dataset.category = category;
 
-    if (image && image.parentNode) {
-  const imgWrap = document.createElement("div");
-  imgWrap.className = "partner-img";
+    if (image) {
+  // In AEM editor, images might be in a different location
+  const isAEMEditor = document.body.classList.contains('cq-wcm-edit');
   
-  // Move the actual image into the card
-  imgWrap.appendChild(image);
-  card.appendChild(imgWrap);
-  
-  // If image was outside, ensure it's now inside the dropdown
-  const dropdown = card.closest('.partner-listing-item, .dropdown-container');
-  if (dropdown && !dropdown.contains(imgWrap)) {
-    dropdown.appendChild(imgWrap);
+  if (isAEMEditor) {
+    // Find the image in common AEM editor locations
+    let editorImage = image;
+    
+    // If image is not where we expect, look for it
+    if (!card.contains(image)) {
+      // Check common AEM editor image containers
+      const possibleContainers = [
+        '.cq-Editable-dom img',
+        '.image img',
+        '.cq-image img',
+        `[data-path*="${card.dataset.cqPath}"] img`
+      ];
+      
+      for (const selector of possibleContainers) {
+        const foundImage = document.querySelector(selector);
+        if (foundImage && !foundImage.closest('.partner-img')) {
+          editorImage = foundImage;
+          break;
+        }
+      }
+    }
+    
+    const imgWrap = document.createElement("div");
+    imgWrap.className = "partner-img";
+    imgWrap.appendChild(editorImage);
+    card.appendChild(imgWrap);
+  } else {
+    // Normal (publish) behavior
+    const imgWrap = document.createElement("div");
+    imgWrap.className = "partner-img";
+    imgWrap.appendChild(image.cloneNode(true));
+    card.appendChild(imgWrap);
   }
 }
 
