@@ -76,47 +76,25 @@ export default function decorate(block) {
     card.dataset.category = category;
 
     if (image) {
-  // Check if we're in AEM editor
-  const isAEMEditor = document.body.classList.contains('cq-wcm-edit');
-  
-  // Get dropdown container
   const dropdown = card.closest('.partner-listing-item') || card.parentElement;
   
-  // Create wrapper
   const imgWrap = document.createElement("div");
   imgWrap.className = "partner-img";
   
-  if (isAEMEditor) {
-    // In AEM editor: clone image and hide original
-    const clonedImage = image.cloneNode(true);
-    imgWrap.appendChild(clonedImage);
-    card.appendChild(imgWrap);
-    
-    // Hide the original image
-    image.style.cssText = `
-      display: none !important;
-      visibility: hidden !important;
-      position: absolute !important;
-      opacity: 0 !important;
-      pointer-events: none !important;
-    `;
-    
-    // Optional: Move to hidden area to keep AEM editing intact
-    if (!image.closest('.cq-editable-hidden')) {
-      const hiddenContainer = document.createElement('div');
-      hiddenContainer.className = 'cq-editable-hidden';
-      hiddenContainer.style.cssText = 'display: none !important;';
-      image.parentNode.insertBefore(hiddenContainer, image);
-      hiddenContainer.appendChild(image);
-    }
-    
-  } else {
-    // In publish mode: move the actual image
-    if (image.parentNode) {
+  // Always clone
+  const clonedImage = image.cloneNode(true);
+  imgWrap.appendChild(clonedImage);
+  card.appendChild(imgWrap);
+  
+  // Always hide/remove the original if it's not in the dropdown
+  if (dropdown && image.parentNode && !dropdown.contains(image.parentNode)) {
+    if (document.body.classList.contains('cq-wcm-edit')) {
+      // In AEM editor, hide it
+      image.style.display = 'none';
+    } else {
+      // In publish mode, remove it
       image.parentNode.removeChild(image);
     }
-    imgWrap.appendChild(image);
-    card.appendChild(imgWrap);
   }
 }
 
