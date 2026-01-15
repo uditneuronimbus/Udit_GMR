@@ -2,6 +2,19 @@ export default function decorate(block) {
   const runtime = block.querySelector('.mfl-runtime');
   if (!runtime) return;
 
+  /* Create container + slider structure */
+  runtime.innerHTML = `
+    <div class="mfl-container">
+      <div class="mfl-slider">
+        <div class="mfl-slides"></div>
+        <div class="mfl-navigation">
+          <button class="mfl-prev" aria-label="Previous">&#8592;</button>
+          <button class="mfl-next" aria-label="Next">&#8594;</button>
+        </div>
+      </div>
+    </div>
+  `;
+
   const slidesWrapper = runtime.querySelector('.mfl-slides');
   const prevBtn = runtime.querySelector('.mfl-prev');
   const nextBtn = runtime.querySelector('.mfl-next');
@@ -35,11 +48,6 @@ export default function decorate(block) {
           <h4 class="mfl-subtitle">${subtitle}</h4>
           <div class="mfl-message">${message}</div>
           <div class="mfl-author">${designation}</div>
-
-          <div class="mfl-nav">
-            <button class="mfl-prev" aria-label="Previous">&#8592;</button>
-            <button class="mfl-next" aria-label="Next">&#8594;</button>
-          </div>
         </div>
       </div>
     `;
@@ -47,8 +55,8 @@ export default function decorate(block) {
     slidesWrapper.append(slide);
   });
 
-  let index = 0;
   const slides = [...slidesWrapper.children];
+  let index = 0;
 
   function update() {
     slides.forEach((slide, i) => {
@@ -56,16 +64,14 @@ export default function decorate(block) {
     });
   }
 
-  runtime.addEventListener('click', (e) => {
-    if (e.target.classList.contains('mfl-prev')) {
-      index = (index - 1 + slides.length) % slides.length;
-      update();
-    }
+  prevBtn.addEventListener('click', () => {
+    index = (index - 1 + slides.length) % slides.length;
+    update();
+  });
 
-    if (e.target.classList.contains('mfl-next')) {
-      index = (index + 1) % slides.length;
-      update();
-    }
+  nextBtn.addEventListener('click', () => {
+    index = (index + 1) % slides.length;
+    update();
   });
 
   update();
