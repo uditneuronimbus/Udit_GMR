@@ -446,7 +446,7 @@
     height: 20px;
   }
 }
-.is-hidden {
-  visibility: hidden;
-  position: absolute;
+.aem-AuthorLayer-Edit .partners-list > picture,
+.aem-AuthorLayer-Edit .partners-list > img {
+  display: none;
 }
