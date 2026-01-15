@@ -151,14 +151,23 @@ export default function decorate(block) {
 
       // Image handling
       if (image) {
-        const imgWrap = document.createElement("div");
-        imgWrap.className = "partner-img";
-        
-        // Clone image to preserve original
-        const clonedImage = image.cloneNode(true);
-        imgWrap.appendChild(clonedImage);
-        card.appendChild(imgWrap);
-      }
+  // Create wrapper inside dropdown/card
+  const imgWrap = document.createElement("div");
+  imgWrap.className = "partner-img";
+
+  // Clone image for dropdown usage
+  const clonedImage = image.cloneNode(true);
+  imgWrap.appendChild(clonedImage);
+  card.appendChild(imgWrap);
+
+  // 🔥 REMOVE original authored structure completely
+  const originalWrapper =
+    image.closest("picture") ||
+    image.closest("div") ||
+    image;
+
+  originalWrapper.remove();
+}
 
       // Content section
       const content = document.createElement("div");
