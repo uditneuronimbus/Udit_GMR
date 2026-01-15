@@ -150,24 +150,52 @@ export default function decorate(block) {
       card.dataset.category = category;
 
       // Image handling
-      if (image) {
-  // Create wrapper inside dropdown/card
-  const imgWrap = document.createElement("div");
-  imgWrap.className = "partner-img";
-
-  // Clone image for dropdown usage
-  const clonedImage = image.cloneNode(true);
-  imgWrap.appendChild(clonedImage);
-  card.appendChild(imgWrap);
-
-  // 🔥 REMOVE original authored structure completely
-  const originalWrapper =
-    image.closest("picture") ||
-    image.closest("div") ||
-    image;
-
-  originalWrapper.remove();
-}
+  if (image) {
+    const imgWrap = document.createElement("div");
+    imgWrap.className = "partner-img";
+    
+    // Function to extract image URL from various elements
+    const extractImageUrl = (imgElement) => {
+      if (imgElement.tagName === 'IMG') {
+        return imgElement.src;
+      } else if (imgElement.tagName === 'PICTURE') {
+        // Try to get image from picture element
+        const img = imgElement.querySelector('img');
+        return img ? img.src : '';
+      } else if (imgElement.tagName === 'DIV' && imgElement.style.backgroundImage) {
+        // Handle background images if needed
+        const bg = imgElement.style.backgroundImage;
+        const urlMatch = bg.match(/url\(['"]?(.*?)['"]?\)/);
+        return urlMatch ? urlMatch[1] : '';
+      }
+      return '';
+    };
+    
+    const imageUrl = extractImageUrl(image);
+    
+    if (imageUrl) {
+      // Create a clean img tag with just the URL
+      const newImg = document.createElement('img');
+      newImg.src = imageUrl;
+      
+      // Copy important attributes if they exist
+      if (image.alt) newImg.alt = image.alt;
+      if (image.title) newImg.title = image.title;
+      if (image.width) newImg.width = image.width;
+      if (image.height) newImg.height = image.height;
+      
+      // Add lazy loading
+      newImg.loading = "lazy";
+      
+      imgWrap.appendChild(newImg);
+    } else {
+      // Fallback: clone the original if no URL found
+      const clonedImage = image.cloneNode(true);
+      imgWrap.appendChild(clonedImage);
+    }
+    
+    card.appendChild(imgWrap);
+  }
 
       // Content section
       const content = document.createElement("div");
