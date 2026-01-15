@@ -310,8 +310,8 @@ function sendAccessibilityToTarget() {
     data: {
       __adobe: {
         target: {
-          'fontSize': accessibilitySettings.fontSize,
-          'highContrast': String(accessibilitySettings.highContrast)
+         accessibility_fontSize: accessibilitySettings.fontSize,
+         accessibility_highContrast: String(accessibilitySettings.highContrast)
         }
       }
     }
