@@ -446,7 +446,13 @@
     height: 20px;
   }
 }
-.aem-AuthorLayer-Edit .partners-list > picture,
-.aem-AuthorLayer-Edit .partners-list > img {
+.aem-AuthorLayer-Edit
+.partner-listing-item
+[class^="cq-Editable"] {
+  display: none;
+}
+.aem-AuthorLayer-Edit
+.partner-listing-item
+[data-cq-resource-type*="image"] {
   display: none;
 }

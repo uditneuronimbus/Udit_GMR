@@ -151,13 +151,14 @@ export default function decorate(block) {
 
       // Image handling
       if (image) {
-  const imgWrap = document.createElement("div");
-  imgWrap.className = "partner-img";
-
-  const clonedImage = image.cloneNode(true);
-  imgWrap.appendChild(clonedImage);
-  card.appendChild(imgWrap);
-}
+        const imgWrap = document.createElement("div");
+        imgWrap.className = "partner-img";
+        
+        // Clone image to preserve original
+        const clonedImage = image.cloneNode(true);
+        imgWrap.appendChild(clonedImage);
+        card.appendChild(imgWrap);
+      }
 
       // Content section
       const content = document.createElement("div");
