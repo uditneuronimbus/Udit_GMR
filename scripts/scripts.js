@@ -223,7 +223,7 @@ const getAndApplyTargetPropositions = async () => {
 
     const response = await window.alloy("sendEvent", {
       renderDecisions: true,
-      decisionScopes: ["target-global-mbox"],
+      decisionScopes: ["accessibility-mbox"],
       data: {
         accessibility_fontSize: accessibilitySettings.fontSize,           
         accessibility_highContrast: String(accessibilitySettings.highContrast)  
