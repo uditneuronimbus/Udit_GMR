@@ -33,9 +33,36 @@ export default function decorate(block) {
   }
 
   /* ================================
-     3️⃣ Hide authored rows (AEM SAFE)
+     3️⃣ Preserve authored content for Universal Editor (AEM SAFE)
+     while hiding it visually for end users
   ================================ */
-  children.forEach(child => child.style.display = "none");
+  
+  // Create a wrapper to hide authored content visually but keep in DOM
+  const authoredContentWrapper = document.createElement('div');
+  authoredContentWrapper.className = 'awards-authored-content';
+  authoredContentWrapper.setAttribute('aria-hidden', 'true');
+  authoredContentWrapper.style.cssText = `
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  `;
+
+  // Move all children to the hidden wrapper while preserving them in DOM
+  while (block.firstChild) {
+    authoredContentWrapper.appendChild(block.firstChild);
+  }
+
+  // Add the hidden wrapper back to the block
+  block.appendChild(authoredContentWrapper);
 
   /* ================================
      4️⃣ Runtime wrapper
@@ -123,7 +150,10 @@ export default function decorate(block) {
   const cardsDesktop = [];
   const cardsMobile = [];
 
-  items.forEach((item) => {
+  // Use the items from the authored content wrapper
+  const authoredItems = [...authoredContentWrapper.children].slice(4);
+
+  authoredItems.forEach((item) => {
     const cols = [...item.children];
     if (!cols.length) return;
 
