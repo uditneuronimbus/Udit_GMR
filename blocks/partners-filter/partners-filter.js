@@ -20,9 +20,8 @@ export default function decorate(block) {
     window.location.href.includes("/editor.html");
 
   if (isAuthorMode) {
-    block.classList.add("partners-author-mode");
-    return;
-  }
+  block.classList.add("partners-author-mode");
+}
 
   /* ================================
      3️⃣ Preserve authored content for Universal Editor (AEM SAFE)
@@ -49,12 +48,26 @@ export default function decorate(block) {
   `;
 
   // Move all children to the hidden wrapper while preserving them in DOM
+  let authoredRoot = block;
+
+if (!isAuthorMode) {
   while (block.firstChild) {
     authoredContentWrapper.appendChild(block.firstChild);
   }
-
-  // Add the hidden wrapper back to the block
   block.appendChild(authoredContentWrapper);
+  authoredRoot = authoredContentWrapper;
+}
+  if (isAuthorMode) {
+  block.querySelectorAll(
+    '[data-cq-resource-type*="image"], .cq-Editable-dom'
+  ).forEach(editable => {
+    editable.style.visibility = 'hidden';
+    editable.style.position = 'absolute';
+    editable.style.pointerEvents = 'none';
+  });
+}
+
+ 
 
   /* ================================
      4️⃣ Runtime wrapper with mobile layout
@@ -129,7 +142,8 @@ export default function decorate(block) {
   const cardsMobile = [];
 
   // Use the items from the authored content wrapper
-  const authoredItems = [...authoredContentWrapper.children].slice(2);
+  const sourceRoot = isAuthorMode ? block : authoredContentWrapper;
+const authoredItems = [...sourceRoot.children].slice(2);
 
   authoredItems.forEach((item) => {
     const cols = [...item.children];
@@ -171,7 +185,7 @@ export default function decorate(block) {
         
         // Clone image to preserve original
         const clonedImage = image.cloneNode(true);
-        imgWrap.appendChild(clonedImage);
+imgWrap.appendChild(clonedImage);
         card.appendChild(imgWrap);
       }
 
