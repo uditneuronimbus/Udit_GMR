@@ -250,7 +250,7 @@ const getAndApplyTargetPropositions = async () => {
     
 
     onDecoratedElement(async () => {
-      await window.alloy("applyPropositions", { propositions });
+      // await window.alloy("applyPropositions", { propositions });
       console.log("Target Applied!");
       
       setTimeout(() => {
