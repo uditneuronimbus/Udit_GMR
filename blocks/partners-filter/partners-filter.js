@@ -76,37 +76,11 @@ export default function decorate(block) {
     card.dataset.category = category;
 
     if (image) {
-  // Get the dropdown/container
-  const dropdown = card.closest('.partner-listing-item') || card.parentElement;
-  
-  // If image is outside dropdown, move it inside and remove original
-  if (dropdown && !dropdown.contains(image)) {
-    const imgWrap = document.createElement("div");
-    imgWrap.className = "partner-img";
-    
-    // Remove from current location and add to card
-    if (image.parentNode) {
-      image.parentNode.removeChild(image);
+      const imgWrap = document.createElement("div");
+      imgWrap.className = "partner-img";
+      imgWrap.appendChild(image.cloneNode(true));
+      card.appendChild(imgWrap);
     }
-    
-    imgWrap.appendChild(image);
-    card.appendChild(imgWrap);
-  } else {
-    // Image is already in correct container - clone AND remove original if outside
-    const imgWrap = document.createElement("div");
-    imgWrap.className = "partner-img";
-    
-    // Clone the image
-    const clonedImage = image.cloneNode(true);
-    imgWrap.appendChild(clonedImage);
-    card.appendChild(imgWrap);
-    
-    // Remove the original image if it's outside the dropdown
-    if (dropdown && image.parentNode && !dropdown.contains(image.parentNode)) {
-      image.parentNode.removeChild(image);
-    }
-  }
-}
 
     const content = document.createElement("div");
     content.className = "partner-content";
