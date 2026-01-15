@@ -187,11 +187,19 @@ export default function decorate(block) {
       }
       
       if (description) {
-        const desc = document.createElement("div");
-        desc.className = "award-description";
-        desc.textContent = description;
-        content.appendChild(desc);
-      }
+  const temp = document.createElement("div");
+  temp.innerHTML = description;
+
+  let p = temp.querySelector("p");
+
+  if (!p) {
+    p = document.createElement("p");
+    p.textContent = description;
+  }
+
+  p.classList.add("award-description");
+  content.appendChild(p);
+}
       
       card.appendChild(content);
       return card;

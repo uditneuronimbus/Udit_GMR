@@ -85,8 +85,7 @@
 
 /* Awards List */
 .awards-list {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  display: flex; flex-direction: column;
   gap: 24px;
 }
 
@@ -128,7 +127,7 @@
 .award-description {
   font-size: 1rem;
   color: var(--charcoal);
-  line-height: 1.6;
+  line-height: 1.6; margin: 0;
 }
 
 .award-description p {
