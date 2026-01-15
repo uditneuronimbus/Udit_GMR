@@ -257,6 +257,65 @@ if (getMetadata('target') === 'true' || getMetadata('personalization')) {
   getAndApplyTargetPropositions();
 
 }
+// ===== ACCESSIBILITY SETTINGS =====
+
+// Initialize accessibility state
+let accessibilitySettings = {
+  fontSize: 'normal',
+  highContrast: false
+};
+
+// Toggle font size
+document.getElementById('toggle-font-size')?.addEventListener('click', () => {
+  accessibilitySettings.fontSize = accessibilitySettings.fontSize === 'normal' ? 'large' : 'normal';
+  applyAccessibilitySettings();
+  sendAccessibilityToTarget();
+});
+
+// Toggle high contrast
+document.getElementById('toggle-high-contrast')?.addEventListener('click', () => {
+  accessibilitySettings.highContrast = !accessibilitySettings.highContrast;
+  applyAccessibilitySettings();
+  sendAccessibilityToTarget();
+});
+
+// Apply settings to page
+function applyAccessibilitySettings() {
+  // Apply font size
+  if (accessibilitySettings.fontSize === 'large') {
+    document.body.style.fontSize = '120%';
+  } else {
+    document.body.style.fontSize = '100%';
+  }
+  
+  // Apply high contrast
+  if (accessibilitySettings.highContrast) {
+    document.body.classList.add('high-contrast');
+  } else {
+    document.body.classList.remove('high-contrast');
+  }
+}
+
+// Send settings to Adobe Target
+function sendAccessibilityToTarget() {
+  if (!window.alloy) {
+    console.warn('Alloy not loaded');
+    return;
+  }
+  
+  console.log('📤 Sending accessibility settings to Target:', accessibilitySettings);
+  
+  window.alloy('sendEvent', {
+    data: {
+      __adobe: {
+        target: {
+          'fontSize': accessibilitySettings.fontSize,
+          'highContrast': String(accessibilitySettings.highContrast)
+        }
+      }
+    }
+  });
+}
 
 /* ===============================
    RETURNING USER FLAG

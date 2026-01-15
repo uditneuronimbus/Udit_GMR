@@ -714,3 +714,32 @@ hr {
 }
 
 /* Corporate Governance page css */
+
+/* High contrast mode */
+body.high-contrast {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+body.high-contrast a {
+  color: #ffff00 !important;
+}
+
+body.high-contrast button {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+.accessibility-controls {
+  position: fixed;
+  top: 80px;              /* push below your sticky header */
+  left: 20px;
+  z-index: 99999;         /* higher than header */
+  display: flex;
+  gap: 10px;
+  background: #fff;
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
