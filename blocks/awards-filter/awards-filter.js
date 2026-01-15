@@ -173,18 +173,11 @@ export default function decorate(block) {
   const imgWrap = document.createElement("div");
   imgWrap.className = "award-img";
 
-  const temp = document.createElement("div");
-  temp.appendChild(imageEl.cloneNode(true));
+  const media = imageEl.closest("picture") || imageEl;
 
-  const media = temp.querySelector("picture, img");
-
-  if (media) {
-    imgWrap.appendChild(media);
-  }
-
+  imgWrap.appendChild(media.cloneNode(true));
   card.appendChild(imgWrap);
 }
-
       
       const content = document.createElement("div");
       content.className = "award-content";
