@@ -22,16 +22,25 @@ export default function decorate(block) {
     const designation = cells[3].textContent.trim();
 
     const slide = document.createElement('div');
-    slide.className = 'mfl-card';
+    slide.className = 'mfl-slide';
 
     slide.innerHTML = `
-      <div class="mfl-image">
-        ${image ? image.outerHTML : ''}
-      </div>
-      <div class="mfl-content">
-        <div class="mfl-subtitle">${subtitle}</div>
-        <div class="mfl-message">${message}</div>
-        <div class="mfl-author">${designation}</div>
+      <div class="mfl-card">
+        <div class="mfl-image">
+          ${image ? image.outerHTML : ''}
+        </div>
+
+        <div class="mfl-content">
+          <h2 class="mfl-title">Message from Leadership</h2>
+          <h4 class="mfl-subtitle">${subtitle}</h4>
+          <div class="mfl-message">${message}</div>
+          <div class="mfl-author">${designation}</div>
+
+          <div class="mfl-nav">
+            <button class="mfl-prev" aria-label="Previous">&#8592;</button>
+            <button class="mfl-next" aria-label="Next">&#8594;</button>
+          </div>
+        </div>
       </div>
     `;
 
@@ -43,18 +52,20 @@ export default function decorate(block) {
 
   function update() {
     slides.forEach((slide, i) => {
-      slide.style.display = i === index ? 'grid' : 'none';
+      slide.style.display = i === index ? 'block' : 'none';
     });
   }
 
-  prevBtn?.addEventListener('click', () => {
-    index = (index - 1 + slides.length) % slides.length;
-    update();
-  });
+  runtime.addEventListener('click', (e) => {
+    if (e.target.classList.contains('mfl-prev')) {
+      index = (index - 1 + slides.length) % slides.length;
+      update();
+    }
 
-  nextBtn?.addEventListener('click', () => {
-    index = (index + 1) % slides.length;
-    update();
+    if (e.target.classList.contains('mfl-next')) {
+      index = (index + 1) % slides.length;
+      update();
+    }
   });
 
   update();

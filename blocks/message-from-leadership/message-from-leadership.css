@@ -14,13 +14,15 @@
   padding: 0 32px;
 }
 
+/* Section Title */
 .mfl-title {
   font-size: 42px;
   font-weight: 500;
-  margin-bottom: 40px;
+  margin-bottom: 48px;
+  color: #0b1f33;
 }
 
-/* Slider */
+/* Slider wrapper */
 .mfl-slider {
   position: relative;
 }
@@ -40,6 +42,7 @@
 /* Image */
 .mfl-image img {
   width: 100%;
+  height: auto;
   border-radius: 16px;
   object-fit: cover;
 }
@@ -49,7 +52,7 @@
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #777;
+  color: #6f6f6f;
   margin-bottom: 12px;
 }
 
@@ -57,7 +60,7 @@
   font-size: 18px;
   line-height: 1.6;
   color: #333;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .mfl-author {
@@ -66,14 +69,7 @@
   color: #000;
 }
 
-/* Navigation */
-.mfl-navigation {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 32px;
-  gap: 12px;
-}
-
+/* Navigation (matches first image) */
 .mfl-nav {
   width: 44px;
   height: 44px;
@@ -81,6 +77,9 @@
   border: 1px solid #f0b04f;
   background: transparent;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mfl-nav.next {
@@ -88,10 +87,24 @@
   color: #fff;
 }
 
+/* Navigation container */
+.mfl-navigation {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+/* Slide visibility */
+.mfl-slide {
+  display: none;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .mfl-card {
     grid-template-columns: 1fr;
+    gap: 32px;
   }
 
   .mfl-title {
