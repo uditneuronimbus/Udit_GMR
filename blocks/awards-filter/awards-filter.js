@@ -170,12 +170,18 @@ export default function decorate(block) {
       card.dataset.category = category;
       
       if (imageEl) {
-        const imgWrap = document.createElement("div");
-        imgWrap.className = "award-img";
-        const clonedImg = imageEl.cloneNode(true);
-        imgWrap.appendChild(clonedImg);
-        card.appendChild(imgWrap);
-      }
+  const imgWrap = document.createElement("div");
+  imgWrap.className = "award-img";
+
+  // Get actual image or picture
+  const media = imageEl.querySelector("picture, img");
+
+  if (media) {
+    imgWrap.appendChild(media.cloneNode(true));
+  }
+
+  card.appendChild(imgWrap);
+}
       
       const content = document.createElement("div");
       content.className = "award-content";
