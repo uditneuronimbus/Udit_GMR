@@ -102,10 +102,17 @@ export default function decorate(block) {
     }
 
     if (descHTML) {
-      const desc = document.createElement("div");
-      desc.className = "partner-description";
-      desc.textContent = descHTML;
-      content.appendChild(desc);
+      const temp = document.createElement("div");
+      temp.innerHTML = descHTML;
+
+      let p = temp.querySelector("p");
+      if (!p) {
+        p = document.createElement("p");
+        p.textContent = descHTML.replace(/<[^>]*>/g, ''); // Strip HTML tags if present
+      }
+
+      p.classList.add("partner-description");
+      content.appendChild(p);
     }
 
     if (link) {
