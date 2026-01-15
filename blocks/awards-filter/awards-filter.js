@@ -171,19 +171,20 @@ export default function decorate(block) {
 
       if (imageEl) {
   // Create a wrapper for the image
-  const imgWrap = document.createElement("div");
-  imgWrap.className = "award-img";
+  let imgWrap = card.querySelector(".award-img");
 
-  // Remove the image from its current position (if it's somewhere else)
-  if (imageEl.parentNode) {
-    imageEl.parentNode.removeChild(imageEl);
+  // If wrapper doesn't exist, create it
+  if (!imgWrap) {
+    imgWrap = document.createElement("div");
+    imgWrap.className = "award-img";
+    card.appendChild(imgWrap);
   }
 
-  // Append the image inside the wrapper
-  imgWrap.appendChild(imageEl);
-
-  // Append the wrapper to the card
-  card.appendChild(imgWrap);
+  // Move the image inside the wrapper
+  if (imageEl.parentNode !== imgWrap) {
+    imageEl.parentNode?.removeChild(imageEl); // remove from current position
+    imgWrap.appendChild(imageEl);              // append inside wrapper
+  }
 }
 
 
