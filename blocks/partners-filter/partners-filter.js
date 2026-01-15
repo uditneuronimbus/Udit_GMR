@@ -79,9 +79,15 @@ export default function decorate(block) {
   const imgWrap = document.createElement("div");
   imgWrap.className = "partner-img";
   
-  // Move the actual image instead of cloning it
+  // Move the actual image into the card
   imgWrap.appendChild(image);
   card.appendChild(imgWrap);
+  
+  // If image was outside, ensure it's now inside the dropdown
+  const dropdown = card.closest('.partner-listing-item, .dropdown-container');
+  if (dropdown && !dropdown.contains(imgWrap)) {
+    dropdown.appendChild(imgWrap);
+  }
 }
 
     const content = document.createElement("div");
