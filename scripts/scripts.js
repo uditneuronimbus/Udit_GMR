@@ -218,6 +218,14 @@ const getAndApplyTargetPropositions = async () => {
     const response = await window.alloy("sendEvent", {
       renderDecisions: true,
       decisionScopes: ["target-global-mbox"],
+      data: {
+        __adobe: {
+          target: {
+            accessibility_fontSize: accessibilitySettings.fontSize,
+            accessibility_highContrast: String(accessibilitySettings.highContrast)
+          }
+        }
+      },
       xdm: {
         eventType: "web.webpagedetails.pageViews",
         profile: {
