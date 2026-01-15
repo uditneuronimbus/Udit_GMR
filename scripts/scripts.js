@@ -211,6 +211,7 @@ const getAndApplyTargetPropositions = async () => {
   }
 
   try {
+    console.log("Fetching Target propositions...");
     const isReturning =
       window.isReturningUser || localStorage.getItem("returning-user");
 
@@ -226,10 +227,15 @@ const getAndApplyTargetPropositions = async () => {
     });
 
     const { propositions } = response;
+    console.log('Propositions: ', propositions.length || 0);
+    console.log("______________________________", propositions);
+    
+    
 
     onDecoratedElement(async () => {
       await window.alloy("applyPropositions", { propositions });
-
+      console.log("Target Applied!");
+      
       setTimeout(() => {
         window.alloy("sendEvent", {
           xdm: {
@@ -238,12 +244,19 @@ const getAndApplyTargetPropositions = async () => {
             _experience: { decisioning: { propositions } },
           },
         });
+        console.log("Display Events Sent");
+        
       }, 1000);
     });
   } catch (error) {
     console.error("Target error:", error);
   }
 };
+if (getMetadata('target') === 'true' || getMetadata('personalization')) {
+
+  getAndApplyTargetPropositions();
+
+}
 
 /* ===============================
    RETURNING USER FLAG
