@@ -189,7 +189,7 @@ export default function decorate(block) {
       if (description) {
         const desc = document.createElement("div");
         desc.className = "award-description";
-        desc.innerHTML = description;
+        desc.textContent = description;
         content.appendChild(desc);
       }
       
