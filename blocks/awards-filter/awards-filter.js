@@ -36,7 +36,7 @@ export default function decorate(block) {
      3️⃣ Preserve authored content for Universal Editor (AEM SAFE)
      while hiding it visually for end users
   ================================ */
-  
+
   // Create a wrapper to hide authored content visually but keep in DOM
   const authoredContentWrapper = document.createElement('div');
   authoredContentWrapper.className = 'awards-authored-content';
@@ -69,7 +69,7 @@ export default function decorate(block) {
   ================================ */
   const runtime = document.createElement("section");
   runtime.className = "awards-filter-runtime bg-gray";
-  
+
   runtime.innerHTML = `
     <div class="container">
       <!-- Desktop Layout -->
@@ -178,8 +178,47 @@ export default function decorate(block) {
       if (imageEl) {
         const imgWrap = document.createElement("div");
         imgWrap.className = "award-img";
-        const clonedImg = imageEl.cloneNode(true);
-        imgWrap.appendChild(clonedImg);
+
+        // Function to extract image URL from various elements
+        const extractImageUrl = (imgElement) => {
+          if (imgElement.tagName === 'IMG') {
+            return imgElement.src;
+          } else if (imgElement.tagName === 'PICTURE') {
+            // Try to get image from picture element
+            const img = imgElement.querySelector('img');
+            return img ? img.src : '';
+          } else if (imgElement.tagName === 'DIV' && imgElement.style.backgroundImage) {
+            // Handle background images if needed
+            const bg = imgElement.style.backgroundImage;
+            const urlMatch = bg.match(/url\(['"]?(.*?)['"]?\)/);
+            return urlMatch ? urlMatch[1] : '';
+          }
+          return '';
+        };
+
+        const imageUrl = extractImageUrl(imageEl);
+
+        if (imageUrl) {
+          // Create a clean img tag with just the URL
+          const newImg = document.createElement('img');
+          newImg.src = imageUrl;
+
+          // Copy important attributes if they exist
+          if (imageEl.alt) newImg.alt = imageEl.alt;
+          if (imageEl.title) newImg.title = imageEl.title;
+          if (imageEl.width) newImg.width = imageEl.width;
+          if (imageEl.height) newImg.height = imageEl.height;
+
+          // Add lazy loading
+          newImg.loading = "lazy";
+
+          imgWrap.appendChild(newImg);
+        } else {
+          // Fallback: clone the original if no URL found
+          const clonedImg = imageEl.cloneNode(true);
+          imgWrap.appendChild(clonedImg);
+        }
+
         card.appendChild(imgWrap);
       }
 
@@ -395,7 +434,7 @@ export default function decorate(block) {
   // Set initial state (show all)
   applyFilter("", "all", cardsDesktop);
   applyFilter("", "all", cardsMobile);
-  
+
   // Initialize desktop UI
   yearSelectDesktop.value = "";
   categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));

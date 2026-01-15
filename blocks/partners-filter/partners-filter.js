@@ -28,7 +28,7 @@ export default function decorate(block) {
      3️⃣ Preserve authored content for Universal Editor (AEM SAFE)
      while hiding it visually for end users
   ================================ */
-  
+
   // Create a wrapper to hide authored content visually but keep in DOM
   const authoredContentWrapper = document.createElement('div');
   authoredContentWrapper.className = 'partners-authored-content';
@@ -61,7 +61,7 @@ export default function decorate(block) {
   ================================ */
   const runtime = document.createElement("section");
   runtime.className = "partners-filter-runtime bg-gray";
-  
+
   runtime.innerHTML = `
     <div class="container">
       <!-- Desktop Layout -->
@@ -150,52 +150,52 @@ export default function decorate(block) {
       card.dataset.category = category;
 
       // Image handling
-  if (image) {
-    const imgWrap = document.createElement("div");
-    imgWrap.className = "partner-img";
-    
-    // Function to extract image URL from various elements
-    const extractImageUrl = (imgElement) => {
-      if (imgElement.tagName === 'IMG') {
-        return imgElement.src;
-      } else if (imgElement.tagName === 'PICTURE') {
-        // Try to get image from picture element
-        const img = imgElement.querySelector('img');
-        return img ? img.src : '';
-      } else if (imgElement.tagName === 'DIV' && imgElement.style.backgroundImage) {
-        // Handle background images if needed
-        const bg = imgElement.style.backgroundImage;
-        const urlMatch = bg.match(/url\(['"]?(.*?)['"]?\)/);
-        return urlMatch ? urlMatch[1] : '';
+      if (image) {
+        const imgWrap = document.createElement("div");
+        imgWrap.className = "partner-img";
+
+        // Function to extract image URL from various elements
+        const extractImageUrl = (imgElement) => {
+          if (imgElement.tagName === 'IMG') {
+            return imgElement.src;
+          } else if (imgElement.tagName === 'PICTURE') {
+            // Try to get image from picture element
+            const img = imgElement.querySelector('img');
+            return img ? img.src : '';
+          } else if (imgElement.tagName === 'DIV' && imgElement.style.backgroundImage) {
+            // Handle background images if needed
+            const bg = imgElement.style.backgroundImage;
+            const urlMatch = bg.match(/url\(['"]?(.*?)['"]?\)/);
+            return urlMatch ? urlMatch[1] : '';
+          }
+          return '';
+        };
+
+        const imageUrl = extractImageUrl(image);
+
+        if (imageUrl) {
+          // Create a clean img tag with just the URL
+          const newImg = document.createElement('img');
+          newImg.src = imageUrl;
+
+          // Copy important attributes if they exist
+          if (image.alt) newImg.alt = image.alt;
+          if (image.title) newImg.title = image.title;
+          if (image.width) newImg.width = image.width;
+          if (image.height) newImg.height = image.height;
+
+          // Add lazy loading
+          newImg.loading = "lazy";
+
+          imgWrap.appendChild(newImg);
+        } else {
+          // Fallback: clone the original if no URL found
+          const clonedImage = image.cloneNode(true);
+          imgWrap.appendChild(clonedImage);
+        }
+
+        card.appendChild(imgWrap);
       }
-      return '';
-    };
-    
-    const imageUrl = extractImageUrl(image);
-    
-    if (imageUrl) {
-      // Create a clean img tag with just the URL
-      const newImg = document.createElement('img');
-      newImg.src = imageUrl;
-      
-      // Copy important attributes if they exist
-      if (image.alt) newImg.alt = image.alt;
-      if (image.title) newImg.title = image.title;
-      if (image.width) newImg.width = image.width;
-      if (image.height) newImg.height = image.height;
-      
-      // Add lazy loading
-      newImg.loading = "lazy";
-      
-      imgWrap.appendChild(newImg);
-    } else {
-      // Fallback: clone the original if no URL found
-      const clonedImage = image.cloneNode(true);
-      imgWrap.appendChild(clonedImage);
-    }
-    
-    card.appendChild(imgWrap);
-  }
 
       // Content section
       const content = document.createElement("div");
@@ -276,10 +276,10 @@ export default function decorate(block) {
   ================================ */
   function filterByCategory(category, cards) {
     state.category = category;
-    
+
     cards.forEach(card => {
-      card.style.display = category === "all" || card.dataset.category === category 
-        ? "" 
+      card.style.display = category === "all" || card.dataset.category === category
+        ? ""
         : "none";
       card.classList.remove("active");
     });
@@ -381,7 +381,7 @@ export default function decorate(block) {
   // Show all cards by default
   filterByCategory("all", cardsDesktop);
   filterByCategory("all", cardsMobile);
-  
+
   // Initialize desktop UI
   categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
   categoryListDesktop.querySelector('li[data-category="all"]').classList.add("active");
