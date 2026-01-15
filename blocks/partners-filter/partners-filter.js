@@ -157,7 +157,7 @@ export default function decorate(block) {
         // Clone image to preserve original
         const clonedImage = image.cloneNode(true);
         imgWrap.appendChild(clonedImage);
-        card.appendChild(imgWrap);
+        //card.appendChild(imgWrap);
       }
 
       // Content section
