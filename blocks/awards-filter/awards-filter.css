@@ -1,9 +1,5 @@
 /* Awards Filter Component */
-.awards-filter-runtime {
-  padding: 40px 0;
-  background: #fff;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
+
 
 /* Desktop Layout */
 .desktop-layout {
@@ -79,25 +75,28 @@
 /* Awards List */
 .awards-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: 24px;
 }
 
 .award-card {
-  background: #fff;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: box-shadow 0.3s;
+    /* background: #fff; */
+    /* border: 1px solid #e9ecef; */
+    /* border-radius: 8px; */
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+    display: flex; gap:8px;
 }
 
-.award-card:hover {
+/* .award-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+} */
 
 .award-img {
-  height: 200px;
+  flex: 0 0 40%;
+  height: 240px;
   overflow: hidden;
+  border-radius: 8px;
 }
 
 .award-img img {
@@ -107,7 +106,7 @@
 }
 
 .award-content {
-  padding: 20px;
+  flex: 1; padding: 30px; background-color: var(--white); border-radius: 8px;
 }
 
 .award-content h3 {
@@ -125,7 +124,7 @@
 }
 
 .award-description p {
-  margin: 0;
+  margin: 0; font-size: 1rem; color: var(--black);
 }
 
 /* Mobile Layout */

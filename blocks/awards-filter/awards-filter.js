@@ -28,7 +28,7 @@ export default function decorate(block) {
      RUNTIME STRUCTURE
   ========================= */
   const section = document.createElement("section");
-  section.className = "awards-filter-runtime";
+  section.className = "awards-filter-runtime bg-gray";
 
   const container = document.createElement("div");
   container.className = "container";
