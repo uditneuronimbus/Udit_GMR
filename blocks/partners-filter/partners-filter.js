@@ -7,10 +7,8 @@ export default function decorate(block) {
   /* ================================
      1️⃣ Read authored content
   ================================ */
-  const sectionTitle =
-    children[0]?.textContent?.trim() || "Our Partners";
-  const filterPanelTitle =
-    children[1]?.textContent?.trim() || "Filter by Category";
+  const sectionTitle = children[0]?.textContent?.trim() || "Our Partners";
+  const filterPanelTitle = children[1]?.textContent?.trim() || "Filter by Category";
   const items = children.slice(2);
 
   /* ================================
@@ -27,17 +25,43 @@ export default function decorate(block) {
   }
 
   /* ================================
-     3️⃣ Detach authored rows (NO display:none)
+     3️⃣ Preserve authored content for Universal Editor (AEM SAFE)
+     while hiding it visually for end users
   ================================ */
-  const authoredFragment = document.createDocumentFragment();
-  children.forEach(child => authoredFragment.appendChild(child));
+  
+  // Create a wrapper to hide authored content visually but keep in DOM
+  const authoredContentWrapper = document.createElement('div');
+  authoredContentWrapper.className = 'partners-authored-content';
+  authoredContentWrapper.setAttribute('aria-hidden', 'true');
+  authoredContentWrapper.style.cssText = `
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  `;
+
+  // Move all children to the hidden wrapper while preserving them in DOM
+  while (block.firstChild) {
+    authoredContentWrapper.appendChild(block.firstChild);
+  }
+
+  // Add the hidden wrapper back to the block
+  block.appendChild(authoredContentWrapper);
 
   /* ================================
-     4️⃣ Runtime wrapper with layouts
+     4️⃣ Runtime wrapper with mobile layout
   ================================ */
   const runtime = document.createElement("section");
   runtime.className = "partners-filter-runtime bg-gray";
-
+  
   runtime.innerHTML = `
     <div class="container">
       <!-- Desktop Layout -->
@@ -58,9 +82,8 @@ export default function decorate(block) {
             Filter by - All Partners <span class="arrow">▼</span>
           </button>
         </div>
-
         <div class="partners-list"></div>
-
+        
         <!-- Mobile Filter Modal -->
         <div class="mobile-filter-modal">
           <div class="mobile-filter-overlay"></div>
@@ -69,15 +92,10 @@ export default function decorate(block) {
               <h3>Select Category</h3>
               <button class="close-modal">×</button>
             </div>
-
             <div class="filter-group category-group">
               <p>Filter by Category</p>
-              <label>
-                <input type="radio" name="category" value="all" checked>
-                All Partners
-              </label>
+              <label><input type="radio" name="category" value="all" checked> All Partners</label>
             </div>
-
             <div class="apply-filter-btn">
               <button class="apply-btn">Apply</button>
             </div>
@@ -92,29 +110,32 @@ export default function decorate(block) {
   /* ================================
      5️⃣ DOM References
   ================================ */
-  const desktopList = runtime.querySelector(".desktop-layout .partners-list");
-  const mobileList = runtime.querySelector(".mobile-layout .partners-list");
-  const categoryListDesktop = runtime.querySelector(".category-filter");
-  const categoryFilterBtn = runtime.querySelector(".category-btn");
-  const mobileModal = runtime.querySelector(".mobile-filter-modal");
-  const modalOverlay = runtime.querySelector(".mobile-filter-overlay");
-  const categoryGroup = runtime.querySelector(".category-group");
-  const applyButton = runtime.querySelector(".apply-btn");
-  const closeModalBtn = runtime.querySelector(".close-modal");
+  const desktopList = runtime.querySelector('.desktop-layout .partners-list');
+  const mobileList = runtime.querySelector('.mobile-layout .partners-list');
+  const categoryListDesktop = runtime.querySelector('.desktop-layout .category-filter');
+  const categoryFilterBtn = runtime.querySelector('.category-btn');
+  const mobileModal = runtime.querySelector('.mobile-filter-modal');
+  const modalOverlay = runtime.querySelector('.mobile-filter-overlay');
+  const modalHeader = runtime.querySelector('.modal-header');
+  const categoryGroup = runtime.querySelector('.category-group');
+  const applyButton = runtime.querySelector('.apply-btn');
+  const closeModalBtn = runtime.querySelector('.close-modal');
 
   /* ================================
-     6️⃣ Data Collection & Card Build
+     6️⃣ Data Collection & Card Building
   ================================ */
   const categories = new Set();
   const cardsDesktop = [];
   const cardsMobile = [];
 
-  items.forEach(item => {
+  // Use the items from the authored content wrapper
+  const authoredItems = [...authoredContentWrapper.children].slice(2);
+
+  authoredItems.forEach((item) => {
     const cols = [...item.children];
     if (!cols.length) return;
 
-    const category =
-      cols[0]?.textContent?.trim().toLowerCase() || "";
+    const category = cols[0]?.textContent?.trim().toLowerCase() || "";
     const image = cols[1]?.querySelector("img, picture");
     const titleText = cols[2]?.textContent?.trim();
     const descHTML = cols[3]?.innerHTML?.trim() || "";
@@ -122,18 +143,24 @@ export default function decorate(block) {
 
     if (category) categories.add(category);
 
+    // Create card element function
     const createCard = () => {
       const card = document.createElement("article");
       card.className = "partner-card";
       card.dataset.category = category;
 
+      // Image handling
       if (image) {
         const imgWrap = document.createElement("div");
         imgWrap.className = "partner-img";
-        imgWrap.appendChild(image.cloneNode(true));
+        
+        // Clone image to preserve original
+        const clonedImage = image.cloneNode(true);
+        imgWrap.appendChild(clonedImage);
         card.appendChild(imgWrap);
       }
 
+      // Content section
       const content = document.createElement("div");
       content.className = "partner-content";
 
@@ -146,8 +173,13 @@ export default function decorate(block) {
       if (descHTML) {
         const temp = document.createElement("div");
         temp.innerHTML = descHTML;
-        let p = temp.querySelector("p") || document.createElement("p");
-        p.textContent = p.textContent || temp.textContent;
+
+        let p = temp.querySelector("p");
+        if (!p) {
+          p = document.createElement("p");
+          p.textContent = descHTML.replace(/<[^>]*>/g, ''); // Strip HTML tags if present
+        }
+
         p.classList.add("partner-description");
         content.appendChild(p);
       }
@@ -155,10 +187,7 @@ export default function decorate(block) {
       if (link) {
         const linkWrap = document.createElement("div");
         linkWrap.className = "partner-link";
-        linkWrap.innerHTML = `
-          <a href="${link}" target="_blank" rel="noopener noreferrer">
-            Visit Website
-          </a>`;
+        linkWrap.innerHTML = `<a href="${link}" target="_blank" rel="noopener noreferrer">Visit Website</a>`;
         content.appendChild(linkWrap);
       }
 
@@ -166,6 +195,7 @@ export default function decorate(block) {
       return card;
     };
 
+    // Create cards for both desktop and mobile
     const cardDesktop = createCard();
     const cardMobile = createCard();
 
@@ -179,23 +209,25 @@ export default function decorate(block) {
   /* ================================
      7️⃣ Populate Filters
   ================================ */
-  [...categories].sort().forEach(cat => {
-    const label = cat.charAt(0).toUpperCase() + cat.slice(1);
+  const sortedCategories = Array.from(categories).sort();
 
+  // Desktop Category Filter
+  sortedCategories.forEach(cat => {
     const li = document.createElement("li");
     li.dataset.category = cat;
-    li.textContent = label;
+    li.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
     categoryListDesktop.appendChild(li);
+  });
 
-    const radio = document.createElement("label");
-    radio.innerHTML = `
-      <input type="radio" name="category" value="${cat}">
-      ${label}`;
-    categoryGroup.appendChild(radio);
+  // Mobile Category Filter
+  sortedCategories.forEach(cat => {
+    const label = document.createElement("label");
+    label.innerHTML = `<input type="radio" name="category" value="${cat}" id="category-${cat}"> ${cat.charAt(0).toUpperCase() + cat.slice(1)}`;
+    categoryGroup.appendChild(label);
   });
 
   /* ================================
-     8️⃣ State
+     8️⃣ State Management
   ================================ */
   const state = {
     category: "all",
@@ -203,80 +235,119 @@ export default function decorate(block) {
   };
 
   /* ================================
-     9️⃣ Filtering Logic
+     9️⃣ Filter Functions
   ================================ */
   function filterByCategory(category, cards) {
     state.category = category;
-
+    
     cards.forEach(card => {
-      card.hidden =
-        !(category === "all" || card.dataset.category === category);
+      card.style.display = category === "all" || card.dataset.category === category 
+        ? "" 
+        : "none";
       card.classList.remove("active");
     });
 
     updateButtonText();
   }
 
-  function updateButtonText() {
-    const text =
-      state.category === "all"
-        ? "All Partners"
-        : state.category.charAt(0).toUpperCase() +
-          state.category.slice(1);
-
-    categoryFilterBtn.innerHTML = `
-      Filter by - ${text} <span class="arrow">▼</span>`;
+  function toggleCardActive(card, cards) {
+    cards.forEach(c => c !== card && c.classList.remove("active"));
+    card.classList.toggle("active");
   }
 
-  /* ================================
-     🔟 Events
-  ================================ */
-  categoryListDesktop.addEventListener("click", e => {
-    if (e.target.tagName !== "LI") return;
+  function updateButtonText() {
+    const catText = state.category === "all" ?
+      "All Partners" :
+      state.category.charAt(0).toUpperCase() + state.category.slice(1);
+    categoryFilterBtn.innerHTML = `Filter by - ${catText} <span class="arrow">▼</span>`;
+  }
 
-    categoryListDesktop
-      .querySelectorAll("li")
-      .forEach(li => li.classList.remove("active"));
-
-    e.target.classList.add("active");
-    filterByCategory(e.target.dataset.category, cardsDesktop);
-  });
-
-  categoryFilterBtn.addEventListener("click", () => {
+  function openModal() {
     mobileModal.classList.add("open");
-    document.body.style.overflow = "hidden";
-  });
+    document.body.style.overflow = 'hidden';
 
-  modalOverlay.addEventListener("click", closeModal);
-  closeModalBtn.addEventListener("click", closeModal);
+    // Set temp filter to current state
+    state.tempCategory = state.category;
+
+    // Set active radio button
+    const catRadio = categoryGroup.querySelector(`input[name="category"][value="${state.tempCategory}"]`);
+    if (catRadio) catRadio.checked = true;
+    else categoryGroup.querySelector('input[name="category"][value="all"]').checked = true;
+
+    // Update button state
+    categoryFilterBtn.classList.add('active');
+  }
 
   function closeModal() {
     mobileModal.classList.remove("open");
-    document.body.style.overflow = "";
+    document.body.style.overflow = '';
+    categoryFilterBtn.classList.remove('active');
   }
 
-  applyButton.addEventListener("click", () => {
+  /* ================================
+     🔟 Event Listeners
+  ================================ */
+  // Desktop Filters
+  categoryListDesktop.addEventListener("click", (e) => {
+    if (e.target.tagName !== "LI") return;
+
+    categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
+    e.target.classList.add("active");
+
+    filterByCategory(e.target.dataset.category, cardsDesktop);
+  });
+
+  // Desktop Card click for reveal toggle
+  desktopList.addEventListener("click", (e) => {
+    const card = e.target.closest('.partner-card');
+    if (card && card.style.display !== 'none') {
+      toggleCardActive(card, cardsDesktop);
+    }
+  });
+
+  // Mobile Filters
+  categoryFilterBtn.addEventListener("click", openModal);
+  modalOverlay.addEventListener("click", closeModal);
+  closeModalBtn.addEventListener('click', closeModal);
+
+  // Mobile Radio Button Changes
+  categoryGroup.querySelectorAll('input[name="category"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      state.tempCategory = radio.value;
+    });
+  });
+
+  // Apply Button
+  applyButton.addEventListener('click', () => {
     filterByCategory(state.tempCategory, cardsMobile);
     closeModal();
   });
 
-  categoryGroup
-    .querySelectorAll('input[name="category"]')
-    .forEach(radio =>
-      radio.addEventListener("change", () => {
-        state.tempCategory = radio.value;
-      })
-    );
+  // Mobile Card click for reveal toggle
+  mobileList.addEventListener("click", (e) => {
+    const card = e.target.closest('.partner-card');
+    if (card && card.style.display !== 'none') {
+      toggleCardActive(card, cardsMobile);
+    }
+  });
+
+  // Escape Key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileModal.classList.contains('open')) {
+      closeModal();
+    }
+  });
 
   /* ================================
-     1️⃣1️⃣ Init
+     1️⃣1️⃣ Initialize
   ================================ */
+  // Show all cards by default
   filterByCategory("all", cardsDesktop);
   filterByCategory("all", cardsMobile);
-
+  
   // Initialize desktop UI
   categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
   categoryListDesktop.querySelector('li[data-category="all"]').classList.add("active");
 
-  console.log("Partners List initialized (no display:none)");
+  console.log("Partners List block initialized with mobile view");
 }
