@@ -66,7 +66,7 @@ export default function decorate(block) {
     const category = cols[0]?.textContent?.trim().toLowerCase() || "";
     const image = cols[1]?.querySelector("img, picture");
     const titleText = cols[2]?.textContent?.trim();
-    const descHTML = cols[3]?.innerHTML?.trim();
+    const descHTML = cols[3]?.textContent?.trim();
     const link = cols[4]?.textContent?.trim();
 
     if (category) categories.add(category);
