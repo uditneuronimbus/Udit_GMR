@@ -20,8 +20,9 @@ export default function decorate(block) {
     window.location.href.includes("/editor.html");
 
   if (isAuthorMode) {
-  block.classList.add("partners-author-mode");
-}
+    block.classList.add("partners-author-mode");
+    return;
+  }
 
   /* ================================
      3️⃣ Preserve authored content for Universal Editor (AEM SAFE)
@@ -48,26 +49,12 @@ export default function decorate(block) {
   `;
 
   // Move all children to the hidden wrapper while preserving them in DOM
-  let authoredRoot = block;
-
-if (!isAuthorMode) {
   while (block.firstChild) {
     authoredContentWrapper.appendChild(block.firstChild);
   }
-  block.appendChild(authoredContentWrapper);
-  authoredRoot = authoredContentWrapper;
-}
-  if (isAuthorMode) {
-  block.querySelectorAll(
-    '[data-cq-resource-type*="image"], .cq-Editable-dom'
-  ).forEach(editable => {
-    editable.style.visibility = 'hidden';
-    editable.style.position = 'absolute';
-    editable.style.pointerEvents = 'none';
-  });
-}
 
- 
+  // Add the hidden wrapper back to the block
+  block.appendChild(authoredContentWrapper);
 
   /* ================================
      4️⃣ Runtime wrapper with mobile layout
@@ -142,8 +129,7 @@ if (!isAuthorMode) {
   const cardsMobile = [];
 
   // Use the items from the authored content wrapper
-  const sourceRoot = isAuthorMode ? block : authoredContentWrapper;
-const authoredItems = [...sourceRoot.children].slice(2);
+  const authoredItems = [...authoredContentWrapper.children].slice(2);
 
   authoredItems.forEach((item) => {
     const cols = [...item.children];
@@ -154,21 +140,6 @@ const authoredItems = [...sourceRoot.children].slice(2);
     const titleText = cols[2]?.textContent?.trim();
     const descHTML = cols[3]?.innerHTML?.trim() || "";
     const link = cols[4]?.textContent?.trim();
-
-    const isAuthor =
-    document.body.classList.contains("aem-AuthorLayer-Edit") ||
-    window.Granite ||
-    window.CQ;
-
-  if (isAuthor) {
-    block.querySelectorAll('.partner-listing-item').forEach(item => {
-      item.querySelectorAll('.cq-Editable-dom').forEach(editable => {
-        editable.style.visibility = 'hidden';
-        editable.style.position = 'absolute';
-        editable.style.pointerEvents = 'none';
-      });
-    });
-  }
 
     if (category) categories.add(category);
 
@@ -185,7 +156,7 @@ const authoredItems = [...sourceRoot.children].slice(2);
         
         // Clone image to preserve original
         const clonedImage = image.cloneNode(true);
-imgWrap.appendChild(clonedImage);
+        imgWrap.appendChild(clonedImage);
         card.appendChild(imgWrap);
       }
 
