@@ -76,23 +76,37 @@ export default function decorate(block) {
     card.dataset.category = category;
 
     if (image) {
+  // Get the dropdown/container
   const dropdown = card.closest('.partner-listing-item') || card.parentElement;
   
+  // Create wrapper and image
   const imgWrap = document.createElement("div");
   imgWrap.className = "partner-img";
   
-  // Always clone
+  // Always clone the image
   const clonedImage = image.cloneNode(true);
   imgWrap.appendChild(clonedImage);
   card.appendChild(imgWrap);
   
-  // Always hide/remove the original if it's not in the dropdown
-  if (dropdown && image.parentNode && !dropdown.contains(image.parentNode)) {
-    if (document.body.classList.contains('cq-wcm-edit')) {
-      // In AEM editor, hide it
-      image.style.display = 'none';
-    } else {
-      // In publish mode, remove it
+  // Hide the original image in AEM editor only
+  const isAEMEditor = document.body.classList.contains('cq-wcm-edit') || 
+                      document.body.classList.contains('aem-AuthorLayer-Edit');
+  
+  if (isAEMEditor && image.parentNode) {
+    // Hide but don't remove (safer for AEM)
+    image.style.display = 'none';
+    image.style.visibility = 'hidden';
+    image.style.position = 'absolute';
+    image.style.opacity = '0';
+    
+    // Alternatively, move it to a hidden container
+    // const hiddenContainer = document.createElement('div');
+    // hiddenContainer.style.display = 'none';
+    // image.parentNode.insertBefore(hiddenContainer, image);
+    // hiddenContainer.appendChild(image);
+  } else {
+    // In publish mode, remove the original
+    if (image.parentNode) {
       image.parentNode.removeChild(image);
     }
   }
