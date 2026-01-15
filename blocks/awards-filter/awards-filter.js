@@ -8,8 +8,8 @@ export default function decorate(block) {
   const items = children.slice(4);
 
   const isAuthorMode = document.body.classList.contains('universal-editor-edit') ||
-    document.body.classList.contains('aem-AuthorLayer-Edit') ||
-    window.location.href.includes('/editor.html');
+                       document.body.classList.contains('aem-AuthorLayer-Edit') ||
+                       window.location.href.includes('/editor.html');
 
   if (isAuthorMode) {
     block.classList.add('awards-author-mode');
@@ -40,11 +40,11 @@ export default function decorate(block) {
   const desktopAside = document.createElement("aside");
   desktopAside.className = "awards-filter-panel";
   desktopAside.innerHTML = `<h4>${filterPanelTitle}</h4>`;
-
+  
   const yearSelectDesktop = document.createElement("select");
   yearSelectDesktop.className = "year-filter";
   desktopAside.appendChild(yearSelectDesktop);
-
+  
   const categoryListDesktop = document.createElement("ul");
   categoryListDesktop.className = "category-filter";
   const allLiDesktop = document.createElement("li");
@@ -168,56 +168,40 @@ export default function decorate(block) {
       card.className = "award-card";
       card.dataset.year = year;
       card.dataset.category = category;
-
-      if (image) {
-        // Get the dropdown/container
-        const dropdown = card.closest('.award-listing-item') || card.parentElement;
-
-        // If image is outside dropdown, move it inside
-        if (dropdown && !dropdown.contains(image)) {
+      
+        if (imageEl) {
           const imgWrap = document.createElement("div");
           imgWrap.className = "award-img";
-
-          // Remove from current location and add to card
-          if (image.parentNode) {
-            image.parentNode.removeChild(image);
-          }
-
-          imgWrap.appendChild(image);
-          card.appendChild(imgWrap);
-        } else {
-          // Image is already in correct container
-          const imgWrap = document.createElement("div");
-          imgWrap.className = "award-img";
-          imgWrap.appendChild(image.cloneNode(true));
+          const clonedImg = imageEl.cloneNode(true);
+          imgWrap.appendChild(clonedImg);
           card.appendChild(imgWrap);
         }
-      }
-
+        
+      
       const content = document.createElement("div");
       content.className = "award-content";
-
+      
       if (title) {
         const titleEl = document.createElement("h3");
         titleEl.textContent = title;
         content.appendChild(titleEl);
       }
-
+      
       if (description) {
-        const temp = document.createElement("div");
-        temp.innerHTML = description;
+  const temp = document.createElement("div");
+  temp.innerHTML = description;
 
-        let p = temp.querySelector("p");
+  let p = temp.querySelector("p");
 
-        if (!p) {
-          p = document.createElement("p");
-          p.textContent = description;
-        }
+  if (!p) {
+    p = document.createElement("p");
+    p.textContent = description;
+  }
 
-        p.classList.add("award-description");
-        content.appendChild(p);
-      }
-
+  p.classList.add("award-description");
+  content.appendChild(p);
+}
+      
       card.appendChild(content);
       return card;
     };
@@ -235,7 +219,7 @@ export default function decorate(block) {
   /* =========================
      POPULATE FILTERS
   ========================= */
-  const sortedYears = Array.from(years).sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+  const sortedYears = Array.from(years).sort((a,b) => b.localeCompare(a, undefined, { numeric: true }));
   const sortedCategories = Array.from(categories).sort();
 
   // Desktop Filters
@@ -243,7 +227,7 @@ export default function decorate(block) {
   defaultOption.value = "";
   defaultOption.textContent = "All Years";
   yearSelectDesktop.appendChild(defaultOption);
-
+  
   sortedYears.forEach(y => {
     const opt = document.createElement("option");
     opt.value = y;
@@ -251,7 +235,7 @@ export default function decorate(block) {
     if (y === defaultYear) opt.selected = true;
     yearSelectDesktop.appendChild(opt);
   });
-
+  
   sortedCategories.forEach(cat => {
     const li = document.createElement("li");
     li.dataset.category = cat;
@@ -264,7 +248,7 @@ export default function decorate(block) {
   const allYearLabel = document.createElement("label");
   allYearLabel.innerHTML = `<input type="radio" name="year" value="" id="year-all" checked> All Years`;
   yearGroup.appendChild(allYearLabel);
-
+  
   sortedYears.forEach(y => {
     const label = document.createElement("label");
     label.innerHTML = `<input type="radio" name="year" value="${y}" id="year-${y}"> ${y}`;
@@ -276,7 +260,7 @@ export default function decorate(block) {
   const allLabel = document.createElement("label");
   allLabel.innerHTML = `<input type="radio" name="category" value="all" id="category-all" checked> ${allAwardsLabel}`;
   categoryGroup.appendChild(allLabel);
-
+  
   sortedCategories.forEach(cat => {
     const label = document.createElement("label");
     label.innerHTML = `<input type="radio" name="category" value="${cat}" id="category-${cat}"> ${cat.charAt(0).toUpperCase() + cat.slice(1)}`;
@@ -302,7 +286,7 @@ export default function decorate(block) {
   function applyFilter(yearVal, catVal, cards) {
     currentFilters.year = yearVal;
     currentFilters.category = catVal;
-
+    
     cards.forEach(card => {
       const yearMatch = !yearVal || card.dataset.year === yearVal;
       const catMatch = catVal === "all" || card.dataset.category === catVal;
@@ -314,11 +298,11 @@ export default function decorate(block) {
     // Update Year button text
     const yearText = currentFilters.year || "Year";
     yearFilterBtn.innerHTML = `${yearText} <span class="arrow">▼</span>`;
-
+    
     // Update Category button text
-    const catText = currentFilters.category === "all" ?
-      allAwardsLabel :
-      currentFilters.category.charAt(0).toUpperCase() + currentFilters.category.slice(1);
+    const catText = currentFilters.category === "all" ? 
+                   allAwardsLabel : 
+                   currentFilters.category.charAt(0).toUpperCase() + currentFilters.category.slice(1);
     categoryFilterBtn.innerHTML = `Filter by - ${catText} <span class="arrow">▼</span>`;
   }
 
@@ -328,20 +312,20 @@ export default function decorate(block) {
       year: "",
       category: "all"
     };
-
+    
     // Reset UI elements
     yearSelectDesktop.value = "";
-
+    
     categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
     categoryListDesktop.querySelector('li[data-category="all"]').classList.add("active");
-
+    
     // Reset mobile radio buttons
     const allYearRadio = modalContent.querySelector('input[name="year"][value=""]');
     if (allYearRadio) allYearRadio.checked = true;
-
+    
     const allCategoryRadio = modalContent.querySelector('input[name="category"][value="all"]');
     if (allCategoryRadio) allCategoryRadio.checked = true;
-
+    
     // Apply filters to show all records
     applyFilter("", "all", cardsDesktop);
     applyFilter("", "all", cardsMobile);
@@ -354,10 +338,10 @@ export default function decorate(block) {
   function openModal(filterType) {
     mobileModal.classList.add("open");
     document.body.style.overflow = 'hidden';
-
+    
     // Reset temp filters to current filters
     tempFilters = { ...currentFilters };
-
+    
     // Update modal title
     const modalTitle = modalHeader.querySelector('h3');
     if (filterType === 'year') {
@@ -369,7 +353,7 @@ export default function decorate(block) {
       yearGroup.style.display = 'none';
       categoryGroup.style.display = 'block';
     }
-
+    
     // Set radio buttons based on temp filters
     if (filterType === 'year') {
       const yearRadio = modalContent.querySelector(`input[name="year"][value="${tempFilters.year}"]`);
@@ -380,7 +364,7 @@ export default function decorate(block) {
       if (catRadio) catRadio.checked = true;
       else modalContent.querySelector('input[name="category"][value="all"]').checked = true;
     }
-
+    
     // Update active button
     yearFilterBtn.classList.toggle('active', filterType === 'year');
     categoryFilterBtn.classList.toggle('active', filterType === 'category');
@@ -403,13 +387,13 @@ export default function decorate(block) {
     currentFilters.year = yearSelectDesktop.value;
     updateButtonText();
   });
-
+  
   categoryListDesktop.addEventListener("click", e => {
     if (e.target.tagName !== "LI") return;
-
+    
     categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
     e.target.classList.add("active");
-
+    
     applyFilter(yearSelectDesktop.value, e.target.dataset.category, cardsDesktop);
     currentFilters.category = e.target.dataset.category;
     updateButtonText();
@@ -418,24 +402,24 @@ export default function decorate(block) {
   // Mobile Event Listeners
   yearFilterBtn.addEventListener("click", () => openModal('year'));
   categoryFilterBtn.addEventListener("click", () => openModal('category'));
-
+  
   modalOverlay.addEventListener("click", closeModal);
-
+  
   modalHeader.querySelector('.close-modal').addEventListener('click', closeModal);
-
+  
   // Radio button change listeners
   modalContent.querySelectorAll('input[name="year"]').forEach(radio => {
     radio.addEventListener('change', () => {
       tempFilters.year = radio.value;
     });
   });
-
+  
   modalContent.querySelectorAll('input[name="category"]').forEach(radio => {
     radio.addEventListener('change', () => {
       tempFilters.category = radio.value;
     });
   });
-
+  
   // Apply button listener
   applyButton.addEventListener('click', () => {
     applyFilter(tempFilters.year, tempFilters.category, cardsMobile);
@@ -455,23 +439,23 @@ export default function decorate(block) {
   // Don't apply any filters initially
   currentFilters.year = "";
   currentFilters.category = "all";
-
+  
   // Initialize desktop - All Years and All Awards selected
   yearSelectDesktop.value = "";
   categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
   categoryListDesktop.querySelector('li[data-category="all"]').classList.add("active");
-
+  
   // Initialize mobile radio buttons - All Years and All Awards selected
   const allYearRadio = modalContent.querySelector('input[name="year"][value=""]');
   if (allYearRadio) allYearRadio.checked = true;
-
+  
   const allCategoryRadio = modalContent.querySelector('input[name="category"][value="all"]');
   if (allCategoryRadio) allCategoryRadio.checked = true;
-
+  
   // IMPORTANT: Don't apply any filter on initialization - show all cards
   // All cards are already visible by default when added to DOM
   // No need to call applyFilter() initially
-
+  
   // Update button text to show initial state
   updateButtonText();
 
