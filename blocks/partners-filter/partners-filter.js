@@ -104,7 +104,7 @@ export default function decorate(block) {
     if (descHTML) {
       const desc = document.createElement("div");
       desc.className = "partner-description";
-      desc.innerHTML = descHTML;
+      desc.textContent = descHTML;
       content.appendChild(desc);
     }
 
