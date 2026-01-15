@@ -20,16 +20,10 @@ export default function decorate(block) {
      STRUCTURE
   ========================= */
   const section = document.createElement("section");
-  section.className = "partners-filter-runtime";
+  section.className = "partners-filter-runtime bg-gray";
 
   const container = document.createElement("div");
   container.className = "container";
-
-  const title = document.createElement("h2");
-  title.className = "section-title";
-  title.textContent = sectionTitle;
-
-  container.appendChild(title);
 
   const desktopLayout = document.createElement("div");
   desktopLayout.className = "desktop-layout";
