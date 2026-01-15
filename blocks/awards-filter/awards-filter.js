@@ -170,22 +170,12 @@ export default function decorate(block) {
       card.dataset.category = category;
 
       if (imageEl) {
-  // Create a wrapper for the image
-  let imgWrap = card.querySelector(".award-img");
-
-  // If wrapper doesn't exist, create it
-  if (!imgWrap) {
-    imgWrap = document.createElement("div");
-    imgWrap.className = "award-img";
-    card.appendChild(imgWrap);
-  }
-
-  // Move the image inside the wrapper
-  if (imageEl.parentNode !== imgWrap) {
-    imageEl.parentNode?.removeChild(imageEl); // remove from current position
-    imgWrap.appendChild(imageEl);              // append inside wrapper
-  }
-}
+        const imgWrap = document.createElement("div");
+        imgWrap.className = "award-img";
+        const clonedImg = imageEl.cloneNode(true);
+        imgWrap.appendChild(clonedImg);
+        card.appendChild(imgWrap);
+      }
 
 
       const content = document.createElement("div");
