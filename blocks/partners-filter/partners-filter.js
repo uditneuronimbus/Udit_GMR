@@ -79,34 +79,30 @@ export default function decorate(block) {
   // Get the dropdown/container
   const dropdown = card.closest('.partner-listing-item') || card.parentElement;
   
-  // Create wrapper and image
-  const imgWrap = document.createElement("div");
-  imgWrap.className = "partner-img";
-  
-  // Always clone the image
-  const clonedImage = image.cloneNode(true);
-  imgWrap.appendChild(clonedImage);
-  card.appendChild(imgWrap);
-  
-  // Hide the original image in AEM editor only
-  const isAEMEditor = document.body.classList.contains('cq-wcm-edit') || 
-                      document.body.classList.contains('aem-AuthorLayer-Edit');
-  
-  if (isAEMEditor && image.parentNode) {
-    // Hide but don't remove (safer for AEM)
-    image.style.display = 'none';
-    image.style.visibility = 'hidden';
-    image.style.position = 'absolute';
-    image.style.opacity = '0';
+  // If image is outside dropdown, move it inside and remove original
+  if (dropdown && !dropdown.contains(image)) {
+    const imgWrap = document.createElement("div");
+    imgWrap.className = "partner-img";
     
-    // Alternatively, move it to a hidden container
-    // const hiddenContainer = document.createElement('div');
-    // hiddenContainer.style.display = 'none';
-    // image.parentNode.insertBefore(hiddenContainer, image);
-    // hiddenContainer.appendChild(image);
-  } else {
-    // In publish mode, remove the original
+    // Remove from current location and add to card
     if (image.parentNode) {
+      image.parentNode.removeChild(image);
+    }
+    
+    imgWrap.appendChild(image);
+    card.appendChild(imgWrap);
+  } else {
+    // Image is already in correct container - clone AND remove original if outside
+    const imgWrap = document.createElement("div");
+    imgWrap.className = "partner-img";
+    
+    // Clone the image
+    const clonedImage = image.cloneNode(true);
+    imgWrap.appendChild(clonedImage);
+    card.appendChild(imgWrap);
+    
+    // Remove the original image if it's outside the dropdown
+    if (dropdown && image.parentNode && !dropdown.contains(image.parentNode)) {
       image.parentNode.removeChild(image);
     }
   }
