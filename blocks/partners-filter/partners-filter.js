@@ -76,23 +76,29 @@ export default function decorate(block) {
     card.dataset.category = category;
 
     if (image) {
-  // Get the dropdown/container
-  const dropdown = card.closest('.partner-listing-item') || card.parentElement;
+      // Get the dropdown/container
+      const dropdown = card.closest('.partner-listing-item') || card.parentElement;
 
-  // Create wrapper
-  const imgWrap = document.createElement("div");
-  imgWrap.className = "partner-img";
+      // If image is outside dropdown, move it inside
+      if (dropdown && !dropdown.contains(image)) {
+        const imgWrap = document.createElement("div");
+        imgWrap.className = "partner-img";
 
-  // Remove image from its current position (outside)
-  if (image.parentNode) {
-    image.parentNode.removeChild(image);
-  }
+        // Remove from current location and add to card
+        if (image.parentNode) {
+          image.parentNode.removeChild(image);
+        }
 
-  // Append image inside card dropdown
-  imgWrap.appendChild(image);
-  card.appendChild(imgWrap);
-}
-
+        imgWrap.appendChild(image);
+        card.appendChild(imgWrap);
+      } else {
+        // Image is already in correct container
+        const imgWrap = document.createElement("div");
+        imgWrap.className = "partner-img";
+        imgWrap.appendChild(image.cloneNode(true));
+        card.appendChild(imgWrap);
+      }
+    }
 
     const content = document.createElement("div");
     content.className = "partner-content";
