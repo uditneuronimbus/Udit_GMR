@@ -12,6 +12,11 @@ import {
   loadCSS,
 } from "./aem.js";
 
+// Initialize accessibility state
+let accessibilitySettings = {
+  fontSize: 'normal',
+  highContrast: false
+};
 
 /* ===============================
    METADATA HELPER
@@ -284,11 +289,6 @@ if (getMetadata('target') === 'true' || getMetadata('personalization')) {
 
 // ===== ACCESSIBILITY SETTINGS =====
 
-// Initialize accessibility state
-let accessibilitySettings = {
-  fontSize: 'normal',
-  highContrast: false
-};
 
 // Toggle font size
 document.getElementById('toggle-font-size')?.addEventListener('click', () => {
