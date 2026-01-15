@@ -76,22 +76,23 @@ export default function decorate(block) {
     card.dataset.category = category;
 
     if (image) {
-  // Get AEM component path if available
-  const cardPath = card.dataset.cqComponentPath || card.dataset.componentPath;
+  // Get the dropdown/container
+  const dropdown = card.closest('.partner-listing-item') || card.parentElement;
   
-  if (cardPath) {
-    // Find image that belongs to this component
-    const componentImage = document.querySelector(`[data-cq-component-path="${cardPath}"] img`);
+  // If image is outside dropdown, move it inside
+  if (dropdown && !dropdown.contains(image)) {
+    const imgWrap = document.createElement("div");
+    imgWrap.className = "partner-img";
     
-    if (componentImage && !card.contains(componentImage)) {
-      // Move image from wherever it is into the card
-      const imgWrap = document.createElement("div");
-      imgWrap.className = "partner-img";
-      imgWrap.appendChild(componentImage);
-      card.appendChild(imgWrap);
+    // Remove from current location and add to card
+    if (image.parentNode) {
+      image.parentNode.removeChild(image);
     }
+    
+    imgWrap.appendChild(image);
+    card.appendChild(imgWrap);
   } else {
-    // Fallback to original logic
+    // Image is already in correct container
     const imgWrap = document.createElement("div");
     imgWrap.className = "partner-img";
     imgWrap.appendChild(image.cloneNode(true));
