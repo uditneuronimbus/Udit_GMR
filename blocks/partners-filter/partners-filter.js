@@ -141,6 +141,21 @@ export default function decorate(block) {
     const descHTML = cols[3]?.innerHTML?.trim() || "";
     const link = cols[4]?.textContent?.trim();
 
+    const isAuthor =
+    document.body.classList.contains("aem-AuthorLayer-Edit") ||
+    window.Granite ||
+    window.CQ;
+
+  if (isAuthor) {
+    block.querySelectorAll('.partner-listing-item').forEach(item => {
+      item.querySelectorAll('.cq-Editable-dom').forEach(editable => {
+        editable.style.visibility = 'hidden';
+        editable.style.position = 'absolute';
+        editable.style.pointerEvents = 'none';
+      });
+    });
+  }
+
     if (category) categories.add(category);
 
     // Create card element function
