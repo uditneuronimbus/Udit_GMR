@@ -223,7 +223,7 @@ const getAndApplyTargetPropositions = async () => {
 
     const response = await window.alloy("sendEvent", {
       renderDecisions: true,
-      decisionScopes: ["target-global-mbox"],
+      // decisionScopes: ["target-global-mbox"],
       data: {
         accessibility_fontSize: accessibilitySettings.fontSize,           
         accessibility_highContrast: String(accessibilitySettings.highContrast)  
@@ -332,7 +332,7 @@ function sendAccessibilityToTarget() {
   
   window.alloy('sendEvent', {
     renderDecisions: true,
-    decisionScopes: ['target-global-mbox'],
+    // decisionScopes: ['target-global-mbox'],
     data: {
       accessibility_fontSize: accessibilitySettings.fontSize,           // ✅ Matches profile script
       accessibility_highContrast: String(accessibilitySettings.highContrast)  // ✅ Matches profile script
