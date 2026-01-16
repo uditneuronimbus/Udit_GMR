@@ -1,30 +1,9 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { fetchPlaceholders } from '../../scripts/placeholders.js';
+import { loadFragment } from '../fragment/fragment.js';
 
 /**
- * Wait until nav is available (EDS-safe)
- */
-function waitForNav(timeout = 4000) {
-  const start = Date.now();
-
-  return new Promise((resolve) => {
-    const timer = setInterval(() => {
-      const nav = document.querySelector('.nav-sections');
-      if (nav) {
-        clearInterval(timer);
-        resolve(nav);
-      }
-
-      if (Date.now() - start > timeout) {
-        clearInterval(timer);
-        resolve(null);
-      }
-    }, 50);
-  });
-}
-
-/**
- * Extract visible text from nav item
+ * Extract visible label from nav item
  */
 function getDirectTextContent(li) {
   const link = li.querySelector(':scope > a');
@@ -41,13 +20,13 @@ function getDirectTextContent(li) {
 }
 
 /**
- * Build breadcrumbs from nav tree
+ * Build breadcrumb data from nav fragment
  */
 async function buildBreadcrumbsFromNav(nav, currentUrl) {
   const crumbs = [];
 
   const homeUrl =
-    document.querySelector('.nav-brand a[href]')?.href ||
+    nav.querySelector('a[href="/"]')?.href ||
     `${window.location.origin}/`;
 
   let activeLink = Array.from(nav.querySelectorAll('a'))
@@ -62,7 +41,6 @@ async function buildBreadcrumbsFromNav(nav, currentUrl) {
         title: getDirectTextContent(li),
         url: link ? link.href : null,
       });
-
       li = li.closest('ul')?.closest('li');
     }
   } else if (currentUrl !== homeUrl) {
@@ -75,38 +53,45 @@ async function buildBreadcrumbsFromNav(nav, currentUrl) {
   const placeholders = await fetchPlaceholders();
   const homeLabel = placeholders.breadcrumbsHomeLabel || 'Home';
 
-  crumbs.unshift({
-    title: homeLabel,
-    url: homeUrl,
-  });
+  crumbs.unshift({ title: homeLabel, url: homeUrl });
 
-  // last item = current page
-  if (crumbs.length) {
-    crumbs[crumbs.length - 1].url = null;
-    crumbs[crumbs.length - 1]['aria-current'] = 'page';
-  }
+  // current page
+  crumbs[crumbs.length - 1].url = null;
+  crumbs[crumbs.length - 1]['aria-current'] = 'page';
 
   return crumbs;
 }
 
-/**
- * Breadcrumbs block entry
- */
 export default async function decorate(block) {
-  // Hide on homepage
+  // hide on homepage
   if (window.location.pathname === '/' || window.location.pathname === '') {
     block.remove();
     return;
   }
 
-  const nav = await waitForNav();
-  if (!nav) {
-    console.warn('Breadcrumbs: nav not found');
+  // load nav fragment directly (EDS best practice)
+  const navMeta = getMetadata('nav');
+  const navPath = navMeta
+    ? new URL(navMeta, window.location).pathname
+    : '/nav';
+
+  const navFragment = await loadFragment(navPath);
+  if (!navFragment) {
     block.remove();
     return;
   }
 
-  const crumbs = await buildBreadcrumbsFromNav(nav, window.location.href);
+  const navSections = navFragment.querySelector('.nav-sections');
+  if (!navSections) {
+    block.remove();
+    return;
+  }
+
+  const crumbs = await buildBreadcrumbsFromNav(
+    navSections,
+    window.location.href
+  );
+
   if (!crumbs.length) {
     block.remove();
     return;
