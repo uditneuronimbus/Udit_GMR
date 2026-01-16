@@ -3,59 +3,67 @@ import { fetchPlaceholders } from '../../scripts/placeholders.js';
 import { loadFragment } from '../fragment/fragment.js';
 
 /**
- * Extract visible label from nav item
+ * Get readable text from nav <li>
  */
-function getDirectTextContent(li) {
-  const link = li.querySelector(':scope > a');
-  if (link) return link.textContent.trim();
+function getItemText(li) {
+  const a = li.querySelector(':scope > a');
+  if (a) return a.textContent.trim();
+  return li.textContent.trim();
+}
 
-  const button = li.querySelector(':scope > button');
-  if (button) return button.textContent.trim();
+/**
+ * Find breadcrumb path in raw nav UL
+ */
+function findPath(ul, currentUrl, trail = []) {
+  for (const li of ul.children) {
+    const link = li.querySelector(':scope > a');
+    const nextTrail = [...trail, li];
 
-  return Array.from(li.childNodes)
-    .filter((n) => n.nodeType === Node.TEXT_NODE)
-    .map((n) => n.textContent)
-    .join(' ')
-    .trim();
+    if (link && link.href === currentUrl) {
+      return nextTrail;
+    }
+
+    const childUl = li.querySelector(':scope > ul');
+    if (childUl) {
+      const result = findPath(childUl, currentUrl, nextTrail);
+      if (result) return result;
+    }
+  }
+  return null;
 }
 
 /**
  * Build breadcrumb data from nav fragment
  */
-async function buildBreadcrumbsFromNav(nav, currentUrl) {
+async function buildBreadcrumbs(navRoot, currentUrl) {
   const crumbs = [];
 
-  const homeUrl =
-    nav.querySelector('a[href="/"]')?.href ||
-    `${window.location.origin}/`;
+  const rootUl = navRoot.querySelector('ul');
+  if (!rootUl) return crumbs;
 
-  let activeLink = Array.from(nav.querySelectorAll('a'))
-    .find((a) => a.href === currentUrl);
+  const path = findPath(rootUl, currentUrl);
 
-  if (activeLink) {
-    let li = activeLink.closest('li');
-
-    while (li) {
-      const link = li.querySelector(':scope > a');
-      crumbs.unshift({
-        title: getDirectTextContent(li),
-        url: link ? link.href : null,
+  if (path) {
+    path.forEach((li) => {
+      const a = li.querySelector(':scope > a');
+      crumbs.push({
+        title: getItemText(li),
+        url: a ? a.href : null,
       });
-      li = li.closest('ul')?.closest('li');
-    }
-  } else if (currentUrl !== homeUrl) {
-    crumbs.unshift({
+    });
+  } else {
+    crumbs.push({
       title: getMetadata('og:title') || document.title,
       url: currentUrl,
     });
   }
 
   const placeholders = await fetchPlaceholders();
-  const homeLabel = placeholders.breadcrumbsHomeLabel || 'Home';
+  crumbs.unshift({
+    title: placeholders.breadcrumbsHomeLabel || 'Home',
+    url: '/',
+  });
 
-  crumbs.unshift({ title: homeLabel, url: homeUrl });
-
-  // current page
   crumbs[crumbs.length - 1].url = null;
   crumbs[crumbs.length - 1]['aria-current'] = 'page';
 
@@ -63,13 +71,13 @@ async function buildBreadcrumbsFromNav(nav, currentUrl) {
 }
 
 export default async function decorate(block) {
-  // hide on homepage
+  // Hide on homepage
   if (window.location.pathname === '/' || window.location.pathname === '') {
     block.remove();
     return;
   }
 
-  // load nav fragment directly (EDS best practice)
+  // Load RAW nav fragment
   const navMeta = getMetadata('nav');
   const navPath = navMeta
     ? new URL(navMeta, window.location).pathname
@@ -81,14 +89,8 @@ export default async function decorate(block) {
     return;
   }
 
-  const navSections = navFragment.querySelector('.nav-sections');
-  if (!navSections) {
-    block.remove();
-    return;
-  }
-
-  const crumbs = await buildBreadcrumbsFromNav(
-    navSections,
+  const crumbs = await buildBreadcrumbs(
+    navFragment,
     window.location.href
   );
 
@@ -105,9 +107,8 @@ export default async function decorate(block) {
 
   crumbs.forEach((item) => {
     const li = document.createElement('li');
-
     if (item['aria-current']) {
-      li.setAttribute('aria-current', item['aria-current']);
+      li.setAttribute('aria-current', 'page');
     }
 
     if (item.url) {
