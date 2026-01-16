@@ -1,15 +1,23 @@
 export default function decorate(block) {
+  console.log("Decorating Awards List block");
+
   const children = [...block.children];
   if (children.length < 5) return;
 
+  /* ================================
+     1️⃣ Read authored content
+  ================================ */
   const allAwardsLabel = children[1]?.textContent?.trim() || "All Awards";
   const filterPanelTitle = children[2]?.textContent?.trim() || "Filter by Year and Category";
   const defaultYear = children[3]?.textContent?.trim() || "";
   const items = children.slice(4);
 
+  /* ================================
+     2️⃣ Check for Author Mode (AEM SAFE)
+  ================================ */
   const isAuthorMode = document.body.classList.contains('universal-editor-edit') ||
-                       document.body.classList.contains('aem-AuthorLayer-Edit') ||
-                       window.location.href.includes('/editor.html');
+    document.body.classList.contains('aem-AuthorLayer-Edit') ||
+    window.location.href.includes('/editor.html');
 
   if (isAuthorMode) {
     block.classList.add('awards-author-mode');
@@ -24,130 +32,128 @@ export default function decorate(block) {
     return;
   }
 
-  /* =========================
-     RUNTIME STRUCTURE
-  ========================= */
-  const section = document.createElement("section");
-  section.className = "awards-filter-runtime bg-gray";
+  /* ================================
+     3️⃣ Preserve authored content for Universal Editor (AEM SAFE)
+     while hiding it visually for end users
+  ================================ */
 
-  const container = document.createElement("div");
-  container.className = "container";
-
-  // ---------------- DESKTOP ----------------
-  const desktopLayout = document.createElement("div");
-  desktopLayout.className = "awards-layout desktop-layout";
-
-  const desktopAside = document.createElement("aside");
-  desktopAside.className = "awards-filter-panel";
-  desktopAside.innerHTML = `<h4>${filterPanelTitle}</h4>`;
-  
-  const yearSelectDesktop = document.createElement("select");
-  yearSelectDesktop.className = "year-filter";
-  desktopAside.appendChild(yearSelectDesktop);
-  
-  const categoryListDesktop = document.createElement("ul");
-  categoryListDesktop.className = "category-filter";
-  const allLiDesktop = document.createElement("li");
-  allLiDesktop.textContent = allAwardsLabel;
-  allLiDesktop.dataset.category = "all";
-  allLiDesktop.classList.add("active");
-  categoryListDesktop.appendChild(allLiDesktop);
-  desktopAside.appendChild(categoryListDesktop);
-
-  const desktopList = document.createElement("div");
-  desktopList.className = "awards-list";
-
-  desktopLayout.appendChild(desktopAside);
-  desktopLayout.appendChild(desktopList);
-
-  // ---------------- MOBILE ----------------
-  const mobileLayout = document.createElement("div");
-  mobileLayout.className = "awards-layout mobile-layout";
-
-  // Mobile filter buttons container
-  const mobileFilterButtons = document.createElement("div");
-  mobileFilterButtons.className = "mobile-filter-buttons";
-
-  // Year filter button
-  const yearFilterBtn = document.createElement("button");
-  yearFilterBtn.className = "mobile-filter-btn year-btn";
-  yearFilterBtn.dataset.type = "year";
-  yearFilterBtn.innerHTML = `Year <span class="arrow">▼</span>`;
-
-  // Category filter button
-  const categoryFilterBtn = document.createElement("button");
-  categoryFilterBtn.className = "mobile-filter-btn category-btn";
-  categoryFilterBtn.dataset.type = "category";
-  categoryFilterBtn.innerHTML = `Filter by <span class="arrow">▼</span>`;
-
-  mobileFilterButtons.appendChild(yearFilterBtn);
-  mobileFilterButtons.appendChild(categoryFilterBtn);
-
-  // Mobile filter modal
-  const mobileModal = document.createElement("div");
-  mobileModal.className = "mobile-filter-modal";
-
-  const modalOverlay = document.createElement("div");
-  modalOverlay.className = "mobile-filter-overlay";
-
-  const modalContent = document.createElement("div");
-  modalContent.className = "mobile-filter-content";
-
-  // Modal header
-  const modalHeader = document.createElement("div");
-  modalHeader.className = "modal-header";
-  modalHeader.innerHTML = `
-    <h3>Select Year</h3>
-    <button class="close-modal">×</button>
+  // Create a wrapper to hide authored content visually but keep in DOM
+  const authoredContentWrapper = document.createElement('div');
+  authoredContentWrapper.className = 'awards-authored-content';
+  authoredContentWrapper.setAttribute('aria-hidden', 'true');
+  authoredContentWrapper.style.cssText = `
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
   `;
-  modalContent.appendChild(modalHeader);
 
-  // Year group
-  const yearGroup = document.createElement("div");
-  yearGroup.className = "filter-group year-group";
-  yearGroup.style.display = "none";
+  // Move all children to the hidden wrapper while preserving them in DOM
+  while (block.firstChild) {
+    authoredContentWrapper.appendChild(block.firstChild);
+  }
 
-  // Category group
-  const categoryGroup = document.createElement("div");
-  categoryGroup.className = "filter-group category-group";
-  categoryGroup.style.display = "none";
+  // Add the hidden wrapper back to the block
+  block.appendChild(authoredContentWrapper);
 
-  modalContent.appendChild(yearGroup);
-  modalContent.appendChild(categoryGroup);
+  /* ================================
+     4️⃣ Runtime wrapper
+  ================================ */
+  const runtime = document.createElement("section");
+  runtime.className = "awards-filter-runtime bg-gray";
 
-  // Apply button container
-  const applyButtonContainer = document.createElement("div");
-  applyButtonContainer.className = "apply-filter-btn";
-  const applyButton = document.createElement("button");
-  applyButton.className = "apply-btn";
-  applyButton.textContent = "Apply";
-  applyButtonContainer.appendChild(applyButton);
-  modalContent.appendChild(applyButtonContainer);
+  runtime.innerHTML = `
+    <div class="container">
+      <!-- Desktop Layout -->
+      <div class="awards-layout desktop-layout">
+        <aside class="awards-filter-panel">
+          <h4>${filterPanelTitle}</h4>
+          <select class="year-filter">
+            <option value="">All Years</option>
+          </select>
+          <ul class="category-filter">
+            <li data-category="all" class="active">${allAwardsLabel}</li>
+          </ul>
+        </aside>
+        <div class="awards-list"></div>
+      </div>
 
-  mobileModal.appendChild(modalOverlay);
-  mobileModal.appendChild(modalContent);
+      <!-- Mobile Layout -->
+      <div class="awards-layout mobile-layout">
+        <div class="mobile-filter-buttons">
+          <button class="mobile-filter-btn year-btn" data-type="year">
+            Year <span class="arrow">▼</span>
+          </button>
+          <button class="mobile-filter-btn category-btn" data-type="category">
+            Filter by <span class="arrow">▼</span>
+          </button>
+        </div>
+        <div class="awards-list"></div>
+        
+        <!-- Mobile Filter Modal -->
+        <div class="mobile-filter-modal">
+          <div class="mobile-filter-overlay"></div>
+          <div class="mobile-filter-content">
+            <div class="modal-header">
+              <h3>Select Year</h3>
+              <button class="close-modal">×</button>
+            </div>
+            <div class="filter-group year-group" style="display: none;">
+              <p>Year</p>
+              <label><input type="radio" name="year" value="" checked> All Years</label>
+            </div>
+            <div class="filter-group category-group" style="display: none;">
+              <p>Filter by Category</p>
+              <label><input type="radio" name="category" value="all" checked> ${allAwardsLabel}</label>
+            </div>
+            <div class="apply-filter-btn">
+              <button class="apply-btn">Apply</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 
-  const mobileList = document.createElement("div");
-  mobileList.className = "awards-list";
+  block.appendChild(runtime);
 
-  mobileLayout.appendChild(mobileFilterButtons);
-  mobileLayout.appendChild(mobileList);
-  mobileLayout.appendChild(mobileModal);
+  /* ================================
+     5️⃣ DOM References
+  ================================ */
+  const desktopList = runtime.querySelector('.desktop-layout .awards-list');
+  const mobileList = runtime.querySelector('.mobile-layout .awards-list');
+  const yearSelectDesktop = runtime.querySelector('.year-filter');
+  const categoryListDesktop = runtime.querySelector('.category-filter');
+  const yearFilterBtn = runtime.querySelector('.year-btn');
+  const categoryFilterBtn = runtime.querySelector('.category-btn');
+  const mobileModal = runtime.querySelector('.mobile-filter-modal');
+  const modalOverlay = runtime.querySelector('.mobile-filter-overlay');
+  const modalHeader = runtime.querySelector('.modal-header');
+  const yearGroup = runtime.querySelector('.year-group');
+  const categoryGroup = runtime.querySelector('.category-group');
+  const applyButton = runtime.querySelector('.apply-btn');
+  const closeModalBtn = runtime.querySelector('.close-modal');
 
-  container.appendChild(desktopLayout);
-  container.appendChild(mobileLayout);
-  section.appendChild(container);
-  block.appendChild(section);
-
-  /* =========================
-     DATA COLLECTION
-  ========================= */
+  /* ================================
+     6️⃣ Data Collection & Card Building
+  ================================ */
   const years = new Set();
   const categories = new Set();
   const cardsDesktop = [];
   const cardsMobile = [];
 
-  items.forEach((item) => {
+  // Use the items from the authored content wrapper
+  const authoredItems = [...authoredContentWrapper.children].slice(4);
+
+  authoredItems.forEach((item) => {
     const cols = [...item.children];
     if (!cols.length) return;
 
@@ -168,41 +174,77 @@ export default function decorate(block) {
       card.className = "award-card";
       card.dataset.year = year;
       card.dataset.category = category;
-      
-        if (imageEl) {
-  const imgWrap = document.createElement("div");
-  imgWrap.className = "award-img";
 
-  const media = imageEl.closest("picture") || imageEl;
+      if (imageEl) {
+        const imgWrap = document.createElement("div");
+        imgWrap.className = "award-img";
 
-  imgWrap.appendChild(media.cloneNode(true));
-  card.appendChild(imgWrap);
-}
-      
+        // Function to extract image URL from various elements
+        const extractImageUrl = (imgElement) => {
+          if (imgElement.tagName === 'IMG') {
+            return imgElement.src;
+          } else if (imgElement.tagName === 'PICTURE') {
+            // Try to get image from picture element
+            const img = imgElement.querySelector('img');
+            return img ? img.src : '';
+          } else if (imgElement.tagName === 'DIV' && imgElement.style.backgroundImage) {
+            // Handle background images if needed
+            const bg = imgElement.style.backgroundImage;
+            const urlMatch = bg.match(/url\(['"]?(.*?)['"]?\)/);
+            return urlMatch ? urlMatch[1] : '';
+          }
+          return '';
+        };
+
+        const imageUrl = extractImageUrl(imageEl);
+
+        if (imageUrl) {
+          // Create a clean img tag with just the URL
+          const newImg = document.createElement('img');
+          newImg.src = imageUrl;
+
+          // Copy important attributes if they exist
+          if (imageEl.alt) newImg.alt = imageEl.alt;
+          if (imageEl.title) newImg.title = imageEl.title;
+          if (imageEl.width) newImg.width = imageEl.width;
+          if (imageEl.height) newImg.height = imageEl.height;
+
+          // Add lazy loading
+          newImg.loading = "lazy";
+
+          imgWrap.appendChild(newImg);
+        } else {
+          // Fallback: clone the original if no URL found
+          const clonedImg = imageEl.cloneNode(true);
+          imgWrap.appendChild(clonedImg);
+        }
+
+        card.appendChild(imgWrap);
+      }
+
       const content = document.createElement("div");
       content.className = "award-content";
-      
+
       if (title) {
         const titleEl = document.createElement("h3");
         titleEl.textContent = title;
         content.appendChild(titleEl);
       }
-      
+
       if (description) {
-  const temp = document.createElement("div");
-  temp.innerHTML = description;
+        const temp = document.createElement("div");
+        temp.innerHTML = description;
 
-  let p = temp.querySelector("p");
+        let p = temp.querySelector("p");
+        if (!p) {
+          p = document.createElement("p");
+          p.textContent = description;
+        }
 
-  if (!p) {
-    p = document.createElement("p");
-    p.textContent = description;
-  }
+        p.classList.add("award-description");
+        content.appendChild(p);
+      }
 
-  p.classList.add("award-description");
-  content.appendChild(p);
-}
-      
       card.appendChild(content);
       return card;
     };
@@ -217,18 +259,13 @@ export default function decorate(block) {
     cardsMobile.push(cardMobile);
   });
 
-  /* =========================
-     POPULATE FILTERS
-  ========================= */
-  const sortedYears = Array.from(years).sort((a,b) => b.localeCompare(a, undefined, { numeric: true }));
+  /* ================================
+     7️⃣ Populate Filters
+  ================================ */
+  const sortedYears = Array.from(years).sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
   const sortedCategories = Array.from(categories).sort();
 
-  // Desktop Filters
-  const defaultOption = document.createElement("option");
-  defaultOption.value = "";
-  defaultOption.textContent = "All Years";
-  yearSelectDesktop.appendChild(defaultOption);
-  
+  // Desktop Year Filter
   sortedYears.forEach(y => {
     const opt = document.createElement("option");
     opt.value = y;
@@ -236,7 +273,8 @@ export default function decorate(block) {
     if (y === defaultYear) opt.selected = true;
     yearSelectDesktop.appendChild(opt);
   });
-  
+
+  // Desktop Category Filter
   sortedCategories.forEach(cat => {
     const li = document.createElement("li");
     li.dataset.category = cat;
@@ -244,106 +282,67 @@ export default function decorate(block) {
     categoryListDesktop.appendChild(li);
   });
 
-  // Mobile Year Filters
-  yearGroup.innerHTML = `<p>Year</p>`;
-  const allYearLabel = document.createElement("label");
-  allYearLabel.innerHTML = `<input type="radio" name="year" value="" id="year-all" checked> All Years`;
-  yearGroup.appendChild(allYearLabel);
-  
+  // Mobile Year Filter
   sortedYears.forEach(y => {
     const label = document.createElement("label");
     label.innerHTML = `<input type="radio" name="year" value="${y}" id="year-${y}"> ${y}`;
     yearGroup.appendChild(label);
   });
 
-  // Mobile Category Filters
-  categoryGroup.innerHTML = `<p>Filter by Category</p>`;
-  const allLabel = document.createElement("label");
-  allLabel.innerHTML = `<input type="radio" name="category" value="all" id="category-all" checked> ${allAwardsLabel}`;
-  categoryGroup.appendChild(allLabel);
-  
+  // Mobile Category Filter
   sortedCategories.forEach(cat => {
     const label = document.createElement("label");
     label.innerHTML = `<input type="radio" name="category" value="${cat}" id="category-${cat}"> ${cat.charAt(0).toUpperCase() + cat.slice(1)}`;
     categoryGroup.appendChild(label);
   });
 
-  /* =========================
-     STATE MANAGEMENT
-  ========================= */
-  let currentFilters = {
+  /* ================================
+     8️⃣ State Management
+  ================================ */
+  const state = {
     year: "",
-    category: "all"
+    category: "all",
+    tempYear: "",
+    tempCategory: "all"
   };
 
-  let tempFilters = {
-    year: "",
-    category: "all"
-  };
-
-  /* =========================
-     FILTER LOGIC
-  ========================= */
+  /* ================================
+     9️⃣ Filter Functions
+  ================================ */
   function applyFilter(yearVal, catVal, cards) {
-    currentFilters.year = yearVal;
-    currentFilters.category = catVal;
-    
+    state.year = yearVal;
+    state.category = catVal;
+
     cards.forEach(card => {
       const yearMatch = !yearVal || card.dataset.year === yearVal;
       const catMatch = catVal === "all" || card.dataset.category === catVal;
       card.style.display = yearMatch && catMatch ? "" : "none";
     });
+
+    updateButtonText();
   }
 
   function updateButtonText() {
     // Update Year button text
-    const yearText = currentFilters.year || "Year";
+    const yearText = state.year || "Year";
     yearFilterBtn.innerHTML = `${yearText} <span class="arrow">▼</span>`;
-    
+
     // Update Category button text
-    const catText = currentFilters.category === "all" ? 
-                   allAwardsLabel : 
-                   currentFilters.category.charAt(0).toUpperCase() + currentFilters.category.slice(1);
+    const catText = state.category === "all" ?
+      allAwardsLabel :
+      state.category.charAt(0).toUpperCase() + state.category.slice(1);
     categoryFilterBtn.innerHTML = `Filter by - ${catText} <span class="arrow">▼</span>`;
   }
 
-  function resetToAll() {
-    // Reset all filters to show all records
-    currentFilters = {
-      year: "",
-      category: "all"
-    };
-    
-    // Reset UI elements
-    yearSelectDesktop.value = "";
-    
-    categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
-    categoryListDesktop.querySelector('li[data-category="all"]').classList.add("active");
-    
-    // Reset mobile radio buttons
-    const allYearRadio = modalContent.querySelector('input[name="year"][value=""]');
-    if (allYearRadio) allYearRadio.checked = true;
-    
-    const allCategoryRadio = modalContent.querySelector('input[name="category"][value="all"]');
-    if (allCategoryRadio) allCategoryRadio.checked = true;
-    
-    // Apply filters to show all records
-    applyFilter("", "all", cardsDesktop);
-    applyFilter("", "all", cardsMobile);
-    updateButtonText();
-  }
-
-  /* =========================
-     MOBILE MODAL FUNCTIONS
-  ========================= */
   function openModal(filterType) {
     mobileModal.classList.add("open");
     document.body.style.overflow = 'hidden';
-    
-    // Reset temp filters to current filters
-    tempFilters = { ...currentFilters };
-    
-    // Update modal title
+
+    // Set temp filters to current state
+    state.tempYear = state.year;
+    state.tempCategory = state.category;
+
+    // Update modal UI
     const modalTitle = modalHeader.querySelector('h3');
     if (filterType === 'year') {
       modalTitle.textContent = 'Select Year';
@@ -354,19 +353,19 @@ export default function decorate(block) {
       yearGroup.style.display = 'none';
       categoryGroup.style.display = 'block';
     }
-    
-    // Set radio buttons based on temp filters
+
+    // Set active radio buttons
     if (filterType === 'year') {
-      const yearRadio = modalContent.querySelector(`input[name="year"][value="${tempFilters.year}"]`);
+      const yearRadio = yearGroup.querySelector(`input[name="year"][value="${state.tempYear}"]`);
       if (yearRadio) yearRadio.checked = true;
-      else modalContent.querySelector('input[name="year"][value=""]').checked = true;
+      else yearGroup.querySelector('input[name="year"][value=""]').checked = true;
     } else {
-      const catRadio = modalContent.querySelector(`input[name="category"][value="${tempFilters.category}"]`);
+      const catRadio = categoryGroup.querySelector(`input[name="category"][value="${state.tempCategory}"]`);
       if (catRadio) catRadio.checked = true;
-      else modalContent.querySelector('input[name="category"][value="all"]').checked = true;
+      else categoryGroup.querySelector('input[name="category"][value="all"]').checked = true;
     }
-    
-    // Update active button
+
+    // Update button states
     yearFilterBtn.classList.toggle('active', filterType === 'year');
     categoryFilterBtn.classList.toggle('active', filterType === 'category');
   }
@@ -378,95 +377,68 @@ export default function decorate(block) {
     categoryFilterBtn.classList.remove('active');
   }
 
-  /* =========================
-     EVENT LISTENERS
-  ========================= */
-  // Desktop Event Listeners
+  /* ================================
+     🔟 Event Listeners
+  ================================ */
+  // Desktop Filters
   yearSelectDesktop.addEventListener("change", () => {
     const activeCat = categoryListDesktop.querySelector(".active")?.dataset.category || "all";
     applyFilter(yearSelectDesktop.value, activeCat, cardsDesktop);
-    currentFilters.year = yearSelectDesktop.value;
-    updateButtonText();
-  });
-  
-  categoryListDesktop.addEventListener("click", e => {
-    if (e.target.tagName !== "LI") return;
-    
-    categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
-    e.target.classList.add("active");
-    
-    applyFilter(yearSelectDesktop.value, e.target.dataset.category, cardsDesktop);
-    currentFilters.category = e.target.dataset.category;
-    updateButtonText();
   });
 
-  // Mobile Event Listeners
+  categoryListDesktop.addEventListener("click", e => {
+    if (e.target.tagName !== "LI") return;
+
+    categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
+    e.target.classList.add("active");
+
+    applyFilter(yearSelectDesktop.value, e.target.dataset.category, cardsDesktop);
+  });
+
+  // Mobile Filters
   yearFilterBtn.addEventListener("click", () => openModal('year'));
   categoryFilterBtn.addEventListener("click", () => openModal('category'));
-  
+
   modalOverlay.addEventListener("click", closeModal);
-  
-  modalHeader.querySelector('.close-modal').addEventListener('click', closeModal);
-  
-  // Radio button change listeners
-  modalContent.querySelectorAll('input[name="year"]').forEach(radio => {
+  closeModalBtn.addEventListener('click', closeModal);
+
+  // Mobile Radio Button Changes
+  yearGroup.querySelectorAll('input[name="year"]').forEach(radio => {
     radio.addEventListener('change', () => {
-      tempFilters.year = radio.value;
+      state.tempYear = radio.value;
     });
   });
-  
-  modalContent.querySelectorAll('input[name="category"]').forEach(radio => {
+
+  categoryGroup.querySelectorAll('input[name="category"]').forEach(radio => {
     radio.addEventListener('change', () => {
-      tempFilters.category = radio.value;
+      state.tempCategory = radio.value;
     });
   });
-  
-  // Apply button listener
+
+  // Apply Button
   applyButton.addEventListener('click', () => {
-    applyFilter(tempFilters.year, tempFilters.category, cardsMobile);
-    updateButtonText();
+    applyFilter(state.tempYear, state.tempCategory, cardsMobile);
     closeModal();
   });
 
-  /* =========================
-     INITIALIZATION
-  ========================= */
-  // Hide original content
-  Array.from(block.children).forEach(child => {
-    if (child !== section) child.style.display = "none";
-  });
-
-  // Set initial state to show ALL records
-  // Don't apply any filters initially
-  currentFilters.year = "";
-  currentFilters.category = "all";
-  
-  // Initialize desktop - All Years and All Awards selected
-  yearSelectDesktop.value = "";
-  categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
-  categoryListDesktop.querySelector('li[data-category="all"]').classList.add("active");
-  
-  // Initialize mobile radio buttons - All Years and All Awards selected
-  const allYearRadio = modalContent.querySelector('input[name="year"][value=""]');
-  if (allYearRadio) allYearRadio.checked = true;
-  
-  const allCategoryRadio = modalContent.querySelector('input[name="category"][value="all"]');
-  if (allCategoryRadio) allCategoryRadio.checked = true;
-  
-  // IMPORTANT: Don't apply any filter on initialization - show all cards
-  // All cards are already visible by default when added to DOM
-  // No need to call applyFilter() initially
-  
-  // Update button text to show initial state
-  updateButtonText();
-
-  // Close modal on escape key
+  // Escape Key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && mobileModal.classList.contains('open')) {
       closeModal();
     }
   });
 
-  // Optional: Add a reset button or functionality if needed
-  // You could add a reset button that calls resetToAll() function
+  /* ================================
+     1️⃣1️⃣ Initialize
+  ================================ */
+  // Set initial state (show all)
+  applyFilter("", "all", cardsDesktop);
+  applyFilter("", "all", cardsMobile);
+
+  // Initialize desktop UI
+  yearSelectDesktop.value = "";
+  categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
+  categoryListDesktop.querySelector('li[data-category="all"]').classList.add("active");
+
+  console.log("Awards List block initialized");
 }
