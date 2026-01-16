@@ -124,7 +124,26 @@ export default function decorate(block) {
   /* ================================
      6️⃣ Data Collection & Card Building
   ================================ */
-  const categories = new Set();
+  
+  // Define category mapping from your JSON configuration
+  const categoryMapping = {
+    "airports": "Airports",
+    "energy": "Energy",
+    "transportation": "Transportation",
+    "foundation": "GMR Varalakshmi Foundation",
+    "epc": "EPC"
+  };
+  
+  // Create a reverse mapping for fallback
+  const categorySlugToName = {};
+  const categoryNameToSlug = {};
+  
+  Object.entries(categoryMapping).forEach(([slug, name]) => {
+    categorySlugToName[slug] = name;
+    categoryNameToSlug[name.toLowerCase()] = slug;
+  });
+
+  const categories = new Map(); // Use Map to store slug->name pairs
   const cardsDesktop = [];
   const cardsMobile = [];
 
@@ -135,19 +154,25 @@ export default function decorate(block) {
     const cols = [...item.children];
     if (!cols.length) return;
 
-    const category = cols[0]?.textContent?.trim().toLowerCase() || "";
+    const categorySlug = cols[0]?.textContent?.trim().toLowerCase() || "";
+    const categoryName = categorySlugToName[categorySlug] || 
+                        categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1);
+    
     const image = cols[1]?.querySelector("img, picture");
     const titleText = cols[2]?.textContent?.trim();
     const descHTML = cols[3]?.innerHTML?.trim() || "";
     const link = cols[4]?.textContent?.trim();
 
-    if (category) categories.add(category);
+    // Store slug->name mapping for categories found in content
+    if (categorySlug) {
+      categories.set(categorySlug, categoryName);
+    }
 
     // Create card element function
     const createCard = () => {
       const card = document.createElement("article");
       card.className = "partner-card";
-      card.dataset.category = category;
+      card.dataset.category = categorySlug;
 
       // Image handling
       if (image) {
@@ -246,20 +271,22 @@ export default function decorate(block) {
   /* ================================
      7️⃣ Populate Filters
   ================================ */
-  const sortedCategories = Array.from(categories).sort();
+  // Sort categories by their display names
+  const sortedCategories = Array.from(categories.entries())
+    .sort((a, b) => a[1].localeCompare(b[1]));
 
   // Desktop Category Filter
-  sortedCategories.forEach(cat => {
+  sortedCategories.forEach(([slug, name]) => {
     const li = document.createElement("li");
-    li.dataset.category = cat;
-    li.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+    li.dataset.category = slug;
+    li.textContent = name; // Use display name from JSON
     categoryListDesktop.appendChild(li);
   });
 
   // Mobile Category Filter
-  sortedCategories.forEach(cat => {
+  sortedCategories.forEach(([slug, name]) => {
     const label = document.createElement("label");
-    label.innerHTML = `<input type="radio" name="category" value="${cat}" id="category-${cat}"> ${cat.charAt(0).toUpperCase() + cat.slice(1)}`;
+    label.innerHTML = `<input type="radio" name="category" value="${slug}" id="category-${slug}"> ${name}`;
     categoryGroup.appendChild(label);
   });
 
@@ -293,10 +320,15 @@ export default function decorate(block) {
   }
 
   function updateButtonText() {
-    const catText = state.category === "all" ?
-      "All Partners" :
-      state.category.charAt(0).toUpperCase() + state.category.slice(1);
-    categoryFilterBtn.innerHTML = `Filter by - ${catText} <span class="arrow">▼</span>`;
+    let displayText = "All Partners";
+    
+    if (state.category !== "all") {
+      // Get the display name from our categories map
+      displayText = categories.get(state.category) || 
+                   state.category.charAt(0).toUpperCase() + state.category.slice(1);
+    }
+    
+    categoryFilterBtn.innerHTML = `Filter by - ${displayText} <span class="arrow">▼</span>`;
   }
 
   function openModal() {
