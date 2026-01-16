@@ -1,55 +1,66 @@
-/* Breadcrumbs container */
-.breadcrumbs {
-    max-width: 1248px;
-    margin: 0 auto;
-    padding: 0 24px;
-    font-size: var(--body-font-size-xs);
-    overflow-x: auto;
+/* 1. Hide empty block if logic fails or homepage */
+.breadcrumbs:empty {
+    display: none;
 }
 
-/* List */
+/* 2. Container Styling */
+.breadcrumbs nav {
+    max-width: 1248px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    font-size: var(--body-font-size-xs);
+    color: var(--text-color);
+    overflow-x: auto;
+    box-sizing: border-box;
+}
+
+/* 3. List Layout */
 .breadcrumbs ol {
     display: flex;
     align-items: center;
     list-style: none;
     padding: 0;
     margin: 0;
-    gap: 1ch;
+    gap: 8px;
     white-space: nowrap;
 }
 
-/* Items */
+/* 4. List Items */
 .breadcrumbs li {
+    display: inline-flex;
+    align-items: center;
     color: var(--dark-color);
 }
 
-/* Separator */
+/* 5. Separator (Slash) */
 .breadcrumbs li:not(:last-child)::after {
     content: '/';
-    padding-left: 1ch;
-    color: var(--dark-color);
+    margin-left: 8px;
+    color: #999;
 }
 
-/* Current page */
+/* 6. Current Page (Bold) */
 .breadcrumbs li[aria-current='page'] {
-    color: var(--text-color);
-    font-weight: 500;
+    font-weight: 600;
+    color: var(--heading-color, #000);
 }
 
-/* Links */
+/* 7. Link Styling */
 .breadcrumbs a {
-    color: inherit;
     text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
 }
 
 .breadcrumbs a:hover {
-    text-decoration: underline;
+    border-bottom-color: currentColor;
 }
 
-/* Desktop */
+/* 8. Desktop Adjustments */
 @media (min-width: 900px) {
-    .breadcrumbs {
+    .breadcrumbs nav {
         max-width: 1264px;
-        padding: 0 32px;
+        padding: 16px 32px;
     }
 }
