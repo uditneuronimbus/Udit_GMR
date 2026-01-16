@@ -379,6 +379,8 @@ const getAndApplyTargetPropositions = async () => {
 
     const propositions = response?.propositions || [];
     console.log(`📦 Propositions received: ${propositions.length}`);
+    console.log("__________________________________________", propositions);
+    
 
     if (!propositions.length) {
       console.warn("⚠️ No propositions returned (check activity & audience)");
