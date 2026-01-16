@@ -317,30 +317,6 @@ const getAndApplyTargetPropositions = async () => {
   /* --------------------------------------------
    * 1. Wait for Alloy to load
    * -------------------------------------------- */
-  if (!window.alloy) {
-    console.log("⏳ Waiting for Alloy to load...");
-
-    let attempts = 0;
-    const maxAttempts = 100;
-
-    await new Promise((resolve) => {
-      const interval = setInterval(() => {
-        attempts++;
-
-        if (window.alloy) {
-          clearInterval(interval);
-          console.log(`✅ Alloy loaded after ${attempts * 100}ms`);
-          resolve();
-        }
-
-        if (attempts >= maxAttempts) {
-          clearInterval(interval);
-          console.error("❌ Alloy not loaded after 10s");
-          resolve();
-        }
-      }, 100);
-    });
-  }
 
   if (!window.alloy) {
     console.error("❌ Alloy still unavailable");
