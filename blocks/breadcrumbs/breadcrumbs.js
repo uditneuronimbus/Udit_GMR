@@ -2,32 +2,24 @@ import { getMetadata } from '../../scripts/aem.js';
 import { fetchPlaceholders } from '../../scripts/placeholders.js';
 import { loadFragment } from '../fragment/fragment.js';
 
-/**
- * Normalize URLs for reliable comparison
- * - removes domain
- * - removes trailing slash
- */
+/* -----------------------------------------
+   Helpers
+------------------------------------------ */
+
 function normalizeUrl(url) {
   try {
     const u = new URL(url, window.location.origin);
     return u.pathname.replace(/\/$/, '');
-  } catch (e) {
+  } catch {
     return url.replace(/\/$/, '');
   }
 }
 
-/**
- * Get visible label text from nav <li>
- */
 function getItemText(li) {
-  const link = li.querySelector(':scope > a');
-  if (link) return link.textContent.trim();
-  return li.textContent.trim();
+  const a = li.querySelector(':scope > a');
+  return a ? a.textContent.trim() : li.textContent.trim();
 }
 
-/**
- * Recursively find breadcrumb path in raw nav <ul>
- */
 function findPath(ul, currentPath, trail = []) {
   for (const li of ul.children) {
     const link = li.querySelector(':scope > a');
@@ -39,16 +31,17 @@ function findPath(ul, currentPath, trail = []) {
 
     const childUl = li.querySelector(':scope > ul');
     if (childUl) {
-      const result = findPath(childUl, currentPath, nextTrail);
-      if (result) return result;
+      const found = findPath(childUl, currentPath, nextTrail);
+      if (found) return found;
     }
   }
   return null;
 }
 
-/**
- * Build breadcrumb data from raw nav fragment
- */
+/* -----------------------------------------
+   Breadcrumb Builder
+------------------------------------------ */
+
 async function buildBreadcrumbs(navFragment) {
   const crumbs = [];
   const rootUl = navFragment.querySelector('ul');
@@ -66,7 +59,6 @@ async function buildBreadcrumbs(navFragment) {
       });
     });
   } else {
-    // fallback if page not in nav
     crumbs.push({
       title: getMetadata('og:title') || document.title,
       url: window.location.href,
@@ -76,27 +68,23 @@ async function buildBreadcrumbs(navFragment) {
   const placeholders = await fetchPlaceholders();
   const homeLabel = placeholders.breadcrumbsHomeLabel || 'Home';
 
-  // detect language root (/en, /fr, etc.)
-  const langRoot = window.location.pathname.split('/')[1];
-  const homeUrl = langRoot ? `/${langRoot}` : '/';
+  const lang = window.location.pathname.split('/')[1];
+  const homeUrl = lang ? `/${lang}` : '/';
 
-  crumbs.unshift({
-    title: homeLabel,
-    url: homeUrl,
-  });
+  crumbs.unshift({ title: homeLabel, url: homeUrl });
 
-  // last crumb = current page
   crumbs[crumbs.length - 1].url = null;
   crumbs[crumbs.length - 1]['aria-current'] = 'page';
 
   return crumbs;
 }
 
-/**
- * Breadcrumbs block entry point
- */
+/* -----------------------------------------
+   Block Entry
+------------------------------------------ */
+
 export default async function decorate(block) {
-  // Hide on homepage
+  // Hide on language root or homepage
   if (
     window.location.pathname === '/' ||
     window.location.pathname.match(/^\/[a-z]{2}$/)
@@ -105,14 +93,13 @@ export default async function decorate(block) {
     return;
   }
 
-  // Load raw nav fragment
-  const navMeta = getMetadata('nav');
-  const navPath = navMeta
-    ? new URL(navMeta, window.location).pathname
-    : '/nav';
+  // 🔑 LANGUAGE-AWARE NAV PATH
+  const lang = window.location.pathname.split('/')[1];
+  const navPath = lang ? `/${lang}/nav` : '/nav';
 
   const navFragment = await loadFragment(navPath);
   if (!navFragment) {
+    console.warn('Breadcrumbs: nav fragment not found:', navPath);
     block.remove();
     return;
   }
@@ -123,7 +110,6 @@ export default async function decorate(block) {
     return;
   }
 
-  // Render DOM
   const navEl = document.createElement('nav');
   navEl.className = 'breadcrumbs';
   navEl.setAttribute('aria-label', 'Breadcrumb');
@@ -132,7 +118,6 @@ export default async function decorate(block) {
 
   crumbs.forEach((item) => {
     const li = document.createElement('li');
-
     if (item['aria-current']) {
       li.setAttribute('aria-current', 'page');
     }
