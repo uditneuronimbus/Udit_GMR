@@ -212,7 +212,27 @@ const onDecoratedElement = (fn) => {
 
 const getAndApplyTargetPropositions = async () => {
   if (!window.alloy) {
-    console.warn("window.alloy not available");
+    console.log('⏳ Waiting for Alloy to load...');
+    await new Promise((resolve) => {
+      const checkAlloy = setInterval(() => {
+        if (window.alloy) {
+          clearInterval(checkAlloy);
+          console.log('✅ Alloy loaded!');
+          resolve();
+        }
+      }, 100); // Check every 100ms
+      
+      // Timeout after 5 seconds
+      setTimeout(() => {
+        clearInterval(checkAlloy);
+        console.error('❌ Alloy failed to load after 5 seconds');
+        resolve();
+      }, 5000);
+    });
+  }
+
+  if (!window.alloy) {
+    console.warn("❌ window.alloy not available after waiting");
     return;
   }
 
