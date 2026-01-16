@@ -210,28 +210,132 @@ const onDecoratedElement = (fn) => {
   observer.observe(document.body, { childList: true });
 };
 
-const getAndApplyTargetPropositions = async () => {
-  if (!window.alloy) {
-    console.log('⏳ Waiting for Alloy to load...');
+// const getAndApplyTargetPropositions = async () => {
+//   if (!window.alloy) {
+//     console.log('⏳ Waiting for Alloy to load...');
     
-    let attempts = 0;
-    const maxAttempts = 100; // 10 seconds (100 * 100ms)
+//     let attempts = 0;
+//     const maxAttempts = 100; // 10 seconds (100 * 100ms)
     
-    await new Promise((resolve) => {
-      const checkAlloy = setInterval(() => {
-        attempts++;
-        console.log(`⏳ Attempt ${attempts}/${maxAttempts}...`);
+//     await new Promise((resolve) => {
+//       const checkAlloy = setInterval(() => {
+//         attempts++;
+//         console.log(`⏳ Attempt ${attempts}/${maxAttempts}...`);
         
+//         if (window.alloy) {
+//           clearInterval(checkAlloy);
+//           console.log('✅ Alloy loaded after', attempts * 100, 'ms!');
+//           resolve();
+//         }
+        
+//         if (attempts >= maxAttempts) {
+//           clearInterval(checkAlloy);
+//           console.error('❌ Alloy failed to load after 10 seconds');
+//           console.error('🔍 Check if Launch tag is loaded in Network tab');
+//           resolve();
+//         }
+//       }, 100);
+//     });
+//   }
+
+//   if (!window.alloy) {
+//     console.error("❌ window.alloy still not available");
+//     console.log('🔍 Debug info:', {
+//       alloy: typeof window.alloy,
+//       launch: typeof _satellite,
+//       adobeDataLayer: typeof window.adobeDataLayer
+//     });
+//     return;
+//   }
+
+//   try {
+//     console.log("Fetching Target propositions...");
+//     const isReturning =
+//       window.isReturningUser || localStorage.getItem("returning-user");
+
+//     const response = await window.alloy("sendEvent", {
+//       renderDecisions: true,
+//       // decisionScopes: ["target-global-mbox"],
+//       data: {
+//         accessibility_fontSize: accessibilitySettings.fontSize,           
+//         accessibility_highContrast: String(accessibilitySettings.highContrast)  
+//       }
+//     });
+
+//     console.log("🎯 Target Response:", response);
+
+//     const { propositions } = response;
+//     console.log(`📦 Propositions received: ${propositions?.length || 0}`);
+//     console.log("______________________________", propositions);
+    
+//      if (propositions && propositions.length > 0) {
+//       console.log("✅ Target content will be auto-applied (renderDecisions: true)");
+      
+
+//     setTimeout(() => {
+//         window.alloy("sendEvent", {
+//           xdm: {
+//             eventType: "decisioning.propositionDisplay",
+//             _experience: { 
+//               decisioning: { 
+//                 propositions: propositions.map(p => ({
+//                   id: p.id,
+//                   scope: p.scope,
+//                   scopeDetails: p.scopeDetails
+//                 }))
+//               } 
+//             }
+//           }
+//         });
+//         console.log("📊 Display events sent");
+//       }, 1000);
+//     } else {
+//       console.warn("⚠️ No propositions received - check activity status and audience matching");
+//     }
+
+//     // onDecoratedElement(async () => {
+//     //   // await window.alloy("applyPropositions", { propositions });
+//     //   console.log("Target Applied!");
+      
+//     //   setTimeout(() => {
+//     //     window.alloy("sendEvent", {
+//     //       xdm: {
+//     //         eventType: "decisioning.propositionDisplay",
+//     //         profile: { isReturningUser: !!isReturning },
+//     //         _experience: { decisioning: { propositions } },
+//     //       },
+//     //     });
+//     //     console.log("Display Events Sent");
+        
+//     //   }, 1000);
+//     // });
+//   } catch (error) {
+//     console.error("Target error:", error);
+//   }
+// };
+const getAndApplyTargetPropositions = async () => {
+  /* --------------------------------------------
+   * 1. Wait for Alloy to load
+   * -------------------------------------------- */
+  if (!window.alloy) {
+    console.log("⏳ Waiting for Alloy to load...");
+
+    let attempts = 0;
+    const maxAttempts = 100;
+
+    await new Promise((resolve) => {
+      const interval = setInterval(() => {
+        attempts++;
+
         if (window.alloy) {
-          clearInterval(checkAlloy);
-          console.log('✅ Alloy loaded after', attempts * 100, 'ms!');
+          clearInterval(interval);
+          console.log(`✅ Alloy loaded after ${attempts * 100}ms`);
           resolve();
         }
-        
+
         if (attempts >= maxAttempts) {
-          clearInterval(checkAlloy);
-          console.error('❌ Alloy failed to load after 10 seconds');
-          console.error('🔍 Check if Launch tag is loaded in Network tab');
+          clearInterval(interval);
+          console.error("❌ Alloy not loaded after 10s");
           resolve();
         }
       }, 100);
@@ -239,80 +343,57 @@ const getAndApplyTargetPropositions = async () => {
   }
 
   if (!window.alloy) {
-    console.error("❌ window.alloy still not available");
-    console.log('🔍 Debug info:', {
-      alloy: typeof window.alloy,
-      launch: typeof _satellite,
-      adobeDataLayer: typeof window.adobeDataLayer
-    });
+    console.error("❌ Alloy still unavailable");
     return;
   }
 
+  /* --------------------------------------------
+   * 2. Read from localStorage
+   * -------------------------------------------- */
+  const fontSize = localStorage.getItem("fontSize") || "medium";
+  const highContrast = localStorage.getItem("highContrast") === "true";
+  const isReturningUser = !!localStorage.getItem("returning-user");
+
   try {
-    console.log("Fetching Target propositions...");
-    const isReturning =
-      window.isReturningUser || localStorage.getItem("returning-user");
+    console.log("🎯 Sending event to Adobe Target...");
 
     const response = await window.alloy("sendEvent", {
       renderDecisions: true,
-      // decisionScopes: ["target-global-mbox"],
-      data: {
-        accessibility_fontSize: accessibilitySettings.fontSize,           
-        accessibility_highContrast: String(accessibilitySettings.highContrast)  
+      decisionScopes: ["__view__"], // REQUIRED for Target
+
+      xdm: {
+        eventType: "personalization.request",
+
+        /* ---------- TARGET PROFILE ATTRIBUTES ---------- */
+        profile: {
+          accessibility: {
+            fontSize: fontSize,
+            highContrast: highContrast,
+            isReturningUser: isReturningUser
+          }
+        }
       }
     });
 
-    console.log("🎯 Target Response:", response);
+    console.log("🎯 Target response:", response);
 
-    const { propositions } = response;
-    console.log(`📦 Propositions received: ${propositions?.length || 0}`);
-    console.log("______________________________", propositions);
-    
-     if (propositions && propositions.length > 0) {
-      console.log("✅ Target content will be auto-applied (renderDecisions: true)");
-      
+    const propositions = response?.propositions || [];
+    console.log(`📦 Propositions received: ${propositions.length}`);
 
-    setTimeout(() => {
-        window.alloy("sendEvent", {
-          xdm: {
-            eventType: "decisioning.propositionDisplay",
-            _experience: { 
-              decisioning: { 
-                propositions: propositions.map(p => ({
-                  id: p.id,
-                  scope: p.scope,
-                  scopeDetails: p.scopeDetails
-                }))
-              } 
-            }
-          }
-        });
-        console.log("📊 Display events sent");
-      }, 1000);
-    } else {
-      console.warn("⚠️ No propositions received - check activity status and audience matching");
+    if (!propositions.length) {
+      console.warn("⚠️ No propositions returned (check activity & audience)");
     }
 
-    // onDecoratedElement(async () => {
-    //   // await window.alloy("applyPropositions", { propositions });
-    //   console.log("Target Applied!");
-      
-    //   setTimeout(() => {
-    //     window.alloy("sendEvent", {
-    //       xdm: {
-    //         eventType: "decisioning.propositionDisplay",
-    //         profile: { isReturningUser: !!isReturning },
-    //         _experience: { decisioning: { propositions } },
-    //       },
-    //     });
-    //     console.log("Display Events Sent");
-        
-    //   }, 1000);
-    // });
+    /* --------------------------------------------
+     * 3. Mark user as returning
+     * -------------------------------------------- */
+    localStorage.setItem("returning-user", "true");
+
   } catch (error) {
-    console.error("Target error:", error);
+    console.error("❌ Adobe Target error:", error);
   }
 };
+
 if (getMetadata('target') === 'true' || getMetadata('personalization')) {
 
   getAndApplyTargetPropositions();
@@ -364,13 +445,15 @@ function sendAccessibilityToTarget() {
   
   window.alloy('sendEvent', {
     renderDecisions: true,
-    // decisionScopes: ['target-global-mbox'],
+    decisionScopes: ['target-global-mbox'],
     data: {
       accessibility_fontSize: accessibilitySettings.fontSize,           // ✅ Matches profile script
       accessibility_highContrast: String(accessibilitySettings.highContrast)  // ✅ Matches profile script
     }
   }).then(response => {
     console.log('✅ Settings sent to Target:', response);
+    console.log();
+    
     console.log('📦 Propositions after button click:', response.propositions?.length || 0);
   }).catch(error => {
     console.error('❌ Error sending to Target:', error);
