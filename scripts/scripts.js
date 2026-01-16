@@ -211,10 +211,40 @@ const onDecoratedElement = (fn) => {
 };
 
 const getAndApplyTargetPropositions = async () => {
-  
+  if (!window.alloy) {
+    console.log('⏳ Waiting for Alloy to load...');
+    
+    let attempts = 0;
+    const maxAttempts = 100; // 10 seconds (100 * 100ms)
+    
+    await new Promise((resolve) => {
+      const checkAlloy = setInterval(() => {
+        attempts++;
+        console.log(`⏳ Attempt ${attempts}/${maxAttempts}...`);
+        
+        if (window.alloy) {
+          clearInterval(checkAlloy);
+          console.log('✅ Alloy loaded after', attempts * 100, 'ms!');
+          resolve();
+        }
+        
+        if (attempts >= maxAttempts) {
+          clearInterval(checkAlloy);
+          console.error('❌ Alloy failed to load after 10 seconds');
+          console.error('🔍 Check if Launch tag is loaded in Network tab');
+          resolve();
+        }
+      }, 100);
+    });
+  }
 
   if (!window.alloy) {
-    console.warn("❌ window.alloy not available after waiting");
+    console.error("❌ window.alloy still not available");
+    console.log('🔍 Debug info:', {
+      alloy: typeof window.alloy,
+      launch: typeof _satellite,
+      adobeDataLayer: typeof window.adobeDataLayer
+    });
     return;
   }
 
