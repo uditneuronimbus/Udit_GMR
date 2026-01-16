@@ -172,9 +172,6 @@ async function loadLazy(doc) {
    LOAD DELAYED (Bhashini Removed)
    =============================== */
 function loadDelayed() {
-   if (getMetadata('target') === 'true' || getMetadata('personalization')) {
-    getAndApplyTargetPropositions();
-  }
   import("./delayed.js");
 }
 
