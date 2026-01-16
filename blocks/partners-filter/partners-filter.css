@@ -95,18 +95,20 @@
 /* IMAGE */
 .partner-img {
     inset: 0;
-    height: 300px;
+    height: 225px;
     background-color: var(--white);
     border-radius: 8px;
-    overflow: hidden; margin-bottom: 60px;
+    overflow: hidden; margin-bottom: 60px; display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.partner-img img,
+/* .partner-img img,
 .partner-img picture {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
+} */
 
 /* ===============================
    BOTTOM SLIDE PANEL
