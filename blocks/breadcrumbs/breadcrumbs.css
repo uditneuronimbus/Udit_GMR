@@ -1,4 +1,4 @@
-/* Breadcrumbs block container */
+/* Breadcrumbs container */
 .breadcrumbs {
     max-width: 1248px;
     margin: 0 auto;
@@ -18,7 +18,7 @@
     white-space: nowrap;
 }
 
-/* Item */
+/* Items */
 .breadcrumbs li {
     color: var(--dark-color);
 }

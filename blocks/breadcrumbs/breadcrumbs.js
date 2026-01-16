@@ -1,90 +1,69 @@
-import { getMetadata } from '../../scripts/aem.js';
 import { fetchPlaceholders } from '../../scripts/placeholders.js';
-import { loadFragment } from '../fragment/fragment.js';
 
-/* -----------------------------------------
-   Helpers
------------------------------------------- */
-
-function normalizeUrl(url) {
-  try {
-    const u = new URL(url, window.location.origin);
-    return u.pathname.replace(/\/$/, '');
-  } catch {
-    return url.replace(/\/$/, '');
-  }
+/**
+ * Convert URL segment to readable title
+ * example: "delhi-airport" → "Delhi Airport"
+ */
+function formatSegment(segment) {
+  return decodeURIComponent(segment)
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-function getItemText(li) {
-  const a = li.querySelector(':scope > a');
-  return a ? a.textContent.trim() : li.textContent.trim();
-}
-
-function findPath(ul, currentPath, trail = []) {
-  for (const li of ul.children) {
-    const link = li.querySelector(':scope > a');
-    const nextTrail = [...trail, li];
-
-    if (link && normalizeUrl(link.href) === currentPath) {
-      return nextTrail;
-    }
-
-    const childUl = li.querySelector(':scope > ul');
-    if (childUl) {
-      const found = findPath(childUl, currentPath, nextTrail);
-      if (found) return found;
-    }
-  }
-  return null;
-}
-
-/* -----------------------------------------
-   Breadcrumb Builder
------------------------------------------- */
-
-async function buildBreadcrumbs(navFragment) {
+/**
+ * Build breadcrumbs purely from URL
+ * Works with UE + component-based nav
+ */
+async function buildBreadcrumbsFromUrl() {
   const crumbs = [];
-  const rootUl = navFragment.querySelector('ul');
-  if (!rootUl) return crumbs;
-
-  const currentPath = normalizeUrl(window.location.href);
-  const path = findPath(rootUl, currentPath);
-
-  if (path) {
-    path.forEach((li) => {
-      const link = li.querySelector(':scope > a');
-      crumbs.push({
-        title: getItemText(li),
-        url: link ? link.href : null,
-      });
-    });
-  } else {
-    crumbs.push({
-      title: getMetadata('og:title') || document.title,
-      url: window.location.href,
-    });
-  }
 
   const placeholders = await fetchPlaceholders();
   const homeLabel = placeholders.breadcrumbsHomeLabel || 'Home';
 
-  const lang = window.location.pathname.split('/')[1];
-  const homeUrl = lang ? `/${lang}` : '/';
+  const pathParts = window.location.pathname
+    .replace(/\/$/, '')
+    .split('/')
+    .filter(Boolean);
 
-  crumbs.unshift({ title: homeLabel, url: homeUrl });
+  // Handle language root (/en, /fr, etc.)
+  let index = 0;
+  let currentPath = '';
 
+  if (pathParts[0] && pathParts[0].length === 2) {
+    currentPath = `/${pathParts[0]}`;
+    crumbs.push({
+      title: homeLabel,
+      url: currentPath,
+    });
+    index = 1;
+  } else {
+    crumbs.push({
+      title: homeLabel,
+      url: '/',
+    });
+  }
+
+  for (; index < pathParts.length; index += 1) {
+    currentPath += `/${pathParts[index]}`;
+
+    crumbs.push({
+      title: formatSegment(pathParts[index]),
+      url: currentPath,
+    });
+  }
+
+  // Mark last item as current page
   crumbs[crumbs.length - 1].url = null;
   crumbs[crumbs.length - 1]['aria-current'] = 'page';
 
   return crumbs;
 }
 
-/* -----------------------------------------
-   Block Entry
------------------------------------------- */
-
+/**
+ * Breadcrumbs block entry
+ */
 export default async function decorate(block) {
-  // Hide on language root or homepage
+  // Hide breadcrumbs on homepage and language root
   if (
     window.location.pathname === '/' ||
     window.location.pathname.match(/^\/[a-z]{2}$/)
@@ -93,31 +72,21 @@ export default async function decorate(block) {
     return;
   }
 
-  // 🔑 LANGUAGE-AWARE NAV PATH
-  const lang = window.location.pathname.split('/')[1];
-  const navPath = lang ? `/${lang}/nav` : '/nav';
-
-  const navFragment = await loadFragment(navPath);
-  if (!navFragment) {
-    console.warn('Breadcrumbs: nav fragment not found:', navPath);
-    block.remove();
-    return;
-  }
-
-  const crumbs = await buildBreadcrumbs(navFragment);
+  const crumbs = await buildBreadcrumbsFromUrl();
   if (!crumbs.length) {
     block.remove();
     return;
   }
 
-  const navEl = document.createElement('nav');
-  navEl.className = 'breadcrumbs';
-  navEl.setAttribute('aria-label', 'Breadcrumb');
+  const nav = document.createElement('nav');
+  nav.className = 'breadcrumbs';
+  nav.setAttribute('aria-label', 'Breadcrumb');
 
   const ol = document.createElement('ol');
 
   crumbs.forEach((item) => {
     const li = document.createElement('li');
+
     if (item['aria-current']) {
       li.setAttribute('aria-current', 'page');
     }
@@ -134,6 +103,6 @@ export default async function decorate(block) {
     ol.appendChild(li);
   });
 
-  navEl.appendChild(ol);
-  block.replaceChildren(navEl);
+  nav.appendChild(ol);
+  block.replaceChildren(nav);
 }
