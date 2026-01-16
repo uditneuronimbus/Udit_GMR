@@ -3,29 +3,43 @@ import { fetchPlaceholders } from '../../scripts/placeholders.js';
 import { loadFragment } from '../fragment/fragment.js';
 
 /**
- * Get readable text from nav <li>
+ * Normalize URLs for reliable comparison
+ * - removes domain
+ * - removes trailing slash
+ */
+function normalizeUrl(url) {
+  try {
+    const u = new URL(url, window.location.origin);
+    return u.pathname.replace(/\/$/, '');
+  } catch (e) {
+    return url.replace(/\/$/, '');
+  }
+}
+
+/**
+ * Get visible label text from nav <li>
  */
 function getItemText(li) {
-  const a = li.querySelector(':scope > a');
-  if (a) return a.textContent.trim();
+  const link = li.querySelector(':scope > a');
+  if (link) return link.textContent.trim();
   return li.textContent.trim();
 }
 
 /**
- * Find breadcrumb path in raw nav UL
+ * Recursively find breadcrumb path in raw nav <ul>
  */
-function findPath(ul, currentUrl, trail = []) {
+function findPath(ul, currentPath, trail = []) {
   for (const li of ul.children) {
     const link = li.querySelector(':scope > a');
     const nextTrail = [...trail, li];
 
-    if (link && link.href === currentUrl) {
+    if (link && normalizeUrl(link.href) === currentPath) {
       return nextTrail;
     }
 
     const childUl = li.querySelector(':scope > ul');
     if (childUl) {
-      const result = findPath(childUl, currentUrl, nextTrail);
+      const result = findPath(childUl, currentPath, nextTrail);
       if (result) return result;
     }
   }
@@ -33,51 +47,65 @@ function findPath(ul, currentUrl, trail = []) {
 }
 
 /**
- * Build breadcrumb data from nav fragment
+ * Build breadcrumb data from raw nav fragment
  */
-async function buildBreadcrumbs(navRoot, currentUrl) {
+async function buildBreadcrumbs(navFragment) {
   const crumbs = [];
-
-  const rootUl = navRoot.querySelector('ul');
+  const rootUl = navFragment.querySelector('ul');
   if (!rootUl) return crumbs;
 
-  const path = findPath(rootUl, currentUrl);
+  const currentPath = normalizeUrl(window.location.href);
+  const path = findPath(rootUl, currentPath);
 
   if (path) {
     path.forEach((li) => {
-      const a = li.querySelector(':scope > a');
+      const link = li.querySelector(':scope > a');
       crumbs.push({
         title: getItemText(li),
-        url: a ? a.href : null,
+        url: link ? link.href : null,
       });
     });
   } else {
+    // fallback if page not in nav
     crumbs.push({
       title: getMetadata('og:title') || document.title,
-      url: currentUrl,
+      url: window.location.href,
     });
   }
 
   const placeholders = await fetchPlaceholders();
+  const homeLabel = placeholders.breadcrumbsHomeLabel || 'Home';
+
+  // detect language root (/en, /fr, etc.)
+  const langRoot = window.location.pathname.split('/')[1];
+  const homeUrl = langRoot ? `/${langRoot}` : '/';
+
   crumbs.unshift({
-    title: placeholders.breadcrumbsHomeLabel || 'Home',
-    url: '/',
+    title: homeLabel,
+    url: homeUrl,
   });
 
+  // last crumb = current page
   crumbs[crumbs.length - 1].url = null;
   crumbs[crumbs.length - 1]['aria-current'] = 'page';
 
   return crumbs;
 }
 
+/**
+ * Breadcrumbs block entry point
+ */
 export default async function decorate(block) {
   // Hide on homepage
-  if (window.location.pathname === '/' || window.location.pathname === '') {
+  if (
+    window.location.pathname === '/' ||
+    window.location.pathname.match(/^\/[a-z]{2}$/)
+  ) {
     block.remove();
     return;
   }
 
-  // Load RAW nav fragment
+  // Load raw nav fragment
   const navMeta = getMetadata('nav');
   const navPath = navMeta
     ? new URL(navMeta, window.location).pathname
@@ -89,16 +117,13 @@ export default async function decorate(block) {
     return;
   }
 
-  const crumbs = await buildBreadcrumbs(
-    navFragment,
-    window.location.href
-  );
-
+  const crumbs = await buildBreadcrumbs(navFragment);
   if (!crumbs.length) {
     block.remove();
     return;
   }
 
+  // Render DOM
   const navEl = document.createElement('nav');
   navEl.className = 'breadcrumbs';
   navEl.setAttribute('aria-label', 'Breadcrumb');
@@ -107,6 +132,7 @@ export default async function decorate(block) {
 
   crumbs.forEach((item) => {
     const li = document.createElement('li');
+
     if (item['aria-current']) {
       li.setAttribute('aria-current', 'page');
     }
