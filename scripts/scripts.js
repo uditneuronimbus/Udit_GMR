@@ -466,8 +466,8 @@ function sendAccessibilityToTarget() {
       eventType: "personalization.request",
       profile: {
         accessibility: {
-          fontSize: settings.fontSize,
-          highContrast: settings.highContrast
+          fontSize: accessibilitySettings.fontSize,
+          highContrast: accessibilitySettings.highContrast
         }
       }
     }
