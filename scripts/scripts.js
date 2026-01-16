@@ -443,20 +443,34 @@ function sendAccessibilityToTarget() {
   
   console.log('📤 Sending accessibility settings to Target:', accessibilitySettings);
   
-  window.alloy('sendEvent', {
-    renderDecisions: true,
-    decisionScopes: ['target-global-mbox'],
-    data: {
-      accessibility_fontSize: accessibilitySettings.fontSize,           // ✅ Matches profile script
-      accessibility_highContrast: String(accessibilitySettings.highContrast)  // ✅ Matches profile script
-    }
-  }).then(response => {
-    console.log('✅ Settings sent to Target:', response);
-    console.log();
+  // window.alloy('sendEvent', {
+  //   renderDecisions: true,
+  //   decisionScopes: ['target-global-mbox'],
+  //   data: {
+  //     accessibility_fontSize: accessibilitySettings.fontSize,           // ✅ Matches profile script
+  //     accessibility_highContrast: String(accessibilitySettings.highContrast)  // ✅ Matches profile script
+  //   }
+  // }).then(response => {
+  //   console.log('✅ Settings sent to Target:', response);
+  //   console.log();
     
-    console.log('📦 Propositions after button click:', response.propositions?.length || 0);
-  }).catch(error => {
-    console.error('❌ Error sending to Target:', error);
+  //   console.log('📦 Propositions after button click:', response.propositions?.length || 0);
+  // }).catch(error => {
+  //   console.error('❌ Error sending to Target:', error);
+  // });
+  window.alloy("sendEvent", {
+    renderDecisions: true,
+    decisionScopes: ["__view__"],
+
+    xdm: {
+      eventType: "personalization.request",
+      profile: {
+        accessibility: {
+          fontSize: settings.fontSize,
+          highContrast: settings.highContrast
+        }
+      }
+    }
   });
 }
 /* ===============================
