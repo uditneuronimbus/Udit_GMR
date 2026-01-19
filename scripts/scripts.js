@@ -281,11 +281,9 @@ const getAndApplyTargetPropositions = async () => {
     console.error("Target error:", error);
   }
 };
-// if (getMetadata('target') === 'true' || getMetadata('personalization')) {
-
-//   getAndApplyTargetPropositions();
-
-// }
+if (getMetadata('target') === 'true' || getMetadata('personalization')) {
+  getAndApplyTargetPropositions();
+}
 
 // ===== ACCESSIBILITY SETTINGS =====
 
