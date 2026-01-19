@@ -30,6 +30,20 @@
   color: #fff;
 }
 
+.infra-hero-title{
+  font-size: 35px;
+  font-weight: 400;
+}
+
+.infra-hero-subtitle{
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.infra-hero-description{
+  font-size: 16px;
+}
+
 .infra-hero.align-left {
   justify-content: flex-start;
 }

@@ -14,6 +14,11 @@
   padding: 0 32px;
 }
 
+/* Slider */
+.mfl-slider {
+  position: relative;
+}
+
 /* Card */
 .mfl-card {
   display: grid;
@@ -87,6 +92,19 @@
 .mfl-slide {
   display: none;
 }
+
+.mfl-slide.active {
+  display: block;
+}
+
+.mfl-slide {
+  display: none;
+}
+
+.mfl-slide.active {
+  display: block;
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {
