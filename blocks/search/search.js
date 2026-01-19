@@ -239,13 +239,12 @@ export default function decorate(block) {
 //   });
 // }
 */
-import algoliasearch from 'https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.esm.browser.js';
+import algoliasearch from "https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.esm.browser.js";
 
-
-   //Algolia config (FRONTEND SAFE)
-const ALGOLIA_APP_ID = 'BARVAFD3OC';
-const ALGOLIA_SEARCH_KEY = 'e3ba8576fac702f5c6826b7b24cf221c';
-const ALGOLIA_INDEX = 'site_pages';
+//Algolia config (FRONTEND SAFE)
+const ALGOLIA_APP_ID = "BARVAFD3OC";
+const ALGOLIA_SEARCH_KEY = "e3ba8576fac702f5c6826b7b24cf221c";
+const ALGOLIA_INDEX = "site_pages";
 
 const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY);
 const algoliaIndex = client.initIndex(ALGOLIA_INDEX);
@@ -253,9 +252,14 @@ const algoliaIndex = client.initIndex(ALGOLIA_INDEX);
 export default function decorate(block) {
   /* ---------- UI Markup ---------- */
   block.innerHTML = `
+  <button class="btn-search" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSearch" aria-expanded="false" aria-controls="collapseSearch">
+    Search
+  </button>
+  <div class="collapse" id="collapseSearch">
     <div class="search-box" role="combobox" aria-expanded="false">
       <input
         type="text"
+        class="form-control"
         placeholder="Search..."
         aria-autocomplete="list"
         aria-controls="search-results"
@@ -265,12 +269,14 @@ export default function decorate(block) {
         class="search-results"
         id="search-results"
         role="listbox"
-      ></div>
+      >
+      </div>
     </div>
+     </div>
   `;
 
-  const input = block.querySelector('input');
-  const resultsEl = block.querySelector('.search-results');
+  const input = block.querySelector("input");
+  const resultsEl = block.querySelector(".search-results");
 
   let results = [];
   let activeIndex = -1;
@@ -278,57 +284,52 @@ export default function decorate(block) {
 
   /* ---------- Helpers ---------- */
   function clearResults() {
-    resultsEl.innerHTML = '';
+    resultsEl.innerHTML = "";
     results = [];
     activeIndex = -1;
-    input.setAttribute('aria-activedescendant', '');
-    block.querySelector('.search-box')
-      .setAttribute('aria-expanded', 'false');
+    input.setAttribute("aria-activedescendant", "");
+    block.querySelector(".search-box").setAttribute("aria-expanded", "false");
   }
 
   function updateActiveResult() {
     results.forEach((el, i) => {
-      el.classList.toggle('active', i === activeIndex);
+      el.classList.toggle("active", i === activeIndex);
     });
 
     if (results[activeIndex]) {
-      input.setAttribute(
-        'aria-activedescendant',
-        results[activeIndex].id
-      );
-      results[activeIndex].scrollIntoView({ block: 'nearest' });
+      input.setAttribute("aria-activedescendant", results[activeIndex].id);
+      results[activeIndex].scrollIntoView({ block: "nearest" });
     }
   }
 
   function renderResults(hits, query) {
-    resultsEl.innerHTML = '';
+    resultsEl.innerHTML = "";
 
     hits.slice(0, 10).forEach((item, i) => {
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = item.path;
       a.id = `search-option-${i}`;
-      a.role = 'option';
+      a.role = "option";
 
-      const title = (item.title || '').replace(
-        new RegExp(`(${query})`, 'ig'),
-        '<mark>$1</mark>'
+      const title = (item.title || "").replace(
+        new RegExp(`(${query})`, "ig"),
+        "<mark>$1</mark>",
       );
 
       a.innerHTML = `
         <div class="search-result">
           <strong>${title}</strong>
-          <p>${item.description || ''}</p>
+          <p>${item.description || ""}</p>
         </div>
       `;
 
       resultsEl.appendChild(a);
     });
 
-    results = Array.from(resultsEl.querySelectorAll('a'));
+    results = Array.from(resultsEl.querySelectorAll("a"));
     activeIndex = -1;
 
-    block.querySelector('.search-box')
-      .setAttribute('aria-expanded', 'true');
+    block.querySelector(".search-box").setAttribute("aria-expanded", "true");
   }
 
   /* ---------- Algolia Search ---------- */
@@ -340,56 +341,54 @@ export default function decorate(block) {
 
     try {
       const { hits } = await algoliaIndex.search(q, {
-        hitsPerPage: 10
+        hitsPerPage: 10,
       });
 
       if (hits.length) {
         renderResults(hits, q);
       }
     } catch (e) {
-      console.error('Algolia search failed', e);
+      console.error("Algolia search failed", e);
     }
   }
 
   /* ---------- Events ---------- */
-  input.addEventListener('input', () => {
+  input.addEventListener("input", () => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(runSearch, 250);
   });
 
-  input.addEventListener('keydown', (e) => {
+  input.addEventListener("keydown", (e) => {
     if (!results.length) return;
 
     switch (e.key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         e.preventDefault();
-        activeIndex =
-          activeIndex < results.length - 1 ? activeIndex + 1 : 0;
+        activeIndex = activeIndex < results.length - 1 ? activeIndex + 1 : 0;
         updateActiveResult();
         break;
 
-      case 'ArrowUp':
+      case "ArrowUp":
         e.preventDefault();
-        activeIndex =
-          activeIndex > 0 ? activeIndex - 1 : results.length - 1;
+        activeIndex = activeIndex > 0 ? activeIndex - 1 : results.length - 1;
         updateActiveResult();
         break;
 
-      case 'Enter':
+      case "Enter":
         if (activeIndex >= 0) {
           e.preventDefault();
           results[activeIndex].click();
         }
         break;
 
-      case 'Escape':
+      case "Escape":
         clearResults();
         input.blur();
         break;
     }
   });
 
-  document.addEventListener('click', (e) => {
+  document.addEventListener("click", (e) => {
     if (!block.contains(e.target)) {
       clearResults();
     }
