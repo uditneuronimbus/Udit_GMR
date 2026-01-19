@@ -2574,12 +2574,6 @@
         "valueType": "string"
       },
       {
-        "component": "reference",
-        "name": "image1",
-        "label": "Background Mobile Image",
-        "valueType": "string"
-      },
-      {
         "component": "text",
         "name": "title",
         "label": "Title",
@@ -2602,6 +2596,12 @@
         "component": "text",
         "name": "buttonUrl",
         "label": "Button Link (URL)",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "image1",
+        "label": "Background Mobile Image",
         "valueType": "string"
       }
     ]

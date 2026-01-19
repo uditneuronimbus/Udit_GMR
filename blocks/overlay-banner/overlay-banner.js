@@ -1,19 +1,21 @@
 export default function decorate(block) {
   const rows = [...block.children];
-  if (rows.length < 5) return;
+  if (rows.length < 6) return;
 
   block.classList.add("banner-overlay-sec");
 
   /* =========================
      Read UE-authored fields
   ========================== */
-  const imageRow = rows[0];
-  const titleRow = rows[1];
-  const descRow = rows[2];
-  const buttonTextRow = rows[3];
-  const buttonLinkRow = rows[4];
+  const imageRow = rows[0];      // desktop image
+  const imageRowMobile = rows[1]; // mobile image (image1)
+  const titleRow = rows[2];
+  const descRow = rows[3];
+  const buttonTextRow = rows[4];
+  const buttonLinkRow = rows[5];
 
   const picture = imageRow.querySelector("picture");
+  const pictureMobile = imageRowMobile.querySelector("picture");
 
   const titleCell = titleRow.children[0];
   const descCell = descRow.children[0];
@@ -34,10 +36,15 @@ export default function decorate(block) {
   const bannerOverlay = document.createElement("div");
   bannerOverlay.className = "banner-overlay";
 
-  /* ---- Background Image ---- */
+  /* ---- Background Images ---- */
   if (picture) {
     picture.classList.add("banner-overlay-img");
     bannerOverlay.append(picture);
+  }
+
+  if (pictureMobile) {
+    pictureMobile.classList.add("banner-overlay-img");
+    bannerOverlay.append(pictureMobile);
   }
 
   /* ---- Overlay Content ---- */
@@ -54,16 +61,14 @@ export default function decorate(block) {
   if (titleCell) {
     let h2 = titleCell.querySelector("h2");
 
-    // Convert <p> → <h2> if h2 doesn't exist
     if (!h2) {
       const p = titleCell.querySelector("p");
 
       if (p) {
         h2 = document.createElement("h2");
-        h2.innerHTML = p.innerHTML; // keep formatting
+        h2.innerHTML = p.innerHTML;
         p.replaceWith(h2);
       } else {
-        // fallback: wrap plain text
         h2 = document.createElement("h2");
         h2.innerHTML = titleCell.innerHTML;
         titleCell.innerHTML = "";
@@ -75,7 +80,7 @@ export default function decorate(block) {
     col.append(titleCell);
   }
 
-  /* ---- Description (optional) ---- */
+  /* ---- Description ---- */
   if (hasDesc) {
     descCell.classList.add("sec-desc", "mb-4");
     col.append(descCell);
@@ -100,4 +105,17 @@ export default function decorate(block) {
   ========================== */
   block.innerHTML = "";
   block.append(container);
+
+  /* =========================
+     Mobile switch (NO styling change)
+  ========================== */
+  const mq = window.matchMedia("(max-width: 767px)");
+
+  const toggleImages = () => {
+    if (picture) picture.style.display = mq.matches ? "none" : "";
+    if (pictureMobile) pictureMobile.style.display = mq.matches ? "" : "none";
+  };
+
+  toggleImages();
+  mq.addEventListener("change", toggleImages);
 }
