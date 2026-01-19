@@ -1,0 +1,66 @@
+/* 1. Hide empty block if logic fails or homepage */
+.breadcrumbs:empty {
+    display: none;
+}
+
+/* 2. Container Styling */
+.breadcrumbs nav {
+    max-width: 1248px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    font-size: var(--body-font-size-xs);
+    color: var(--text-color);
+    overflow-x: auto;
+    box-sizing: border-box;
+}
+
+/* 3. List Layout */
+.breadcrumbs ol {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+/* 4. List Items */
+.breadcrumbs li {
+    display: inline-flex;
+    align-items: center;
+    color: var(--dark-color);
+}
+
+/* 5. Separator (Slash) */
+.breadcrumbs li:not(:last-child)::after {
+    content: '/';
+    margin-left: 8px;
+    color: #999;
+}
+
+/* 6. Current Page (Bold) */
+.breadcrumbs li[aria-current='page'] {
+    font-weight: 600;
+    color: var(--heading-color, #000);
+}
+
+/* 7. Link Styling */
+.breadcrumbs a {
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.breadcrumbs a:hover {
+    border-bottom-color: currentColor;
+}
+
+/* 8. Desktop Adjustments */
+@media (min-width: 900px) {
+    .breadcrumbs nav {
+        max-width: 1264px;
+        padding: 16px 32px;
+    }
+}
