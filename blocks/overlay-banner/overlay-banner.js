@@ -7,13 +7,25 @@ export default function decorate(block) {
   /* =========================
      Read UE-authored fields
   ========================== */
-  const imageRow = rows[0];
-  const titleRow = rows[1];
-  const descRow = rows[2];
-  const buttonTextRow = rows[3];
-  const buttonLinkRow = rows[4];
+  const imageRow = rows[0];      // Desktop image (always required)
+  const titleRow = rows[1];      // Title
+  const descRow = rows[2];       // Description
+  const buttonTextRow = rows[3]; // Button text
+  const buttonLinkRow = rows[4]; // Button link
+  
+  // Mobile image is optional - check if 6th row exists and has content
+  let mobileImageRow = null;
+  let pictureMobile = null;
+  
+  if (rows.length >= 6) {
+    mobileImageRow = rows[5];
+    // Check if the mobile image row actually has a picture element
+    if (mobileImageRow && mobileImageRow.children.length > 0) {
+      pictureMobile = mobileImageRow.querySelector("picture");
+    }
+  }
 
-  const picture = imageRow.querySelector("picture");
+  const pictureDesktop = imageRow.querySelector("picture");
 
   const titleCell = titleRow.children[0];
   const descCell = descRow.children[0];
@@ -24,6 +36,7 @@ export default function decorate(block) {
 
   const hasDesc = descCell && descCell.textContent.trim().length > 0;
   const hasButton = btnText.length > 0 && btnLink.length > 0;
+  const hasMobileImage = pictureMobile !== null;
 
   /* =========================
      Build flat Structure
@@ -34,10 +47,21 @@ export default function decorate(block) {
   const bannerOverlay = document.createElement("div");
   bannerOverlay.className = "banner-overlay";
 
-  /* ---- Background Image ---- */
-  if (picture) {
-    picture.classList.add("banner-overlay-img");
-    bannerOverlay.append(picture);
+  /* ---- Background Images ---- */
+  // Desktop image (always shown)
+  if (pictureDesktop) {
+    pictureDesktop.classList.add("banner-overlay-img");
+    // Only add desktop-only class if we have a mobile image
+    if (hasMobileImage) {
+      pictureDesktop.classList.add("desktop-only");
+    }
+    bannerOverlay.append(pictureDesktop);
+  }
+
+  // Mobile image (optional, only if exists)
+  if (hasMobileImage) {
+    pictureMobile.classList.add("banner-overlay-img", "mobile-only");
+    bannerOverlay.append(pictureMobile);
   }
 
   /* ---- Overlay Content ---- */
@@ -100,4 +124,12 @@ export default function decorate(block) {
   ========================== */
   block.innerHTML = "";
   block.append(container);
+  
+  // Debug: log what we found
+  console.log("Banner overlay debug:", {
+    rowsCount: rows.length,
+    hasDesktopImage: !!pictureDesktop,
+    hasMobileImage: hasMobileImage,
+    mobileImageRowExists: !!mobileImageRow
+  });
 }

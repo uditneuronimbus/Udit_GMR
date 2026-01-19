@@ -105,7 +105,7 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
 
   // lock scroll on mobile when menu open
   document.body.style.overflowY =
-    willBeExpanded || isDesktop.matches ? "" : "hidden";
+    willBeExpanded || isDesktop.matches ? "" : "hidden1";
 
   nav.setAttribute("aria-expanded", willBeExpanded ? "true" : "false");
 
