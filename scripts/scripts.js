@@ -12,12 +12,6 @@ import {
   loadCSS,
 } from "./aem.js";
 
-// Initialize accessibility state
-let accessibilitySettings = {
-  fontSize: 'normal',
-  highContrast: false
-};
-
 /* ===============================
    METADATA HELPER
    =============================== */
@@ -222,126 +216,48 @@ const getAndApplyTargetPropositions = async () => {
       window.isReturningUser || localStorage.getItem("returning-user");
 
     const response = await window.alloy("sendEvent", {
-      renderDecisions: true,
+      renderDecisions: false,
       decisionScopes: ["__view__"],
-      data: {
-        accessibility_fontSize: accessibilitySettings.fontSize,           
-        accessibility_highContrast: String(accessibilitySettings.highContrast)  
-      }
+      xdm: {
+        eventType: "web.webpagedetails.pageViews",
+        profile: {
+          isReturningUser: !!isReturning,
+        },
+      },
     });
 
-    console.log("🎯 Target Response:", response);
-
     const { propositions } = response;
-    console.log(`📦 Propositions received: ${propositions?.length || 0}`);
+    console.log('Propositions: ', propositions.length || 0);
     console.log("______________________________", propositions);
     
-     if (propositions && propositions.length > 0) {
-      console.log("✅ Target content will be auto-applied (renderDecisions: true)");
-      
+    
 
-    setTimeout(() => {
+    onDecoratedElement(async () => {
+      await window.alloy("applyPropositions", { propositions });
+      console.log("Target Applied!");
+      
+      setTimeout(() => {
         window.alloy("sendEvent", {
           xdm: {
             eventType: "decisioning.propositionDisplay",
-            _experience: { 
-              decisioning: { 
-                propositions: propositions.map(p => ({
-                  id: p.id,
-                  scope: p.scope,
-                  scopeDetails: p.scopeDetails
-                }))
-              } 
-            }
-          }
+            profile: { isReturningUser: !!isReturning },
+            _experience: { decisioning: { propositions } },
+          },
         });
-        console.log("📊 Display events sent");
-      }, 1000);
-    } else {
-      console.warn("⚠️ No propositions received - check activity status and audience matching");
-    }
-
-    // onDecoratedElement(async () => {
-    //   // await window.alloy("applyPropositions", { propositions });
-    //   console.log("Target Applied!");
-      
-    //   setTimeout(() => {
-    //     window.alloy("sendEvent", {
-    //       xdm: {
-    //         eventType: "decisioning.propositionDisplay",
-    //         profile: { isReturningUser: !!isReturning },
-    //         _experience: { decisioning: { propositions } },
-    //       },
-    //     });
-    //     console.log("Display Events Sent");
+        console.log("Display Events Sent");
         
-    //   }, 1000);
-    // });
+      }, 1000);
+    });
   } catch (error) {
     console.error("Target error:", error);
   }
 };
 if (getMetadata('target') === 'true' || getMetadata('personalization')) {
+
   getAndApplyTargetPropositions();
+
 }
 
-// ===== ACCESSIBILITY SETTINGS =====
-
-
-// Toggle font size
-document.getElementById('toggle-font-size')?.addEventListener('click', () => {
-  accessibilitySettings.fontSize = accessibilitySettings.fontSize === 'normal' ? 'large' : 'normal';
-  applyAccessibilitySettings();
-  sendAccessibilityToTarget();
-});
-
-// Toggle high contrast
-document.getElementById('toggle-high-contrast')?.addEventListener('click', () => {
-  accessibilitySettings.highContrast = !accessibilitySettings.highContrast;
-  applyAccessibilitySettings();
-  sendAccessibilityToTarget();
-});
-
-// Apply settings to page
-function applyAccessibilitySettings() {
-  // Apply font size
-  if (accessibilitySettings.fontSize === 'large') {
-    document.body.style.fontSize = '120%';
-  } else {
-    document.body.style.fontSize = '100%';
-  }
-  
-  // Apply high contrast
-  if (accessibilitySettings.highContrast) {
-    document.body.classList.add('high-contrast');
-  } else {
-    document.body.classList.remove('high-contrast');
-  }
-}
-
-// Send settings to Adobe Target
-function sendAccessibilityToTarget() {
-  if (!window.alloy) {
-    console.warn('Alloy not loaded');
-    return;
-  }
-  
-  console.log('📤 Sending accessibility settings to Target:', accessibilitySettings);
-  
-  window.alloy('sendEvent', {
-    renderDecisions: true,
-    decisionScopes: ['__view__'],
-    data: {
-      accessibility_fontSize: accessibilitySettings.fontSize,           // ✅ Matches profile script
-      accessibility_highContrast: String(accessibilitySettings.highContrast)  // ✅ Matches profile script
-    }
-  }).then(response => {
-    console.log('✅ Settings sent to Target:', response);
-    console.log('📦 Propositions after button click:', response.propositions?.length || 0);
-  }).catch(error => {
-    console.error('❌ Error sending to Target:', error);
-  });
-}
 /* ===============================
    RETURNING USER FLAG
    =============================== */
