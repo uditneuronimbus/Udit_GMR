@@ -92,14 +92,12 @@ export default function decorate(block) {
           <button class="mobile-filter-btn year-btn" data-type="year">
             Year <span class="arrow"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
-</svg>
-</span>
+</svg></span>
           </button>
           <button class="mobile-filter-btn category-btn" data-type="category">
             Filter by <span class="arrow"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
-</svg>
-</span>
+</svg></span>
           </button>
         </div>
         <div class="awards-list"></div>
@@ -329,13 +327,17 @@ export default function decorate(block) {
   function updateButtonText() {
     // Update Year button text
     const yearText = state.year || "Year";
-    yearFilterBtn.innerHTML = `${yearText} <span class="arrow">▼</span>`;
+    yearFilterBtn.innerHTML = `${yearText} <span class="arrow"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+</svg></span>`;
 
     // Update Category button text
     const catText = state.category === "all" ?
       allAwardsLabel :
       state.category.charAt(0).toUpperCase() + state.category.slice(1);
-    categoryFilterBtn.innerHTML = `Filter by - ${catText} <span class="arrow">▼</span>`;
+    categoryFilterBtn.innerHTML = `Filter by - ${catText} <span class="arrow"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+</svg></span>`;
   }
 
   function openModal(filterType) {
