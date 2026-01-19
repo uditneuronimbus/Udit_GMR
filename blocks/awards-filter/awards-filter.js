@@ -90,10 +90,14 @@ export default function decorate(block) {
       <div class="awards-layout mobile-layout">
         <div class="mobile-filter-buttons">
           <button class="mobile-filter-btn year-btn" data-type="year">
-            Year <span class="arrow">▼</span>
+            Year <span class="arrow"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+</svg></span>
           </button>
           <button class="mobile-filter-btn category-btn" data-type="category">
-            Filter by <span class="arrow">▼</span>
+            Filter by <span class="arrow"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+</svg></span>
           </button>
         </div>
         <div class="awards-list"></div>
@@ -107,11 +111,9 @@ export default function decorate(block) {
               <button class="close-modal">×</button>
             </div>
             <div class="filter-group year-group" style="display: none;">
-              <p>Year</p>
               <label><input type="radio" name="year" value="" checked> All Years</label>
             </div>
             <div class="filter-group category-group" style="display: none;">
-              <p>Filter by Category</p>
               <label><input type="radio" name="category" value="all" checked> ${allAwardsLabel}</label>
             </div>
             <div class="apply-filter-btn">
@@ -325,13 +327,17 @@ export default function decorate(block) {
   function updateButtonText() {
     // Update Year button text
     const yearText = state.year || "Year";
-    yearFilterBtn.innerHTML = `${yearText} <span class="arrow">▼</span>`;
+    yearFilterBtn.innerHTML = `${yearText} <span class="arrow"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+</svg></span>`;
 
     // Update Category button text
     const catText = state.category === "all" ?
       allAwardsLabel :
       state.category.charAt(0).toUpperCase() + state.category.slice(1);
-    categoryFilterBtn.innerHTML = `Filter by - ${catText} <span class="arrow">▼</span>`;
+    categoryFilterBtn.innerHTML = `Filter by - ${catText} <span class="arrow"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+</svg></span>`;
   }
 
   function openModal(filterType) {
@@ -345,11 +351,11 @@ export default function decorate(block) {
     // Update modal UI
     const modalTitle = modalHeader.querySelector('h3');
     if (filterType === 'year') {
-      modalTitle.textContent = 'Select Year';
+      modalTitle.textContent = 'Filter by Year';
       yearGroup.style.display = 'block';
       categoryGroup.style.display = 'none';
     } else {
-      modalTitle.textContent = 'Select Category';
+      modalTitle.textContent = 'Filter by Category';
       yearGroup.style.display = 'none';
       categoryGroup.style.display = 'block';
     }
@@ -441,4 +447,6 @@ export default function decorate(block) {
   categoryListDesktop.querySelector('li[data-category="all"]').classList.add("active");
 
   console.log("Awards List block initialized");
+  
+  
 }

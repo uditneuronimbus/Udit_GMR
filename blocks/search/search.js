@@ -269,8 +269,7 @@ export default function decorate(block) {
         class="search-results"
         id="search-results"
         role="listbox"
-      >
-      </div>
+      ></div>
     </div>
      </div>
   `;
