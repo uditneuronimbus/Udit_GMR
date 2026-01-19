@@ -4,7 +4,7 @@ header.header-wrapper { position: fixed;
 header.header-wrapper:before { position:absolute; content: ''; height: 56px; width:100%; background-color: var(--white); border-bottom: 1px var(--light-grey, #E0E0E0) solid }
 
 .header-wrapper {
-    transition-duration: .3s; 
+    transition-duration: .3s;
 }
 .nav-brand .default-content-wrapper {
     display: flex;
@@ -203,7 +203,7 @@ header.header-wrapper:before { position:absolute; content: ''; height: 56px; wid
     padding: 1rem 0.5rem;
     color: var(--black);
     background: url(../../icons/arrow-right-yellow.svg) no-repeat
-        calc(100% - 0.25rem) center;
+    calc(100% - 0.25rem) center;
     background-size: 0.35rem;
     transition-duration: 0.3s;
 }
