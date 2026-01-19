@@ -89,11 +89,10 @@ export default function decorate(block) {
           <div class="mobile-filter-overlay"></div>
           <div class="mobile-filter-content">
             <div class="modal-header">
-              <h3>Select Category</h3>
+              <h3>Filter by Category</h3>
               <button class="close-modal">×</button>
             </div>
             <div class="filter-group category-group">
-              <p>Filter by Category</p>
               <label><input type="radio" name="category" value="all" checked> All Partners</label>
             </div>
             <div class="apply-filter-btn">
@@ -328,7 +327,10 @@ export default function decorate(block) {
                    state.category.charAt(0).toUpperCase() + state.category.slice(1);
     }
     
-    categoryFilterBtn.innerHTML = `Filter by - ${displayText} <span class="arrow">▼</span>`;
+    categoryFilterBtn.innerHTML = `Filter by - ${displayText} <span class="arrow"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+</svg>
+</span>`;
   }
 
   function openModal() {

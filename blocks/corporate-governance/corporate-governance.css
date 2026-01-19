@@ -199,7 +199,7 @@
     align-items: flex-start;
     border-radius: 8px;
     gap: 16px;
-    padding: 24px;
+    padding: 24px; width: 100%;
     text-align: left; color:var(--white);
   }
   .cg-title {
