@@ -28,6 +28,16 @@
     object-position: bottom right;
 }
 
+/* Desktop image - show by default, hide on mobile */
+.banner-overlay-img.desktop-only {
+    display: block;
+}
+
+/* Mobile image - hide by default, show on mobile */
+.banner-overlay-img.mobile-only {
+    display: none;
+}
+
 .banner-overlay-text {
     position: absolute;
     top: 0;
@@ -43,6 +53,15 @@
 
 /* Responsive */
 @media (max-width: 767px) {
+    /* Switch images for mobile */
+    .banner-overlay-img.desktop-only {
+        display: none;
+    }
+    
+    .banner-overlay-img.mobile-only {
+        display: block;
+    }
+    
     .banner-overlay-img img {
         height: 100%;
         object-fit: cover;

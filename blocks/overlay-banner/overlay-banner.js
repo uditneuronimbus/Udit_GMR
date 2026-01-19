@@ -1,5 +1,6 @@
 export default function decorate(block) {
   const rows = [...block.children];
+  // Now expect 6 rows: image, title, desc, buttonText, buttonLink, image1
   if (rows.length < 6) return;
 
   block.classList.add("banner-overlay-sec");
@@ -7,15 +8,15 @@ export default function decorate(block) {
   /* =========================
      Read UE-authored fields
   ========================== */
-  const imageRow = rows[0];      // desktop image
-  const imageRowMobile = rows[1]; // mobile image (image1)
-  const titleRow = rows[2];
-  const descRow = rows[3];
-  const buttonTextRow = rows[4];
-  const buttonLinkRow = rows[5];
+  const imageRow = rows[0];      // Desktop image
+  const titleRow = rows[1];      // Title
+  const descRow = rows[2];       // Description
+  const buttonTextRow = rows[3]; // Button text
+  const buttonLinkRow = rows[4]; // Button link
+  const image1Row = rows[5];     // Mobile image (image1)
 
-  const picture = imageRow.querySelector("picture");
-  const pictureMobile = imageRowMobile.querySelector("picture");
+  const pictureDesktop = imageRow.querySelector("picture");
+  const pictureMobile = image1Row.querySelector("picture");
 
   const titleCell = titleRow.children[0];
   const descCell = descRow.children[0];
@@ -37,13 +38,15 @@ export default function decorate(block) {
   bannerOverlay.className = "banner-overlay";
 
   /* ---- Background Images ---- */
-  if (picture) {
-    picture.classList.add("banner-overlay-img");
-    bannerOverlay.append(picture);
+  // Desktop image (shown by default)
+  if (pictureDesktop) {
+    pictureDesktop.classList.add("banner-overlay-img", "desktop-only");
+    bannerOverlay.append(pictureDesktop);
   }
 
+  // Mobile image (hidden on desktop)
   if (pictureMobile) {
-    pictureMobile.classList.add("banner-overlay-img");
+    pictureMobile.classList.add("banner-overlay-img", "mobile-only");
     bannerOverlay.append(pictureMobile);
   }
 
@@ -61,14 +64,16 @@ export default function decorate(block) {
   if (titleCell) {
     let h2 = titleCell.querySelector("h2");
 
+    // Convert <p> → <h2> if h2 doesn't exist
     if (!h2) {
       const p = titleCell.querySelector("p");
 
       if (p) {
         h2 = document.createElement("h2");
-        h2.innerHTML = p.innerHTML;
+        h2.innerHTML = p.innerHTML; // keep formatting
         p.replaceWith(h2);
       } else {
+        // fallback: wrap plain text
         h2 = document.createElement("h2");
         h2.innerHTML = titleCell.innerHTML;
         titleCell.innerHTML = "";
@@ -80,7 +85,7 @@ export default function decorate(block) {
     col.append(titleCell);
   }
 
-  /* ---- Description ---- */
+  /* ---- Description (optional) ---- */
   if (hasDesc) {
     descCell.classList.add("sec-desc", "mb-4");
     col.append(descCell);
@@ -105,17 +110,4 @@ export default function decorate(block) {
   ========================== */
   block.innerHTML = "";
   block.append(container);
-
-  /* =========================
-     Mobile switch (NO styling change)
-  ========================== */
-  const mq = window.matchMedia("(max-width: 767px)");
-
-  const toggleImages = () => {
-    if (picture) picture.style.display = mq.matches ? "none" : "";
-    if (pictureMobile) pictureMobile.style.display = mq.matches ? "" : "none";
-  };
-
-  toggleImages();
-  mq.addEventListener("change", toggleImages);
 }
