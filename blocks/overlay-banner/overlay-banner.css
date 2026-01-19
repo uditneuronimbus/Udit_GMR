@@ -92,11 +92,7 @@
     }
 
     .banner-overlay {
-        padding-bottom: 56%;
+        padding-bottom: 100%;
         margin: 0 0 40px;
-    }
-
-    .banner-overlay-img {
-        width: 135%;
     }
 }
