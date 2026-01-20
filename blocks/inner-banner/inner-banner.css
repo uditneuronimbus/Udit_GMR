@@ -22,7 +22,7 @@
     height: 100%;
     top: 0;
     left: 0;
-    background: var(--black);
+    background: linear-gradient(90deg,rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 80%);
 }
 .inner-hero-img img {
     width: 100%;
