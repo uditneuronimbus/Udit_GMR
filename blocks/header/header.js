@@ -6,23 +6,15 @@ const isDesktop = window.matchMedia("(min-width: 900px)");
 
 function closeOnEscape(e) {
   if (e.code !== "Escape") return;
-
   const nav = document.getElementById("nav");
   if (!nav) return;
-
   const navSections = nav.querySelector(".nav-sections");
   if (!navSections) return;
-
-  const navSectionExpanded = navSections.querySelector(
-    '[aria-expanded="true"]'
-  );
-
+  const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
   if (navSectionExpanded && isDesktop.matches) {
-    // collapse only the open dropdown on desktop
     toggleAllNavSections(navSections);
     navSectionExpanded.focus();
   } else if (!isDesktop.matches) {
-    // close full menu on mobile
     toggleMenu(nav, navSections);
     const btn = nav.querySelector("button");
     if (btn) btn.focus();
@@ -32,15 +24,10 @@ function closeOnEscape(e) {
 function closeOnFocusLost(e) {
   const nav = e.currentTarget;
   if (!nav) return;
-
-  // focus moved completely outside of nav
   if (!nav.contains(e.relatedTarget)) {
     const navSections = nav.querySelector(".nav-sections");
     if (!navSections) return;
-
-    const navSectionExpanded = navSections.querySelector(
-      '[aria-expanded="true"]'
-    );
+    const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
     if (navSectionExpanded && isDesktop.matches) {
       toggleAllNavSections(navSections, false);
     } else if (!isDesktop.matches) {
@@ -52,15 +39,12 @@ function closeOnFocusLost(e) {
 function openOnKeydown(e) {
   const focused = document.activeElement;
   if (!focused) return;
-
   const isNavDrop = focused.classList.contains("nav-drop");
   if (!isNavDrop) return;
-
   if (e.code === "Enter" || e.code === "Space") {
     e.preventDefault();
     const navSections = focused.closest(".nav-sections");
     if (!navSections) return;
-
     const dropExpanded = focused.getAttribute("aria-expanded") === "true";
     toggleAllNavSections(navSections);
     focused.setAttribute("aria-expanded", dropExpanded ? "false" : "true");
@@ -71,36 +55,17 @@ function focusNavSection() {
   document.activeElement?.addEventListener("keydown", openOnKeydown);
 }
 
-/**
- * Toggles all nav sections
- * @param {Element} sections The container element
- * @param {Boolean|String} expanded Whether the element should be expanded or collapsed
- */
 function toggleAllNavSections(sections, expanded = false) {
   if (!sections) return;
-  const value = expanded === true || expanded === "true" ? "true" : "false";
-
-  sections
-    .querySelectorAll(":scope .default-content-wrapper > ul > li")
-    .forEach((section) => {
-      section.setAttribute("aria-expanded", value);
-    });
+  const value = expanded ? "true" : "false";
+  sections.querySelectorAll(":scope .default-content-wrapper > ul > li")
+    .forEach(section => section.setAttribute("aria-expanded", value));
 }
 
-/**
- * Toggles the entire nav
- * @param {Element} nav The container element
- * @param {Element} navSections The nav sections within the container element
- * @param {*} forceExpanded Optional param to force nav expand behavior when not null
- */
 function toggleMenu(nav, navSections, forceExpanded = null) {
   if (!nav || !navSections) return;
-
   const currentlyExpanded = nav.getAttribute("aria-expanded") === "true";
-  // if forceExpanded is not null, we want nav to be exactly that, not inverted
-  const willBeExpanded =
-    forceExpanded !== null ? !!forceExpanded : !currentlyExpanded;
-
+  const willBeExpanded = forceExpanded !== null ? !!forceExpanded : !currentlyExpanded;
   const button = nav.querySelector(".nav-hamburger button");
 
   // lock scroll on mobile when menu open
@@ -108,36 +73,27 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
     willBeExpanded || isDesktop.matches ? "" : "hidden1";
 
   nav.setAttribute("aria-expanded", willBeExpanded ? "true" : "false");
-
-  // collapse or expand dropdowns according to new state / breakpoint
-  const dropdownExpanded =
-    willBeExpanded && !isDesktop.matches ? "true" : "false";
-  toggleAllNavSections(navSections, dropdownExpanded);
+  toggleAllNavSections(navSections, willBeExpanded && !isDesktop.matches);
 
   if (button) {
-    button.setAttribute(
-      "aria-label",
-      willBeExpanded ? "Close navigation" : "Open navigation"
-    );
+    button.setAttribute("aria-label", willBeExpanded ? "Close navigation" : "Open navigation");
   }
 
-  // enable nav dropdown keyboard accessibility
   const navDrops = navSections.querySelectorAll(".nav-drop");
   if (isDesktop.matches) {
-    navDrops.forEach((drop) => {
+    navDrops.forEach(drop => {
       if (!drop.hasAttribute("tabindex")) {
         drop.setAttribute("tabindex", 0);
         drop.addEventListener("focus", focusNavSection);
       }
     });
   } else {
-    navDrops.forEach((drop) => {
+    navDrops.forEach(drop => {
       drop.removeAttribute("tabindex");
       drop.removeEventListener("focus", focusNavSection);
     });
   }
 
-  // escape / focus-out handling
   if (willBeExpanded || isDesktop.matches) {
     window.addEventListener("keydown", closeOnEscape);
     nav.addEventListener("focusout", closeOnFocusLost);
@@ -147,24 +103,15 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   }
 }
 
-/**
- * loads and decorates the header, mainly the nav
- * @param {Element} block The header block element
- */
 export default async function decorate(block) {
-  // 🔹 imageMap available everywhere inside decorate
   const imageMap = new Map();
 
-  // load nav as fragment
   const navMeta = getMetadata("nav");
-  const navPathMain = navMeta
-    ? new URL(navMeta, window.location).pathname
-    : "/en/nav";
+  const navPathMain = navMeta ? new URL(navMeta, window.location).pathname : "/en/nav";
   const isAero = window.location.pathname.startsWith("/aero-gmr/");
   const navPath = isAero ? "/aero-gmr/nav" : navPathMain;
   const fragment = await loadFragment(navPath);
 
-  // decorate nav DOM
   block.textContent = "";
   const nav = document.createElement("nav");
   nav.id = "nav";
@@ -189,7 +136,48 @@ export default async function decorate(block) {
       if (btnContainer) btnContainer.className = "";
     }
 
-    // 🔹 Build imageMap from header-image block
+    // ────────────────────────────────────────────────────────────────
+    // Bind ALL logos (<picture> elements) to /en/
+    // Works for both the old and the new logo you uploaded
+    // ────────────────────────────────────────────────────────────────
+    const logoPictures = navBrand.querySelectorAll("picture");
+
+    logoPictures.forEach(picture => {
+      const logoLink = document.createElement("a");
+      logoLink.href = "/en/";
+      logoLink.setAttribute("aria-label", "GMR Home");
+      logoLink.style.display = "inline-block";
+      logoLink.style.textDecoration = "none";
+
+      picture.parentNode.insertBefore(logoLink, picture);
+      logoLink.appendChild(picture);
+
+      // Clean up empty wrapper (common in AEM)
+      let current = logoLink.parentElement;
+      while (current && current !== navBrand) {
+        if ((current.tagName === "P" || current.tagName === "DIV") &&
+          current.children.length <= 1 &&
+          !current.textContent.trim()) {
+          const next = current.parentNode;
+          next.insertBefore(logoLink, current);
+          current.remove();
+          current = next;
+        } else {
+          break;
+        }
+      }
+    });
+
+    // Remove any leftover plain-text URL paragraphs
+    navBrand.querySelectorAll("p").forEach(p => {
+      const text = p.textContent.trim();
+      if (text.startsWith("http") || text.startsWith("/") || text === "#" || text.includes("gmrcorp")) {
+        p.remove();
+      }
+    });
+    // ────────────────────────────────────────────────────────────────
+
+    // Build imageMap from header-image block
     const menuImgWrapper = navBrand.querySelector(":scope > div > div");
     if (menuImgWrapper) {
       [...menuImgWrapper.children].forEach((div) => {
@@ -219,7 +207,6 @@ export default async function decorate(block) {
         const descP = ps.length > 1 ? ps[1] : null;
         const innerList = li.querySelector(":scope > ul");
 
-        // 🔹 main menu label: used as fallback for images
         const mainLabelEl = li.querySelector(
           ":scope > p, :scope > a, :scope > span, :scope > h4"
         );
@@ -227,36 +214,29 @@ export default async function decorate(block) {
           ? mainLabelEl.textContent.trim().toLowerCase().replace(/\s+/g, "-")
           : null;
 
-        // only ABOUT / BUSINESS / INVESTORS have extra content
         const hasMega = titleEl || descP || innerList;
         if (!hasMega || !innerList) return;
 
         li.classList.add("has-mega");
 
-        // wrapper
         const mega = document.createElement("div");
         mega.className = "mega-wrapper";
 
-        // left column
         const colLeft = document.createElement("div");
         colLeft.className = "mega-left";
 
         if (titleEl) colLeft.append(titleEl);
         if (descP) colLeft.append(descP);
 
-        // middle column
         const colMid = document.createElement("div");
         colMid.className = "mega-mid";
 
-        // right column
         const colRight = document.createElement("div");
         colRight.className = "mega-right";
 
-        // CASE 1: simple mega → put innerList in middle
         if (innerList && descP) {
           colMid.append(innerList);
 
-          // default image for this mega = main menu image if available
           if (mainKey) {
             const imgUrl = imageMap.get(mainKey);
             if (imgUrl) {
@@ -266,17 +246,14 @@ export default async function decorate(block) {
             }
           }
         } else {
-          // CASE 2: 3-level mega: level1 → level2 → level3 (UL)
-          // move big UL to left
           colLeft.append(innerList);
 
           let counter = 0;
 
           [...innerList.children].forEach((level1) => {
-            const level2Ul = level1.querySelector(":scope > ul"); // level 2 UL
+            const level2Ul = level1.querySelector(":scope > ul");
             if (!level2Ul) return;
 
-            // level2Li = li that contains level3 <ul>
             level2Ul.querySelectorAll(":scope > li > ul").forEach((level3Ul) => {
               counter++;
               const id = `thirdMenu-${counter}`;
@@ -289,14 +266,8 @@ export default async function decorate(block) {
               let level2Text = "";
 
               if (el2) {
-                // first check if <a> exists inside el
                 const link2 = el2.querySelector("a");
-
-                if (link2) {
-                  level2Text = link2.outerHTML;
-                } else {
-                  level2Text = el2.textContent.trim();
-                }
+                level2Text = link2 ? link2.outerHTML : el2.textContent.trim();
               }
 
               const el = level1.querySelector(
@@ -305,14 +276,8 @@ export default async function decorate(block) {
               let level1Text = "";
 
               if (el) {
-                // first check if <a> exists inside el
                 const link = el.querySelector("a");
-
-                if (link) {
-                  level1Text = link.outerHTML;
-                } else {
-                  level1Text = el.textContent.trim();
-                }
+                level1Text = link ? link.outerHTML : el.textContent.trim();
               }
 
               const thirdMenu = document.createElement("div");
@@ -340,19 +305,16 @@ export default async function decorate(block) {
               thirdMenu.append(level3Ul.cloneNode(true));
               colMid.append(thirdMenu);
 
-              // link level2 <li> → this panel
               if (level2Li) {
                 level2Li.dataset.target = id;
               }
             });
           });
 
-          // hide all panels by default
           colMid.querySelectorAll(".thirdMenu").forEach((div) => {
             div.style.display = "none";
           });
 
-          // default image = main menu image if available
           if (mainKey) {
             const defaultImg = imageMap.get(mainKey);
             if (defaultImg) {
@@ -362,12 +324,10 @@ export default async function decorate(block) {
             }
           }
 
-          // hover on innerList <li> (2nd-level + possible 3rd-level)
           innerList.querySelectorAll("li").forEach((levelLi) => {
             levelLi.addEventListener("mouseenter", () => {
               const target = levelLi.dataset.target;
 
-              // 🔹 panels: only if there is a target
               colMid.querySelectorAll(".thirdMenu").forEach((div) => {
                 div.style.display = "none";
               });
@@ -377,14 +337,12 @@ export default async function decorate(block) {
                 if (panel) panel.style.display = "block";
               }
 
-              // 🔹 image logic ALWAYS runs (even when there's no panel)
               const labelEl = levelLi.querySelector(
                 ":scope > p, :scope > a, :scope > span"
               );
 
               let imgUrl = null;
 
-              // try submenu-specific image
               if (labelEl) {
                 const key = labelEl.textContent
                   .trim()
@@ -393,12 +351,10 @@ export default async function decorate(block) {
                 imgUrl = imageMap.get(key) || null;
               }
 
-              // fallback to main menu image
               if (!imgUrl && mainKey) {
                 imgUrl = imageMap.get(mainKey) || null;
               }
 
-              // update colRight
               colRight.innerHTML = "";
 
               if (imgUrl) {
@@ -438,7 +394,6 @@ export default async function decorate(block) {
       });
   }
 
-  // hamburger for mobile
   const hamburger = document.createElement("div");
   hamburger.classList.add("nav-hamburger");
   hamburger.innerHTML = `
@@ -449,15 +404,10 @@ export default async function decorate(block) {
   nav.prepend(hamburger);
   nav.setAttribute("aria-expanded", "false");
 
-  // initialize state based on current breakpoint
   toggleMenu(nav, navSections, isDesktop.matches);
   isDesktop.addEventListener("change", () =>
     toggleMenu(nav, navSections, isDesktop.matches)
   );
-
-  /* ===============================
-     HEADER WRAPPER
-  =============================== */
 
   const navWrapper = document.createElement("div");
   navWrapper.className = "primary-header header-wrapper";
@@ -465,20 +415,12 @@ export default async function decorate(block) {
   const container = document.createElement("div");
   container.className = "container position-relative";
 
-  // Move all nav children into container
   while (nav.firstChild) {
     container.append(nav.firstChild);
   }
 
-  // Append container back into nav
   nav.append(container);
-
-  // Append nav to wrapper
   navWrapper.append(nav);
-
-  /* ===============================
-     HEADER AFFIX ON SCROLL
-  =============================== */
 
   function handleHeaderAffix() {
     if (window.scrollY > 10) {
@@ -491,7 +433,6 @@ export default async function decorate(block) {
   handleHeaderAffix();
   window.addEventListener("scroll", handleHeaderAffix, { passive: true });
 
-  // Replace block content
   block.innerHTML = "";
   block.append(navWrapper);
 }
