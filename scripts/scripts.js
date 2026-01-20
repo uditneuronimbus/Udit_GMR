@@ -23,15 +23,9 @@ const getMetadata = (name) => {
 /* ===============================
    PAGE SLUG → BODY CLASS
    =============================== */
-/**
- * Adds page slug as body class
- * "/"                     → page-home
- * "/about-us"             → page-about-us
- * "/services/web-design"  → page-web-design
- */
 function addPageSlugClass() {
   const path = window.location.pathname
-    .replace(/\/$/, "") // remove trailing slash
+    .replace(/\/$/, "")
     .split("/")
     .filter(Boolean);
 
@@ -83,11 +77,72 @@ async function loadFonts() {
 }
 
 /* ===============================
-   AUTO BLOCKS
+   AUTO BLOCKS (BREADCRUMBS)
    =============================== */
-function buildAutoBlocks() {
+/**
+ * Manual Build + Manual Load for Breadcrumbs
+ * Injects INTO the First Section (Hero) to avoid layout shift
+ */
+async function buildBreadcrumbs(main) {
+  // 1. Skip on Homepage or 404
+  if (window.location.pathname === '/' || window.location.pathname === '/404') {
+    return;
+  }
+
+  // 2. Prevent Duplicates
+  if (main.querySelector('.breadcrumbs')) {
+    return;
+  }
+
+  // 3. Create the Block Wrapper & Block
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('breadcrumbs-wrapper');
+
+  const block = document.createElement('div');
+  block.classList.add('breadcrumbs', 'block');
+  block.dataset.blockName = 'breadcrumbs';
+  block.dataset.blockStatus = 'loading';
+
+  wrapper.append(block);
+
+  // 4. INJECT INTO FIRST SECTION
+  const firstSection = main.querySelector('.section');
+
+  if (firstSection) {
+    // Inject at the top of the existing first section
+    firstSection.prepend(wrapper);
+  } else {
+    // Fallback: If page is empty, create a new section
+    const section = document.createElement('div');
+    section.classList.add('section', 'breadcrumbs-container');
+    section.append(wrapper);
+    main.prepend(section);
+  }
+
+  // 5. MANUALLY LOAD THE BLOCK LOGIC
   try {
-    // no-op
+    const cssLoaded = loadCSS(`${window.hlx.codeBasePath}/blocks/breadcrumbs/breadcrumbs.css`);
+    const modLoaded = import(`${window.hlx.codeBasePath}/blocks/breadcrumbs/breadcrumbs.js`);
+
+    const [_, mod] = await Promise.all([cssLoaded, modLoaded]);
+
+    if (mod.default) {
+      await mod.default(block);
+    }
+    block.dataset.blockStatus = 'loaded';
+  } catch (error) {
+    console.error("Failed to load breadcrumbs:", error);
+    block.dataset.blockStatus = 'failed';
+  }
+}
+
+/* ===============================
+   BUILD AUTO BLOCKS
+   =============================== */
+function buildAutoBlocks(main) {
+  try {
+    // Breadcrumbs are NOT called here to avoid deadlock.
+    // They are called in loadLazy below.
   } catch (error) {
     console.error("Auto Blocking failed", error);
   }
@@ -114,12 +169,10 @@ async function loadEager(doc) {
   const main = doc.querySelector("main");
   if (main) {
     decorateMain(main);
-
-    /* ✅ ADD BODY CLASSES EARLY */
     addPageSlugClass();
     document.body.classList.add("appear");
 
-    // Adobe Target wait (if enabled)
+    // Adobe Target wait
     if (getMetadata("target") === "true") {
       await new Promise((resolve) => {
         if (window.alloy) return resolve();
@@ -143,7 +196,6 @@ async function loadEager(doc) {
   }
 }
 
-
 /* ===============================
    LOAD LAZY
    =============================== */
@@ -158,12 +210,15 @@ async function loadLazy(doc) {
   loadHeader(doc.querySelector("header"));
   loadFooter(doc.querySelector("footer"));
 
+  /* ✅ Manual Load Call for Breadcrumbs */
+  buildBreadcrumbs(main);
+
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
 }
 
 /* ===============================
-   LOAD DELAYED (Bhashini Removed)
+   LOAD DELAYED
    =============================== */
 function loadDelayed() {
   import("./delayed.js");
@@ -226,21 +281,18 @@ const getAndApplyTargetPropositions = async () => {
     });
 
     const { propositions } = response;
-    
-    
 
     onDecoratedElement(async () => {
       await window.alloy("applyPropositions", { propositions });
-      
+
       setTimeout(() => {
         window.alloy("sendEvent", {
           xdm: {
             eventType: "decisioning.propositionDisplay",
-            profile: { isReturningUser: !!isReturning },
+            profile: { isReturningUser: !!isReturning, },
             _experience: { decisioning: { propositions } },
           },
         });
-        
       }, 1000);
     });
   } catch (error) {
