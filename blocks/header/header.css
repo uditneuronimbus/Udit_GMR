@@ -217,7 +217,7 @@ header.header-wrapper:before {
     padding: 1rem 0.5rem;
     color: var(--black);
     background: url(../../icons/arrow-right-yellow.svg) no-repeat
-        calc(100% - 0.25rem) center;
+    calc(100% - 0.25rem) center;
     background-size: 0.35rem;
     transition-duration: 0.3s;
 }
