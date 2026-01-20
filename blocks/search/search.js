@@ -177,10 +177,10 @@ export default function decorate(block) {
         break;
 
       case "Enter":
-        if (activeIndex >= 0) {
-          e.preventDefault();
-          results[activeIndex].click();
-        }
+        e.preventDefault();
+        const query = input.value.trim();
+        if (!query) return;
+        window.location.href = `/search?q=${encodeURIComponent(query)}`;
         break;
 
       case "Escape":
