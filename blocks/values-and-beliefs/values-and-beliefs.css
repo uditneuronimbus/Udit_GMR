@@ -32,7 +32,7 @@
   
   .value-card-image {
     position: relative;
-    height: 220px;
+    height: 250px;
   }
   
   .value-card-image picture,
@@ -44,14 +44,14 @@
   
   .value-card-overlay {
     position: absolute;
-    bottom: 12px;
-    left: 12px;
+    bottom: 0px;
     background: #003a8f;
     color: #fff;
     padding: 6px 12px;
     border-radius: 4px;
     font-size: 14px;
     font-weight: 600;
+    width: 274px;
   }
   
   .value-card-content {
