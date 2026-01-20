@@ -51,6 +51,8 @@
     --fs-normal: 1rem;
     --fs-medium: 1.125rem;
     --fs-large: 1.25rem;
+    --fs-xlarge: 1.5rem;
+    --fs-xxlarge: 2rem;
     --fs-xl: 2.5rem;
     --fs-xxl: 3rem;
 }
