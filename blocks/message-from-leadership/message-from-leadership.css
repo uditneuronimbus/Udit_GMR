@@ -14,15 +14,13 @@
   padding: 0 24px;
 }
 
-/* ── Slider Container ── */
 .mfl-slider {
   position: relative;
 }
 
-/* ── Slides Wrapper ── */
 .mfl-slides {
   position: relative;
-  min-height: 420px; /* prevents jump when switching slides */
+  min-height: 520px; 
 }
 
 .mfl-slide {
@@ -38,31 +36,71 @@
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  position: relative; /* bring active slide to normal flow */
 }
 
-/* ── Card Layout ── */
 .mfl-card {
   display: grid;
-  grid-template-columns: 45% 55%;
+  grid-template-columns: 1fr 1fr;   
   gap: 56px;
   align-items: center;
+  position: relative;
 }
 
-/* ── Image ── */
+.mfl-image {
+  position: relative;               
+  border-radius: 12px;
+  overflow: hidden;
+}
+
 .mfl-image img,
 .mfl-image picture {
   width: 100%;
   height: auto;
   max-height: 520px;
   object-fit: cover;
-  border-radius: 12px;
   display: block;
 }
 
-/* ── Content ── */
+.mfl-navigation {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  gap: 12px;
+  z-index: 10;                      
+}
+
+.mfl-navigation button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;               
+  border: none;
+  background: rgba(255, 255, 255, 0.25);  
+  color: white;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(4px);      
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mfl-navigation button:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.mfl-navigation .mfl-next {
+  background: #f0b04f;             
+  color: white;
+}
+
+.mfl-navigation .mfl-next:hover {
+  background: #e0a03f;
+}
+
 .mfl-title {
-  font-size: 2.625rem; /* 42px */
+  font-size: 2.625rem;
   font-weight: 500;
   line-height: 1.15;
   color: #0b1f33;
@@ -70,7 +108,7 @@
 }
 
 .mfl-subtitle {
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1.2px;
@@ -79,58 +117,18 @@
 }
 
 .mfl-message {
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.125rem;
   line-height: 1.65;
   color: #2d2d2d;
   margin-bottom: 1.75rem;
 }
 
 .mfl-author {
-  font-size: 1rem; /* 16px */
+  font-size: 1rem;
   font-weight: 600;
   color: #0b1f33;
 }
 
-/* ── Navigation ── */
-.mfl-navigation {
-  display: flex;
-  gap: 12px;
-  margin-top: 2rem;
-  justify-content: flex-start;
-}
-
-.mfl-navigation button {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-  background: transparent;
-  color: #444;
-  font-size: 1.25rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.mfl-navigation button:hover {
-  background: #f8f8f8;
-  border-color: #d0d0d0;
-}
-
-.mfl-navigation .mfl-next {
-  background: #f0b04f;
-  color: white;
-  border-color: #f0b04f;
-}
-
-.mfl-navigation .mfl-next:hover {
-  background: #e0a03f;
-  border-color: #e0a03f;
-}
-
-/* ── Responsive Adjustments ── */
 @media (max-width: 1024px) {
   .mfl-card {
     gap: 40px;
@@ -147,13 +145,17 @@
     gap: 32px;
   }
 
+  .mfl-image {
+    max-height: 380px;
+  }
+
   .mfl-image img,
   .mfl-image picture {
     max-height: 380px;
   }
 
   .mfl-title {
-    font-size: 2rem; /* 32px */
+    font-size: 2rem;
   }
 
   .mfl-message {
@@ -161,7 +163,15 @@
   }
 
   .mfl-navigation {
+    position: static;
+    margin-top: 24px;
     justify-content: center;
+    bottom: auto;
+    right: auto;
+  }
+
+  .mfl-navigation button {
+    background: rgba(0, 0, 0, 0.5);   
   }
 }
 
@@ -175,7 +185,7 @@
   }
 
   .mfl-navigation button {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
   }
 }
