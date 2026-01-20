@@ -90,14 +90,14 @@ export default function decorate(block) {
     const plusIcon = document.createElement("span");
     plusIcon.className = `plus-icon ${index === 0 ? "d-none" : ""}`;
     plusIcon.innerHTML = `
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
         <path d="M5 12h14m-7 7V5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>`;
 
     const minusIcon = document.createElement("span");
     minusIcon.className = `minus-icon ${index === 0 ? "" : "d-none"}`;
     minusIcon.innerHTML = `
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
         <path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>`;
 
