@@ -23,7 +23,7 @@
         {
           "component": "reference",
           "name": "image",
-          "label": "Background Image",
+          "label": "Background Desktop Image",
           "valueType": "string"
         },
         {
@@ -49,6 +49,12 @@
           "component": "text",
           "name": "buttonUrl",
           "label": "Button Link (URL)",
+          "valueType": "string"
+        },
+        {
+          "component": "reference",
+          "name": "image1",
+          "label": "Background Mobile Image",
           "valueType": "string"
         }
       ]

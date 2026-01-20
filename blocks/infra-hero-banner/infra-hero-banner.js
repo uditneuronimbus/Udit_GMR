@@ -26,34 +26,62 @@ export default function decorate(block) {
   content.className = 'infra-hero-content';
 
   /* =============================
-     Background image (USE + REMOVE)
+     Background image
   ============================== */
   const img = bgRow.querySelector('img');
   if (img) {
     bg.style.backgroundImage = `url(${img.src})`;
   }
-  bgRow.remove(); // ✅ MUST
+  bgRow.remove();
 
   /* =============================
-     Alignment (READ + REMOVE)
+     Alignment
   ============================== */
   const alignment = alignmentRow.textContent.trim().toLowerCase();
   hero.classList.add(alignment === 'left' ? 'align-left' : 'align-right');
-  alignmentRow.remove(); // ✅ FIXES "Right" repetition
+  alignmentRow.remove();
 
   /* =============================
-     Move visible content rows
+     Title
   ============================== */
-  [titleRow, subtitleRow, descRow, extraRow].forEach((row) => {
-    if (row && row.textContent.trim()) {
-      content.appendChild(row); // MOVE, not clone
-    } else if (row) {
-      row.remove();
-    }
-  });
+  if (titleRow && titleRow.textContent.trim()) {
+    titleRow.classList.add('infra-hero-title');
+    content.appendChild(titleRow);
+  } else if (titleRow) {
+    titleRow.remove();
+  }
 
   /* =============================
-     CTA (READ + REMOVE)
+     Subtitle
+  ============================== */
+  if (subtitleRow && subtitleRow.textContent.trim()) {
+    subtitleRow.classList.add('infra-hero-subtitle');
+    content.appendChild(subtitleRow);
+  } else if (subtitleRow) {
+    subtitleRow.remove();
+  }
+
+  /* =============================
+     Description
+  ============================== */
+  if (descRow && descRow.textContent.trim()) {
+    descRow.classList.add('infra-hero-description');
+    content.appendChild(descRow);
+  } else if (descRow) {
+    descRow.remove();
+  }
+
+  /* =============================
+     Extra row (optional)
+  ============================== */
+  if (extraRow && extraRow.textContent.trim()) {
+    content.appendChild(extraRow);
+  } else if (extraRow) {
+    extraRow.remove();
+  }
+
+  /* =============================
+     CTA
   ============================== */
   const ctaText = ctaTextRow.textContent.trim();
   const ctaLink = ctaLinkRow.textContent.trim();
@@ -67,7 +95,6 @@ export default function decorate(block) {
     content.appendChild(cta);
   }
 
-  // ✅ Remove config-only rows
   ctaTextRow.remove();
   ctaLinkRow.remove();
 

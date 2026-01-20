@@ -143,6 +143,7 @@ async function loadEager(doc) {
   }
 }
 
+
 /* ===============================
    LOAD LAZY
    =============================== */
@@ -225,10 +226,12 @@ const getAndApplyTargetPropositions = async () => {
     });
 
     const { propositions } = response;
+    
+    
 
     onDecoratedElement(async () => {
       await window.alloy("applyPropositions", { propositions });
-
+      
       setTimeout(() => {
         window.alloy("sendEvent", {
           xdm: {
@@ -237,6 +240,7 @@ const getAndApplyTargetPropositions = async () => {
             _experience: { decisioning: { propositions } },
           },
         });
+        
       }, 1000);
     });
   } catch (error) {

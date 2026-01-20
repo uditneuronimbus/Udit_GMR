@@ -68,7 +68,10 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   const willBeExpanded = forceExpanded !== null ? !!forceExpanded : !currentlyExpanded;
   const button = nav.querySelector(".nav-hamburger button");
 
-  document.body.style.overflowY = willBeExpanded || isDesktop.matches ? "" : "hidden";
+  // lock scroll on mobile when menu open
+  document.body.style.overflowY =
+    willBeExpanded || isDesktop.matches ? "" : "hidden1";
+
   nav.setAttribute("aria-expanded", willBeExpanded ? "true" : "false");
   toggleAllNavSections(navSections, willBeExpanded && !isDesktop.matches);
 
