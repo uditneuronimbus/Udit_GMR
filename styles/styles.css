@@ -195,6 +195,11 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .page-corporate-governance .banner-overlay-text .col-md-7 { width: 75%; }
 }
 @media (max-width:991px){
+.h1,h1{font-size:2.5rem}
+.h2,h2{font-size:2rem}
+.h3,h3{font-size:1.25rem}
+.h4,h4{font-size:1rem}
+.h5,h5{font-size:0.875rem}
 .awards-filter-runtime, .default-section, .page-corporate-governance .overlay-banner-container, .partners-filter-runtime, .spacer { padding: 60px 0; }
 .businesses-section.block, .container, .default-section .default-content-wrapper, .global-leaders-aviation-wrapper, .listed-companies-wrapper { padding-left: 1rem; padding-right: 1rem; }
 .global-leaders-aviation-wrapper { padding-left: 0; padding-right: 0;}
@@ -202,7 +207,8 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 }
 @media (max-width:767px){
 .col.w-20{max-width:100%!important}
-.businesses-section.block,.container,.default-section .default-content-wrapper,.global-leaders-aviation-wrapper,.listed-companies-wrapper{max-width:100%;padding-left:10px;padding-right:10px}
+.businesses-section.block,.container,.default-section .default-content-wrapper,.global-leaders-aviation-wrapper,.listed-companies-wrapper{max-width:100%;padding-left:16px;padding-right:16px}
+.global-leaders-aviation-wrapper { padding-left:0;padding-right:0 }
 .h1,h1{font-size:2rem}
 .h2,h2{font-size:1.5rem}
 .h3,h3{font-size:1.125}

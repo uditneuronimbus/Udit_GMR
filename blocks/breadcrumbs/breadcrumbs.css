@@ -28,3 +28,15 @@
     background-size: 5px;
     padding: 0;
 }
+@media (max-width: 767px) {
+.breadcrumbs { color: var(--black); }
+.breadcrumbs-wrapper { background-color: var(--light-grey);}
+.breadcrumb li:first-child a { background: none; padding: 0; }
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "/";
+    width: 15px;
+    height: 40px;
+    background: none;
+    filter: invert(0); color: var(--charcoal); opacity: .5; }
+    .breadcrumb li a { color: var(--charcoal); opacity: .5; }
+}
