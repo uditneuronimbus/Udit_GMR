@@ -1,111 +1,30 @@
-/* =========================================
-   CONTAINER & LAYOUT
-   ========================================= */
-
-/* The wrapper inside the Hero Section */
-.breadcrumbs-wrapper {
-    /* PUSH DOWN logic:
-       100px is safe for most headers.
-       If it still overlaps, increase to 120px or 130px.
-    */
-    padding-top: 100px;
-
-    /* Ensure it sits ON TOP of the Hero Image */
+.breadcrumbs {
     position: relative;
-    z-index: 5;
-
-    /* Full width of the container */
-    width: 100%;
-
-    /* Optional: Subtle gradient background to make text readable on complex images */
-    /* background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 100%); */
+    z-index: 10;
+    height: 40px;
+    color: var(--white);
+    line-height: 40px;
 }
-
-/* Hide if empty */
-.breadcrumbs:empty {
+.page-en .breadcrumbs-wrapper,
+.page-home .breadcrumbs-wrapper {
     display: none;
 }
-
-/* =========================================
-   NAVIGATION STYLING
-   ========================================= */
-
-.breadcrumbs nav {
-    max-width: 1248px;
-    margin: 0 auto;
-    padding: 0 24px;
-    font-size: var(--body-font-size-xs, 14px);
-
-    /* Default text color: White (since it's over a Hero image) */
-    color: #fff;
-
-    overflow-x: auto;
-    box-sizing: border-box;
-}
-
-/* The List */
-.breadcrumbs ol {
-    display: flex;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    gap: 8px;
-    white-space: nowrap;
-}
-
-/* Items */
-.breadcrumbs li {
-    display: inline-flex;
-    align-items: center;
-    color: #fff; /* White text */
-    text-shadow: 0 1px 3px rgba(0,0,0,0.6); /* Drop shadow for readability */
-}
-
-/* Separator (Slash) */
-.breadcrumbs li:not(:last-child)::after {
-    content: '/';
-    margin-left: 8px;
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: normal;
-}
-
-/* Current Page (Last Item) */
-.breadcrumbs li[aria-current='page'] {
-    font-weight: 700;
-    color: #fff;
-    pointer-events: none;
-}
-
-/* Links */
-.breadcrumbs a {
+.breadcrumb li:first-child a {
+    background: url(../../icons/home-icon.svg) no-repeat left center;
+    padding: 0 0 0 2rem;
     text-decoration: none;
-    color: inherit;
-    border-bottom: 1px solid transparent;
-    transition: all 0.2s ease-in-out;
+    line-height: 40px;
 }
-
-.breadcrumbs a:hover {
-    border-bottom-color: currentColor;
-    opacity: 0.9;
+.breadcrumb li a {
+    color: var(--light-grey);
+    display: inline-block;
 }
-
-/* =========================================
-   RESPONSIVE
-   ========================================= */
-@media (max-width: 900px) {
-    .breadcrumbs-wrapper {
-        /* Mobile headers are usually shorter, reduce gap */
-        padding-top: 85px;
-    }
-    .breadcrumbs nav {
-        padding: 0 16px;
-    }
-}
-
-@media (min-width: 900px) {
-    .breadcrumbs nav {
-        max-width: 1264px;
-        padding: 0 32px;
-    }
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "";
+    width: 20px;
+    height: 40px;
+    background: url(../../icons/arrow-right-black.svg) no-repeat center;
+    filter: invert(1);
+    background-size: 5px;
+    padding: 0;
 }
