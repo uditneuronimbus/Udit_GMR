@@ -30,7 +30,7 @@ export default function decorate(block) {
       <div class="container">
         <div class="my-5 ps-5 ms-5">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-xl-6 col-lg-8">
               <h2 class="sec-title text-primary">${sectionTitle}</h2>
               <div class="sec-desc">${sectionDesc}</div>
             </div>

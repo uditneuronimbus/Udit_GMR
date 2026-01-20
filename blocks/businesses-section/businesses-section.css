@@ -31,6 +31,9 @@
 .mobile-business-image{display:none;margin:1.5rem 0;border-radius:8px;overflow:hidden}
 .mobile-business-image img{width:100%;height:auto;max-height:300px;object-fit:cover;display:block}
 .business-image img {margin:1.5rem 0;border-radius:8px;overflow:hidden}
+@media (max-width:1199px){
+.business-accordion-wrapper { padding: 4rem; }
+}
 @media (max-width:991px){
 .business-accordion-container{grid-template-columns:1fr;gap:2rem}
 .business-accordion-header h2{font-size:2rem}
@@ -38,6 +41,8 @@
 .accordion-button{padding:1.25rem 0;font-size:1.125rem}
 .business-image-preview{display: none;}
 .business-image { display: block; }
+.business-accordion-wrapper { padding: 2rem; }
+.business-accordion-header { margin-bottom: 2rem; }
 }
 @media (max-width:767px){
 .businesses-section-wrapper{background-color:var(--sky-blue)}

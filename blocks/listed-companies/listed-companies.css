@@ -227,6 +227,11 @@
         padding: 0 4rem;
     }
 }
+@media (max-width: 1199px) {
+    .listed-companies.block {
+        padding: 0;
+    }
+}
 
 @media (max-width: 767px) {
     .listed-companies.block {

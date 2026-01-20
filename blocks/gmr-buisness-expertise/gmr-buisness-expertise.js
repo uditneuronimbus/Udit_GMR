@@ -59,7 +59,7 @@ export default function decorate(block) {
     const cta = cells[3]?.textContent?.trim() || "READ MORE";
 
     const col = document.createElement("div");
-    col.className = "col-md-4";
+    col.className = "col-md-6 col-lg-4 mt-4";
 
     const card = document.createElement("div");
     card.className = index === 0 ? "card card-ui-one" : "card card-ui-one";

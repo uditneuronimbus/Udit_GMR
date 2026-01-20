@@ -21,3 +21,11 @@
     background: #e5f2ff;
     border-color: #cce5ff;
 }
+
+@media (max-width:1199px){
+.success-stories .inner-container { padding: 4rem; }
+}
+
+@media (max-width:991px){
+.success-stories .inner-container { padding: 2rem; }
+}

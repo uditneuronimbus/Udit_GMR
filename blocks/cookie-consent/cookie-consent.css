@@ -172,7 +172,7 @@
 .footer-actions-right {
   display: flex;
   gap: 12px;
-  align-items: center;
+  align-items: center; flex-wrap: wrap;
 }
 
 /* Buttons */
@@ -184,7 +184,7 @@
   cursor: pointer;
   font-size: 14px;
   padding: 8px;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease; white-space: nowrap;
 }
 
 .btn-text:hover {
@@ -208,4 +208,11 @@
 
 .cookie-consent {
   animation: slideUp 0.3s ease-out;
+}
+@media (max-width:767px){
+.cookie-consent-col { padding:1rem;}
+.cookie-layout, .cookie-footer { gap: 1rem; flex-direction: column; }
+.cookie-left h2 { font-size:var(--fs-medium); }
+.cookie-description { line-height: 1.4; font-size: var(--fs-regular); }
+.footer-actions-left, .footer-actions-right { gap: 8px; }
 }

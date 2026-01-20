@@ -58,7 +58,7 @@ export default async function decorate(block) {
     const desc = cells[2]?.textContent?.trim() || "";
 
     const col = document.createElement("div");
-    col.className = "col-md-4 mt-4";
+    col.className = "col-md-6 col-lg-4 mt-4";
 
     col.innerHTML = `
       <div class="card card-ui-one">

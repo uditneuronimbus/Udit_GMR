@@ -6,3 +6,6 @@
         width: 34%;
     }
 }
+@media (max-width:991px){
+.sec-key.spacer { padding-bottom: 120px; }
+}

@@ -38,6 +38,9 @@
     font-size: var(--fs-medium);
 }
 
+@media (max-width: 991px) {
+.flat-overlay { padding: 0 0 6rem; }
+}
 @media (max-width: 767px) {
     .flat-title {
         font-size: 1.8rem;

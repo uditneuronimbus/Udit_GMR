@@ -99,7 +99,7 @@ export default async function decorate(block) {
       const publishDateFormatted = formatDate(publishDateRaw);
 
       const card = document.createElement("div");
-      card.className = "col-md-4";
+      card.className = "col-md-6 col-lg-4 mt-4";
 
       card.innerHTML = `
         <div class="card card-news">

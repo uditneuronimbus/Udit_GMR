@@ -85,3 +85,12 @@
 .innovation-col.active .card-title {
     font-size: 1.5rem;
 }
+@media (max-width:1199px){
+.sec-innovation .my-5.ps-5.ms-5 {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+}
+@media (max-width:991px){
+.card-overlay { height: 350px; }
+}

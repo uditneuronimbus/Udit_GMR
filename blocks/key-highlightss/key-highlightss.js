@@ -45,7 +45,7 @@ export default function decorate(block) {
     const cardDesc = descEl ? descEl.innerHTML.trim() : "";
 
     // IMPORTANT: class applied on grid child itself
-    item.className = "key-col col-md-4";
+    item.className = "key-col col-md-6 col-lg-4 mt-4";
 
     item.innerHTML = `
     <div class="card card-ui-three">

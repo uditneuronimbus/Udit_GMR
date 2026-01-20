@@ -66,13 +66,13 @@ export default function decorate(block) {
   row.className = "row";
 
   const col1 = document.createElement("div");
-  col1.className = "col-md-4";
+  col1.className = "col-md-6 col-lg-4";
 
   const col2 = document.createElement("div");
-  col2.className = "col-md-4";
+  col2.className = "col-md-6 col-lg-4";
 
   const col3 = document.createElement("div");
-  col3.className = "col-md-4 d-flex flex-column";
+  col3.className = "col-md-12 col-lg-4 d-flex flex-column";
 
   /* -------------------------
      COLUMN 1 – TWO IMAGES

@@ -70,3 +70,12 @@
 .careerImg div {
     height: 100%;
 }
+
+@media (max-width:1199px){
+.cardContent {padding: 2rem;}
+.cardContent h3 { font-size: var(--fs-xxlarge); }
+.cardContent p { font-size: var(--fs-normal); }
+}
+@media (max-width:991px){
+.careerImg.picthree { margin-top: 1.5rem;}
+}

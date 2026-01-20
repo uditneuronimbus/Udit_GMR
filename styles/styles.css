@@ -210,4 +210,5 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .h5,h5{font-size:.875rem}
 .page-corporate-governance .banner-overlay-text .col-md-7{width:80%}
 .sec-title, .sec-title h2 { font-size: var(--fs-xlarge); line-height: 1.4; }
+.btn { height:40px; padding: 0 1rem; font-size: var(--fs-regular); }
 }

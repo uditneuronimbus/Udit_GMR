@@ -179,7 +179,7 @@ export default async function decorate(block) {
     companyItem.classList.add('listed-company-item');
 
     const col = document.createElement('div');
-    col.className = 'col-md-6 mb-4';
+    col.className = 'col-lg-6 mt-4';
 
     const companiesGrid = document.createElement('div');
     companiesGrid.className = 'companiesGrid';
