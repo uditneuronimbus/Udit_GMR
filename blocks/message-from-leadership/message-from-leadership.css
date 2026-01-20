@@ -1,119 +1,181 @@
-/* Hide authored rows */
+/* Hide original authored content after decoration */
 .message-from-leadership.mfl-initialized > :not(.mfl-runtime) {
   display: none;
 }
 
 .mfl-runtime {
   padding: 80px 0;
-  background: #fff;
+  background: #ffffff;
 }
 
 .mfl-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 24px;
 }
 
-/* Slider */
+/* ── Slider Container ── */
 .mfl-slider {
   position: relative;
 }
 
-/* Card */
+/* ── Slides Wrapper ── */
+.mfl-slides {
+  position: relative;
+  min-height: 420px; /* prevents jump when switching slides */
+}
+
+.mfl-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+.mfl-slide.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  position: relative; /* bring active slide to normal flow */
+}
+
+/* ── Card Layout ── */
 .mfl-card {
   display: grid;
   grid-template-columns: 45% 55%;
-  gap: 48px;
+  gap: 56px;
   align-items: center;
 }
 
-/* Image */
-.mfl-image img {
+/* ── Image ── */
+.mfl-image img,
+.mfl-image picture {
   width: 100%;
   height: auto;
-  border-radius: 16px;
+  max-height: 520px;
   object-fit: cover;
+  border-radius: 12px;
+  display: block;
 }
 
-/* Content */
+/* ── Content ── */
 .mfl-title {
-  font-size: 42px;
+  font-size: 2.625rem; /* 42px */
   font-weight: 500;
-  margin-bottom: 16px;
+  line-height: 1.15;
   color: #0b1f33;
+  margin-bottom: 1rem;
 }
 
 .mfl-subtitle {
-  font-size: 14px;
+  font-size: 0.875rem; /* 14px */
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   color: #6f6f6f;
-  margin-bottom: 12px;
+  margin-bottom: 1.125rem;
 }
 
 .mfl-message {
-  font-size: 18px;
-  line-height: 1.6;
-  color: #333;
-  margin-bottom: 28px;
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.65;
+  color: #2d2d2d;
+  margin-bottom: 1.75rem;
 }
 
 .mfl-author {
-  font-size: 16px;
-  font-weight: 500;
-  color: #000;
+  font-size: 1rem; /* 16px */
+  font-weight: 600;
+  color: #0b1f33;
 }
 
-/* Navigation */
+/* ── Navigation ── */
 .mfl-navigation {
   display: flex;
   gap: 12px;
-  margin-top: 32px;
+  margin-top: 2rem;
+  justify-content: flex-start;
 }
 
 .mfl-navigation button {
-  width: 44px;
-  height: 44px;
-  border-radius: 6px;
-  border: 1px solid #f0b04f;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
   background: transparent;
+  color: #444;
+  font-size: 1.25rem;
   cursor: pointer;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.mfl-navigation button:hover {
+  background: #f8f8f8;
+  border-color: #d0d0d0;
+}
+
 .mfl-navigation .mfl-next {
   background: #f0b04f;
-  color: #fff;
+  color: white;
+  border-color: #f0b04f;
 }
 
-/* Slides */
-.mfl-slide {
-  display: none;
+.mfl-navigation .mfl-next:hover {
+  background: #e0a03f;
+  border-color: #e0a03f;
 }
 
-.mfl-slide.active {
-  display: block;
+/* ── Responsive Adjustments ── */
+@media (max-width: 1024px) {
+  .mfl-card {
+    gap: 40px;
+  }
 }
 
-.mfl-slide {
-  display: none;
-}
-
-.mfl-slide.active {
-  display: block;
-}
-
-
-/* Responsive */
 @media (max-width: 768px) {
+  .mfl-runtime {
+    padding: 60px 0;
+  }
+
   .mfl-card {
     grid-template-columns: 1fr;
     gap: 32px;
   }
 
+  .mfl-image img,
+  .mfl-image picture {
+    max-height: 380px;
+  }
+
   .mfl-title {
-    font-size: 32px;
+    font-size: 2rem; /* 32px */
+  }
+
+  .mfl-message {
+    font-size: 1.0625rem;
+  }
+
+  .mfl-navigation {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .mfl-container {
+    padding: 0 16px;
+  }
+
+  .mfl-title {
+    font-size: 1.75rem;
+  }
+
+  .mfl-navigation button {
+    width: 44px;
+    height: 44px;
   }
 }

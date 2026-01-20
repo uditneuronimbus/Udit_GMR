@@ -1,67 +1,63 @@
 export default function decorate(block) {
-  /* ===============================
-     1️⃣ Collect authored items FIRST
-     =============================== */
-  const items = [...block.children].filter(
-    (child) => child.dataset?.aueModel === 'message-from-leadership-item'
-  );
+  // 1. Find authored slide items (adjust selector to your reality)
+  const items = [...block.children].filter((child) => {
+    return (
+      child.tagName === 'DIV' &&
+      child.children.length >= 4 &&
+      child.querySelector('img, picture')
+    );
+  });
 
-  if (!items.length) return;
+  if (items.length === 0) {
+    console.warn('No leadership message items found in block');
+    return;
+  }
 
+  // 2. Extract data
   const slidesData = items.map((item) => {
     const cells = [...item.children];
     if (cells.length < 4) return null;
 
     return {
-      image: cells[0].querySelector('img')?.outerHTML || '',
+      image: cells[0].innerHTML.trim(),              
       subtitle: cells[1].textContent.trim(),
-      message: cells[2].innerHTML,
+      message: cells[2].innerHTML.trim(),
       designation: cells[3].textContent.trim(),
     };
   }).filter(Boolean);
 
-  /* ===============================
-     2️⃣ Clear authored markup
-     =============================== */
+  if (slidesData.length === 0) return;
+
   block.innerHTML = '';
 
-  /* ===============================
-     3️⃣ Create runtime
-     =============================== */
-  const runtime = document.createElement('div');
-  runtime.className = 'mfl-runtime';
+  const container = document.createElement('div');
+  container.className = 'mfl-container';
 
-  runtime.innerHTML = `
-    <div class="mfl-container">
-      <div class="mfl-slider">
-        <div class="mfl-slides"></div>
-
-        <div class="mfl-navigation">
-          <button class="mfl-prev" aria-label="Previous">&#8592;</button>
-          <button class="mfl-next" aria-label="Next">&#8594;</button>
-        </div>
+  container.innerHTML = `
+    <div class="mfl-slider">
+      <div class="mfl-slides"></div>
+      <div class="mfl-navigation">
+        <button class="mfl-prev" aria-label="Previous slide">←</button>
+        <button class="mfl-next" aria-label="Next slide">→</button>
       </div>
     </div>
   `;
 
-  block.append(runtime);
-  block.classList.add('mfl-initialized');
+  block.append(container);
+  block.classList.add('mfl-decorated');
 
-  const slidesWrapper = runtime.querySelector('.mfl-slides');
-  const prevBtn = runtime.querySelector('.mfl-prev');
-  const nextBtn = runtime.querySelector('.mfl-next');
+  const slidesWrapper = container.querySelector('.mfl-slides');
+  const prevBtn = container.querySelector('.mfl-prev');
+  const nextBtn = container.querySelector('.mfl-next');
 
-  /* ===============================
-     4️⃣ Build slides
-     =============================== */
-  slidesData.forEach((data) => {
+  slidesData.forEach((data, idx) => {
     const slide = document.createElement('div');
     slide.className = 'mfl-slide';
+    if (idx === 0) slide.classList.add('active');
 
     slide.innerHTML = `
       <div class="mfl-card">
         <div class="mfl-image">${data.image}</div>
-
         <div class="mfl-content">
           <h2 class="mfl-title">Message from Leadership</h2>
           <h4 class="mfl-subtitle">${data.subtitle}</h4>
@@ -70,31 +66,29 @@ export default function decorate(block) {
         </div>
       </div>
     `;
-
-    slidesWrapper.append(slide);
+    slidesWrapper.appendChild(slide);
   });
 
-  /* ===============================
-     5️⃣ Slider logic
-     =============================== */
-  const slides = [...slidesWrapper.children];
-  let index = 0;
+  let current = 0;
+  const slides = slidesWrapper.children;
 
-  function update() {
-    slides.forEach((slide, i) => {
-      slide.classList.toggle('active', i === index);
+  function showSlide(idx) {
+    [...slides].forEach((s, i) => {
+      s.classList.toggle('active', i === idx);
     });
   }
 
   prevBtn.addEventListener('click', () => {
-    index = (index - 1 + slides.length) % slides.length;
-    update();
+    current = (current - 1 + slides.length) % slides.length;
+    showSlide(current);
   });
 
   nextBtn.addEventListener('click', () => {
-    index = (index + 1) % slides.length;
-    update();
+    current = (current + 1) % slides.length;
+    showSlide(current);
   });
 
-  update();
+  showSlide(0);
+
+
 }
