@@ -10,7 +10,9 @@ function closeOnEscape(e) {
   if (!nav) return;
   const navSections = nav.querySelector(".nav-sections");
   if (!navSections) return;
-  const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
+  const navSectionExpanded = navSections.querySelector(
+    '[aria-expanded="true"]',
+  );
   if (navSectionExpanded && isDesktop.matches) {
     toggleAllNavSections(navSections);
     navSectionExpanded.focus();
@@ -27,7 +29,9 @@ function closeOnFocusLost(e) {
   if (!nav.contains(e.relatedTarget)) {
     const navSections = nav.querySelector(".nav-sections");
     if (!navSections) return;
-    const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
+    const navSectionExpanded = navSections.querySelector(
+      '[aria-expanded="true"]',
+    );
     if (navSectionExpanded && isDesktop.matches) {
       toggleAllNavSections(navSections, false);
     } else if (!isDesktop.matches) {
@@ -58,14 +62,16 @@ function focusNavSection() {
 function toggleAllNavSections(sections, expanded = false) {
   if (!sections) return;
   const value = expanded ? "true" : "false";
-  sections.querySelectorAll(":scope .default-content-wrapper > ul > li")
-    .forEach(section => section.setAttribute("aria-expanded", value));
+  sections
+    .querySelectorAll(":scope .default-content-wrapper > ul > li")
+    .forEach((section) => section.setAttribute("aria-expanded", value));
 }
 
 function toggleMenu(nav, navSections, forceExpanded = null) {
   if (!nav || !navSections) return;
   const currentlyExpanded = nav.getAttribute("aria-expanded") === "true";
-  const willBeExpanded = forceExpanded !== null ? !!forceExpanded : !currentlyExpanded;
+  const willBeExpanded =
+    forceExpanded !== null ? !!forceExpanded : !currentlyExpanded;
   const button = nav.querySelector(".nav-hamburger button");
 
   // lock scroll on mobile when menu open
@@ -76,19 +82,22 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   toggleAllNavSections(navSections, willBeExpanded && !isDesktop.matches);
 
   if (button) {
-    button.setAttribute("aria-label", willBeExpanded ? "Close navigation" : "Open navigation");
+    button.setAttribute(
+      "aria-label",
+      willBeExpanded ? "Close navigation" : "Open navigation",
+    );
   }
 
   const navDrops = navSections.querySelectorAll(".nav-drop");
   if (isDesktop.matches) {
-    navDrops.forEach(drop => {
+    navDrops.forEach((drop) => {
       if (!drop.hasAttribute("tabindex")) {
         drop.setAttribute("tabindex", 0);
         drop.addEventListener("focus", focusNavSection);
       }
     });
   } else {
-    navDrops.forEach(drop => {
+    navDrops.forEach((drop) => {
       drop.removeAttribute("tabindex");
       drop.removeEventListener("focus", focusNavSection);
     });
@@ -107,7 +116,9 @@ export default async function decorate(block) {
   const imageMap = new Map();
 
   const navMeta = getMetadata("nav");
-  const navPathMain = navMeta ? new URL(navMeta, window.location).pathname : "/en/nav";
+  const navPathMain = navMeta
+    ? new URL(navMeta, window.location).pathname
+    : "/en/nav";
   const isAero = window.location.pathname.startsWith("/aero-gmr/");
   const navPath = isAero ? "/aero-gmr/nav" : navPathMain;
   const fragment = await loadFragment(navPath);
@@ -142,12 +153,11 @@ export default async function decorate(block) {
     // ────────────────────────────────────────────────────────────────
     const logoPictures = navBrand.querySelectorAll("picture");
 
-    logoPictures.forEach(picture => {
+    logoPictures.forEach((picture) => {
       const logoLink = document.createElement("a");
       logoLink.href = "/en/";
       logoLink.setAttribute("aria-label", "GMR Home");
-      logoLink.style.display = "inline-block";
-      logoLink.style.textDecoration = "none";
+      logoLink.className = "navbar-logo";
 
       picture.parentNode.insertBefore(logoLink, picture);
       logoLink.appendChild(picture);
@@ -155,9 +165,11 @@ export default async function decorate(block) {
       // Clean up empty wrapper (common in AEM)
       let current = logoLink.parentElement;
       while (current && current !== navBrand) {
-        if ((current.tagName === "P" || current.tagName === "DIV") &&
+        if (
+          (current.tagName === "P" || current.tagName === "DIV") &&
           current.children.length <= 1 &&
-          !current.textContent.trim()) {
+          !current.textContent.trim()
+        ) {
           const next = current.parentNode;
           next.insertBefore(logoLink, current);
           current.remove();
@@ -169,9 +181,14 @@ export default async function decorate(block) {
     });
 
     // Remove any leftover plain-text URL paragraphs
-    navBrand.querySelectorAll("p").forEach(p => {
+    navBrand.querySelectorAll("p").forEach((p) => {
       const text = p.textContent.trim();
-      if (text.startsWith("http") || text.startsWith("/") || text === "#" || text.includes("gmrcorp")) {
+      if (
+        text.startsWith("http") ||
+        text.startsWith("/") ||
+        text === "#" ||
+        text.includes("gmrcorp")
+      ) {
         p.remove();
       }
     });
@@ -208,7 +225,7 @@ export default async function decorate(block) {
         const innerList = li.querySelector(":scope > ul");
 
         const mainLabelEl = li.querySelector(
-          ":scope > p, :scope > a, :scope > span, :scope > h4"
+          ":scope > p, :scope > a, :scope > span, :scope > h4",
         );
         const mainKey = mainLabelEl
           ? mainLabelEl.textContent.trim().toLowerCase().replace(/\s+/g, "-")
@@ -254,61 +271,63 @@ export default async function decorate(block) {
             const level2Ul = level1.querySelector(":scope > ul");
             if (!level2Ul) return;
 
-            level2Ul.querySelectorAll(":scope > li > ul").forEach((level3Ul) => {
-              counter++;
-              const id = `thirdMenu-${counter}`;
+            level2Ul
+              .querySelectorAll(":scope > li > ul")
+              .forEach((level3Ul) => {
+                counter++;
+                const id = `thirdMenu-${counter}`;
 
-              const level2Li = level3Ul.closest("li");
+                const level2Li = level3Ul.closest("li");
 
-              const el2 = level2Li.querySelector(
-                ":scope > p, :scope > a, :scope > span"
-              );
-              let level2Text = "";
+                const el2 = level2Li.querySelector(
+                  ":scope > p, :scope > a, :scope > span",
+                );
+                let level2Text = "";
 
-              if (el2) {
-                const link2 = el2.querySelector("a");
-                level2Text = link2 ? link2.outerHTML : el2.textContent.trim();
-              }
+                if (el2) {
+                  const link2 = el2.querySelector("a");
+                  level2Text = link2 ? link2.outerHTML : el2.textContent.trim();
+                }
 
-              const el = level1.querySelector(
-                ":scope > p, :scope > a, :scope > span"
-              );
-              let level1Text = "";
+                const el = level1.querySelector(
+                  ":scope > p, :scope > a, :scope > span",
+                );
+                let level1Text = "";
 
-              if (el) {
-                const link = el.querySelector("a");
-                level1Text = link ? link.outerHTML : el.textContent.trim();
-              }
+                if (el) {
+                  const link = el.querySelector("a");
+                  level1Text = link ? link.outerHTML : el.textContent.trim();
+                }
 
-              const thirdMenu = document.createElement("div");
-              thirdMenu.classList.add("thirdMenu");
-              thirdMenu.id = id;
+                const thirdMenu = document.createElement("div");
+                thirdMenu.classList.add("thirdMenu");
+                thirdMenu.id = id;
 
-              const headingWrapper = document.createElement("div");
-              headingWrapper.classList.add("thirdMenu-headings");
+                const headingWrapper = document.createElement("div");
+                headingWrapper.classList.add("thirdMenu-headings");
 
-              if (level1Text) {
-                const l1 = document.createElement("div");
-                l1.classList.add("thirdMenu-level1");
-                l1.innerHTML = level1Text;
-                headingWrapper.append(l1);
-              }
+                if (level1Text) {
+                  const l1 = document.createElement("div");
+                  l1.classList.add("thirdMenu-level1");
+                  l1.innerHTML = level1Text;
+                  headingWrapper.append(l1);
+                }
 
-              if (level2Text) {
-                const l2 = document.createElement("div");
-                l2.classList.add("thirdMenu-level2");
-                l2.innerHTML = level2Text;
-                headingWrapper.append(l2);
-              }
+                if (level2Text) {
+                  const l2 = document.createElement("div");
+                  l2.classList.add("thirdMenu-level2");
+                  l2.innerHTML = level2Text;
+                  headingWrapper.append(l2);
+                }
 
-              thirdMenu.append(headingWrapper);
-              thirdMenu.append(level3Ul.cloneNode(true));
-              colMid.append(thirdMenu);
+                thirdMenu.append(headingWrapper);
+                thirdMenu.append(level3Ul.cloneNode(true));
+                colMid.append(thirdMenu);
 
-              if (level2Li) {
-                level2Li.dataset.target = id;
-              }
-            });
+                if (level2Li) {
+                  level2Li.dataset.target = id;
+                }
+              });
           });
 
           colMid.querySelectorAll(".thirdMenu").forEach((div) => {
@@ -338,7 +357,7 @@ export default async function decorate(block) {
               }
 
               const labelEl = levelLi.querySelector(
-                ":scope > p, :scope > a, :scope > span"
+                ":scope > p, :scope > a, :scope > span",
               );
 
               let imgUrl = null;
@@ -387,7 +406,7 @@ export default async function decorate(block) {
             toggleAllNavSections(navSections);
             navSection.setAttribute(
               "aria-expanded",
-              expanded ? "false" : "true"
+              expanded ? "false" : "true",
             );
           }
         });
@@ -406,7 +425,7 @@ export default async function decorate(block) {
 
   toggleMenu(nav, navSections, isDesktop.matches);
   isDesktop.addEventListener("change", () =>
-    toggleMenu(nav, navSections, isDesktop.matches)
+    toggleMenu(nav, navSections, isDesktop.matches),
   );
 
   const navWrapper = document.createElement("div");
