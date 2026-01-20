@@ -35,24 +35,19 @@ export default function decorate(block) {
   const ul = runtime.querySelector(".aviation-tabs-list");
 
   /* ================================
-     4️⃣ Helper function to get clean path (without domain)
+     4️⃣ Helper function to get clean path
      ================================ */
   const getCleanPath = (url) => {
     if (!url) return '';
-    
-    let path = url;
-    
-    // Remove protocol and domain if present
-    path = path.replace(/^(https?:\/\/)?[^\/]+/, '');
-    
-    // Remove trailing slash
-    path = path.replace(/\/$/, '');
-    
-    // Ensure it starts with / if not empty
+
+    let path = url
+      .replace(/^(https?:\/\/)?[^\/]+/, '')
+      .replace(/\/$/, '');
+
     if (path && !path.startsWith('/')) {
       path = '/' + path;
     }
-    
+
     return path;
   };
 
@@ -62,26 +57,21 @@ export default function decorate(block) {
   const currentPath = getCleanPath(window.location.href);
 
   /* ================================
-     6️⃣ Build tabs (TEXT ONLY)
+     6️⃣ Build tabs
      ================================ */
   itemRows.forEach((row) => {
     const cells = [...row.children];
 
-    const label = cells[0]?.textContent?.trim(); // Airport Name
-    const link = cells[1]?.textContent?.trim();  // URL
+    const label = cells[0]?.textContent?.trim();
+    const link = cells[1]?.textContent?.trim();
     const isActive = cells[2]?.textContent?.trim() === "true";
 
     if (!label || !link) return;
 
     const li = document.createElement("li");
-    
-    // Get clean path from link
     const linkPath = getCleanPath(link);
-    
-    // Check if current page path matches link path
     const isCurrentPage = currentPath === linkPath;
-    
-    // Add active class if either authored as active OR current page matches
+
     if (isActive || isCurrentPage) {
       li.classList.add("active");
     }
@@ -92,5 +82,20 @@ export default function decorate(block) {
 
     li.appendChild(a);
     ul.appendChild(li);
+  });
+
+  /* ================================
+     7️⃣ Scroll ACTIVE li to center
+     ================================ */
+  requestAnimationFrame(() => {
+    const activeLi = ul.querySelector("li.active");
+
+    if (activeLi) {
+      activeLi.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center"
+      });
+    }
   });
 }

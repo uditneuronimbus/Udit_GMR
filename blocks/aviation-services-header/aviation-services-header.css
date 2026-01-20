@@ -7,7 +7,8 @@
   gap: 40px;
   list-style: none;
   margin: 0;
-  padding: 16px 0; overflow: auto;
+  padding: 16px 0; overflow-x: auto;
+  scroll-behavior: smooth;
 }
 
 .aviation-tabs-list li {
