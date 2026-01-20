@@ -5,6 +5,7 @@
 .hero-swiper {
     position: relative;
     overflow: hidden;
+    margin-top: -80px;
 }
 .hero-slide {
     padding: 0 0 47%;
