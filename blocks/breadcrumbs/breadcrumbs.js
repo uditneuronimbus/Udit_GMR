@@ -1,11 +1,11 @@
-import { getMetadata } from '../../scripts/aem.js';
+import { getMetadata } from "../../scripts/aem.js";
 
 /* =========================================================
    HELPER: String Formatting (URL to Title)
    ========================================================= */
 function formatSegment(segment) {
   return segment
-    .replace(/-/g, ' ')
+    .replace(/-/g, " ")
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
@@ -15,7 +15,7 @@ function formatSegment(segment) {
 function normalizePath(url) {
   try {
     const path = new URL(url, window.location.origin).pathname;
-    return path.replace(/\.html$/, '').replace(/\/$/, '');
+    return path.replace(/\.html$/, "").replace(/\/$/, "");
   } catch (e) {
     return url;
   }
@@ -29,8 +29,8 @@ function waitForNav(timeout = 3000) {
   return new Promise((resolve) => {
     const timer = setInterval(() => {
       const nav =
-        document.querySelector('.nav-sections') ||
-        document.querySelector('nav[aria-expanded]');
+        document.querySelector(".nav-sections") ||
+        document.querySelector("nav[aria-expanded]");
       if (nav) {
         clearInterval(timer);
         resolve(nav);
@@ -52,18 +52,17 @@ async function buildFromNav(nav, currentUrl) {
 
   if (!nav) return crumbs;
 
-  const navLinks = Array.from(nav.querySelectorAll('a'));
+  const navLinks = Array.from(nav.querySelectorAll("a"));
   const activeLink = navLinks.find(
-    (a) => normalizePath(a.href) === normalizedCurrent
+    (a) => normalizePath(a.href) === normalizedCurrent,
   );
 
   if (activeLink) {
-    let li = activeLink.closest('li');
+    let li = activeLink.closest("li");
     while (li) {
-      const link = li.querySelector(':scope > a');
+      const link = li.querySelector(":scope > a");
       const text =
-        link?.textContent?.trim() ||
-        li.firstChild?.textContent?.trim();
+        link?.textContent?.trim() || li.firstChild?.textContent?.trim();
 
       if (text) {
         crumbs.unshift({
@@ -71,7 +70,7 @@ async function buildFromNav(nav, currentUrl) {
           url: link ? link.href : null,
         });
       }
-      li = li.closest('ul')?.closest('li');
+      li = li.closest("ul")?.closest("li");
     }
   }
   return crumbs;
@@ -82,11 +81,11 @@ async function buildFromNav(nav, currentUrl) {
    ========================================================= */
 function buildFromUrl(currentUrl) {
   const crumbs = [];
-  const path = new URL(currentUrl).pathname.replace(/\/$/, '');
-  const segments = path.replace('.html', '').split('/').filter(Boolean);
+  const path = new URL(currentUrl).pathname.replace(/\/$/, "");
+  const segments = path.replace(".html", "").split("/").filter(Boolean);
 
-  const HIDDEN_SEGMENTS = ['en', 'hi', 'content'];
-  let accumPath = '';
+  const HIDDEN_SEGMENTS = ["en", "hi", "content"];
+  let accumPath = "";
 
   segments.forEach((segment, index) => {
     accumPath += `/${segment}`;
@@ -113,15 +112,12 @@ export default async function decorate(block) {
   /* -----------------------------------------
      1. HOME PAGE CHECK (FIXED)
      ----------------------------------------- */
-  const path = window.location.pathname.replace(/\/$/, '');
+  const path = window.location.pathname.replace(/\/$/, "");
 
-  const isHome =
-    path === '' ||
-    path === '/' ||
-    /^\/[a-z]{2}$/.test(path); // /en, /hi, etc.
+  const isHome = path === "" || path === "/" || /^\/[a-z]{2}$/.test(path); // /en, /hi, etc.
 
   if (isHome) {
-    block.innerHTML = '';
+    block.innerHTML = "";
     return;
   }
 
@@ -138,27 +134,28 @@ export default async function decorate(block) {
     crumbs = buildFromUrl(currentUrl);
   }
 
-  crumbs.unshift({ title: 'Home', url: homeUrl });
+  crumbs.unshift({ title: "Home", url: homeUrl });
 
   if (crumbs.length > 0) {
     crumbs[crumbs.length - 1].url = null;
-    crumbs[crumbs.length - 1]['aria-current'] = 'page';
+    crumbs[crumbs.length - 1]["aria-current"] = "page";
   }
 
   /* -----------------------------------------
      3. UE-SAFE RENDERING (IMPORTANT FIX)
      ----------------------------------------- */
-  let html = '<nav class="breadcrumbs" aria-label="Breadcrumb"><ol>';
+  let html =
+    '<nav class="breadcrumbs container" aria-label="Breadcrumb"><ol class="breadcrumb">';
 
   crumbs.forEach((item) => {
     if (item.url) {
-      html += `<li><a href="${item.url}">${item.title}</a></li>`;
+      html += `<li class="breadcrumb-item"><a href="${item.url}">${item.title}</a></li>`;
     } else {
-      html += `<li aria-current="page">${item.title}</li>`;
+      html += `<li class="breadcrumb-item" aria-current="page">${item.title}</li>`;
     }
   });
 
-  html += '</ol></nav>';
+  html += "</ol></nav>";
 
   block.innerHTML = html;
 }

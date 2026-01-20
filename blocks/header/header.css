@@ -1,342 +1,419 @@
-/* -------------------------------------------
-   1. MAIN HEADER WRAPPER
-   ------------------------------------------- */
 header.header-wrapper {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
-    background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    display: block;
-    min-height: 70px;
+    transition-duration: 0.3s;
 }
-
-header.header-wrapper:before,
-header.header-wrapper:after {
-    display: none !important;
+.primary-header {
+    transition-duration: 0.3s;
 }
-
-/* -------------------------------------------
-   2. STOCKS / UTILITY (Top Layer)
-   ------------------------------------------- */
-.header-utility-container.nav-sections,
-.nav-sections {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
+.primary-header:before {
+    position: absolute;
+    content: "";
+    height: 50px;
     width: 100%;
-    height: 56px;
-    background-color: #fff;
-    z-index: 1020;
-    border-bottom: 1px solid #f0f0f0;
-    transition: top 0.3s ease-in-out;
-    display: block;
-    overflow: hidden;
+    background-color: var(--white);
+    border-bottom: solid 1px var(--light-grey);
+    transition-duration: 0.3s;
+}
+.primary-header.affix:before {
+    height: 80px;
+}
+.page-home .primary-header:hover,
+.page-en .primary-header:hover {
+    background: var(--blue);
+}
+.page-home .primary-header.affix:hover,
+.page-en .primary-header.affix:hover {
+    background: none;
 }
 
-/* Hide on Scroll */
-header.header-wrapper.affix .header-utility-container.nav-sections,
-header.header-wrapper.affix .nav-sections {
-    top: -56px !important;
+.header-wrapper .container {
+    display: flex;
+    flex-direction: column-reverse;
 }
-
-/* -------------------------------------------
-   3. MAIN NAVIGATION BAR (Pushed Down)
-   ------------------------------------------- */
-.header-image-container.nav-brand,
-.nav-brand {
-    position: relative;
-    z-index: 1010;
-    background-color: #fff;
-    width: 100%;
-    height: 70px;
-    margin-top: 56px !important;
-    padding-top: 0 !important;
-    transition: margin-top 0.3s ease-in-out;
-}
-
-/* Scroll State */
-header.header-wrapper.affix .header-image-container.nav-brand,
-header.header-wrapper.affix .nav-brand {
-    margin-top: 0 !important;
-}
-
-/* -------------------------------------------
-   4. FLEX CONTAINER (Top Menu Layout)
-   ------------------------------------------- */
 .nav-brand .default-content-wrapper {
-    display: flex !important;
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: nowrap !important;
-    width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 15px;
-    height: 100%;
+    padding-right: 50px;
+    transition-duration: 0.3s;
+}
+.affix .nav-brand .default-content-wrapper {
+    transform: translateY(-50px);
+}
+
+.nav-brand {
+    position: relative;
+    height: 80px;
+}
+
+.navbar-logo + .navbar-logo,
+.page-home .navbar-logo:first-child,
+.page-en .navbar-logo:first-child,
+.page-home .affix .navbar-logo + .navbar-logo,
+.page-en .affix .navbar-logo + .navbar-logo {
+    display: none;
+}
+.page-home .navbar-logo + .navbar-logo,
+.page-en .navbar-logo + .navbar-logo,
+.page-home .affix .navbar-logo:first-child,
+.page-en .affix .navbar-logo:first-child {
+    display: block;
+}
+
+.nav-brand p {
+    margin: 0;
+}
+.nav-brand p {
+    margin: 0;
 }
 
 .nav-brand img {
     height: 2.5rem;
     width: auto;
-    flex-shrink: 0;
 }
 
-/* --- TOP MENU ITEMS (Space Fix) --- */
 .nav-brand ul {
-    display: flex !important;
-    flex-direction: row !important;
-    /* Minimize gap to fit all items */
-    gap: 8px !important;
-    list-style: none !important;
-    margin: 0 5px !important;
-    padding: 0 !important;
-    flex-grow: 1;
-    justify-content: flex-end;
-    align-items: center;
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
-
 .nav-brand ul li {
-    display: flex !important;
-    align-items: center;
-    height: 70px;
-    position: static;
-    margin: 0 !important;
-    flex-shrink: 0;
+    position: relative;
 }
 
-/* Safe Bridge */
-.nav-brand ul > li::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    height: 40px;
-    background: transparent;
-    z-index: 1015;
-}
-
-/* LINK STYLING (Small Font) */
-.nav-brand ul > li > a {
-    color: #333;
-    font-size: 11px !important; /* Critical Size */
+.nav-brand .default-content-wrapper > ul > li > a,
+.nav-brand .default-content-wrapper > ul > li > p > a {
+    color: var(--charcoal);
+    font-size: var(--fs-small);
     text-transform: uppercase;
-    font-weight: 700;
+    font-weight: var(--fw-semi-bold);
+    line-height: 80px;
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
     text-decoration: none;
-    letter-spacing: 0.1px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0 2px;
-    white-space: nowrap;
-    transition: color 0.2s ease;
+}
+.nav-brand ul > li.has-mega > a:after {
+    content: "";
+    width: 6px;
+    height: 11px;
+    background: url(../../icons/arrow-right-black.svg) no-repeat center;
+    background-size: 100%;
+    transform: rotate(90deg);
+}
+.primary-header.header-wrapper.affix .nav-brand ul > li > a,
+.primary-header.header-wrapper.affix .nav-brand ul > li > p > a {
+    color: var(--charcoal);
+}
+.page-en .nav-brand ul > li.has-mega > a:after,
+.page-home .nav-brand ul > li.has-mega > a:after {
+    filter: invert(1);
+}
+.page-en .affix .nav-brand ul > li.has-mega > a:after,
+.page-home .affix .nav-brand ul > li.has-mega > a:after {
+    filter: invert(0);
+}
+.page-en .nav-brand .default-content-wrapper > ul > li > a,
+.page-en .nav-brand .default-content-wrapper > ul > li > p > a,
+.page-home .nav-brand .default-content-wrapper > ul > li > a,
+.page-home .nav-brand .default-content-wrapper > ul > li > p > a {
+    color: var(--white);
 }
 
-.nav-brand ul > li > a:hover {
-    color: #F58220;
+/********************************************
+  MEGA MENU PANEL (LEVEL 1)
+*********************************************/
+.nav-brand ul > li > h4,
+.nav-brand ul > li > p:nth-child(3),
+.nav-brand ul > li > ul {
+    display: none !important; /* Hidden until panel opens */
 }
 
-/* --- SEARCH BAR (Aggressively Shrunk) --- */
-.nav-brand form,
-.nav-brand .search-wrapper {
-    margin-left: 5px;
-    flex-shrink: 0 !important;
-    display: flex;
-    align-items: center;
-}
-
-.nav-brand input {
-    width: 120px !important; /* Critical Width */
-    height: 38px;
-    padding: 0 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    outline: none;
-    font-size: 12px;
-}
-
-/* -------------------------------------------
-   6. MEGA MENU WRAPPER
-   ------------------------------------------- */
-.nav-brand ul > li > ul { display: none !important; }
-
-/* Show on Hover */
 .nav-brand ul > li:hover > .mega-wrapper,
 .nav-brand ul > li:focus-within > .mega-wrapper {
-    display: flex;
     opacity: 1;
     pointer-events: auto;
-    visibility: visible;
-    transition-delay: 0s;
 }
 
 .mega-wrapper {
     display: none;
     opacity: 0;
-    visibility: hidden;
     pointer-events: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    width: 100%;
-    max-width: 1280px;
-    height: 550px;
+    position: fixed;
+    left: 50%;
+    top: 130px;
     background: #fff;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-    border-top: 1px solid #e0e0e0;
-    z-index: 999;
-    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
-}
-
-/* --- COLUMNS --- */
-.mega-left { width: 28%; background: #fff; border-right: 1px solid #eee; padding: 2rem 2rem 2rem 3rem; overflow-y: auto; scrollbar-width: none; }
-
-/* MIDDLE COLUMN CONTAINER - CRITICAL LAYOUT FIX */
-.mega-mid {
-    width: 32%;
-    padding: 2rem 3rem;
-    overflow-y: auto;
-    background: #fff;
-    border-left: none;
-    scrollbar-width: none;
-
-    /* Force Vertical Column from Top */
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-start !important; /* Starts at Top */
-    align-items: stretch !important; /* Full Width */
-}
-
-.mega-right { flex: 1; position: relative; background: #f4f4f4; height: 100%; display: flex; min-width: 300px; }
-.mega-dynamic-image { width: 100% !important; height: 100% !important; object-fit: cover; position: absolute; inset: 0; }
-.mega-left::-webkit-scrollbar, .mega-mid::-webkit-scrollbar { display: none; }
-
-/* --- LEFT COLUMN STYLES --- */
-.mega-left h4 { font-size: 1.6rem; font-weight: 700; color: #000; margin: 0 0 1.5rem 0; letter-spacing: -0.5px; }
-.mega-description { font-size: 15px; color: #666; line-height: 1.6; margin-bottom: 20px; display: block; max-width: 90%; }
-.acc-item { border-bottom: 1px solid #eee; }
-.acc-header { padding: 15px 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 16px; color: #333; }
-.acc-toggle::after { content: '+'; font-size: 22px; color: #F58220; font-weight: 300; }
-.acc-item.open .acc-toggle::after { content: '-'; font-size: 26px; font-weight: 400; line-height: 18px; }
-.acc-body { display: none; padding-bottom: 20px; }
-.acc-item.open .acc-body { display: block; }
-.sub-link { display: block; padding: 12px 15px; margin-bottom: 5px; font-size: 15px; color: #555; cursor: pointer; border-radius: 4px; transition: 0.2s; position: relative; }
-.sub-link:hover { color: #F58220; }
-.sub-link.active { background-color: #F58220; color: #fff; font-weight: 600; }
-.sub-link.active:after { content: '→'; position: absolute; right: 15px; font-size: 16px; line-height: 1; }
-
-/* ----------------------------------------------------
-   UNIVERSAL MIDDLE COLUMN DESIGN (Apply to ALL)
-   ---------------------------------------------------- */
-
-/* 1. Target ALL Lists in the middle column */
-/* Use comma separation to catch every possible variation */
-.mega-mid ul,
-.mid-panel-content ul,
-.mega-simple-list {
-    list-style: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-
-    /* CRITICAL: Force Vertical Stacking */
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-start !important;
-
-    width: 100% !important;
-    gap: 0 !important;
-}
-
-/* 2. Target ALL List Items (Fixes spacing & borders) */
-.mega-mid li,
-.mid-panel-content li,
-.mega-simple-list li {
-    width: 100% !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-
-    /* THE "BUSINESS" DESIGN */
-    padding: 12px 0 !important;
-    border-bottom: 1px solid #f9f9f9 !important;
-
-    cursor: pointer;
-    margin: 0 !important;
-
-    /* Text Styling */
-    font-size: 14px !important;
-    color: #444 !important;
-    font-weight: 500 !important;
-
-    /* Allow mixed case, but fix if ALL CAPS is forced by HTML */
-    text-transform: capitalize !important;
-    text-decoration: none !important;
-}
-
-/* 3. Hover Effect */
-.mega-mid li:hover,
-.mid-panel-content li:hover,
-.mega-simple-list li:hover {
-    color: #F58220 !important;
-}
-
-/* 4. Arrows */
-.mega-mid li:after,
-.mid-panel-content li:after,
-.mega-simple-list li:after {
-    content: '›';
-    font-size: 1.2rem;
-    color: #F58220;
-    font-weight: 400;
-    line-height: 1;
-    transition: transform 0.2s ease;
-    margin-left: 10px;
-    opacity: 1 !important; /* Force Visible */
-}
-
-/* 5. Slide Arrow on Hover */
-.mega-mid li:hover:after,
-.mid-panel-content li:hover:after,
-.mega-simple-list li:hover:after {
-    transform: translateX(5px);
-}
-
-/* 6. Link Styling (Inside LI) */
-.mega-mid li a,
-.mid-panel-content li a,
-.mega-simple-list li a {
-    color: inherit;
-    text-decoration: none;
-    width: 100%;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+    transform: translate(-50%, 0);
+    transition: 0.25s ease;
     display: flex;
-    justify-content: space-between;
+    min-height: 320px;
+    z-index: 900;
+    width: 1300px;
+}
+.primary-header.affix .mega-wrapper {
+    top: 80px;
+}
+
+/********************************************
+  LEFT COLUMN (TITLE + DESCRIPTION)
+*********************************************/
+.mega-left,
+.mega-mid {
+    padding: 2rem 3rem;
+    width: 30%;
+    flex: 0 0 auto;
+}
+.mega-mid {
+    border-left: solid 2px #f4f4f4;
+}
+.mega-right {
+    flex: 1 1 auto;
+    background-color: var(--light-grey);
+    position: relative;
+    overflow: hidden;
+}
+.mega-right img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.mega-left h4 {
+    font-size: 1.5rem;
+    font-weight: var(--fw-medium);
+    color: var(--black);
+}
+
+.mega-left p {
+    margin: 0;
+    font-size: var(--fs-regular);
+    color: var(--charcoal);
+    opacity: 0.7;
+    font-weight: var(--fw-medium);
+    max-width: 250px;
+}
+.mega-left ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: block;
+}
+.mega-left > ul > li > .button-container {
+    opacity: 1;
+    max-width: inherit;
+    border-bottom: solid 1px #e0e0e0;
+}
+.mega-left > ul > li > .button-container > .button {
+    display: block;
+    line-height: 45px;
+    text-transform: none;
+    font-weight: var(--fw-bold);
+    color: var(--black);
+}
+
+.mega-left ul li ul {
+    display: block !important;
+}
+.mega-left > ul > li > ul > li > p {
+    opacity: 1;
+    max-width: inherit;
+    color: var(--charcoal);
+}
+.mega-left > ul > li > ul > li > a,
+.mega-left > ul > li > ul > li > p > a {
+    line-height: 45px;
+    text-transform: none;
+    font-weight: var(--fw-medium);
+    color: var(--charcoal);
+    padding: 0 1rem;
+    text-decoration: none;
+}
+.mega-left ul li ul li {
+    display: block;
+}
+.mega-left ul li ul li ul {
+    display: none !important;
+}
+
+/********************************************
+  MIDDLE COLUMN (SUB-MENU LIST)
+*********************************************/
+
+.mega-mid ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: block;
+}
+
+.mega-mid ul li {
+    font-weight: var(--fw-semi-bold);
+}
+.mega-mid ul li + li {
+    border-top: solid 1px #e0e0e0;
+}
+.mega-mid ul li a {
+    display: block;
+    text-decoration: none;
+    padding: 1rem 0.5rem;
+    color: var(--black);
+    background: url(../../icons/arrow-right-yellow.svg) no-repeat
+        calc(100% - 0.25rem) center;
+    background-size: 0.35rem;
+    transition-duration: 0.3s;
+}
+.mega-mid ul li a:hover {
+    background-position: calc(100% - 0.5rem) center;
+    color: var(--yellow);
+}
+
+/********************************************
+  RIGHT COLUMN (IMAGE)
+*********************************************/
+.mega-right {
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
     align-items: center;
 }
 
-/* Titles */
-.mid-title-l1 {
-    font-size: 15px; font-weight: 500; color: #F58220; margin: 0 0 12px 0; display: flex; justify-content: space-between; align-items: center; cursor: pointer; text-decoration: none; border-bottom: 1px solid #eee; padding-bottom: 10px; width: 100%;
+.mega-right picture img {
+    width: 360px;
+    height: auto;
+    border-radius: 6px;
 }
-.mid-title-l1:after { content: '›'; font-size: 20px; line-height: 1; font-weight: bold; }
 
-.mid-title-l2 {
-    font-size: 22px; font-weight: 500; color: #222; margin: 15px 0 20px 0; display: block; cursor: pointer;
+.mega-right ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: block;
+    background: #fff;
 }
-.mid-title-l2:after { content: '›'; float: right; color: #F58220; font-size: 24px; font-weight: 300; }
+.mega-right ul li {
+    padding: 5px 0;
+    display: block;
+    font-size: 14px;
+    cursor: pointer;
+    color: #003366;
+}
 
-.nav-brand ul > li > p { display: none; }
-.nav-brand > div > div:nth-child(2) { display: none !important; }
+/********************************************
+  HEADER IMAGE SYNC (existing block)
+*********************************************/
+.header-image-wrapper {
+    width: 100%;
+    margin-top: -1px;
+}
 
-/* Mobile */
+.header-image-wrapper .header-image {
+    width: 100%;
+    display: none;
+}
+
+/********************************************
+  MOBILE RESPONSIVE
+*********************************************/
 @media (max-width: 900px) {
-    .nav-hamburger { display: block; }
-    .nav-brand ul { display: none; }
-    .mega-wrapper { position: static; display: block; height: auto; width: 100%; max-width: none; opacity: 1; visibility: visible; border: none; box-shadow: none; top: auto; }
-    .mega-left, .mega-mid, .mega-right { width: 100%; padding: 1rem; border: none; }
-    .mega-right { display: none; }
+    #nav {
+        flex-wrap: wrap;
+    }
+
+    .nav-hamburger {
+        display: block;
+    }
+
+    .nav-brand ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    #nav[aria-expanded="true"] .nav-brand + ul {
+        display: flex;
+    }
+
+    .nav-brand ul > li {
+        width: 100%;
+        padding: 12px 0;
+    }
+
+    .mega-wrapper {
+        position: static;
+        display: block !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        transform: none !important;
+        box-shadow: none;
+        grid-template-columns: 1fr;
+    }
+
+    .mega-right {
+        display: none;
+    }
+
+    .mega-left ul li:hover > ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: block !important;
+    }
+
+    .mega-wrapper ul > li:hover > ul,
+    .mega-wrapper ul > li:focus-within > ul {
+        display: grid;
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0px);
+        width: auto;
+        display: block !important;
+    }
+}
+
+/********************************************
+  HAMBURGER (MOBILE)
+*********************************************/
+.nav-hamburger {
+    display: none;
+}
+
+.nav-hamburger button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-hamburger-icon {
+    width: 22px;
+    height: 2px;
+    background: #000;
+    display: block;
+    position: relative;
+}
+
+.nav-hamburger-icon::before,
+.nav-hamburger-icon::after {
+    content: "";
+    width: 22px;
+    height: 2px;
+    background: #000;
+    position: absolute;
+    left: 0;
+}
+
+.nav-hamburger-icon::before {
+    top: -6px;
+}
+
+.nav-hamburger-icon::after {
+    top: 6px;
 }

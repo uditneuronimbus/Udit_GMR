@@ -9,7 +9,9 @@ function closeOnEscape(e) {
   if (!nav) return;
   const navSections = nav.querySelector(".nav-sections");
   if (!navSections) return;
-  const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
+  const navSectionExpanded = navSections.querySelector(
+    '[aria-expanded="true"]',
+  );
   if (navSectionExpanded && isDesktop.matches) {
     toggleAllNavSections(navSections);
     navSectionExpanded.focus();
@@ -26,7 +28,9 @@ function closeOnFocusLost(e) {
   if (!nav.contains(e.relatedTarget)) {
     const navSections = nav.querySelector(".nav-sections");
     if (!navSections) return;
-    const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
+    const navSectionExpanded = navSections.querySelector(
+      '[aria-expanded="true"]',
+    );
     if (navSectionExpanded && isDesktop.matches) {
       toggleAllNavSections(navSections, false);
     } else if (!isDesktop.matches) {
@@ -57,34 +61,40 @@ function focusNavSection() {
 function toggleAllNavSections(sections, expanded = false) {
   if (!sections) return;
   const value = expanded ? "true" : "false";
-  sections.querySelectorAll(":scope .default-content-wrapper > ul > li")
-    .forEach(section => section.setAttribute("aria-expanded", value));
+  sections
+    .querySelectorAll(":scope .default-content-wrapper > ul > li")
+    .forEach((section) => section.setAttribute("aria-expanded", value));
 }
 
 function toggleMenu(nav, navSections, forceExpanded = null) {
   if (!nav || !navSections) return;
   const currentlyExpanded = nav.getAttribute("aria-expanded") === "true";
-  const willBeExpanded = forceExpanded !== null ? !!forceExpanded : !currentlyExpanded;
+  const willBeExpanded =
+    forceExpanded !== null ? !!forceExpanded : !currentlyExpanded;
   const button = nav.querySelector(".nav-hamburger button");
 
-  document.body.style.overflowY = willBeExpanded || isDesktop.matches ? "" : "hidden";
+  document.body.style.overflowY =
+    willBeExpanded || isDesktop.matches ? "" : "hidden";
   nav.setAttribute("aria-expanded", willBeExpanded ? "true" : "false");
   toggleAllNavSections(navSections, willBeExpanded && !isDesktop.matches);
 
   if (button) {
-    button.setAttribute("aria-label", willBeExpanded ? "Close navigation" : "Open navigation");
+    button.setAttribute(
+      "aria-label",
+      willBeExpanded ? "Close navigation" : "Open navigation",
+    );
   }
 
   const navDrops = navSections.querySelectorAll(".nav-drop");
   if (isDesktop.matches) {
-    navDrops.forEach(drop => {
+    navDrops.forEach((drop) => {
       if (!drop.hasAttribute("tabindex")) {
         drop.setAttribute("tabindex", 0);
         drop.addEventListener("focus", focusNavSection);
       }
     });
   } else {
-    navDrops.forEach(drop => {
+    navDrops.forEach((drop) => {
       drop.removeAttribute("tabindex");
       drop.removeEventListener("focus", focusNavSection);
     });
@@ -103,7 +113,9 @@ export default async function decorate(block) {
   const imageMap = new Map();
 
   const navMeta = getMetadata("nav");
-  const navPathMain = navMeta ? new URL(navMeta, window.location).pathname : "/en/nav";
+  const navPathMain = navMeta
+    ? new URL(navMeta, window.location).pathname
+    : "/en/nav";
   const isAero = window.location.pathname.startsWith("/aero-gmr/");
   const navPath = isAero ? "/aero-gmr/nav" : navPathMain;
   const fragment = await loadFragment(navPath);
@@ -133,20 +145,21 @@ export default async function decorate(block) {
     }
 
     const logoPictures = navBrand.querySelectorAll("picture");
-    logoPictures.forEach(picture => {
+    logoPictures.forEach((picture) => {
       const logoLink = document.createElement("a");
       logoLink.href = "/en/";
       logoLink.setAttribute("aria-label", "GMR Home");
-      logoLink.style.display = "inline-block";
-      logoLink.style.textDecoration = "none";
+      logoLink.className = "navbar-logo";
       picture.parentNode.insertBefore(logoLink, picture);
       logoLink.appendChild(picture);
 
       let current = logoLink.parentElement;
       while (current && current !== navBrand) {
-        if ((current.tagName === "P" || current.tagName === "DIV") &&
+        if (
+          (current.tagName === "P" || current.tagName === "DIV") &&
           current.children.length <= 1 &&
-          !current.textContent.trim()) {
+          !current.textContent.trim()
+        ) {
           const next = current.parentNode;
           next.insertBefore(logoLink, current);
           current.remove();
@@ -157,9 +170,14 @@ export default async function decorate(block) {
       }
     });
 
-    navBrand.querySelectorAll("p").forEach(p => {
+    navBrand.querySelectorAll("p").forEach((p) => {
       const text = p.textContent.trim();
-      if (text.startsWith("http") || text.startsWith("/") || text === "#" || text.includes("gmrcorp")) {
+      if (
+        text.startsWith("http") ||
+        text.startsWith("/") ||
+        text === "#" ||
+        text.includes("gmrcorp")
+      ) {
         p.remove();
       }
     });
@@ -173,7 +191,11 @@ export default async function decorate(block) {
         const imgEl = first?.querySelector("img");
         if (!labelEl || !imgEl) return;
 
-        const key = labelEl.textContent.trim().toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-");
+        const key = labelEl.textContent
+          .trim()
+          .toLowerCase()
+          .replace(/\u00A0/g, " ")
+          .replace(/\s+/g, "-");
         imageMap.set(key, imgEl.src);
       });
       menuImgWrapper.remove();
@@ -193,16 +215,20 @@ export default async function decorate(block) {
 
         let descriptionText = "";
         const allPs = li.querySelectorAll(":scope > p");
-        allPs.forEach(p => {
+        allPs.forEach((p) => {
           if (!p.contains(mainLinkEl) && p.textContent.trim().length > 10) {
             descriptionText = p.textContent.trim();
           }
         });
 
         if (customTitleEl) menuTitleText = customTitleEl.textContent.trim();
-        if(!menuTitleText && li.firstChild) menuTitleText = li.firstChild.textContent.trim();
+        if (!menuTitleText && li.firstChild)
+          menuTitleText = li.firstChild.textContent.trim();
 
-        const mainLabelKey = menuTitleText.toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-");
+        const mainLabelKey = menuTitleText
+          .toLowerCase()
+          .replace(/\u00A0/g, " ")
+          .replace(/\s+/g, "-");
         const mainImgSrc = imageMap.get(mainLabelKey);
 
         li.classList.add("has-mega");
@@ -231,7 +257,9 @@ export default async function decorate(block) {
 
         if (mainImgSrc) rightImg.src = mainImgSrc;
 
-        const hasNestedSubmenus = [...innerList.children].some(child => child.querySelector("ul"));
+        const hasNestedSubmenus = [...innerList.children].some((child) =>
+          child.querySelector("ul"),
+        );
 
         if (!hasNestedSubmenus) {
           // SIMPLE LAYOUT
@@ -245,11 +273,16 @@ export default async function decorate(block) {
           const simpleUl = document.createElement("ul");
           simpleUl.className = "mega-simple-list";
 
-          [...innerList.children].forEach(item => {
+          [...innerList.children].forEach((item) => {
             const link = item.querySelector("a");
-            const text = link ? link.textContent.trim() : item.textContent.trim();
+            const text = link
+              ? link.textContent.trim()
+              : item.textContent.trim();
             const href = link ? link.href : "#";
-            const key = text.toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-");
+            const key = text
+              .toLowerCase()
+              .replace(/\u00A0/g, " ")
+              .replace(/\s+/g, "-");
 
             const liEl = document.createElement("li");
             const aEl = document.createElement("a");
@@ -267,7 +300,6 @@ export default async function decorate(block) {
             simpleUl.append(liEl);
           });
           colMid.append(simpleUl);
-
         } else {
           // COMPLEX LAYOUT
           const leftContainer = document.createElement("div");
@@ -283,13 +315,20 @@ export default async function decorate(block) {
 
           colMid.append(midTitleL1, midTitleL2, midContent);
 
-          const updateSelection = (titleL1, hrefL1, titleL2, hrefL2, contentClone, imgKey) => {
+          const updateSelection = (
+            titleL1,
+            hrefL1,
+            titleL2,
+            hrefL2,
+            contentClone,
+            imgKey,
+          ) => {
             midTitleL1.textContent = titleL1;
             midTitleL1.href = hrefL1 || "#";
             midTitleL2.textContent = titleL2;
             midTitleL2.href = hrefL2 || "#";
             midContent.innerHTML = "";
-            if(contentClone) midContent.append(contentClone);
+            if (contentClone) midContent.append(contentClone);
 
             const specificImg = imageMap.get(imgKey);
             if (specificImg) {
@@ -302,7 +341,9 @@ export default async function decorate(block) {
 
           [...innerList.children].forEach((level1Li, l1Index) => {
             const l1LinkEl = level1Li.querySelector("a");
-            const l1Text = l1LinkEl ? l1LinkEl.textContent.trim() : level1Li.firstChild.textContent.trim();
+            const l1Text = l1LinkEl
+              ? l1LinkEl.textContent.trim()
+              : level1Li.firstChild.textContent.trim();
             const l1Href = l1LinkEl ? l1LinkEl.href : "#";
 
             const accItem = document.createElement("div");
@@ -315,39 +356,54 @@ export default async function decorate(block) {
 
             accHeader.addEventListener("click", () => {
               const isOpen = accItem.classList.contains("open");
-              leftContainer.querySelectorAll(".acc-item").forEach(item => item.classList.remove("open"));
-              if(!isOpen) accItem.classList.add("open");
+              leftContainer
+                .querySelectorAll(".acc-item")
+                .forEach((item) => item.classList.remove("open"));
+              if (!isOpen) accItem.classList.add("open");
             });
 
             accItem.append(accHeader, accBody);
             leftContainer.append(accItem);
 
             const level2Ul = level1Li.querySelector("ul");
-            if(level2Ul) {
+            if (level2Ul) {
               [...level2Ul.children].forEach((level2Li, l2Index) => {
                 const l2LinkEl = level2Li.querySelector("a");
                 const clone = level2Li.cloneNode(true);
-                if(clone.querySelector("ul")) clone.querySelector("ul").remove();
+                if (clone.querySelector("ul"))
+                  clone.querySelector("ul").remove();
                 const l2Text = clone.textContent.trim();
                 const l2Href = l2LinkEl ? l2LinkEl.href : "#";
-                const l2Key = l2Text.toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-");
+                const l2Key = l2Text
+                  .toLowerCase()
+                  .replace(/\u00A0/g, " ")
+                  .replace(/\s+/g, "-");
 
                 const subItem = document.createElement("div");
                 subItem.className = "sub-link";
                 subItem.textContent = l2Text;
 
                 const triggerUpdate = () => {
-                  leftContainer.querySelectorAll(".sub-link").forEach(el => el.classList.remove("active"));
+                  leftContainer
+                    .querySelectorAll(".sub-link")
+                    .forEach((el) => el.classList.remove("active"));
                   subItem.classList.add("active");
                   const level3Ul = level2Li.querySelector("ul");
                   const l3Clone = level3Ul ? level3Ul.cloneNode(true) : null;
-                  updateSelection(l1Text, l1Href, l2Text, l2Href, l3Clone, l2Key);
+                  updateSelection(
+                    l1Text,
+                    l1Href,
+                    l2Text,
+                    l2Href,
+                    l3Clone,
+                    l2Key,
+                  );
                 };
 
                 subItem.addEventListener("mouseenter", triggerUpdate);
                 subItem.addEventListener("click", triggerUpdate);
 
-                if(l1Index === 0 && l2Index === 0) {
+                if (l1Index === 0 && l2Index === 0) {
                   firstL2Item = subItem;
                   firstL1Item = accItem;
                 }
@@ -356,8 +412,8 @@ export default async function decorate(block) {
             }
           });
 
-          if(firstL1Item) firstL1Item.classList.add("open");
-          if(firstL2Item) firstL2Item.dispatchEvent(new Event('click'));
+          if (firstL1Item) firstL1Item.classList.add("open");
+          if (firstL2Item) firstL2Item.dispatchEvent(new Event("click"));
         }
 
         mega.append(colLeft, colMid, colRight);
@@ -370,16 +426,23 @@ export default async function decorate(block) {
 
   const navSections = nav.querySelector(".nav-sections");
   if (navSections) {
-    navSections.querySelectorAll(":scope .default-content-wrapper > ul > li").forEach((navSection) => {
-      if (navSection.querySelector("ul")) navSection.classList.add("nav-drop");
-      navSection.addEventListener("click", () => {
-        if (isDesktop.matches) {
-          const expanded = navSection.getAttribute("aria-expanded") === "true";
-          toggleAllNavSections(navSections);
-          navSection.setAttribute("aria-expanded", expanded ? "false" : "true");
-        }
+    navSections
+      .querySelectorAll(":scope .default-content-wrapper > ul > li")
+      .forEach((navSection) => {
+        if (navSection.querySelector("ul"))
+          navSection.classList.add("nav-drop");
+        navSection.addEventListener("click", () => {
+          if (isDesktop.matches) {
+            const expanded =
+              navSection.getAttribute("aria-expanded") === "true";
+            toggleAllNavSections(navSections);
+            navSection.setAttribute(
+              "aria-expanded",
+              expanded ? "false" : "true",
+            );
+          }
+        });
       });
-    });
   }
 
   const hamburger = document.createElement("div");
@@ -389,7 +452,9 @@ export default async function decorate(block) {
   nav.prepend(hamburger);
 
   toggleMenu(nav, navSections, isDesktop.matches);
-  isDesktop.addEventListener("change", () => toggleMenu(nav, navSections, isDesktop.matches));
+  isDesktop.addEventListener("change", () =>
+    toggleMenu(nav, navSections, isDesktop.matches),
+  );
 
   const navWrapper = document.createElement("div");
   navWrapper.className = "primary-header header-wrapper";
