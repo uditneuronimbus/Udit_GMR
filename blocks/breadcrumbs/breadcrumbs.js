@@ -4,7 +4,6 @@ import { getMetadata } from '../../scripts/aem.js';
    HELPER: String Formatting (URL to Title)
    ========================================================= */
 function formatSegment(segment) {
-  // Converts "delhi-airport" -> "Delhi Airport"
   return segment
     .replace(/-/g, ' ')
     .replace(/\b\w/g, (char) => char.toUpperCase());
@@ -29,7 +28,9 @@ function waitForNav(timeout = 3000) {
   const start = Date.now();
   return new Promise((resolve) => {
     const timer = setInterval(() => {
-      const nav = document.querySelector('.nav-sections') || document.querySelector('nav[aria-expanded]');
+      const nav =
+        document.querySelector('.nav-sections') ||
+        document.querySelector('nav[aria-expanded]');
       if (nav) {
         clearInterval(timer);
         resolve(nav);
@@ -52,16 +53,23 @@ async function buildFromNav(nav, currentUrl) {
   if (!nav) return crumbs;
 
   const navLinks = Array.from(nav.querySelectorAll('a'));
-  const activeLink = navLinks.find((a) => normalizePath(a.href) === normalizedCurrent);
+  const activeLink = navLinks.find(
+    (a) => normalizePath(a.href) === normalizedCurrent
+  );
 
   if (activeLink) {
     let li = activeLink.closest('li');
     while (li) {
       const link = li.querySelector(':scope > a');
-      const text = link ? link.textContent.trim() : (li.firstChild?.textContent?.trim() || '');
+      const text =
+        link?.textContent?.trim() ||
+        li.firstChild?.textContent?.trim();
 
       if (text) {
-        crumbs.unshift({ title: text, url: link ? link.href : null });
+        crumbs.unshift({
+          title: text,
+          url: link ? link.href : null,
+        });
       }
       li = li.closest('ul')?.closest('li');
     }
@@ -74,18 +82,15 @@ async function buildFromNav(nav, currentUrl) {
    ========================================================= */
 function buildFromUrl(currentUrl) {
   const crumbs = [];
-  const path = new URL(currentUrl).pathname;
+  const path = new URL(currentUrl).pathname.replace(/\/$/, '');
   const segments = path.replace('.html', '').split('/').filter(Boolean);
 
-  // CONFIG: Folder names to HIDE from the visual trail
   const HIDDEN_SEGMENTS = ['en', 'hi', 'content'];
-
   let accumPath = '';
 
   segments.forEach((segment, index) => {
     accumPath += `/${segment}`;
 
-    // Skip visual display if it's a hidden segment
     if (HIDDEN_SEGMENTS.includes(segment.toLowerCase())) {
       return;
     }
@@ -93,15 +98,10 @@ function buildFromUrl(currentUrl) {
     const isLast = index === segments.length - 1;
 
     crumbs.push({
-      // THIS uses the URL slug (delhi-airport -> Delhi Airport)
       title: formatSegment(segment),
       url: isLast ? null : accumPath,
     });
   });
-
-  /* REMOVED: The code block that fetched 'og:title' / document.title
-     This ensures it stays as "Delhi Airport" instead of "Delhi Airport, India"
-  */
 
   return crumbs;
 }
@@ -110,10 +110,18 @@ function buildFromUrl(currentUrl) {
    MAIN DECORATE FUNCTION
    ========================================================= */
 export default async function decorate(block) {
-  block.textContent = '';
+  /* -----------------------------------------
+     1. HOME PAGE CHECK (FIXED)
+     ----------------------------------------- */
+  const path = window.location.pathname.replace(/\/$/, '');
 
-  // Hide on Homepage
-  if (window.location.pathname === '/' || window.location.pathname === '') {
+  const isHome =
+    path === '' ||
+    path === '/' ||
+    /^\/[a-z]{2}$/.test(path); // /en, /hi, etc.
+
+  if (isHome) {
+    block.innerHTML = '';
     return;
   }
 
@@ -121,44 +129,36 @@ export default async function decorate(block) {
   const currentUrl = window.location.href;
   const homeUrl = `${window.location.origin}/`;
 
-  // 1. Try Menu
+  /* -----------------------------------------
+     2. BUILD CRUMBS
+     ----------------------------------------- */
   let crumbs = await buildFromNav(nav, currentUrl);
 
-  // 2. URL Fallback (If menu fails)
   if (crumbs.length < 2) {
     crumbs = buildFromUrl(currentUrl);
   }
 
-  // 3. Always prepend Home
   crumbs.unshift({ title: 'Home', url: homeUrl });
 
-  // 4. Mark last item as current
   if (crumbs.length > 0) {
-    const last = crumbs[crumbs.length - 1];
-    last.url = null;
-    last['aria-current'] = 'page';
+    crumbs[crumbs.length - 1].url = null;
+    crumbs[crumbs.length - 1]['aria-current'] = 'page';
   }
 
-  // 5. Render
-  const navEl = document.createElement('nav');
-  navEl.setAttribute('aria-label', 'Breadcrumb');
+  /* -----------------------------------------
+     3. UE-SAFE RENDERING (IMPORTANT FIX)
+     ----------------------------------------- */
+  let html = '<nav class="breadcrumbs" aria-label="Breadcrumb"><ol>';
 
-  const ol = document.createElement('ol');
   crumbs.forEach((item) => {
-    const li = document.createElement('li');
-    if (item['aria-current']) li.setAttribute('aria-current', 'page');
-
     if (item.url) {
-      const a = document.createElement('a');
-      a.href = item.url;
-      a.textContent = item.title;
-      li.appendChild(a);
+      html += `<li><a href="${item.url}">${item.title}</a></li>`;
     } else {
-      li.textContent = item.title;
+      html += `<li aria-current="page">${item.title}</li>`;
     }
-    ol.appendChild(li);
   });
 
-  navEl.appendChild(ol);
-  block.appendChild(navEl);
+  html += '</ol></nav>';
+
+  block.innerHTML = html;
 }
