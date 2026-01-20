@@ -344,5 +344,9 @@
     "components": [
       "value-cards"
     ]
+  },
+  {
+    "id": "search-results",
+    "components": []
   }
 ]
