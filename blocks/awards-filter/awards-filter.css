@@ -17,11 +17,16 @@
 .award-content h3{margin:0 0 12px 0;font-size:var(--fs-medium);font-weight:600;color:var(--charcoal);line-height:1.4}
 .award-description{font-size:var(--fs-normal);color:var(--charcoal);line-height:1.6;margin:0}
 .award-description p{margin:0;font-size:var(--fs-normal);color:var(--black)}
-@media (max-width:1024px){
-.awards-list{grid-template-columns:1fr;gap:20px}
-.award-img{height:180px}
+.awards-author-mode{border:2px dashed var(--blue);padding:20px;background:var(--white)}
+.awards-author-note{background:var(--white);border:1px solid var(--light-grey);border-radius:8px;padding:16px;margin-bottom:20px}
+.awards-author-note p{margin:8px 0;font-size:var(--fs-regular)}
+.awards-author-note strong{color:var(--blue)}
+.awards-filter-runtime+*{display:none}
+@media (max-width:1199px){
+.award-card { flex-direction: column;}
+.award-img { flex: 0 0 100%; }
 }
-@media (max-width:768px){
+@media (max-width:991px){
 .desktop-layout{display:none}
 .mobile-layout{display:block}
 .mobile-filter-buttons{display:flex}
@@ -29,8 +34,3 @@
 .container{padding:0 16px}
 .awards-filter-runtime{padding:24px 0}
 }
-.awards-author-mode{border:2px dashed var(--blue);padding:20px;background:var(--white)}
-.awards-author-note{background:var(--white);border:1px solid var(--light-grey);border-radius:8px;padding:16px;margin-bottom:20px}
-.awards-author-note p{margin:8px 0;font-size:var(--fs-regular)}
-.awards-author-note strong{color:var(--blue)}
-.awards-filter-runtime+*{display:none}

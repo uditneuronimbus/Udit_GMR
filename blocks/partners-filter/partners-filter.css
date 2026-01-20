@@ -26,19 +26,21 @@
 @media (max-width:1400px){
 .partner-content h3 { font-size: var(--fs-normal); font-weight: 500;}
 }
-@media (max-width:1024px){
+@media (max-width:1199px){
 .partners-list{grid-template-columns:repeat(2,1fr)}
 }
-@media (max-width:768px){
+@media (max-width:991px){
 .desktop-layout{display:none}
 .mobile-layout{display:block}
-.partners-list{grid-template-columns:1fr}
 .partner-card{height:253px}
 .section-title{font-size:var(--fs-xlarge);margin-bottom:24px}
 .partner-img{height:250px;margin-bottom:50px}
 .partner-content h3{font-size:var(--fs-normal)}
 .partner-description{font-size:var(--fs-regular)}
 .partner-link a{font-size:var(--fs-regular)}
+}
+@media (max-width:640px){
+.partners-list{grid-template-columns:1fr}
 }
 @media (max-width:480px){
 .mobile-filter-buttons{flex-direction:column}

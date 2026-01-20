@@ -25,6 +25,16 @@
 .cg-section.theme-red .cg-points li::before{color:var(--red)}
 .cg-section.theme-yellow .cg-points li::before{color:var(--yellow)}
 .cg-section.theme-blue .cg-points li::before{color:var(--royal-blue)}
+@media (max-width:1199px){
+.cg-section.theme-blue { position: static; }
+.cg-sections { column-gap: 40px; row-gap: 40px; }
+.cg-hero-image { left: inherit; right: 34px; margin: 0; }
+.cg-content { max-width: 600px; }
+}
+@media (max-width:991px){
+.cg-content { max-width: 450px; }
+.cg-hero-image { max-width: 200px;}
+}
 @media (max-width:767px){
 .cg-hero-image{display:none}
 .cg-sections{row-gap:24px}

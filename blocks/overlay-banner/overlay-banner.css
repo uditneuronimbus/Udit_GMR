@@ -62,6 +62,9 @@
 }
 
 /* Responsive */
+@media (max-width: 991px) {
+    .banner-overlay { padding: 0 0 45%; }
+}
 @media (max-width: 767px) {
     /* Switch images for mobile */
     .banner-overlay-img.desktop-only {
