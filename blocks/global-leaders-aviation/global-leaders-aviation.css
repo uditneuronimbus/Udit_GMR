@@ -108,9 +108,9 @@
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 767px) {
     .global-leaders-aviation {
-        padding: 56px 0;
+        padding: 0;
     }
 
     .global-leaders-aviation h2 {
