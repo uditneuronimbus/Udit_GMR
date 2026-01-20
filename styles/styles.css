@@ -65,6 +65,7 @@ a:focus,a:hover{color:var(--black)}
 .btn,a:focus,a:hover,button{text-decoration:none;outline:0!important;outline-offset:0px!important}
 label{font-weight:400}
 iframe{width:100%!important}
+b, strong { font-weight: 600; }
 sub,sup{font-size:50%}
 .row-gap{margin:0 -5px}
 .row-gap .col,.row-gap [class*=col-]{padding:0 5px}
@@ -211,7 +212,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .global-leaders-aviation-wrapper { padding-left:0;padding-right:0 }
 .h1,h1{font-size:2rem}
 .h2,h2{font-size:1.5rem}
-.h3,h3{font-size:1.125}
+.h3,h3{font-size:1.125rem}
 .h4,h4{font-size:1rem}
 .h5,h5{font-size:.875rem}
 .page-corporate-governance .banner-overlay-text .col-md-7{width:80%}

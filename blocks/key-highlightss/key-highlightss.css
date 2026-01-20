@@ -1,11 +1,7 @@
-.sec-key {
-    background-color: var(--lpink);
-}
-@media screen and (min-width: 768px) {
-    .sec-grid-2 .key-col {
-        width: 34%;
-    }
+.sec-key{background-color:var(--lpink)}
+@media screen and (min-width:768px){
+.sec-grid-2 .key-col{width:34%}
 }
 @media (max-width:991px){
-.sec-key.spacer { padding-bottom: 120px; }
+.sec-key.spacer{padding-bottom:120px}
 }

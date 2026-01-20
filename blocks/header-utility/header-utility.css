@@ -1,191 +1,30 @@
-.header-utility-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 50px;
-    transition-duration: 0.3s;
-}
-.affix .header-utility-content {
-    transform: translateY(-50px);
-}
-
-.utility-nav,
-.stock-track {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-.exchange-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    white-space: nowrap;
-}
-
-.stock-track .stock-item {
-    border-right: 1px solid rgba(0, 0, 0, 0.3);
-    padding-right: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    line-height: 12px;
-    font-size: 12px;
-}
-.trend-down .exchange_trend,
-.trend-down .exchange_change {
-    color: var(--red);
-}
-.trend-up .exchange_trend,
-.trend-up .exchange_change {
-    color: var(--green);
-}
-
-.stock-track .stock-item:last-child {
-    border-right: none;
-    padding-right: 0;
-}
-
-.stock-track .stock-item strong {
-    font-weight: 800;
-}
-
-.bhashini-dropdown-btn-icon {
-    width: 24px;
-    height: 24px;
-}
-
-button.bhashini-dropdown-btn {
-    padding: 0;
-}
-
-.nav-group {
-    position: relative;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.nav-label {
-    font-weight: 600;
-}
-
-/* Simple Dropdown Styles */
-.nav-dropdown {
-    display: none;
-    /* Hidden by default */
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: #fff;
-    border: 1px solid #ddd;
-    min-width: 150px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-    padding: 5px 0;
-}
-
-.nav-group:hover .nav-dropdown {
-    display: block;
-    /* Show on hover */
-}
-
-.nav-dropdown a {
-    display: block;
-    padding: 8px 15px;
-    text-decoration: none;
-    color: #333;
-    transition: background 0.2s;
-}
-
-.nav-dropdown a:hover {
-    background: #f5f5f5;
-}
-.nav-group > a,
-.nav-group .nav-label {
-    text-transform: uppercase;
-    color: var(--black);
-    text-decoration: none;
-    display: block;
-    line-height: 22px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    position: relative;
-}
-.nav-group > a:before,
-.nav-group .nav-label:before {
-    content: "";
-    position: absolute;
-    bottom: 0.2rem;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background-color: var(--yellow);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-}
-.nav-group > a:hover,
-.nav-group .nav-label:hover {
-    color: var(--yellow);
-}
-.nav-group > a:hover:before,
-.nav-group .nav-label:hover:before {
-    transform: scaleX(1);
-    transform-origin: left;
-}
-.nav-group > a .arrow,
-.nav-group .nav-label .arrow {
-    max-width: 12px;
-    display: flex;
-    align-items: center;
-    margin-top: -2px;
-}
-.utility-icons {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-/* Base icon button */
-.utility-icons .icon-btn {
-    border: none;
-    background: none;
-    padding: 0;
-    cursor: pointer;
-    transition: color 0.25s ease;
-    color: var(--black);
-}
-
-/* Hover state */
-.utility-icons .icon-btn:hover {
-    color: var(--yellow);
-}
-
-/* SVG stroke + fill on hover */
-.utility-icons .icon-btn:hover svg,
-.utility-icons .icon-btn:hover svg path,
-.utility-icons .icon-btn:hover svg circle,
-.utility-icons .icon-btn:hover svg rect {
-    stroke: var(--yellow);
-    fill: none; /* keeps outline icons clean */
-}
-
-/* If any SVG uses fill icons */
-.utility-icons .icon-btn:hover svg[fill],
-.utility-icons .icon-btn:hover svg path[fill] {
-    fill: var(--yellow);
-}
-.font-size-level-1 .font-size-dot.dot3 {
-    background-color: var(--yellow) !important;
-}
-.font-size-level-2 .font-size-dot.dot2,
-.font-size-level-2 .font-size-dot.dot3 {
-    background-color: var(--yellow) !important;
-}
-.font-size-level-3 .font-size-dot.dot1,
-.font-size-level-3 .font-size-dot.dot2,
-.font-size-level-3 .font-size-dot.dot3 {
-    background-color: var(--yellow) !important;
-}
+.header-utility-content{display:flex;justify-content:space-between;align-items:center;height:50px;transition-duration:.3s}
+.affix .header-utility-content{transform:translateY(-50px)}
+.stock-track,.utility-nav{display:flex;align-items:center;gap:12px}
+.exchange-wrapper{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.stock-track .stock-item{border-right:1px solid rgba(0,0,0,.3);padding-right:8px;display:flex;align-items:center;gap:8px;line-height:12px;font-size:12px}
+.trend-down .exchange_change,.trend-down .exchange_trend{color:var(--red)}
+.trend-up .exchange_change,.trend-up .exchange_trend{color:var(--green)}
+.stock-track .stock-item:last-child{border-right:none;padding-right:0}
+.stock-track .stock-item strong{font-weight:800}
+.bhashini-dropdown-btn-icon{width:24px;height:24px}
+button.bhashini-dropdown-btn{padding:0}
+.nav-group{position:relative;cursor:pointer;display:flex;align-items:center;gap:5px}
+.nav-label{font-weight:600}
+.nav-dropdown{display:none;position:absolute;top:100%;right:0;background:#fff;border:1px solid #ddd;min-width:150px;box-shadow:0 4px 6px rgba(0,0,0,.1);z-index:100;padding:5px 0}
+.nav-group:hover .nav-dropdown{display:block}
+.nav-dropdown a{display:block;padding:8px 15px;text-decoration:none;color:#333;transition:background .2s}
+.nav-dropdown a:hover{background:#f5f5f5}
+.nav-group .nav-label,.nav-group>a{text-transform:uppercase;color:var(--black);text-decoration:none;display:block;line-height:22px;font-size:12px;display:flex;align-items:center;gap:4px;position:relative}
+.nav-group .nav-label:before,.nav-group>a:before{content:"";position:absolute;bottom:.2rem;left:0;width:100%;height:1px;background-color:var(--yellow);transform:scaleX(0);transform-origin:right;transition:transform .6s cubic-bezier(.19, 1, .22, 1)}
+.nav-group .nav-label:hover,.nav-group>a:hover{color:var(--yellow)}
+.nav-group .nav-label:hover:before,.nav-group>a:hover:before{transform:scaleX(1);transform-origin:left}
+.nav-group .nav-label .arrow,.nav-group>a .arrow{max-width:12px;display:flex;align-items:center;margin-top:-2px}
+.utility-icons{display:flex;align-items:center;gap:12px}
+.utility-icons .icon-btn{border:none;background:0 0;padding:0;cursor:pointer;transition:color .25s ease;color:var(--black)}
+.utility-icons .icon-btn:hover{color:var(--yellow)}
+.utility-icons .icon-btn:hover svg,.utility-icons .icon-btn:hover svg circle,.utility-icons .icon-btn:hover svg path,.utility-icons .icon-btn:hover svg rect{stroke:var(--yellow);fill:none}
+.utility-icons .icon-btn:hover svg path[fill],.utility-icons .icon-btn:hover svg[fill]{fill:var(--yellow)}
+.font-size-level-1 .font-size-dot.dot3{background-color:var(--yellow)!important}
+.font-size-level-2 .font-size-dot.dot2,.font-size-level-2 .font-size-dot.dot3{background-color:var(--yellow)!important}
+.font-size-level-3 .font-size-dot.dot1,.font-size-level-3 .font-size-dot.dot2,.font-size-level-3 .font-size-dot.dot3{background-color:var(--yellow)!important}
