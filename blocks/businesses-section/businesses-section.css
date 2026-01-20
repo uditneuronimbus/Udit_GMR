@@ -13,7 +13,7 @@
 .business-accordion-header{margin-bottom:4rem}
 .business-accordion-header h2{font-size:2.8rem;font-weight:400;color:var(--blue);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
 .business-accordion-header h2 .subtitle{display:inline-block;font-size:2rem;font-weight:300;font-style:italic;color:var(--turquoise);font-family:var(--font-secondary);position:relative}
-.business-accordion-header .title{position:relative;text-transform:uppercase}
+.business-accordion-header .title{position:relative;}
 /* .business-accordion-header .title:after{content:'/';color:var(--blue)} */
 .intro-text{font-size:1.5rem;color:var(--charcoal);max-width:900px;margin:0;line-height:1.6}
 .business-accordion-container{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
