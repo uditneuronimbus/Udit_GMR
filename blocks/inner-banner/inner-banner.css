@@ -17,6 +17,7 @@
 @media (max-width:991px){
 .inner-hero p{font-size:var(--fs-regular)}
 .inner-hero{padding:0 0 65%}
+}
 @media (max-width:767px){
 .inner-hero{margin-top:0;padding:0 0 150%}
 .section.inner-banner-container{display:flex;flex-direction:column-reverse}
@@ -24,5 +25,5 @@
 .inner-hero-img:before{background:linear-gradient(180deg,rgba(0,0,0,.7) 0,rgba(0,0,0,0) 80%)}
 .inner-hero-overlay{align-items:flex-start}
 .inner-hero h2{font-size:var(--fs-xxlarge);line-height:1.4}
-}
+.inner-hero-video { position: absolute; top: 50%; }
 }
