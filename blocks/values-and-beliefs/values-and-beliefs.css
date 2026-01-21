@@ -1,111 +1,81 @@
-.values-and-beliefs-wrapper{
-    background: #E0E0E0;
+.value-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
-.values-section {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 16px;
-  }
-  
-  .values-title {
-    text-align: center;
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 32px;
-  }
-  
-  .values-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 24px;
-    margin-bottom: 70px;
-  }
-  
-  .value-card {
-    /* background: #fff;
-    border-radius: 6px;
-    overflow: hidden;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-    transition: transform 0.3s ease; */
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-  }
-  
-  .value-card:hover {
-    transform: translateY(-6px);
-  }
-  
-  .value-card-image {
-    /* position: relative;
-    height: 250px; */
-    inset: 0;
-    height: 225px;
-    background-color: var(--white);
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .value-card-image picture,
-  .value-card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .value-card-overlay {
-    /* position: absolute;
-    bottom: 0px;
-    background: #003a8f;
-    color: #fff;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 600;
-    width: 274px; */
-    padding: 16px;
-    color: var(--white);
-    border-radius: 8px;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background: var(--blue);
-    background-repeat: no-repeat;
-    background-position: bottom right;
-  }
+.value-card-image {
+  position: relative;
+  height: 225px;
+  background-color: var(--white);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 60px;   /* ← this creates space for content below */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .value-card-overlay::after{
-    content:"";position:absolute;right:14px;top:50%;transform:translateY(-50%);width:24px;height:24px;background-repeat:no-repeat;background-size:contain;background-image:url("data:image/svg+xml,%3Csvg%20width='25'%20height='25'%20viewBox='0%200%2025%2025'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cpath%20d='M17.5%2012.5C17.5%2012.776%2017.276%2013%2017%2013H13V17C13%2017.276%2012.776%2017.5%2012.5%2017.5C12.224%2017.5%2012%2017.276%2012%2017V13H8C7.724%2013%207.5%2012.776%207.5%2012.5C7.5%2012.224%207.724%2012%208%2012H12V8C12%207.724%2012.224%207.5%2012.5%207.5C12.776%207.5%2013%207.724%2013%208V12H17C17.276%2012%2017.5%2012.224%2017.5%2012.5ZM24.5%205V20C24.5%2022.481%2022.481%2024.5%2020%2024.5H5C2.519%2024.5%200.5%2022.481%200.5%2020V5C0.5%202.519%202.519%200.5%205%200.5H20C22.481%200.5%2024.5%202.519%2024.5%205ZM23.5%205C23.5%203.07%2021.93%201.5%2020%201.5H5C3.07%201.5%201.5%203.07%201.5%205V20C1.5%2021.93%203.07%2023.5%205%2023.5H20C21.93%2023.5%2023.5%2021.93%2023.5%2020V5Z'%20fill='%23FAA519'%20stroke='%23FAA519'/%3E%3C/svg%3E");transition:opacity .2s ease,transform .2s ease
-  }
+.value-card-overlay {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 16px;
+  color: var(--white);
+  background: var(--blue);
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  transition: background 0.3s ease;
+}
 
-  .value-card.active .value-card-overlay::after{
-    top:20px;transform:translateY(0);background-image:url("data:image/svg+xml,%3Csvg%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cpath%20d='M19.5%200H4.5C2.01472%200%200%202.01472%200%204.5V19.5C0%2021.9853%202.01472%2024%204.5%2024H19.5C21.9853%2024%2024%2021.9853%2024%2019.5V4.5C24%202.01472%2021.9853%200%2019.5%200Z'%20fill='%23FAA51A'/%3E%3Cpath%20d='M17.0002%2012C17.0002%2012.2761%2016.7761%2012.5002%2016.5%2012.5002H7.5C7.22391%2012.5002%206.99984%2012.2761%206.99984%2012C6.99984%2011.7239%207.22391%2011.4998%207.5%2011.4998H16.5C16.7761%2011.4998%2017.0002%2011.7239%2017.0002%2012Z'%20fill='white'/%3E%3C/svg%3E");transition:opacity .2s ease,transform .2s ease
-  }
-  
-  .value-card-content {
-    display: none;
-    padding: 16px;
-  }
-  
-  .value-card-content h3 {
-    margin: 0 0 8px;
-    font-size: 18px;
-  }
-  
-  .value-card-content .quote {
-    font-size: 14px;
-    color: #444;
-  }
-  
-  .value-card-content .author {
-    margin-top: 8px;
-    font-size: 13px;
-    font-style: italic;
-    color: #777;
-  }
+/* Plus / Minus icon logic via ::after */
+.value-card-overlay::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("data:image/svg+xml,%3Csvg width='25' height='25' viewBox='0 0 25 25' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M17.5 12.5C17.5 12.776 17.276 13 17 13H13V17C13 17.276 12.776 17.5 12.5 17.5C12.224 17.5 12 17.276 12 17V13H8C7.724 13 7.5 12.776 7.5 12.5C7.5 12.224 7.724 12 8 12H12V8C12 7.724 12.224 7.5 12.5 7.5C12.776 7.5 13 7.724 13 8V12H17C17.276 12 17.5 12.224 17.5 12.5ZM24.5 5V20C24.5 22.481 22.481 24.5 20 24.5H5C2.519 24.5 0.5 22.481 0.5 20V5C0.5 2.519 2.519 0.5 5 0.5H20C22.481 0.5 24.5 2.519 24.5 5ZM23.5 5C23.5 3.07 21.93 1.5 20 1.5H5C3.07 1.5 1.5 3.07 1.5 5V20C1.5 21.93 3.07 23.5 5 23.5H20C21.93 23.5 23.5 21.93 23.5 20V5Z' fill='%23FAA519' stroke='%23FAA519'/%3E%3C/svg%3E");
+  transition: all 0.25s ease;
+}
+
+.value-card.active .value-card-overlay::after {
+  top: 50%;
+  transform: translateY(-50%);
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19.5 0H4.5C2.01472 0 0 2.01472 0 4.5V19.5C0 21.9853 2.01472 24 4.5 24H19.5C21.9853 24 24 21.9853 24 19.5V4.5C24 2.01472 21.9853 0 19.5 0Z' fill='%23FAA51A'/%3E%3Cpath d='M17.0002 12C17.0002 12.2761 16.7761 12.5002 16.5 12.5002H7.5C7.22391 12.5002 6.99984 12.2761 6.99984 12C6.99984 11.7239 7.22391 11.4998 7.5 11.4998H16.5C16.7761 11.4998 17.0002 11.7239 17.0002 12Z' fill='white'/%3E%3C/svg%3E");
+}
+
+/* Show content when active */
+.value-card.active .value-card-content {
+  display: block;
+}
+
+.value-card-content {
+  display: none;
+  padding: 0 16px 24px 16px;
+}
+
+.value-card-content h3 {
+  margin: 0 0 12px;
+  font-size: 18px;
+}
+
+.value-card-content .quote {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #444;
+  margin: 0 0 12px;
+}
+
+.value-card-content .author {
+  margin: 0;
+  font-size: 13px;
+  font-style: italic;
+  color: #777;
+}
