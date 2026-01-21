@@ -1,75 +1,102 @@
 export default function decorate(block) {
-  const rows = [...block.children];
+  const rows = [...block.children].filter(row => row.children.length > 0); // skip fully empty rows
 
-  // Extract elements safely (in case there are fewer rows)
-  const titleEl = rows[0];
-  const descEl = rows[1];
-  const marketTitleEl = rows[2];
-  const marketDateEl = rows[3];
-  const marketContentEl = rows[4];
-  const ctaTextEl = rows[5];
-  const ctaLinkEl = rows[6];
+  if (rows.length === 0) {
+    block.innerHTML = '<p>No content configured.</p>';
+    return;
+  }
 
-  // Stat cards start from row 7 onwards (up to 6 stats)
-  const statEls = rows.slice(7, 13); // rows[7] to rows[12] → max 6 stats
+  let idx = 0;
 
-  const data = {
-    title: titleEl?.textContent?.trim() || 'Investor Relations',
-    description: descEl?.innerHTML?.trim() || '',
-    marketTitle: marketTitleEl?.textContent?.trim() || '',
-    marketDate: marketDateEl?.textContent?.trim() || '',
-    marketContent: marketContentEl?.innerHTML?.trim() || '',
-    ctaText: ctaTextEl?.textContent?.trim() || '',
-    ctaLink: ctaLinkEl?.textContent?.trim() || '#',
-    stats: statEls
-      .map(el => el?.innerHTML?.trim())
-      .filter(Boolean) // remove empty or undefined
-  };
+  // Title (first non-empty row, usually single cell or first cell)
+  const title = rows[idx]?.children[0]?.textContent?.trim() || 'Investor Relations';
+  idx++;
 
-  // Clear the block
+  // Description (next row, can have HTML)
+  let description = '';
+  if (rows[idx] && rows[idx].children.length > 0) {
+    description = rows[idx].innerHTML.trim();
+    idx++;
+  }
+
+  // Market section (usually 3 rows: title, date, content)
+  let marketTitle = '';
+  let marketDate = '';
+  let marketContent = '';
+
+  // Try to detect market block (often 2–3 consecutive rows)
+  if (rows[idx] && rows[idx].children.length >= 1) {
+    marketTitle = rows[idx].children[0]?.textContent?.trim() || '';
+    idx++;
+  }
+  if (rows[idx] && rows[idx].children.length >= 1) {
+    marketDate = rows[idx].children[0]?.textContent?.trim() || '';
+    idx++;
+  }
+  if (rows[idx] && rows[idx].children.length >= 1) {
+    marketContent = rows[idx].innerHTML.trim();
+    idx++;
+  }
+
+  // CTA (usually one row with text + link)
+  let ctaText = '';
+  let ctaLink = '#';
+
+  if (rows[idx] && rows[idx].children.length >= 2) {
+    ctaText = rows[idx].children[0]?.textContent?.trim() || '';
+    const linkCell = rows[idx].children[1];
+    ctaLink = linkCell?.querySelector('a')?.href || linkCell?.textContent?.trim() || '#';
+    idx++;
+  } else if (rows[idx] && rows[idx].children.length >= 1) {
+    ctaText = rows[idx].children[0]?.textContent?.trim() || '';
+    idx++;
+  }
+
+  // Stats: collect remaining rows (up to 6), each as full innerHTML
+  const stats = [];
+  for (let i = idx; i < rows.length && stats.length < 6; i++) {
+    const statHTML = rows[i]?.innerHTML?.trim();
+    if (statHTML) {
+      stats.push(statHTML);
+    }
+  }
+
+  // Build structure
   block.innerHTML = '';
 
-  // Create wrapper
   const wrapper = document.createElement('div');
   wrapper.className = 'gal-investor-wrapper';
 
   wrapper.innerHTML = `
     <div class="gal-left">
-      <h2>${data.title}</h2>
+      <h2>${title}</h2>
       
-      ${data.description ? `<div class="gal-desc">${data.description}</div>` : ''}
+      ${description ? `<div class="gal-desc">${description}</div>` : ''}
 
-      <div class="gal-market">
-        <div class="market-header">
-          <span class="market-title">${data.marketTitle}</span>
-          <span class="market-date">${data.marketDate}</span>
+      ${(marketTitle || marketDate || marketContent) ? `
+        <div class="gal-market">
+          <div class="market-header">
+            ${marketTitle ? `<span class="market-title">${marketTitle}</span>` : ''}
+            ${marketDate ? `<span class="market-date">${marketDate}</span>` : ''}
+          </div>
+          ${marketContent ? `<div class="market-body">${marketContent}</div>` : ''}
         </div>
-        ${data.marketContent ? `<div class="market-body">${data.marketContent}</div>` : ''}
-      </div>
+      ` : ''}
 
-      ${data.ctaText ? `<a class="gal-cta" href="${data.ctaLink}">${data.ctaText}</a>` : ''}
+      ${ctaText ? `<a class="gal-cta" href="${ctaLink}">${ctaText}</a>` : ''}
     </div>
 
     <div class="gal-right">
-      ${data.stats
-        .map(stat => `
-          <div class="gal-stat-card">
-            ${stat}
-          </div>
-        `)
+      ${stats
+        .map(stat => `<div class="gal-stat-card">${stat}</div>`)
         .join('')}
       
-      <!-- Optional: Show empty placeholders if fewer than 6 stats are provided -->
-      ${Array(Math.max(0, 6 - data.stats.length))
+      ${Array(Math.max(0, 6 - stats.length))
         .fill('')
         .map(() => `<div class="gal-stat-card gal-stat-placeholder"></div>`)
         .join('')}
     </div>
   `;
 
-  block.append(wrapper);
+  block.appendChild(wrapper);
 }
-
-
-
-
