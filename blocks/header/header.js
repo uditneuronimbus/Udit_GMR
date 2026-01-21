@@ -400,7 +400,7 @@ export default async function decorate(block) {
                   );
                 };
 
-                subItem.addEventListener("mouseenter", triggerUpdate);
+                subItem.addEventListener("click", triggerUpdate);
                 subItem.addEventListener("click", triggerUpdate);
 
                 if (l1Index === 0 && l2Index === 0) {
