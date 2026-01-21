@@ -140,7 +140,7 @@ export default function decorate(block) {
     if (ctaLabelEl) {
       const a = document.createElement("a");
       a.href = (ctaLinkEl?.textContent || "#").trim();
-      a.className = "btn btn-transparent";
+      a.className = "btn-link";
       a.textContent = ctaLabelEl.textContent.trim();
       ctaDiv.appendChild(a);
     }
