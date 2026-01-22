@@ -195,9 +195,9 @@ export default function decorate(block) {
         e.preventDefault();
         const query = input.value.trim();
         if (!query) return;
-        // const parts = window.location.pathname.split("/").filter(Boolean);
-        // const lang = parts[0] || "en";
-        window.location.href = `/en/search?q=${encodeURIComponent(query)}`;
+        const parts = window.location.pathname.split("/").filter(Boolean);
+        const lang = parts[0] || "en";
+        window.location.href = `/${lang}/search?q=${encodeURIComponent(query)}`;
         break;
 
       case "Escape":

@@ -40,7 +40,6 @@ export default async function decorate(block) {
     const lang = parts[0] || "en";
     const { hits } = await index.search(query, {
       hitsPerPage: 20,
-      filters: `lang:${lang}`,
       attributesToSnippet: ["content:40"],
       snippetEllipsisText: "..."
     });
