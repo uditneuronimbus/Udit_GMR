@@ -56,7 +56,28 @@ export default function decorate(block) {
     const picture = cells[0]?.querySelector("img");
     const title = cells[1]?.textContent?.trim() || "";
     const desc = cells[2]?.textContent?.trim() || "";
-    const cta = cells[3]?.textContent?.trim() || "READ MORE";
+    const ctaCell = cells[3];
+    let ctaText = "";
+    let ctaHref = "";
+    let ctaTarget = "_self";
+
+    if (ctaCell) {
+      const link = ctaCell.querySelector("a");
+
+      if (link) {
+        // Case: author added a real link
+        ctaText = link.textContent.trim();
+        ctaHref = link.getAttribute("href");
+        ctaTarget = link.getAttribute("target") || "_self";
+      } else {
+        // Case: text-only CTA
+        const text = ctaCell.textContent.trim();
+        if (text && text.toLowerCase() !== "na" && text.toLowerCase() !== "false") {
+          ctaText = text;
+          ctaHref = "#";
+        }
+      }
+    }
 
     const col = document.createElement("div");
     col.className = "col-md-6 col-lg-4 mt-4";
@@ -82,10 +103,18 @@ export default function decorate(block) {
     content.className = "card-body";
 
     content.innerHTML = `
-      <h3 class="card-title">${title}</h3>
-      <p class="card-desc">${desc}</p>
-      <div class="card-cta"><a href="#" class="btn-link">${cta}</a>
-    `;
+  <h3 class="card-title">${title}</h3>
+  <p class="card-desc">${desc}</p>
+  ${ctaText
+        ? `<div class="card-cta">
+           <a href="${ctaHref}" target="${ctaTarget}" class="btn-link">
+             ${ctaText}
+           </a>
+         </div>`
+        : ""
+      }
+`;
+
 
     card.append(content);
     col.append(card);
