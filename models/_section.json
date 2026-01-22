@@ -113,7 +113,9 @@
         "header",
         "partners-filter",
         "awards-filter",
-        "breadcrumbs"
+        "breadcrumbs",
+        "press-release-featured",
+        "press-release-listing"
       ]
     }
   ]
