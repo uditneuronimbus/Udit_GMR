@@ -153,7 +153,13 @@ export default function decorate(block) {
   const cardsMobile = [];
 
   // Use the items from the authored content wrapper
-  const authoredItems = [...authoredContentWrapper.children].slice(4);
+  const authoredItems = [...authoredContentWrapper.children]
+  .slice(4)
+  .sort((a, b) => {
+    const yearA = a.children[1]?.textContent?.trim() || "0";
+    const yearB = b.children[1]?.textContent?.trim() || "0";
+    return parseInt(yearB, 10) - parseInt(yearA, 10); // latest year first
+  });
 
   authoredItems.forEach((item) => {
     const cols = [...item.children];
