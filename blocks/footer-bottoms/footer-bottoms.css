@@ -9,11 +9,11 @@
     list-style: none;
     display: flex;
     justify-content: flex-end;
-    gap: 1rem;
+    gap: .5rem;
 }
 .footer-bottoms ul li:after {
     content: "|";
-    padding-left: 1rem;
+    padding-left: .5rem;
 }
 .footer-bottoms ul li:last-child:after {
     display: none;
@@ -24,6 +24,7 @@
     text-decoration: none;
     color: var(--charcoal);
     position: relative;
+    font-size: var(--fs-xs);
 }
 
 .footer-bottoms ul li a:before {
