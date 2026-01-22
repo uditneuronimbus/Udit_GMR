@@ -7,6 +7,19 @@ const ALGOLIA_INDEX = "site_pages";
 const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY);
 const index = client.initIndex(ALGOLIA_INDEX);
 
+function getBasePath() {
+  const parts = window.location.pathname
+    .split("/")
+    .filter(Boolean);
+
+  if (parts.length >= 2) {
+    return `/${parts[0]}/${parts[1]}`;
+  }
+
+  return `/${parts[0] || ""}`;
+}
+
+
 function getQuery() {
   const params = new URLSearchParams(window.location.search);
   return params.get("q") || "";
@@ -23,8 +36,11 @@ export default async function decorate(block) {
   if (!query) return;
 
   try {
+    const parts = window.location.pathname.split("/").filter(Boolean);
+    const lang = parts[0] || "en";
     const { hits } = await index.search(query, {
       hitsPerPage: 20,
+      filters: `lang:${lang}`,
       attributesToSnippet: ["content:40"],
       snippetEllipsisText: "..."
     });

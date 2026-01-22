@@ -16,6 +16,19 @@ const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY, {
 
 const algoliaIndex = client.initIndex(ALGOLIA_INDEX);
 
+function getBasePath() {
+  const parts = window.location.pathname
+    .split("/")
+    .filter(Boolean);
+
+  if (parts.length >= 2) {
+    return `/${parts[0]}/${parts[1]}`;
+  }
+
+  return `/${parts[0] || ""}`;
+}
+
+
 export default function decorate(block) {
   /* ---------- UI Markup (UNCHANGED) ---------- */
   block.innerHTML = `
@@ -127,8 +140,11 @@ export default function decorate(block) {
     if (q.length < 2) return;
 
     try {
+      const parts = window.location.pathname.split("/").filter(Boolean);
+      const lang = parts[0] || "en";
       const { hits } = await algoliaIndex.search(q, {
         hitsPerPage: 10,
+        filters: `lang:${lang}`,
         attributesToRetrieve: [
           "title",
           "metaTitle",
@@ -180,7 +196,9 @@ export default function decorate(block) {
         e.preventDefault();
         const query = input.value.trim();
         if (!query) return;
-        window.location.href = `/search?q=${encodeURIComponent(query)}`;
+        const parts = window.location.pathname.split("/").filter(Boolean);
+        const lang = parts[0] || "en";
+        window.location.href = `/${lang}/search?q=${encodeURIComponent(query)}`;
         break;
 
       case "Escape":
