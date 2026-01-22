@@ -10,46 +10,49 @@ export default function decorate(block) {
 
   let cursor = 0;
 
-  /* ===============================
-     TITLE
-  =============================== */
+  // TITLE
   const title = rows[cursor]?.children[0]?.textContent.trim() || 'Investor Relations';
   cursor++;
 
-  /* ===============================
-     DESCRIPTION (HTML)
-  =============================== */
+  // DESCRIPTION (optional)
   let description = '';
   if (rows[cursor] && rows[cursor].children.length === 1) {
     description = rows[cursor].innerHTML.trim();
     cursor++;
   }
 
-  /* ===============================
-     MARKET SECTION (UP TO 3 SINGLE-CELL ROWS)
-  =============================== */
+  // ──────────────────────────────────────────────
+  // MARKET SECTION ─ only if ≥ 2 single-cell rows
+  // ──────────────────────────────────────────────
   let marketTitle = '';
   let marketDate = '';
   let marketContent = '';
 
-  if (rows[cursor]?.children.length === 1) {
+  if (
+    cursor < rows.length &&
+    rows[cursor].children.length === 1 &&
+    cursor + 1 < rows.length &&
+    rows[cursor + 1].children.length === 1 &&
+    !rows[cursor].querySelector('a') &&
+    !rows[cursor + 1].querySelector('a')
+  ) {
     marketTitle = rows[cursor].textContent.trim();
     cursor++;
-  }
 
-  if (rows[cursor]?.children.length === 1) {
     marketDate = rows[cursor].textContent.trim();
     cursor++;
+
+    if (
+      cursor < rows.length &&
+      rows[cursor].children.length === 1 &&
+      !rows[cursor].querySelector('a')
+    ) {
+      marketContent = rows[cursor].innerHTML.trim();
+      cursor++;
+    }
   }
 
-  if (rows[cursor]?.children.length === 1) {
-    marketContent = rows[cursor].innerHTML.trim();
-    cursor++;
-  }
-
-  /* ===============================
-     CTA (ROW WITH LINK OR 2 CELLS)
-  =============================== */
+  // CTA
   let ctaText = '';
   let ctaLink = '#';
 
@@ -68,19 +71,14 @@ export default function decorate(block) {
     }
   }
 
-  /* ===============================
-     STATS (EVERYTHING ELSE)
-  =============================== */
+  // STATS
   const stats = [];
-
   for (let i = cursor; i < rows.length && stats.length < 6; i++) {
     const html = rows[i].innerHTML.trim();
     if (html) stats.push(html);
   }
 
-  /* ===============================
-     BUILD DOM
-  =============================== */
+  // BUILD DOM (unchanged)
   block.innerHTML = '';
 
   const wrapper = document.createElement('div');
