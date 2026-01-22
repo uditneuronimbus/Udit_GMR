@@ -26,16 +26,22 @@ export default function decorate(block) {
   content.className = 'infra-hero-content';
 
   /* =============================
-     Background image
+     Background image (FULL QUALITY)
   ============================== */
   const img = bgRow.querySelector('img');
-  if (img) {
-    const fullSrc =
-      img.getAttribute('data-src') ||
-      img.getAttribute('srcset')?.split(',').pop()?.trim().split(' ')[0] ||
-      img.src;
 
-    bg.style.backgroundImage = `url(${fullSrc})`;
+  if (img) {
+    // remove Franklin params
+    const baseSrc = img.src.split('?')[0];
+
+    // force large + high quality
+    img.src = `${baseSrc}?width=2400&quality=90&format=jpg`;
+
+    img.className = 'infra-hero-bg-img';
+    img.removeAttribute('width');
+    img.removeAttribute('height');
+
+    bg.appendChild(img);
   }
 
   bgRow.remove();
@@ -50,40 +56,40 @@ export default function decorate(block) {
   /* =============================
      Title
   ============================== */
-  if (titleRow && titleRow.textContent.trim()) {
+  if (titleRow?.textContent.trim()) {
     titleRow.classList.add('infra-hero-title');
     content.appendChild(titleRow);
-  } else if (titleRow) {
-    titleRow.remove();
+  } else {
+    titleRow?.remove();
   }
 
   /* =============================
      Subtitle
   ============================== */
-  if (subtitleRow && subtitleRow.textContent.trim()) {
+  if (subtitleRow?.textContent.trim()) {
     subtitleRow.classList.add('infra-hero-subtitle');
     content.appendChild(subtitleRow);
-  } else if (subtitleRow) {
-    subtitleRow.remove();
+  } else {
+    subtitleRow?.remove();
   }
 
   /* =============================
      Description
   ============================== */
-  if (descRow && descRow.textContent.trim()) {
+  if (descRow?.textContent.trim()) {
     descRow.classList.add('infra-hero-description');
     content.appendChild(descRow);
-  } else if (descRow) {
-    descRow.remove();
+  } else {
+    descRow?.remove();
   }
 
   /* =============================
-     Extra row (optional)
+     Extra row
   ============================== */
-  if (extraRow && extraRow.textContent.trim()) {
+  if (extraRow?.textContent.trim()) {
     content.appendChild(extraRow);
-  } else if (extraRow) {
-    extraRow.remove();
+  } else {
+    extraRow?.remove();
   }
 
   /* =============================
