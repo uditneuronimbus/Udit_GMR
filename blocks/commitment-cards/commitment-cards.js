@@ -8,17 +8,25 @@ export default function decorate(block) {
   container.className = "container";
 
   // ---- Header ----
-  const headerRow = rows.shift();
-  headerRow.classList.add("sec-head", "mb-5", "text-center");
+const headerRow = rows.shift();
+headerRow.classList.add("sec-head", "mb-5", "text-center");
 
-  const p = headerRow.querySelector("p");
+// find first meaningful element or text
+let titleEl = headerRow.querySelector("h1, h2, h3, p");
 
-  if (p) {
-    const h2 = document.createElement("h2");
-    h2.className = "sec-title fw-normal";
-    h2.innerHTML = p.innerHTML; // preserve authored content
-    p.replaceWith(h2);
-  }
+if (!titleEl && headerRow.textContent.trim()) {
+  titleEl = document.createElement("div");
+  titleEl.innerHTML = headerRow.innerHTML;
+}
+
+if (titleEl) {
+  const h2 = document.createElement("h2");
+  h2.className = "sec-title fw-normal";
+  h2.innerHTML = titleEl.innerHTML;
+
+  headerRow.innerHTML = "";
+  headerRow.appendChild(h2);
+}
 
   // ---- Grid ----
   const grid = document.createElement("div");
