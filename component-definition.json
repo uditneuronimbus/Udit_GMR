@@ -1501,7 +1501,7 @@
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "Press Release Featured",
+                  "name": "press-release-featured",
                   "model": "press-release-featured",
                   "filter": "press-release-featured"
                 }
@@ -1517,9 +1517,24 @@
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "Press Release Listing",
+                  "name": "press-release-listing",
                   "model": "press-release-listing",
-                  "filter": "press-release-listing"
+                  "filter": "only-press-release-items"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Press Release Item",
+          "id": "press-release-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "press-release-item",
+                  "model": "press-release-item"
                 }
               }
             }

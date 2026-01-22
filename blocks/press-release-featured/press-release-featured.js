@@ -1,87 +1,135 @@
-import { getApiHost } from "../../scripts/api.js";
+export default function decorate(block) {
+  console.log("Decorating Press Release Featured block");
 
-/**
- * Format date to "DD Mon YYYY" format
- */
-function formatDate(dateString) {
-  if (!dateString) return "";
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
+  const children = [...block.children];
+  if (children.length < 1) return;
 
-export default async function decorate(block) {
-  // Read authored fields
-  const [titleEl, categoryEl] = [...block.children];
-  const sectionTitle = titleEl?.textContent?.trim() || "LATEST PRESS UPDATE";
-  const category = categoryEl?.textContent?.trim() || "";
+  /* ================================
+     1️⃣ Read authored content
+  ================================ */
+  const sectionLabel = children[0]?.textContent?.trim() || "LATEST PRESS UPDATE";
+  const badge = children[1]?.textContent?.trim() || "";
+  const title = children[2]?.textContent?.trim() || "";
+  const description = children[3]?.innerHTML?.trim() || "";
+  const publishDate = children[4]?.textContent?.trim() || "";
+  const lastUpdated = children[5]?.textContent?.trim() || "";
+  const ctaLink = children[6]?.querySelector("a")?.href || children[6]?.textContent?.trim() || "#";
+  const ctaText = children[7]?.textContent?.trim() || "READ MORE";
+  
+  let imageEl = null;
+  if (children[8]) {
+    imageEl = children[8].querySelector("img") || children[8].querySelector("picture");
+  }
 
-  // Clear block
-  block.innerHTML = "";
+  /* ================================
+     2️⃣ Check for Author Mode (AEM SAFE)
+  ================================ */
+  const isAuthorMode = document.body.classList.contains('universal-editor-edit') ||
+    document.body.classList.contains('aem-AuthorLayer-Edit') ||
+    window.location.href.includes('/editor.html');
 
-  // Create section
-  const section = document.createElement("section");
-  section.className = "press-release-featured";
+  if (isAuthorMode) {
+    block.classList.add('press-featured-author-mode');
+    const authorNote = document.createElement('div');
+    authorNote.className = 'press-featured-author-note';
+    authorNote.innerHTML = `
+      <p><strong>📰 Press Release Featured Component</strong></p>
+      <p><small>• Edit the content fields in the table below</small></p>
+      <p><small>• Styled layout appears in publish mode</small></p>
+    `;
+    block.insertBefore(authorNote, children[0]);
+    return;
+  }
 
-  const container = document.createElement("div");
-  container.className = "container";
+  /* ================================
+     3️⃣ Preserve authored content for Universal Editor (AEM SAFE)
+  ================================ */
+  const authoredContentWrapper = document.createElement('div');
+  authoredContentWrapper.className = 'press-featured-authored-content';
+  authoredContentWrapper.setAttribute('aria-hidden', 'true');
+  authoredContentWrapper.style.cssText = `
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  `;
 
-  // Loading state
-  container.innerHTML = `<div class="featured-loading">Loading...</div>`;
-  section.appendChild(container);
-  block.appendChild(section);
+  // Move all children to the hidden wrapper while preserving them in DOM
+  while (block.firstChild) {
+    authoredContentWrapper.appendChild(block.firstChild);
+  }
 
-  try {
-    // Fetch latest press release
-    const apiUrl = `${getApiHost()}/api/v1/web/gmr/press-release?category=${encodeURIComponent(category)}&limit=1`;
-    const res = await fetch(apiUrl);
-    if (!res.ok) throw new Error(`API error ${res.status}`);
+  // Add the hidden wrapper back to the block
+  block.appendChild(authoredContentWrapper);
 
-    const json = await res.json();
-    const items = json?.data?.data?.pressReleaseList?.items || [];
-
-    if (!items.length) {
-      container.innerHTML = `<p class="no-data">No press releases found.</p>`;
-      return;
+  /* ================================
+     4️⃣ Get image URL
+  ================================ */
+  const extractImageUrl = (imgElement) => {
+    if (!imgElement) return '';
+    if (imgElement.tagName === 'IMG') {
+      return imgElement.src;
+    } else if (imgElement.tagName === 'PICTURE') {
+      const img = imgElement.querySelector('img');
+      return img ? img.src : '';
     }
+    return '';
+  };
 
-    const item = items[0];
-    const publishDate = formatDate(item.publishDate?.iso || item.publishDate);
-    const lastUpdated = formatDate(item.lastModified?.iso || item.lastModified || item.publishDate);
+  const imageUrl = extractImageUrl(imageEl);
+  const imageAlt = imageEl?.alt || title || 'Press Release Image';
 
-    container.innerHTML = `
+  /* ================================
+     5️⃣ Runtime wrapper
+  ================================ */
+  const runtime = document.createElement("section");
+  runtime.className = "press-release-featured-runtime";
+
+  // Generate badge class from badge text
+  const badgeClass = badge ? badge.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '') : 'general';
+
+  runtime.innerHTML = `
+    <div class="container">
       <div class="featured-wrapper">
         <div class="featured-content">
-          <span class="featured-label">${sectionTitle}</span>
-          <h1 class="featured-title">${item.title || ""}</h1>
-          <p class="featured-description">${item.description?.plaintext || item.shortDescription || ""}</p>
+          <span class="featured-label">${sectionLabel}</span>
+          <h1 class="featured-title">${title}</h1>
+          <div class="featured-description">${description}</div>
           
           <div class="featured-meta">
-            <span class="badge ${item.businessCategory?.toLowerCase().replace(/\s+/g, '-') || 'general'}">${item.businessCategory || item.category || ""}</span>
-            <span class="meta-separator">|</span>
-            <span class="meta-date">
-              <svg class="icon-calendar" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M12.667 2.667H3.333C2.597 2.667 2 3.264 2 4v9.333c0 .737.597 1.334 1.333 1.334h9.334c.736 0 1.333-.597 1.333-1.334V4c0-.736-.597-1.333-1.333-1.333z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M10.667 1.333v2.667M5.333 1.333v2.667M2 6.667h12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              ${publishDate}
-            </span>
-            <span class="meta-separator">|</span>
-            <span class="meta-updated">
-              <svg class="icon-calendar" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M12.667 2.667H3.333C2.597 2.667 2 3.264 2 4v9.333c0 .737.597 1.334 1.333 1.334h9.334c.736 0 1.333-.597 1.333-1.334V4c0-.736-.597-1.333-1.333-1.333z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M10.667 1.333v2.667M5.333 1.333v2.667M2 6.667h12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Last Updated : ${lastUpdated}
-            </span>
+            ${badge ? `<span class="badge ${badgeClass}">${badge}</span>` : ''}
+            ${badge ? '<span class="meta-separator">|</span>' : ''}
+            ${publishDate ? `
+              <span class="meta-date">
+                <svg class="icon-calendar" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M12.667 2.667H3.333C2.597 2.667 2 3.264 2 4v9.333c0 .737.597 1.334 1.333 1.334h9.334c.736 0 1.333-.597 1.333-1.334V4c0-.736-.597-1.333-1.333-1.333z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10.667 1.333v2.667M5.333 1.333v2.667M2 6.667h12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                ${publishDate}
+              </span>
+            ` : ''}
+            ${lastUpdated ? `
+              <span class="meta-separator">|</span>
+              <span class="meta-updated">
+                <svg class="icon-calendar" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M12.667 2.667H3.333C2.597 2.667 2 3.264 2 4v9.333c0 .737.597 1.334 1.333 1.334h9.334c.736 0 1.333-.597 1.333-1.334V4c0-.736-.597-1.333-1.333-1.333z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10.667 1.333v2.667M5.333 1.333v2.667M2 6.667h12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Last Updated : ${lastUpdated}
+              </span>
+            ` : ''}
           </div>
 
-          <a href="${item.ctaLink || item.path || '#'}" class="btn-read-more">
-            READ MORE
+          <a href="${ctaLink}" class="btn-read-more">
+            ${ctaText}
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M3.333 8h9.334M8 3.333L12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -89,13 +137,13 @@ export default async function decorate(block) {
         </div>
 
         <div class="featured-image">
-          <img src="${item.cardImage?._publishUrl || item.featuredImage?._publishUrl || ''}" alt="${item.title || ''}" loading="eager">
+          ${imageUrl ? `<img src="${imageUrl}" alt="${imageAlt}" loading="eager">` : ''}
         </div>
       </div>
-    `;
-  } catch (err) {
-    console.error("Press Release Featured error:", err);
-    container.innerHTML = `<p class="error">Error loading press release.</p>`;
-  }
-}
+    </div>
+  `;
 
+  block.appendChild(runtime);
+
+  console.log("Press Release Featured block initialized");
+}

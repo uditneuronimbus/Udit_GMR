@@ -329,8 +329,10 @@
     "components": []
   },
   {
-    "id": "press-release-listing",
-    "components": []
+    "id": "only-press-release-items",
+    "components": [
+      "press-release-item"
+    ]
   },
   {
     "id": "sdg-themes",
