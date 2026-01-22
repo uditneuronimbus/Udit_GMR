@@ -1,0 +1,18 @@
+.search-result-item {
+  padding: 16px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.search-result-item h3 {
+  margin: 0 0 6px;
+}
+
+.search-result-item p {
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.search-result-item em {
+  background: #ffe58a;
+  font-style: normal;
+}

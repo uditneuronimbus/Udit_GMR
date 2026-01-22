@@ -83,3 +83,13 @@
     text-overflow: ellipsis;
     white-space: normal;
 }
+.search-snippet {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+.search-snippet em {
+  background: #ffe58a;
+  font-style: normal;
+}
