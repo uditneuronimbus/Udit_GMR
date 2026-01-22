@@ -130,7 +130,7 @@
 export default function decorate(block) {
   const rows = [...block.children];
 
-  if (rows.length === 0) {
+  if (!rows.length) {
     block.innerHTML = '<p>No content configured.</p>';
     return;
   }
@@ -143,14 +143,16 @@ export default function decorate(block) {
   const sectionTitle =
     (configCells[0]?.textContent || '').trim() || 'Financial Reports';
 
-  /* ✅ FIXED DESCRIPTION (AEM SAFE) */
+  /* ✅ AEM-SAFE DESCRIPTION FIX */
   let sectionDescriptionHTML = '';
   if (configCells[1]) {
-    sectionDescriptionHTML = configCells[1].innerHTML;
+    const descCell = configCells[1];
+    const hasText = descCell.textContent
+      ?.replace(/\u00A0/g, '')
+      .trim();
 
-    // Remove empty AEM filler markup
-    if (!sectionDescriptionHTML.replace(/<[^>]*>/g, '').trim()) {
-      sectionDescriptionHTML = '';
+    if (hasText) {
+      sectionDescriptionHTML = descCell.innerHTML;
     }
   }
 
@@ -170,7 +172,10 @@ export default function decorate(block) {
   /* ===============================
      COLLECT CARDS
   =============================== */
-  const companyCards = { airport: [], infra: [] };
+  const companyCards = {
+    airport: [],
+    infra: [],
+  };
 
   for (let i = 1; i < rows.length; i++) {
     const cells = [...rows[i].children];
@@ -196,8 +201,8 @@ export default function decorate(block) {
       let link = (linkCell?.textContent || '').trim();
 
       const aTag = linkCell?.querySelector('a');
-      if (aTag) {
-        link = aTag.href || '#';
+      if (aTag?.href) {
+        link = aTag.href;
       }
 
       if (title && link && link !== '#') {
@@ -235,11 +240,11 @@ export default function decorate(block) {
         </div>
       ` : ''}
 
-      <div class="financial-tabs">
-        <button class="tab active" data-company="airport">
+      <div class="financial-tabs" role="tablist">
+        <button class="tab active" role="tab" data-company="airport">
           ${tab1Text}
         </button>
-        <button class="tab" data-company="infra">
+        <button class="tab" role="tab" data-company="infra">
           ${tab2Text}
         </button>
       </div>
@@ -266,19 +271,21 @@ export default function decorate(block) {
       return;
     }
 
-    cardsContainer.innerHTML = cards.map(card => `
-      <a class="financial-card"
-         href="${card.link}"
-         target="_blank"
-         rel="noopener">
-        <h3>${card.title}</h3>
-        <span>VIEW NOW &gt;</span>
-      </a>
-    `).join('');
+    cardsContainer.innerHTML = cards
+      .map(card => `
+        <a class="financial-card"
+           href="${card.link}"
+           target="_blank"
+           rel="noopener">
+          <h3>${card.title}</h3>
+          <span>VIEW NOW &gt;</span>
+        </a>
+      `)
+      .join('');
   }
 
   /* ===============================
-     INIT + TABS
+     INIT + TAB HANDLERS
   =============================== */
   renderCards('airport');
 
