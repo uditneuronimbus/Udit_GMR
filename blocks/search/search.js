@@ -94,7 +94,10 @@ export default function decorate(block) {
 
     hits.slice(0, 10).forEach((item, i) => {
       const a = document.createElement("a");
-      a.href = item.path;
+      const parts = window.location.pathname.split("/").filter(Boolean);
+      const lang = parts[0] || "en";
+
+      a.href = item.path || `/${lang}/`;
       a.id = `search-option-${i}`;
       a.role = "option";
 
