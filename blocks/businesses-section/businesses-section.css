@@ -46,7 +46,7 @@
 }
 @media (max-width:767px){
 .businesses-section-wrapper{background-color:var(--sky-blue)}
-.business-accordion-wrapper{padding:3rem 1rem;width:90%;margin:auto;box-shadow:0 0 10px rgba(0,51,102,.1);margin-top:-5rem}
+.business-accordion-wrapper{padding:3rem 1rem;width:100%;margin:auto;box-shadow:0 0 10px rgba(0,51,102,.1);margin-top:-1rem}
 .business-accordion-header{margin-bottom:2rem}
 .mobile-business-image img{max-height:200px}
 /* .business-cta .btn{width:100%;display:flex} */

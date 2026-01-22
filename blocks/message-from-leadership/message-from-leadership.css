@@ -100,7 +100,8 @@
   display: flex;
   gap: 12px;
   justify-content: flex-end;   
-  margin-top: 32px;
+  margin-top: -113px;
+  margin-right: 445px;
 }
 
 .mfl-navigation button {

@@ -46,7 +46,7 @@ export default function decorate(block) {
       <div class="airport-cards row"></div>
 
       <div class="load-more-wrap text-center">
-        <button class="load-more-btn btn-link">Load More</button>
+        <button class="load-more-btn btn btn-primary">Load More</button>
       </div>
     </div>
   `;

@@ -448,14 +448,14 @@ function findCookieConsentBlock() {
 }
 
 function setupCookiePolicyLinks() {
-  // Find all links with title containing "Cookies Policies" (exact match)
+  // Find all links with title containing "Customize Cookies" (exact match)
   const allLinks = document.querySelectorAll('a[title]');
   
   allLinks.forEach(link => {
     const title = link.getAttribute('title') || '';
     
-    // Check if this is exactly "Cookies Policies" (case-insensitive)
-    if (title.toLowerCase() === 'cookies policies') {
+    // Check if this is exactly "Customize Cookies" (case-insensitive)
+    if (title.toLowerCase() === 'customize cookies') {
       
       // Check if we've already added a handler
       if (link.dataset.cookieHandlerAdded) return;
