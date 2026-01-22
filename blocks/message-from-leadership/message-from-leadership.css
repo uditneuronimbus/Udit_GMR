@@ -107,7 +107,7 @@
 .mfl-navigation button {
   width: 44px;
   height: 44px;
-  border-radius: 50%;
+  border-radius: 15%;
   border: 1px solid #f0b04f;
   background: transparent;
   color: #f0b04f;
@@ -125,7 +125,7 @@
 
 .mfl-navigation .mfl-next {
   background: #f0b04f;
-  color: #ffffff;
+  color: var(--black #000000);
   border-color: #f0b04f;
 }
 
