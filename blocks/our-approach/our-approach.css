@@ -1,7 +1,7 @@
 /* BLOCK ROOT — MANDATORY */
 .our-approach {
   padding: 80px 0;
-  background: #E0E0E0;
+  background:var(--light-grey #e0e0e0);
   margin-top: 70px;
 }
 
