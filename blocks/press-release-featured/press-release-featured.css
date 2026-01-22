@@ -1,0 +1,176 @@
+/* Press Release Featured Block */
+.press-release-featured {
+  padding: 4rem 0;
+  background: var(--white);
+}
+
+.press-release-featured .featured-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.press-release-featured .featured-content {
+  padding-right: 2rem;
+}
+
+.press-release-featured .featured-label {
+  display: block;
+  font-size: var(--fs-small, 0.875rem);
+  font-weight: var(--fw-semi-bold, 600);
+  color: var(--primary-orange, #E87722);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.press-release-featured .featured-title {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: var(--fw-bold, 700);
+  color: var(--charcoal, #333);
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+
+.press-release-featured .featured-description {
+  font-size: var(--fs-regular, 1rem);
+  color: var(--text-grey, #666);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.press-release-featured .featured-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  font-size: var(--fs-small, 0.875rem);
+}
+
+.press-release-featured .badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: var(--fs-small, 0.875rem);
+  font-weight: var(--fw-medium, 500);
+  text-transform: capitalize;
+}
+
+.press-release-featured .badge.sports {
+  background-color: var(--primary-orange, #E87722);
+  color: var(--white);
+}
+
+.press-release-featured .badge.airports,
+.press-release-featured .badge.airports-aero-services {
+  background-color: var(--turquoise, #00A3AD);
+  color: var(--white);
+}
+
+.press-release-featured .badge.energy {
+  background-color: var(--royal-blue, #0054A6);
+  color: var(--white);
+}
+
+.press-release-featured .badge.corporate {
+  background-color: var(--charcoal, #333);
+  color: var(--white);
+}
+
+.press-release-featured .badge.transport,
+.press-release-featured .badge.transport-urban-infrastructure {
+  background-color: #6B4C9A;
+  color: var(--white);
+}
+
+.press-release-featured .badge.foundation {
+  background-color: #2E8B57;
+  color: var(--white);
+}
+
+.press-release-featured .meta-separator {
+  color: var(--light-grey, #ccc);
+}
+
+.press-release-featured .meta-date,
+.press-release-featured .meta-updated {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-grey, #666);
+}
+
+.press-release-featured .icon-calendar {
+  opacity: 0.6;
+}
+
+.press-release-featured .btn-read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-orange, #E87722);
+  font-weight: var(--fw-semi-bold, 600);
+  text-decoration: none;
+  font-size: var(--fs-regular, 1rem);
+  transition: gap 0.3s ease;
+}
+
+.press-release-featured .btn-read-more:hover {
+  gap: 1rem;
+}
+
+.press-release-featured .featured-image {
+  position: relative;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  aspect-ratio: 16/10;
+}
+
+.press-release-featured .featured-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.press-release-featured .featured-loading,
+.press-release-featured .no-data,
+.press-release-featured .error {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-grey, #666);
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+  .press-release-featured .featured-wrapper {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .press-release-featured .featured-content {
+    padding-right: 0;
+    order: 2;
+  }
+
+  .press-release-featured .featured-image {
+    order: 1;
+  }
+}
+
+@media (max-width: 576px) {
+  .press-release-featured {
+    padding: 2rem 0;
+  }
+
+  .press-release-featured .featured-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .press-release-featured .meta-separator {
+    display: none;
+  }
+}
+

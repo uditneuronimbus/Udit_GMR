@@ -2720,6 +2720,44 @@
     ]
   },
   {
+    "id": "press-release-featured",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "description": "e.g., LATEST PRESS UPDATE"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "category",
+        "label": "Business Category Filter",
+        "description": "Filter by business category (leave empty for all)"
+      }
+    ]
+  },
+  {
+    "id": "press-release-listing",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "description": "e.g., All Releases"
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "itemsPerPage",
+        "label": "Items Per Page",
+        "description": "Number of items to show per page (default: 10)"
+      }
+    ]
+  },
+  {
     "id": "privacy-request",
     "fields": [
       {

@@ -323,6 +323,14 @@
     ]
   },
   {
+    "id": "press-release-featured",
+    "components": []
+  },
+  {
+    "id": "press-release-listing",
+    "components": []
+  },
+  {
     "id": "sdg-themes",
     "components": [
       "sdg-themes-item"
