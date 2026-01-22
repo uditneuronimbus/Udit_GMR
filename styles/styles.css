@@ -95,7 +95,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .bg-white{background-color:var(--white)!important}
 .bg-black{background-color:var(--black)!important}
 .bg-charcoal{background-color:var(--charcoal)!important}
-.bg-sky-blue{background-color:var(--sky-blue)!important}
+.bg-sky-blue,.baclground-skyblue{background-color:var(--sky-blue)!important}
 .text-blue,.text-primary{color:var(--blue)!important}
 .text-red{color:var(--red)!important}
 .text-secondary,.text-yellow{color:var(--yellow)!important}
@@ -205,7 +205,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .gmr-impact .global-leaders-aviation .gla-footer>div { background-color: #e0e0e0; }
 
 .page-about .commitment-cards-container .sec-commitment { background: none; margin-top: -4rem;}
-/* .page-about .commitment-cards-container .sec-commitment .sec-head { display: none;} */
+.page-about .commitment-cards-container .sec-commitment .sec-title { color:var(--charcoal); } 
 .page-about .flat-banner { margin-top: 0; }
 /* about gmr impact */
 

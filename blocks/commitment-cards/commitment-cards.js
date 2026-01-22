@@ -8,25 +8,27 @@ export default function decorate(block) {
   container.className = "container";
 
   // ---- Header ----
-const headerRow = rows.shift();
-headerRow.classList.add("sec-head", "mb-5", "text-center");
+  const headerRow = rows.shift();
+  headerRow.classList.add("sec-head", "mb-5", "text-center");
 
-// find first meaningful element or text
-let titleEl = headerRow.querySelector("h1, h2, h3, p");
+  const p = headerRow.querySelector("p");
+  let hasHeaderContent = false;
 
-if (!titleEl && headerRow.textContent.trim()) {
-  titleEl = document.createElement("div");
-  titleEl.innerHTML = headerRow.innerHTML;
-}
-
-if (titleEl) {
-  const h2 = document.createElement("h2");
-  h2.className = "sec-title fw-normal";
-  h2.innerHTML = titleEl.innerHTML;
-
-  headerRow.innerHTML = "";
-  headerRow.appendChild(h2);
-}
+  if (p) {
+    const h2 = document.createElement("h2");
+    h2.className = "sec-title fw-normal";
+    h2.innerHTML = p.innerHTML; // preserve authored content
+    
+    // Check if header has actual content (not just whitespace/empty)
+    const headerText = p.textContent.trim();
+    if (headerText) {
+      p.replaceWith(h2);
+      hasHeaderContent = true;
+    } else {
+      // Remove the empty paragraph but don't add h2
+      p.remove();
+    }
+  }
 
   // ---- Grid ----
   const grid = document.createElement("div");
@@ -99,7 +101,15 @@ if (titleEl) {
     grid.append(row);
   });
 
-  container.append(headerRow, grid);
+  // Only append headerRow if it has content
+  if (hasHeaderContent) {
+    container.append(headerRow);
+  } else {
+    // Remove headerRow entirely if empty
+    headerRow.remove();
+  }
+  
+  container.append(grid);
   outerContainer.append(container);
   block.append(outerContainer);
 }
