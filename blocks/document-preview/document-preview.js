@@ -1,5 +1,8 @@
 export default function decorate(block) {
-  const documentUrl = block.dataset.docUrl;
+  const textUrl = block.textContent?.trim();
+  const dataUrl = block.dataset.docUrl;
+
+  const documentUrl = dataUrl || textUrl;
 
   if (!documentUrl) {
     block.innerHTML = `<p class="doc-error">⚠️ No document URL provided</p>`;
