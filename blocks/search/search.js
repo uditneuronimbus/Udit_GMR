@@ -16,17 +16,17 @@ const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY, {
 
 const algoliaIndex = client.initIndex(ALGOLIA_INDEX);
 
-function getBasePath() {
-  const parts = window.location.pathname
-    .split("/")
-    .filter(Boolean);
+// function getBasePath() {
+//   const parts = window.location.pathname
+//     .split("/")
+//     .filter(Boolean);
 
-  if (parts.length >= 2) {
-    return `/${parts[0]}/${parts[1]}`;
-  }
+//   if (parts.length >= 2) {
+//     return `/${parts[0]}/${parts[1]}`;
+//   }
 
-  return `/${parts[0] || ""}`;
-}
+//   return `/${parts[0] || ""}`;
+// }
 
 
 export default function decorate(block) {
@@ -144,7 +144,6 @@ export default function decorate(block) {
       const lang = parts[0] || "en";
       const { hits } = await algoliaIndex.search(q, {
         hitsPerPage: 10,
-        filters: `lang:${lang}`,
         attributesToRetrieve: [
           "title",
           "metaTitle",
@@ -196,9 +195,9 @@ export default function decorate(block) {
         e.preventDefault();
         const query = input.value.trim();
         if (!query) return;
-        const parts = window.location.pathname.split("/").filter(Boolean);
-        const lang = parts[0] || "en";
-        window.location.href = `/${lang}/search?q=${encodeURIComponent(query)}`;
+        // const parts = window.location.pathname.split("/").filter(Boolean);
+        // const lang = parts[0] || "en";
+        window.location.href = `/en/search?q=${encodeURIComponent(query)}`;
         break;
 
       case "Escape":
