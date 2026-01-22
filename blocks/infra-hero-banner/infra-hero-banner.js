@@ -30,8 +30,14 @@ export default function decorate(block) {
   ============================== */
   const img = bgRow.querySelector('img');
   if (img) {
-    bg.style.backgroundImage = `url(${img.src})`;
+    const fullSrc =
+      img.getAttribute('data-src') ||
+      img.getAttribute('srcset')?.split(',').pop()?.trim().split(' ')[0] ||
+      img.src;
+
+    bg.style.backgroundImage = `url(${fullSrc})`;
   }
+
   bgRow.remove();
 
   /* =============================
