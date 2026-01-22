@@ -48,18 +48,6 @@
           "valueType": "string",
           "name": "sectionDescription",
           "label": "Section Description"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "sectionctaText",
-          "label": "CTA Text"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "sectionctaLink",
-          "label": "CTA Link"
         }
       ]
     },
