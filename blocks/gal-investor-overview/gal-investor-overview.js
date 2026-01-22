@@ -1,67 +1,86 @@
 export default function decorate(block) {
-  const rows = [...block.children].filter(row => row.children.length > 0); // skip fully empty rows
+  const rows = [...block.children].filter(
+    (row) => row.children.length && row.textContent.trim()
+  );
 
-  if (rows.length === 0) {
+  if (!rows.length) {
     block.innerHTML = '<p>No content configured.</p>';
     return;
   }
 
-  let idx = 0;
+  let cursor = 0;
 
-  // Title (first non-empty row, usually single cell or first cell)
-  const title = rows[idx]?.children[0]?.textContent?.trim() || 'Investor Relations';
-  idx++;
+  /* ===============================
+     TITLE
+  =============================== */
+  const title = rows[cursor]?.children[0]?.textContent.trim() || 'Investor Relations';
+  cursor++;
 
-  // Description (next row, can have HTML)
+  /* ===============================
+     DESCRIPTION (HTML)
+  =============================== */
   let description = '';
-  if (rows[idx] && rows[idx].children.length > 0) {
-    description = rows[idx].innerHTML.trim();
-    idx++;
+  if (rows[cursor] && rows[cursor].children.length === 1) {
+    description = rows[cursor].innerHTML.trim();
+    cursor++;
   }
 
-  // Market section (usually 3 rows: title, date, content)
+  /* ===============================
+     MARKET SECTION (UP TO 3 SINGLE-CELL ROWS)
+  =============================== */
   let marketTitle = '';
   let marketDate = '';
   let marketContent = '';
 
-  // Try to detect market block (often 2–3 consecutive rows)
-  if (rows[idx] && rows[idx].children.length >= 1) {
-    marketTitle = rows[idx].children[0]?.textContent?.trim() || '';
-    idx++;
-  }
-  if (rows[idx] && rows[idx].children.length >= 1) {
-    marketDate = rows[idx].children[0]?.textContent?.trim() || '';
-    idx++;
-  }
-  if (rows[idx] && rows[idx].children.length >= 1) {
-    marketContent = rows[idx].innerHTML.trim();
-    idx++;
+  if (rows[cursor]?.children.length === 1) {
+    marketTitle = rows[cursor].textContent.trim();
+    cursor++;
   }
 
-  // CTA (usually one row with text + link)
+  if (rows[cursor]?.children.length === 1) {
+    marketDate = rows[cursor].textContent.trim();
+    cursor++;
+  }
+
+  if (rows[cursor]?.children.length === 1) {
+    marketContent = rows[cursor].innerHTML.trim();
+    cursor++;
+  }
+
+  /* ===============================
+     CTA (ROW WITH LINK OR 2 CELLS)
+  =============================== */
   let ctaText = '';
   let ctaLink = '#';
 
-  if (rows[idx] && rows[idx].children.length >= 2) {
-    ctaText = rows[idx].children[0]?.textContent?.trim() || '';
-    const linkCell = rows[idx].children[1];
-    ctaLink = linkCell?.querySelector('a')?.href || linkCell?.textContent?.trim() || '#';
-    idx++;
-  } else if (rows[idx] && rows[idx].children.length >= 1) {
-    ctaText = rows[idx].children[0]?.textContent?.trim() || '';
-    idx++;
-  }
+  if (rows[cursor]) {
+    const cells = [...rows[cursor].children];
+    const hasLink = rows[cursor].querySelector('a');
 
-  // Stats: collect remaining rows (up to 6), each as full innerHTML
-  const stats = [];
-  for (let i = idx; i < rows.length && stats.length < 6; i++) {
-    const statHTML = rows[i]?.innerHTML?.trim();
-    if (statHTML) {
-      stats.push(statHTML);
+    if (cells.length >= 2 || hasLink) {
+      ctaText = cells[0]?.textContent.trim() || '';
+      ctaLink =
+        cells[1]?.querySelector('a')?.href ||
+        hasLink?.href ||
+        cells[1]?.textContent.trim() ||
+        '#';
+      cursor++;
     }
   }
 
-  // Build structure
+  /* ===============================
+     STATS (EVERYTHING ELSE)
+  =============================== */
+  const stats = [];
+
+  for (let i = cursor; i < rows.length && stats.length < 6; i++) {
+    const html = rows[i].innerHTML.trim();
+    if (html) stats.push(html);
+  }
+
+  /* ===============================
+     BUILD DOM
+  =============================== */
   block.innerHTML = '';
 
   const wrapper = document.createElement('div');
@@ -70,7 +89,7 @@ export default function decorate(block) {
   wrapper.innerHTML = `
     <div class="gal-left">
       <h2>${title}</h2>
-      
+
       ${description ? `<div class="gal-desc">${description}</div>` : ''}
 
       ${(marketTitle || marketDate || marketContent) ? `
@@ -87,10 +106,10 @@ export default function decorate(block) {
     </div>
 
     <div class="gal-right">
-      ${stats
-        .map(stat => `<div class="gal-stat-card">${stat}</div>`)
-        .join('')}
-      
+      ${stats.map(stat => `
+        <div class="gal-stat-card">${stat}</div>
+      `).join('')}
+
       ${Array(Math.max(0, 6 - stats.length))
         .fill('')
         .map(() => `<div class="gal-stat-card gal-stat-placeholder"></div>`)

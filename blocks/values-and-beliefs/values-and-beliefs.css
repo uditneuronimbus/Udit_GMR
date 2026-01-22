@@ -1,3 +1,6 @@
+/* ===============================
+   SECTION
+================================ */
 .values-section {
   max-width: 1200px;
   margin: 0 auto;
@@ -8,32 +11,44 @@
   text-align: center;
   font-size: 36px;
   font-weight: 700;
-  margin: 0 0 40px;
+  margin-bottom: 40px;
   color: #000;
 }
 
+/* ===============================
+   GRID
+================================ */
 .values-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
+  align-items: stretch;
 }
 
+/* ===============================
+   CARD FRAME
+================================ */
 .value-card {
-  border-radius: 12px;
+  position: relative;
+  border-radius: 14px;
   overflow: hidden;
   background: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .value-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.18);
 }
 
+/* ===============================
+   IMAGE FRAME
+================================ */
 .value-card-image {
   position: relative;
-  height: 280px;           /* Matches portrait ratio in your screenshot */
+  width: 100%;
+  aspect-ratio: 3 / 4;     
   overflow: hidden;
 }
 
@@ -44,49 +59,57 @@
   display: block;
 }
 
+/* ===============================
+   BLUE TITLE BAR
+================================ */
 .value-card-overlay {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  background: #003a8f;     /* Solid blue like your bar */
-  color: white;
-  padding: 12px 16px;
-  font-size: 16px;
+  height: 52px;
+  background: #003a8f;
+  color: #fff;
+  padding: 0 16px;
+  font-size: 15px;
   font-weight: 600;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  z-index: 4;
   cursor: pointer;
-  z-index: 3;
 }
 
+/* PLUS / MINUS ICON */
 .value-card-overlay span.icon {
   width: 20px;
   height: 20px;
-  background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='1' y='1' width='18' height='18' rx='4' fill='%23FAA519'/%3E%3Cpath d='M10 5V15' stroke='white' stroke-width='2'/%3E%3Cpath d='M5 10H15' stroke='white' stroke-width='2'/%3E%3C/svg%3E") center / contain no-repeat;
-  transition: transform 0.3s ease;
+  background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='1' y='1' width='18' height='18' rx='4' fill='%23FAA519'/%3E%3Cpath d='M10 5V15' stroke='white' stroke-width='2'/%3E%3Cpath d='M5 10H15' stroke='white' stroke-width='2'/%3E%3C/svg%3E")
+    center / contain no-repeat;
 }
 
 .value-card.active .value-card-overlay span.icon {
-  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='1' y='1' width='18' height='18' rx='4' fill='%23FAA519'/%3E%3Cpath d='M5 10H15' stroke='white' stroke-width='2'/%3E%3C/svg%3E"); /* minus */
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='1' y='1' width='18' height='18' rx='4' fill='%23FAA519'/%3E%3Cpath d='M5 10H15' stroke='white' stroke-width='2'/%3E%3C/svg%3E");
 }
 
+/* ===============================
+   OVERLAY CONTENT
+================================ */
 .value-card-content {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.50);   /* Dark overlay for text readability */
-  color: white;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 20px;
+  padding: 24px;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.4s ease;
-  z-index: 2;
+  transition: opacity 0.35s ease;
+  z-index: 3;
 }
 
 .value-card.active .value-card-content {
@@ -94,16 +117,28 @@
   visibility: visible;
 }
 
+/* TEXT */
 .value-card-content .quote {
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.5;
-  margin: 0 0 16px;
+  margin-bottom: 14px;
   font-style: italic;
-  max-width: 90%;
 }
 
 .value-card-content .author {
-  font-size: 15px;
-  font-style: normal;
-  opacity: 0.95;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* ===============================
+   MOBILE
+================================ */
+@media (max-width: 768px) {
+  .values-title {
+    font-size: 28px;
+  }
+
+  .value-card-overlay {
+    font-size: 14px;
+  }
 }
