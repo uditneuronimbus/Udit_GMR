@@ -16,8 +16,8 @@
 }
 
 .factsheet-header h2 {
-  font-size: 2.5rem;
-  font-weight: 600;
+  font-size: 48px;
+  font-weight: 400;
   margin-bottom: 1.5rem;
 }
 
@@ -66,9 +66,10 @@
 }
 
 .factsheet-card img {
-  width: 48px;
-  height: 48px;
+  width: 90px;
+  height: 80px;
   margin-bottom: 1rem;
+  margin-left: 425px;
 }
 
 .factsheet-card h4 {
@@ -77,6 +78,7 @@
 }
 
 .factsheet-card p {
-  font-size: 0.95rem;
+  font-size: 24px;
   opacity: 0.95;
+  font-weight: 600;
 }
