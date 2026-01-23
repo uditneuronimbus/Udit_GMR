@@ -17,7 +17,7 @@
       }
     },
     {
-      "title": "GMR Tabs Item",
+      "title": "GMR Tab Item",
       "id": "gmr-tabs-item",
       "plugins": {
         "xwalk": {
@@ -39,7 +39,7 @@
         {
           "component": "text",
           "name": "mainTitle",
-          "label": "Section Heading",
+          "label": "Section Title",
           "valueType": "string",
           "defaultValue": "What Makes GMR Different"
         }
@@ -49,42 +49,47 @@
       "id": "gmr-tabs-item",
       "fields": [
         {
-          "component": "select",
-          "name": "tab",
-          "label": "Tab",
+          "component": "text",
+          "name": "tabTitle",
+          "label": "Tab Title",
           "valueType": "string",
-          "options": [
-            {
-              "name": "Work That Makes A Difference",
-              "value": "work"
-            },
-            {
-              "name": "Life Beyond The Job",
-              "value": "life"
-            },
-            {
-              "name": "A Place To Belong",
-              "value": "belong"
-            }
-          ]
-        },
-        {
-          "component": "reference",
-          "name": "icon",
-          "label": "Card Icon (White)",
-          "valueType": "string"
+          "placeholder": "e.g. Work That Makes A Difference",
+          "required": true
         },
         {
           "component": "text",
-          "name": "title",
-          "label": "Card Title",
-          "valueType": "string"
+          "name": "tabId",
+          "label": "Tab ID (optional - for JS/anchors)",
+          "valueType": "string",
+          "placeholder": "e.g. work, life-beyond-job",
+          "description": "Lowercase kebab-case recommended"
         },
         {
-          "component": "richtext",
-          "name": "description",
-          "label": "Card Description",
-          "valueType": "string"
+          "component": "container",
+          "name": "cards",
+          "label": "Cards in this Tab",
+          "multi": true,
+          "fields": [
+            {
+              "component": "reference",
+              "name": "icon",
+              "label": "Card Icon",
+              "valueType": "string"
+            },
+            {
+              "component": "text",
+              "name": "cardTitle",
+              "label": "Card Title",
+              "valueType": "string",
+              "required": true
+            },
+            {
+              "component": "richtext",
+              "name": "cardDesc",
+              "label": "Card Description",
+              "valueType": "string"
+            }
+          ]
         }
       ]
     }

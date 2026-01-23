@@ -931,7 +931,7 @@
           }
         },
         {
-          "title": "GMR Tabs Item",
+          "title": "GMR Tab Item",
           "id": "gmr-tabs-item",
           "plugins": {
             "xwalk": {
