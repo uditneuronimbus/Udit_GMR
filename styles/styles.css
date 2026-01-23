@@ -116,7 +116,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .btn-link:hover:after{right:.25rem}
 .btn{height:44px;display:inline-flex;align-items:center;padding:0 1.25rem;border-radius:.5rem;font-weight:var(--fw-semi-bold);gap:.5rem;justify-content:center}
 .btn-lg{font-size:var(--fs-normal);height:54px;padding:0 1.75rem}
-.btn-primary{background-color:var(--lorange);border-color:var(--lorange);color:var(--black)}
+.btn-primary{background-color:var(--lorange);border:1px solid var(--lorange);color:var(--black)}
 .btn-outline-primary{background-color:none;border-color:var(--lorange);color:var(--lorange)}
 .btn-outline-primary:focus,.btn-outline-primary:hover,.btn-primary:focus,.btn-primary:hover{background-color:var(--white);border-color:var(--lorange);color:var(--black)}
 .btn-transparent{padding:0;font-weight:500;text-decoration:none;border-radius:0;border:none;background-color:transparent;color:var(--yellow)!important;position:relative;height:auto;display:inline-flex;align-items:center;gap:6px}
@@ -209,6 +209,9 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .page-about .flat-banner { margin-top: 0; }
 .all-business-cards-container .default-content-wrapper { background-color: var(--lgrey); text-align: center; padding-bottom: 80px; }
 .all-business-cards-container .default-content-wrapper .button-container { margin-bottom: 0; }
+.all-business-cards-container .default-content-wrapper .button { height: 44px; display: inline-flex; align-items: center; padding: 0 1.25rem; border-radius: .5rem; font-weight: var(--fw-semi-bold); gap: .5rem; justify-content: center; text-decoration: none; }
+.all-business-cards-container .default-content-wrapper .primary { background-color: var(--lorange); border:1px solid var(--lorange); color: var(--black); }
+.all-business-cards-container .default-content-wrapper .primary:hover { background-color: var(--white); }
 /* about gmr impact */
 
 
