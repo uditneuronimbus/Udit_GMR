@@ -1,9 +1,14 @@
-/* Hide original authored content after decoration */
+
+/* =====================================================
+   HIDE AUTHORED CONTENT AFTER DECORATION
+===================================================== */
 .message-from-leadership.mfl-initialized > :not(.mfl-runtime) {
   display: none;
 }
 
-
+/* =====================================================
+   SECTION
+===================================================== */
 .mfl-runtime {
   padding: 80px 0;
   background: #ffffff;
@@ -15,7 +20,9 @@
   padding: 0 24px;
 }
 
-
+/* =====================================================
+   SLIDER
+===================================================== */
 .mfl-slider {
   position: relative;
 }
@@ -31,7 +38,7 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.45s ease, visibility 0.45s ease;
+  transition: opacity 0.45s ease;
 }
 
 .mfl-slide.active {
@@ -40,36 +47,43 @@
   pointer-events: auto;
 }
 
-
+/* =====================================================
+   CARD LAYOUT
+===================================================== */
 .mfl-card {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 45% 55%;
   gap: 56px;
-  align-items: center;
-  margin-top: 50px;
+  align-items: stretch;
+  margin-top: 48px;
+  position: relative;
 }
 
-
+/* =====================================================
+   IMAGE
+===================================================== */
 .mfl-image {
-  position: relative;
   border-radius: 12px;
   overflow: hidden;
 }
 
 .mfl-image img,
-.mfl-image picture {
+.mfl-image picture img {
   width: 100%;
-  /* height: auto;
-  max-height: 520px; */
+  height: 100%;
   object-fit: cover;
   display: block;
-  height: 450px;
 }
 
+/* =====================================================
+   CONTENT
+===================================================== */
 .mfl-content {
-  margin-top: -108px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 0;
 }
-
 
 .mfl-title {
   font-size: 2.625rem;
@@ -85,12 +99,12 @@
   text-transform: uppercase;
   letter-spacing: 1.2px;
   color: #6f6f6f;
-  margin-bottom: 1.125rem;
+  margin-bottom: 1.25rem;
 }
 
 .mfl-message {
   font-size: 1.125rem;
-  /* line-height: 1.65; */
+  line-height: 1.65;
   color: #2d2d2d;
   margin-bottom: 1.75rem;
 }
@@ -101,28 +115,30 @@
   color: #0b1f33;
 }
 
+/* =====================================================
+   NAVIGATION
+===================================================== */
 .mfl-navigation {
-  position: static;
+  position: absolute;
+  right: 40px;
+  bottom: 40px;
   display: flex;
   gap: 12px;
-  justify-content: flex-end;   
-  margin-top: -80px;
-  margin-right: 445px;
 }
 
 .mfl-navigation button {
   width: 44px;
   height: 44px;
-  border-radius: 15%;
+  border-radius: 12px;
   border: 1px solid #f0b04f;
   background: transparent;
   color: #f0b04f;
   font-size: 1.25rem;
   cursor: pointer;
-  transition: all 0.25s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.25s ease;
 }
 
 .mfl-navigation .mfl-prev:hover {
@@ -131,7 +147,7 @@
 
 .mfl-navigation .mfl-next {
   background: #f0b04f;
-  color: var(--black);
+  color: #000;
   border-color: #f0b04f;
 }
 
@@ -139,14 +155,22 @@
   background: #e0a03f;
 }
 
-
+/* =====================================================
+   TABLET
+===================================================== */
 @media (max-width: 1024px) {
   .mfl-card {
     gap: 40px;
   }
+
+  .mfl-title {
+    font-size: 2.25rem;
+  }
 }
 
-
+/* =====================================================
+   MOBILE
+===================================================== */
 @media (max-width: 768px) {
   .mfl-runtime {
     padding: 60px 0;
@@ -161,9 +185,8 @@
     max-height: 380px;
   }
 
-  .mfl-image img,
-  .mfl-image picture {
-    max-height: 380px;
+  .mfl-content {
+    padding: 0;
   }
 
   .mfl-title {
@@ -175,12 +198,15 @@
   }
 
   .mfl-navigation {
-    justify-content: center;   
+    position: static;
+    justify-content: center;
     margin-top: 24px;
   }
 }
 
-
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
 @media (max-width: 480px) {
   .mfl-container {
     padding: 0 16px;

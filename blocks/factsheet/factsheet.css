@@ -80,5 +80,9 @@
 .factsheet-card p {
   font-size: 24px;
   opacity: 0.95;
+  font-weight: 300;
+}
+
+.factsheet-card strong {
   font-weight: 600;
 }

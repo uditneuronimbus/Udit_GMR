@@ -52,7 +52,9 @@
 }
 
 .infra-hero-description {
-  font-size: 16px;
+  font-size: 19px;
+  font-weight: 400;
+  color: #E0E0E0;
 }
 
 .infra-hero.align-left {
