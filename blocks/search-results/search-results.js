@@ -1,8 +1,6 @@
 import algoliasearch from "https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.esm.browser.js";
 
-const ALGOLIA_APP_ID = "BARVAFD3OC";
-const ALGOLIA_SEARCH_KEY = "e3ba8576fac702f5c6826b7b24cf221c";
-const ALGOLIA_INDEX = "site_pages";
+const { ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY, ALGOLIA_INDEX } = window.APP_CONFIG;
 
 const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY);
 const index = client.initIndex(ALGOLIA_INDEX);
@@ -59,9 +57,11 @@ export default async function decorate(block) {
         item._snippetResult?.content?.value ||
         item.description ||
         "";
-
+      const parts = window.location.pathname.split("/").filter(Boolean);
+      const lang = parts[0] || "en";
+      const safeHref = item.path ? item.path : `/${lang}/`;
       el.innerHTML = `
-        <a href="${item.path}">
+        <a href="${safeHref}">
           <h3>${item.title || item.metaTitle}</h3>
           <p>${snippet}</p>
         </a>
