@@ -51,6 +51,16 @@
       "partners-filter",
       "awards-filter",
       "breadcrumbs",
+      "message-from-leadership",
+      "gmr-tabs",
+      "image-slider",
+      "integrity-decision"
+    ]
+  },
+  {
+    "id": "integrity-decision",
+    "components": [
+      "integrity-decision-item"
       "Message from Leadership",
       "press-release-featured",
       "press-release-listing"
@@ -219,6 +229,12 @@
     ]
   },
   {
+    "id": "gmr-tabs",
+    "components": [
+      "gmr-tabs-item"
+    ]
+  },
+  {
     "id": "header-img",
     "components": [
       "menu-img"
@@ -240,6 +256,12 @@
     "id": "hero-banner",
     "components": [
       "hero-banner-items"
+    ]
+  },
+  {
+    "id": "image-slider",
+    "components": [
+      "image-slider-item"
     ]
   },
   {
@@ -330,8 +352,24 @@
     ]
   },
   {
+    "id": "sdg-themes",
+    "components": [
+      "sdg-themes-item"
+    ]
+  },
+  {
+    "id": "search-results",
+    "components": []
+  },
+  {
     "id": "press-release-featured",
     "components": []
+  },
+  {
+    "id": "sustainable-aviation",
+    "components": [
+      "sustainable-aviation-item"
+    ]
   },
   {
     "id": "only-press-release-items",

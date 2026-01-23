@@ -189,7 +189,7 @@
             "value": "gmr-impact"
           },
           {
-            "name": "BG Sky Blue",
+            "name": "Background Sky-Blue",
             "value": "bg-sky-blue"
           },
           {
@@ -221,6 +221,46 @@
             "value": "mb-0"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "integrity-decision",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionTitle",
+        "label": "Section Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      }
+    ]
+  },
+  {
+    "id": "integrity-decision-item",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "icon",
+        "label": "Icon / Image"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Card Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
       }
     ]
   },
@@ -1644,6 +1684,61 @@
     ]
   },
   {
+    "id": "gmr-tabs",
+    "fields": [
+      {
+        "component": "text",
+        "name": "mainTitle",
+        "label": "Section Heading",
+        "valueType": "string",
+        "defaultValue": "What Makes GMR Different"
+      }
+    ]
+  },
+  {
+    "id": "gmr-tabs-item",
+    "fields": [
+      {
+        "component": "select",
+        "name": "tab",
+        "label": "Tab",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Work That Makes A Difference",
+            "value": "work"
+          },
+          {
+            "name": "Life Beyond The Job",
+            "value": "life"
+          },
+          {
+            "name": "A Place To Belong",
+            "value": "belong"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "icon",
+        "label": "Card Icon (White)",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Card Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Card Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "menu-img",
     "fields": [
       {
@@ -1850,6 +1945,42 @@
         "name": "text",
         "value": "",
         "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "image-slider",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Section Heading",
+        "valueType": "string",
+        "defaultValue": "Everyday Life at GMR"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Section Description",
+        "valueType": "string",
+        "defaultValue": "At GMR, the countless small moments in our people's workday show the human side of building big things together."
+      }
+    ]
+  },
+  {
+    "id": "image-slider-item",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "altText",
+        "label": "Alt Text",
         "valueType": "string"
       }
     ]
