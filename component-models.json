@@ -1101,42 +1101,6 @@
     ]
   },
   {
-    "id": "everyday-life-block",
-    "fields": [
-      {
-        "component": "text",
-        "name": "heading",
-        "label": "Section Heading",
-        "valueType": "string",
-        "defaultValue": "Everyday Life at GMR"
-      },
-      {
-        "component": "richtext",
-        "name": "description",
-        "label": "Section Description",
-        "valueType": "string",
-        "defaultValue": "At GMR, the countless small moments in our people's workday show the human side of building big things together."
-      }
-    ]
-  },
-  {
-    "id": "everyday-life-item",
-    "fields": [
-      {
-        "component": "reference",
-        "name": "image",
-        "label": "Image",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "altText",
-        "label": "Alt Text",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
     "id": "factsheet",
     "fields": [
       {
@@ -1941,6 +1905,42 @@
         "name": "text",
         "value": "",
         "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "image-slider",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Section Heading",
+        "valueType": "string",
+        "defaultValue": "Everyday Life at GMR"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Section Description",
+        "valueType": "string",
+        "defaultValue": "At GMR, the countless small moments in our people's workday show the human side of building big things together."
+      }
+    ]
+  },
+  {
+    "id": "image-slider-item",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "altText",
+        "label": "Alt Text",
         "valueType": "string"
       }
     ]
