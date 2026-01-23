@@ -1041,7 +1041,8 @@
         "component": "text",
         "name": "mainTitle",
         "label": "Section Heading",
-        "valueType": "string"
+        "valueType": "string",
+        "defaultValue": "What Makes GMR Different"
       }
     ]
   },
@@ -1053,31 +1054,28 @@
         "name": "tabLabel",
         "label": "Tab Button Label",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "culture-feature-card",
+    "fields": [
+      {
+        "component": "icon",
+        "name": "icon",
+        "label": "Card Icon"
       },
       {
-        "component": "items",
-        "name": "featureCards",
-        "label": "Add Feature Cards",
-        "fields": [
-          {
-            "component": "reference",
-            "name": "icon",
-            "label": "Card Icon (White)",
-            "valueType": "string"
-          },
-          {
-            "component": "text",
-            "name": "title",
-            "label": "Card Title",
-            "valueType": "string"
-          },
-          {
-            "component": "richtext",
-            "name": "description",
-            "label": "Card Description",
-            "valueType": "string"
-          }
-        ]
+        "component": "text",
+        "name": "title",
+        "label": "Card Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Card Description",
+        "valueType": "string"
       }
     ]
   },
