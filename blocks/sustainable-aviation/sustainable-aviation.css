@@ -16,9 +16,10 @@
 }
 
 .sa-header h2 {
-  font-size: 44px;
-  font-weight: 600;
-  color: #0b2e2a;
+  font-size: 48px;
+  font-weight: 400;
+  color:var(--black);
+
 }
 
 .sa-description {
@@ -66,7 +67,6 @@
 .sa-card-content p {
   font-size: 16px;
   color: #333333;
-  line-height: 1.6;
 }
 
 @media (max-width: 992px) {
