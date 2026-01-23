@@ -63,6 +63,13 @@
           "label": "Default Year to Show",
           "valueType": "string",
           "description": "e.g., 2026 (leave empty for all years)"
+        },
+        {
+          "component": "number",
+          "name": "itemsPerPage",
+          "label": "Items Per Page",
+          "valueType": "number",
+          "description": "Number of items per page (default: 10)"
         }
       ]
     },
