@@ -1035,61 +1035,6 @@
     ]
   },
   {
-    "id": "culture-feature-block",
-    "fields": [
-      {
-        "component": "text",
-        "name": "mainTitle",
-        "label": "Section Heading",
-        "valueType": "string",
-        "defaultValue": "What Makes GMR Different"
-      }
-    ]
-  },
-  {
-    "id": "culture-feature-item",
-    "fields": [
-      {
-        "component": "select",
-        "name": "tab",
-        "label": "Tab",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Work That Makes A Difference",
-            "value": "work"
-          },
-          {
-            "name": "Life Beyond The Job",
-            "value": "life"
-          },
-          {
-            "name": "A Place To Belong",
-            "value": "belong"
-          }
-        ]
-      },
-      {
-        "component": "reference",
-        "name": "icon",
-        "label": "Card Icon (White)",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "title",
-        "label": "Card Title",
-        "valueType": "string"
-      },
-      {
-        "component": "richtext",
-        "name": "description",
-        "label": "Card Description",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
     "id": "document-preview",
     "fields": [
       {
@@ -1695,6 +1640,61 @@
         "valueType": "string",
         "name": "ctaLink",
         "label": "CTA Link"
+      }
+    ]
+  },
+  {
+    "id": "gmr-tabs",
+    "fields": [
+      {
+        "component": "text",
+        "name": "mainTitle",
+        "label": "Section Heading",
+        "valueType": "string",
+        "defaultValue": "What Makes GMR Different"
+      }
+    ]
+  },
+  {
+    "id": "gmr-tabs-item",
+    "fields": [
+      {
+        "component": "select",
+        "name": "tab",
+        "label": "Tab",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Work That Makes A Difference",
+            "value": "work"
+          },
+          {
+            "name": "Life Beyond The Job",
+            "value": "life"
+          },
+          {
+            "name": "A Place To Belong",
+            "value": "belong"
+          }
+        ]
+      },
+      {
+        "component": "asset",
+        "name": "icon",
+        "label": "Card Icon (White)",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Card Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Card Description",
+        "valueType": "string"
       }
     ]
   },

@@ -52,7 +52,7 @@
       "awards-filter",
       "breadcrumbs",
       "message-from-leadership",
-      "culture-feature-block",
+      "gmr-tabs",
       "image-slider"
     ]
   },
@@ -151,12 +151,6 @@
     ]
   },
   {
-    "id": "culture-feature-block",
-    "components": [
-      "culture-feature-item"
-    ]
-  },
-  {
     "id": "document-preview",
     "components": []
   },
@@ -222,6 +216,12 @@
     "id": "gmr-buisness-expertise",
     "components": [
       "gmr-buisness-item"
+    ]
+  },
+  {
+    "id": "gmr-tabs",
+    "components": [
+      "gmr-tabs-item"
     ]
   },
   {
