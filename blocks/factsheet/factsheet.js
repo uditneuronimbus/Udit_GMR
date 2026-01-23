@@ -4,7 +4,7 @@ export default function decorate(block) {
   const rows = [...block.children];
 
   /* ===============================
-     1️⃣ Parent field
+     1️⃣ Parent field (Title)
   ================================ */
   const titleRow = rows.shift();
   const sectionTitle = titleRow?.textContent?.trim() || "";
@@ -39,14 +39,15 @@ export default function decorate(block) {
   const tabs = [...runtime.querySelectorAll(".factsheet-tab")];
 
   /* ===============================
-     4️⃣ Parse cards
+     4️⃣ Parse cards (FIXED)
   ================================ */
   const cards = itemRows.map((row) => {
     const [iconEl, titleEl, descEl, categoryEl] = [...row.children];
+
     return {
       icon: iconEl?.querySelector("img")?.src || "",
       title: titleEl?.textContent?.trim() || "",
-      description: descEl?.textContent?.trim() || "",
+      description: descEl?.innerHTML?.trim() || "", // ✅ KEEP HTML (bold, links, etc.)
       category: categoryEl?.textContent?.trim()?.toLowerCase() || ""
     };
   });
@@ -73,16 +74,19 @@ export default function decorate(block) {
   ================================ */
   function render(category) {
     grid.innerHTML = "";
+
     cards
       .filter(c => c.category === category)
       .forEach(c => {
         const card = document.createElement("div");
         card.className = "factsheet-card";
+
         card.innerHTML = `
           ${c.icon ? `<img src="${c.icon}" alt="">` : ""}
           <h4>${c.title}</h4>
           <p>${c.description}</p>
         `;
+
         grid.append(card);
       });
   }
@@ -106,3 +110,4 @@ export default function decorate(block) {
     render(visibleTabs[0].dataset.category);
   }
 }
+
