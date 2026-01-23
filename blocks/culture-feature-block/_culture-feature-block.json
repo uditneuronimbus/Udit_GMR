@@ -8,23 +8,23 @@
           "page": {
             "resourceType": "core/franklin/components/block/v1/block",
             "template": {
-              "name": "culture-feature-block",
+              "name": "Culture Feature Block",
               "model": "culture-feature-block",
-              "filter": "culture-tab-filter"
+              "filter": "culture-feature-block"
             }
           }
         }
       }
     },
     {
-      "title": "Culture Tab",
+      "title": "Culture Tab Item",
       "id": "culture-tab-item",
       "plugins": {
         "xwalk": {
           "page": {
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
-              "name": "culture-tab-item",
+              "name": "Culture Tab Item",
               "model": "culture-tab-item"
             }
           }
@@ -32,38 +32,67 @@
       }
     }
   ],
+
   "models": [
     {
       "id": "culture-feature-block",
       "fields": [
-        { "component": "text", "name": "mainHeading", "label": "Section Heading", "valueType": "string" }
-      ]
-    },
-    {
-      "id": "culture-tab-item",
-      "itemLabel": "tabLabel",
-      "fields": [
-        { "component": "text", "name": "tabLabel", "label": "Tab Button Label", "valueType": "string" },
         {
-          "component": "items",
-          "name": "featureCards",
-          "label": "Add Feature Cards",
-          "model": "culture-card-model"
+          "component": "text",
+          "valueType": "string",
+          "name": "mainTitle",
+          "label": "Section Heading",
+          "defaultValue": "What Makes GMR Different"
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "backgroundImage",
+          "label": "Background Image"
         }
       ]
     },
     {
-      "id": "culture-card-model",
+      "id": "culture-tab-item",
       "fields": [
-        { "component": "reference", "name": "icon", "label": "Icon", "valueType": "string" },
-        { "component": "text", "name": "title", "label": "Title", "valueType": "string" },
-        { "component": "text", "name": "desc", "label": "Description", "valueType": "string" }
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "tabLabel",
+          "label": "Tab Button Label"
+        },
+        {
+          "component": "items",
+          "name": "cards",
+          "label": "Feature Cards",
+          "fields": [
+            {
+              "component": "reference",
+              "valueType": "string",
+              "name": "cardIcon",
+              "label": "Icon (White)"
+            },
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "cardTitle",
+              "label": "Card Title"
+            },
+            {
+              "component": "richtext",
+              "valueType": "string",
+              "name": "cardDescription",
+              "label": "Card Description"
+            }
+          ]
+        }
       ]
     }
   ],
+
   "filters": [
     {
-      "id": "culture-tab-filter",
+      "id": "culture-feature-block",
       "components": ["culture-tab-item"]
     }
   ]

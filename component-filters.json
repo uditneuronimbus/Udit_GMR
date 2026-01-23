@@ -150,7 +150,7 @@
     ]
   },
   {
-    "id": "culture-tab-filter",
+    "id": "culture-feature-block",
     "components": [
       "culture-tab-item"
     ]
