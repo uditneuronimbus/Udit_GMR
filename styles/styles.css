@@ -62,7 +62,7 @@ img{max-width:100%;height:auto}
 a,button,input[type=submit]{-webkit-transition:all ease .3s;-moz-transition:all ease .3s;-o-transition:all ease .3s;-ms-transition:all ease .3s;transition:all ease .3s}
 .btn-link,a{color:var(--blue)}
 a:focus,a:hover{color:var(--black)}
-.button,.btn,a:focus,a:hover,button{text-decoration:none;outline:0!important;outline-offset:0px!important}
+.btn,a:focus,a:hover,button{text-decoration:none;outline:0!important;outline-offset:0px!important}
 label{font-weight:400}
 iframe{width:100%!important}
 b, strong { font-weight: 600; }
@@ -114,11 +114,11 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .btn-link:focus,.btn-link:hover{color:var(--lorange)}
 .btn-link:hover:before{transform:scaleX(1);transform-origin:left}
 .btn-link:hover:after{right:.25rem}
-.btn,.button{height:44px;display:inline-flex;align-items:center;padding:0 1.25rem;border-radius:.5rem;font-weight:var(--fw-semi-bold);gap:.5rem;justify-content:center}
+.btn{height:44px;display:inline-flex;align-items:center;padding:0 1.25rem;border-radius:.5rem;font-weight:var(--fw-semi-bold);gap:.5rem;justify-content:center}
 .btn-lg{font-size:var(--fs-normal);height:54px;padding:0 1.75rem}
-.btn-primary,.primary{background-color:var(--lorange);border:1px solid var(--lorange);color:var(--black)}
+.btn-primary{background-color:var(--lorange);border-color:var(--lorange);color:var(--black)}
 .btn-outline-primary{background-color:none;border-color:var(--lorange);color:var(--lorange)}
-.btn-outline-primary:focus,.btn-outline-primary:hover,.btn-primary:focus,.btn-primary:hover,.primary:hover{background-color:var(--white);border-color:var(--lorange);color:var(--black)}
+.btn-outline-primary:focus,.btn-outline-primary:hover,.btn-primary:focus,.btn-primary:hover{background-color:var(--white);border-color:var(--lorange);color:var(--black)}
 .btn-transparent{padding:0;font-weight:500;text-decoration:none;border-radius:0;border:none;background-color:transparent;color:var(--yellow)!important;position:relative;height:auto;display:inline-flex;align-items:center;gap:6px}
 .btn-transparent{padding:0;font-weight:500;text-decoration:none;border:none;background:0 0;color:#faa519!important;display:inline-flex;align-items:center;gap:6px}
 .btn-transparent::after{content:"";width:22px;height:22px;display:inline-block;background-repeat:no-repeat;background-size:22px;transition:.3s ease-in-out;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23faa519' stroke-width='2'><path stroke-linecap='round' stroke-linejoin='round' d='M9 5l7 7-7 7'/></svg>")}
@@ -207,7 +207,6 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .page-about .commitment-cards-container .sec-commitment { background: none; margin-top: -4rem;}
 .page-about .commitment-cards-container .sec-commitment .sec-title { color:var(--charcoal); } 
 .page-about .flat-banner { margin-top: 0; }
-.page-about .message-from-leadership-container { padding-bottom: 80px; }
 .all-business-cards-container .default-content-wrapper { background-color: var(--lgrey); text-align: center; padding-bottom: 80px; }
 .all-business-cards-container .default-content-wrapper .button-container { margin-bottom: 0; }
 /* about gmr impact */
