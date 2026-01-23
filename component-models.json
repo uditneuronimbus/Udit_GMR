@@ -189,8 +189,8 @@
             "value": "gmr-impact"
           },
           {
-            "name": "Background Sky Blue",
-            "value": "baclground-skyblue"
+            "name": "BG Sky Blue",
+            "value": "bg-sky-blue"
           },
           {
             "name": "Alignment Left",
@@ -1031,6 +1031,17 @@
         "component": "text",
         "name": "point6",
         "label": "Point 6 (Optional)"
+      }
+    ]
+  },
+  {
+    "id": "document-preview",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "documentUrl",
+        "label": "Document URL (PDF / Doc / Excel)"
       }
     ]
   },
@@ -2756,6 +2767,205 @@
     ]
   },
   {
+    "id": "press-release-featured",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionLabel",
+        "label": "Section Label",
+        "valueType": "string",
+        "description": "e.g., LATEST PRESS UPDATE",
+        "defaultValue": "LATEST PRESS UPDATE"
+      },
+      {
+        "component": "select",
+        "name": "badge",
+        "label": "Business Category Badge",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Corporate",
+            "value": "Corporate"
+          },
+          {
+            "name": "Airports & Aero Services",
+            "value": "Airports & Aero Services"
+          },
+          {
+            "name": "Energy",
+            "value": "Energy"
+          },
+          {
+            "name": "Sports",
+            "value": "Sports"
+          },
+          {
+            "name": "Transport & Urban Infrastructure",
+            "value": "Transport & Urban Infrastructure"
+          },
+          {
+            "name": "Foundation",
+            "value": "Foundation"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title / Headline",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "publishDate",
+        "label": "Publish Date",
+        "valueType": "string",
+        "description": "e.g., 01 Jan 2026"
+      },
+      {
+        "component": "text",
+        "name": "lastUpdated",
+        "label": "Last Updated Date",
+        "valueType": "string",
+        "description": "e.g., 05 Jan 2026"
+      },
+      {
+        "component": "aem-content",
+        "name": "ctaLink",
+        "label": "CTA Link",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaText",
+        "label": "CTA Button Text",
+        "valueType": "string",
+        "defaultValue": "READ MORE"
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Featured Image",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "press-release-listing",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title (Main Heading)",
+        "valueType": "string",
+        "defaultValue": "All Releases"
+      },
+      {
+        "component": "text",
+        "name": "allReleasesLabel",
+        "label": "All Releases Button Text",
+        "valueType": "string",
+        "defaultValue": "All"
+      },
+      {
+        "component": "text",
+        "name": "filterPanelTitle",
+        "label": "Filter Sidebar Title",
+        "valueType": "string",
+        "defaultValue": "Filter by"
+      },
+      {
+        "component": "text",
+        "name": "defaultYear",
+        "label": "Default Year to Show",
+        "valueType": "string",
+        "description": "e.g., 2026 (leave empty for all years)"
+      }
+    ]
+  },
+  {
+    "id": "press-release-item",
+    "itemLabel": "title",
+    "fields": [
+      {
+        "component": "select",
+        "name": "category",
+        "label": "Business Category",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Corporate",
+            "value": "corporate"
+          },
+          {
+            "name": "Airports & Aero Services",
+            "value": "airports-aero-services"
+          },
+          {
+            "name": "Energy",
+            "value": "energy"
+          },
+          {
+            "name": "Sports",
+            "value": "sports"
+          },
+          {
+            "name": "Transport & Urban Infrastructure",
+            "value": "transport-urban-infrastructure"
+          },
+          {
+            "name": "Foundation",
+            "value": "foundation"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "year",
+        "label": "Year (e.g., 2026)",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Press Release Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title / Headline",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "publishDate",
+        "label": "Publish Date",
+        "valueType": "string",
+        "description": "e.g., 01 Jan 2026"
+      },
+      {
+        "component": "text",
+        "name": "lastUpdated",
+        "label": "Last Updated Date",
+        "valueType": "string",
+        "description": "e.g., 05 Jan 2026"
+      },
+      {
+        "component": "aem-content",
+        "name": "ctaLink",
+        "label": "Read More Link",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "privacy-request",
     "fields": [
       {
@@ -2820,6 +3030,10 @@
         "label": "Description"
       }
     ]
+  },
+  {
+    "id": "search-results",
+    "fields": []
   },
   {
     "id": "social-connect",
@@ -2976,21 +3190,6 @@
         "name": "quoteAuthor",
         "label": "Quote Author",
         "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "search-results",
-    "fields": []
-  },
-  {
-    "id": "document-preview",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "documentUrl",
-        "label": "Document URL (PDF / Doc / Excel)"
       }
     ]
   }

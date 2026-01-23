@@ -150,7 +150,9 @@
         "partners-filter",
         "awards-filter",
         "breadcrumbs",
-        "Message from Leadership"
+        "Message from Leadership",
+        "press-release-featured",
+        "press-release-listing"
       ]
     }
   ]
