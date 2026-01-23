@@ -1047,19 +1047,28 @@
     ]
   },
   {
-    "id": "culture-tab-item",
+    "id": "culture-feature-item",
     "fields": [
       {
-        "component": "text",
-        "name": "tabLabel",
-        "label": "Tab Button Label",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "culture-feature-card",
-    "fields": [
+        "component": "select",
+        "name": "tab",
+        "label": "Tab",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Work That Makes A Difference",
+            "value": "work"
+          },
+          {
+            "name": "Life Beyond The Job",
+            "value": "life"
+          },
+          {
+            "name": "A Place To Belong",
+            "value": "belong"
+          }
+        ]
+      },
       {
         "component": "icon",
         "name": "icon",

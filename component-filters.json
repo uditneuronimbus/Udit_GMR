@@ -152,13 +152,7 @@
   {
     "id": "culture-feature-block",
     "components": [
-      "culture-tab-item"
-    ]
-  },
-  {
-    "id": "culture-tab-item",
-    "components": [
-      "culture-feature-card"
+      "culture-feature-item"
     ]
   },
   {

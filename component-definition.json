@@ -562,31 +562,15 @@
           }
         },
         {
-          "title": "Culture Tab Item",
-          "id": "culture-tab-item",
+          "title": "Culture Feature Item",
+          "id": "culture-feature-item",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "culture-tab-item",
-                  "model": "culture-tab-item",
-                  "filter": "culture-tab-item"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Culture Feature Card",
-          "id": "culture-feature-card",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "culture-feature-card",
-                  "model": "culture-feature-card"
+                  "name": "culture-feature-item",
+                  "model": "culture-feature-item"
                 }
               }
             }
