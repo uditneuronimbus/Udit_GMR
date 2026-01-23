@@ -61,6 +61,9 @@
     "id": "integrity-decision",
     "components": [
       "integrity-decision-item"
+      "Message from Leadership",
+      "press-release-featured",
+      "press-release-listing"
     ]
   },
   {
@@ -346,6 +349,32 @@
     "id": "only-partners-items",
     "components": [
       "partner-listing-item"
+    ]
+  },
+  {
+    "id": "sdg-themes",
+    "components": [
+      "sdg-themes-item"
+    ]
+  },
+  {
+    "id": "search-results",
+    "components": []
+  },
+  {
+    "id": "press-release-featured",
+    "components": []
+  },
+  {
+    "id": "sustainable-aviation",
+    "components": [
+      "sustainable-aviation-item"
+    ]
+  },
+  {
+    "id": "only-press-release-items",
+    "components": [
+      "press-release-item"
     ]
   },
   {
