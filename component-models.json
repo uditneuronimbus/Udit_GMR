@@ -1123,7 +1123,7 @@
     "id": "everyday-life-item",
     "fields": [
       {
-        "component": "asset",
+        "component": "reference",
         "name": "image",
         "label": "Image",
         "valueType": "string"
