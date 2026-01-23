@@ -1041,8 +1041,7 @@
         "component": "text",
         "name": "mainHeading",
         "label": "Section Heading",
-        "valueType": "string",
-        "defaultValue": "What Makes GMR Different"
+        "valueType": "string"
       }
     ]
   },
@@ -1058,28 +1057,32 @@
       },
       {
         "component": "items",
-        "name": "tabCards",
-        "label": "Tab Feature Cards",
-        "fields": [
-          {
-            "component": "reference",
-            "name": "cardIcon",
-            "label": "Icon Image (White)",
-            "valueType": "string"
-          },
-          {
-            "component": "text",
-            "name": "cardTitle",
-            "label": "Card Title",
-            "valueType": "string"
-          },
-          {
-            "component": "text",
-            "name": "cardDescription",
-            "label": "Card Description",
-            "valueType": "string"
-          }
-        ]
+        "name": "featureCards",
+        "label": "Add Feature Cards",
+        "model": "culture-card-model"
+      }
+    ]
+  },
+  {
+    "id": "culture-card-model",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "icon",
+        "label": "Icon",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "desc",
+        "label": "Description",
+        "valueType": "string"
       }
     ]
   },
