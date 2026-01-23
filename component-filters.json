@@ -53,7 +53,14 @@
       "breadcrumbs",
       "message-from-leadership",
       "gmr-tabs",
-      "image-slider"
+      "image-slider",
+      "integrity-decision"
+    ]
+  },
+  {
+    "id": "integrity-decision",
+    "components": [
+      "integrity-decision-item"
     ]
   },
   {
