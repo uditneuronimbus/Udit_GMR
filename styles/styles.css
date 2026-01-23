@@ -196,7 +196,10 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .card-img, .card-img-bottom { border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; }
 .card-img, .card-img-top { border-top-left-radius: 4px; border-top-right-radius: 4px; }
 
-
+/* corporate-governance */
+.page-corporate-governance .default-section.bg-gray { padding-bottom: 160px; }
+.page-corporate-governance .overlay-banner-container { padding-top: 0!important; margin-top: -4rem;}
+/* corporate-governance */
 /* about gmr impact */
 .gmr-impact .gla-wrapper.spacer { padding-bottom: 160px;}
 .gmr-impact .gla-wrapper>.container .col-lg-4.col-md-5, .gmr-impact .gla-wrapper>.container .col-md-7.col-lg-8 {flex: 0 0 auto; width: 100%;}
@@ -230,6 +233,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .h4,h4{font-size:1rem}
 .h5,h5{font-size:0.875rem}
 .awards-filter-runtime, .default-section, .page-corporate-governance .overlay-banner-container, .partners-filter-runtime, .spacer { padding: 60px 0; }
+.page-corporate-governance .default-section.bg-gray { padding-bottom: 120px; }
 .businesses-section.block, .container, .default-section .default-content-wrapper, .global-leaders-aviation-wrapper, .listed-companies-wrapper { padding-left: 1rem; padding-right: 1rem; }
 .global-leaders-aviation-wrapper { padding-left: 0; padding-right: 0;}
 .sec-title, .sec-title h2 { font-size: var(--fs-xxlarge);}
