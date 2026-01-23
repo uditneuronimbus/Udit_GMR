@@ -340,20 +340,21 @@ export default function decorate(block) {
     const titleSlug = createSlug(title);
     const ctaLink = providedLink || `/press-releases/${categorySlug}/${titleSlug}`;
 
-    if (!category && !year && !title && !imageEl) return;
+    if (!category && !title && !imageEl) return;
 
-    // Extract month and year from publishDate using parseDate (handles ISO and text formats)
+    // Extract month and year from publishDate (date-time picker is the source of truth)
     let month = "";
-    let extractedYear = year; // Use authored year as default
+    let extractedYear = "";
     if (publishDate) {
       const dateObj = parseDate(publishDate);
       if (dateObj && dateObj.getTime() > 0) {
         month = String(dateObj.getMonth() + 1).padStart(2, '0');
-        // If year field is empty, extract from date
-        if (!extractedYear) {
-          extractedYear = String(dateObj.getFullYear());
-        }
+        extractedYear = String(dateObj.getFullYear());
       }
+    }
+    // Fallback to manual year field only if publishDate didn't provide year
+    if (!extractedYear && year) {
+      extractedYear = year;
     }
 
     if (extractedYear) years.add(extractedYear);
