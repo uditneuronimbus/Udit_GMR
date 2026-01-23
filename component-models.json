@@ -1072,7 +1072,8 @@
       {
         "component": "reference",
         "name": "icon",
-        "label": "Card Icon"
+        "label": "Card Icon (White)",
+        "valueType": "string"
       },
       {
         "component": "text",
