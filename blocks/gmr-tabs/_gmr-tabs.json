@@ -69,7 +69,7 @@
           ]
         },
         {
-          "component": "asset",
+          "component": "reference",
           "name": "icon",
           "label": "Card Icon (White)",
           "valueType": "string"
