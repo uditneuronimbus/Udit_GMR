@@ -69,7 +69,7 @@
           ]
         },
         {
-          "component": "icon",
+          "component": "reference",
           "name": "icon",
           "label": "Card Icon"
         },
