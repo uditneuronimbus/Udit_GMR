@@ -160,6 +160,12 @@
     "components": []
   },
   {
+    "id": "everyday-life-block",
+    "components": [
+      "everyday-life-item"
+    ]
+  },
+  {
     "id": "factsheet",
     "components": [
       "factsheet-item"
