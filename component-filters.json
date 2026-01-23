@@ -60,12 +60,6 @@
     ]
   },
   {
-    "id": "integrity-decision",
-    "components": [
-      "integrity-decision-item"
-    ]
-  },
-  {
     "id": "airport-overview",
     "components": [
       "airport-overview-item"
@@ -281,6 +275,12 @@
     "id": "innovation-cards",
     "components": [
       "innovation-card-item"
+    ]
+  },
+  {
+    "id": "integrity-decision",
+    "components": [
+      "integrity-decision-item"
     ]
   },
   {

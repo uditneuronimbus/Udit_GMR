@@ -31,7 +31,7 @@ export default function decorate(block) {
     </div>
   `;
 
-  block.after(section);
+  block.append(section);
 
   const cardsWrapper = section.querySelector(".integrity-cards");
 

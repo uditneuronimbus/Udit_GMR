@@ -83,37 +83,6 @@
       "id": "blocks",
       "components": [
         {
-          "title": "Integrity Decision",
-          "id": "integrity-decision",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "integrity-decision",
-                  "model": "integrity-decision",
-                  "filter": "integrity-decision"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Integrity Decision Item",
-          "id": "integrity-decision-item",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "integrity-decision-item",
-                  "model": "integrity-decision-item"
-                }
-              }
-            }
-          }
-        },
-        {
           "title": "Airport Hero",
           "id": "airport-hero",
           "plugins": {
@@ -1252,6 +1221,37 @@
                 "template": {
                   "name": "Innovation Card Item",
                   "model": "innovation-card-item"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Integrity Decision",
+          "id": "integrity-decision",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "integrity-decision",
+                  "model": "integrity-decision",
+                  "filter": "integrity-decision"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Integrity Decision Item",
+          "id": "integrity-decision-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "integrity-decision-item",
+                  "model": "integrity-decision-item"
                 }
               }
             }
