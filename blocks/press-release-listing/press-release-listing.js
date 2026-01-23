@@ -342,27 +342,28 @@ export default function decorate(block) {
 
     if (!category && !year && !title && !imageEl) return;
 
-    // Extract month from publishDate (format: "01 Jan 2026")
+    // Extract month and year from publishDate using parseDate (handles ISO and text formats)
     let month = "";
+    let extractedYear = year; // Use authored year as default
     if (publishDate) {
-      const dateMatch = publishDate.match(/(\d{1,2})\s+(\w{3})\s+(\d{4})/);
-      if (dateMatch) {
-        const monthNames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-        const monthIndex = monthNames.indexOf(dateMatch[2].toLowerCase());
-        if (monthIndex !== -1) {
-          month = String(monthIndex + 1).padStart(2, '0');
+      const dateObj = parseDate(publishDate);
+      if (dateObj && dateObj.getTime() > 0) {
+        month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        // If year field is empty, extract from date
+        if (!extractedYear) {
+          extractedYear = String(dateObj.getFullYear());
         }
       }
     }
 
-    if (year) years.add(year);
+    if (extractedYear) years.add(extractedYear);
     if (category) categories.add(category);
 
     const imageUrl = extractImageUrl(imageEl);
 
     allCardsData.push({
       category,
-      year,
+      year: extractedYear,
       month,
       imageUrl,
       title,
