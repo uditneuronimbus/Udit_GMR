@@ -20,7 +20,12 @@
 .partner-card.active .partner-content{height:100%;padding-top:50px}
 .partner-card.active .partner-description,.partner-card.active .partner-link{display:block}
 .partner-link{position:absolute;bottom:15px}
-.partner-description,.partner-link{display:none;transition:opacity .3s ease}
+.partner-description{display:none;transition:opacity .3s ease;overflow:auto;max-height:140px;scrollbar-width:thin;scrollbar-color:var(--lorange) transparent}
+.partner-description::-webkit-scrollbar{width:5px}
+.partner-description::-webkit-scrollbar-track{background:0 0}
+.partner-description::-webkit-scrollbar-thumb{background-color:var(--lorange);border-radius:10px}
+.partner-description::-webkit-scrollbar-thumb:hover{background-color:var(--lorange)}
+.partner-description,.partner-link{display:none;transition:opacity .3s ease;}
 .partner-link a{color:var(--yellow);font-size:var(--fs-normal);font-weight:500;text-transform:uppercase;text-decoration:none;position:relative;padding-right:30px}
 .partner-link a:after{content:"";position:absolute;right:0;top:50%;transform:translateY(-50%);width:22px;height:22px;background-repeat:no-repeat;background-size:contain;background-image:url("data:image/svg+xml,%3Csvg%20width='22'%20height='22'%20viewBox='0%200%2022%2022'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cpath%20d='M8.13181%204.51766L13.553%2010.8424L8.13181%2017.1672'%20stroke='%23FAA519'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E");transition:opacity .2s ease,transform .2s ease}
 @media (max-width:1400px){
