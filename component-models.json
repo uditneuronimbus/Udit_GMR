@@ -1039,16 +1039,9 @@
     "fields": [
       {
         "component": "text",
-        "valueType": "string",
         "name": "mainTitle",
         "label": "Section Heading",
-        "defaultValue": "What Makes GMR Different"
-      },
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "backgroundImage",
-        "label": "Background Image"
+        "valueType": "string"
       }
     ]
   },
@@ -1057,32 +1050,32 @@
     "fields": [
       {
         "component": "text",
-        "valueType": "string",
         "name": "tabLabel",
-        "label": "Tab Button Label"
+        "label": "Tab Button Label",
+        "valueType": "string"
       },
       {
         "component": "items",
-        "name": "cards",
-        "label": "Feature Cards",
+        "name": "featureCards",
+        "label": "Add Feature Cards",
         "fields": [
           {
             "component": "reference",
-            "valueType": "string",
-            "name": "cardIcon",
-            "label": "Icon (White)"
+            "name": "icon",
+            "label": "Card Icon (White)",
+            "valueType": "string"
           },
           {
             "component": "text",
-            "valueType": "string",
-            "name": "cardTitle",
-            "label": "Card Title"
+            "name": "title",
+            "label": "Card Title",
+            "valueType": "string"
           },
           {
             "component": "richtext",
-            "valueType": "string",
-            "name": "cardDescription",
-            "label": "Card Description"
+            "name": "description",
+            "label": "Card Description",
+            "valueType": "string"
           }
         ]
       }
