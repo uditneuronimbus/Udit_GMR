@@ -1,9 +1,7 @@
 import algoliasearch from "https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.esm.browser.js";
 
 // Algolia config (FRONTEND SAFE)
-const ALGOLIA_APP_ID = "BARVAFD3OC";
-const ALGOLIA_SEARCH_KEY = "e3ba8576fac702f5c6826b7b24cf221c";
-const ALGOLIA_INDEX = "site_pages";
+const { ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY, ALGOLIA_INDEX } = window.APP_CONFIG;
 
 // ⚠️ Force stable hosts (fixes unreachable-host errors on corp networks)
 const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY, {
