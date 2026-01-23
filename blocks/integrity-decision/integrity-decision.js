@@ -6,7 +6,7 @@ export default function decorate(block) {
      1️⃣ Read authored content
      ================================ */
   const sectionTitle = rows[0].textContent.trim();
-  const sectionDesc = rows[1].innerHTML;
+  const sectionDesc = rows[1].textContent.trim();
   const cardRows = rows.slice(2);
 
   /* Hide authored rows (UE safe) */
@@ -44,7 +44,7 @@ export default function decorate(block) {
 
     const img = cells[0].querySelector("img");
     const title = cells[1].textContent.trim();
-    const desc = cells[2].innerHTML;
+    const desc = cells[2].textContent.trim();
 
     const card = document.createElement("div");
     card.className = "integrity-card";
