@@ -62,7 +62,9 @@ img{max-width:100%;height:auto}
 a,button,input[type=submit]{-webkit-transition:all ease .3s;-moz-transition:all ease .3s;-o-transition:all ease .3s;-ms-transition:all ease .3s;transition:all ease .3s}
 .btn-link,a{color:var(--blue)}
 a:focus,a:hover{color:var(--black)}
-.btn,a:focus,a:hover,button{text-decoration:none;outline:0!important;outline-offset:0px!important}
+.btn,a:focus,a:hover,button{text-decoration:none;}
+:focus-visible { border-radius: 4px; outline: 2px solid var(--yellow); outline-offset: 2px; }
+:focus:not(:focus-visible) { outline: none; }
 label{font-weight:400}
 iframe{width:100%!important}
 b, strong { font-weight: 600; }
