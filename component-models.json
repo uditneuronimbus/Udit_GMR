@@ -2978,18 +2978,16 @@
         "valueType": "string"
       },
       {
-        "component": "text",
+        "component": "date-time",
         "name": "publishDate",
         "label": "Publish Date",
-        "valueType": "string",
-        "description": "e.g., 01 Jan 2026"
+        "valueType": "string"
       },
       {
-        "component": "text",
+        "component": "date-time",
         "name": "lastUpdated",
         "label": "Last Updated Date",
-        "valueType": "string",
-        "description": "e.g., 05 Jan 2026"
+        "valueType": "string"
       }
     ]
   },

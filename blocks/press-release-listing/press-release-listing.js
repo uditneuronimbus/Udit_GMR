@@ -271,9 +271,17 @@ export default function decorate(block) {
     return '';
   };
 
-  // Helper function to parse date
+  // Helper function to parse date (handles ISO and "01 Jan 2026" formats)
   const parseDate = (dateStr) => {
     if (!dateStr) return new Date(0);
+    
+    // Try ISO format first (from datepicker: 2026-01-23T00:00:00.000Z)
+    const isoDate = new Date(dateStr);
+    if (!isNaN(isoDate.getTime())) {
+      return isoDate;
+    }
+    
+    // Try "01 Jan 2026" format
     const dateMatch = dateStr.match(/(\d{1,2})\s+(\w{3})\s+(\d{4})/);
     if (dateMatch) {
       const monthNames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
@@ -284,7 +292,21 @@ export default function decorate(block) {
         return new Date(year, monthIndex, day);
       }
     }
-    return new Date(dateStr);
+    
+    return new Date(0);
+  };
+
+  // Helper function to format date for display (returns "23 Jan 2026")
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    const date = parseDate(dateStr);
+    if (isNaN(date.getTime()) || date.getTime() === 0) return dateStr;
+    
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
   };
 
   // Helper function to create slug from title
@@ -344,8 +366,8 @@ export default function decorate(block) {
       month,
       imageUrl,
       title,
-      publishDate,
-      lastUpdated,
+      publishDate: formatDate(publishDate),
+      lastUpdated: formatDate(lastUpdated),
       ctaLink,
       dateObj: parseDate(publishDate)
     });
