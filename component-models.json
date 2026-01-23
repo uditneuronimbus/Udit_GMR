@@ -190,7 +190,7 @@
           },
           {
             "name": "Background Sky Blue",
-            "value": "baclground-skyblue"
+            "value": "bg-sky-blue"
           },
           {
             "name": "Alignment Left",
@@ -1031,6 +1031,78 @@
         "component": "text",
         "name": "point6",
         "label": "Point 6 (Optional)"
+      }
+    ]
+  },
+  {
+    "id": "culture-feature-block",
+    "fields": [
+      {
+        "component": "text",
+        "name": "mainHeading",
+        "label": "Section Heading",
+        "valueType": "string",
+        "defaultValue": "What Makes GMR Different"
+      },
+      {
+        "component": "reference",
+        "name": "backgroundImage",
+        "label": "Background Image (Blue Pattern)",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "culture-tab-item",
+    "itemLabel": "tabLabel",
+    "fields": [
+      {
+        "component": "text",
+        "name": "tabLabel",
+        "label": "Tab Button Label",
+        "valueType": "string"
+      },
+      {
+        "component": "checkbox",
+        "name": "isDefaultActive",
+        "label": "Set as Default Active Tab",
+        "valueType": "boolean"
+      },
+      {
+        "component": "items",
+        "name": "featureCards",
+        "label": "Feature Cards in this Tab",
+        "fields": [
+          {
+            "component": "reference",
+            "name": "icon",
+            "label": "Feature Icon (White)",
+            "valueType": "string"
+          },
+          {
+            "component": "text",
+            "name": "cardTitle",
+            "label": "Feature Title",
+            "valueType": "string"
+          },
+          {
+            "component": "text",
+            "name": "cardDescription",
+            "label": "Feature Description",
+            "valueType": "string"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "document-preview",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "documentUrl",
+        "label": "Document URL (PDF / Doc / Excel)"
       }
     ]
   },
@@ -2822,6 +2894,10 @@
     ]
   },
   {
+    "id": "search-results",
+    "fields": []
+  },
+  {
     "id": "social-connect",
     "fields": [
       {
@@ -2976,21 +3052,6 @@
         "name": "quoteAuthor",
         "label": "Quote Author",
         "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "search-results",
-    "fields": []
-  },
-  {
-    "id": "document-preview",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "documentUrl",
-        "label": "Document URL (PDF / Doc / Excel)"
       }
     ]
   }
