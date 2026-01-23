@@ -30,11 +30,10 @@
 .sa-items {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 36px;
+  gap: 20px;
 }
 
 .sa-card {
-  background: #fff;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0,0,0,0.08);
@@ -50,10 +49,12 @@
   width: 100%;
   height: 260px;
   object-fit: cover;
+  margin-bottom: 8px;
 }
 
 .sa-card-content {
   padding: 24px 26px 30px;
+  background-color: var(--white );
 }
 
 .sa-card-content h3 {
@@ -64,7 +65,7 @@
 
 .sa-card-content p {
   font-size: 16px;
-  color: #666;
+  color: #333333;
   line-height: 1.6;
 }
 

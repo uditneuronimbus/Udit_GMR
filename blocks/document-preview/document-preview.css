@@ -1,0 +1,40 @@
+.document-preview-wrapper {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.document-toolbar {
+  padding: 10px 14px;
+  background: #f7f7f7;
+  border-bottom: 1px solid #ddd;
+  text-align: right;
+}
+
+.document-toolbar a {
+  font-size: 14px;
+  color: #0056b3;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.document-toolbar a:hover {
+  text-decoration: underline;
+}
+
+.document-container {
+  width: 100%;
+  height: 600px;
+}
+
+.document-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.doc-error {
+  color: red;
+  font-weight: 600;
+}

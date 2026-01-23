@@ -12,12 +12,22 @@ export default function decorate(block) {
   headerRow.classList.add("sec-head", "mb-5", "text-center");
 
   const p = headerRow.querySelector("p");
+  let hasHeaderContent = false;
 
   if (p) {
     const h2 = document.createElement("h2");
     h2.className = "sec-title fw-normal";
     h2.innerHTML = p.innerHTML; // preserve authored content
-    p.replaceWith(h2);
+    
+    // Check if header has actual content (not just whitespace/empty)
+    const headerText = p.textContent.trim();
+    if (headerText) {
+      p.replaceWith(h2);
+      hasHeaderContent = true;
+    } else {
+      // Remove the empty paragraph but don't add h2
+      p.remove();
+    }
   }
 
   // ---- Grid ----
@@ -91,7 +101,15 @@ export default function decorate(block) {
     grid.append(row);
   });
 
-  container.append(headerRow, grid);
+  // Only append headerRow if it has content
+  if (hasHeaderContent) {
+    container.append(headerRow);
+  } else {
+    // Remove headerRow entirely if empty
+    headerRow.remove();
+  }
+  
+  container.append(grid);
   outerContainer.append(container);
   block.append(outerContainer);
 }

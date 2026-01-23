@@ -51,6 +51,7 @@
       "partners-filter",
       "awards-filter",
       "breadcrumbs",
+      "Message from Leadership",
       "press-release-featured",
       "press-release-listing"
     ]
@@ -148,6 +149,10 @@
     "components": [
       "governance-section"
     ]
+  },
+  {
+    "id": "document-preview",
+    "components": []
   },
   {
     "id": "factsheet",
@@ -339,6 +344,10 @@
     "components": [
       "sdg-themes-item"
     ]
+  },
+  {
+    "id": "search-results",
+    "components": []
   },
   {
     "id": "success-stories",

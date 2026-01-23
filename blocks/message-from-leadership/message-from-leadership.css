@@ -46,6 +46,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 56px;
   align-items: center;
+  margin-top: 50px;
 }
 
 
@@ -58,10 +59,15 @@
 .mfl-image img,
 .mfl-image picture {
   width: 100%;
-  height: auto;
-  max-height: 520px;
+  /* height: auto;
+  max-height: 520px; */
   object-fit: cover;
   display: block;
+  height: 450px;
+}
+
+.mfl-content {
+  margin-top: -108px;
 }
 
 
@@ -84,7 +90,7 @@
 
 .mfl-message {
   font-size: 1.125rem;
-  line-height: 1.65;
+  /* line-height: 1.65; */
   color: #2d2d2d;
   margin-bottom: 1.75rem;
 }
@@ -100,13 +106,14 @@
   display: flex;
   gap: 12px;
   justify-content: flex-end;   
-  margin-top: 32px;
+  margin-top: -80px;
+  margin-right: 445px;
 }
 
 .mfl-navigation button {
   width: 44px;
   height: 44px;
-  border-radius: 50%;
+  border-radius: 15%;
   border: 1px solid #f0b04f;
   background: transparent;
   color: #f0b04f;
@@ -124,7 +131,7 @@
 
 .mfl-navigation .mfl-next {
   background: #f0b04f;
-  color: #ffffff;
+  color: var(--black);
   border-color: #f0b04f;
 }
 

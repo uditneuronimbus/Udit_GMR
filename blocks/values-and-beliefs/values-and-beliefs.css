@@ -1,10 +1,20 @@
+
 /* ===============================
    SECTION
 ================================ */
+.values-and-beliefs-wrapper{
+  margin-bottom: 64px;
+  background: var( --light-grey);
+}
+
+.values-and-beliefs .block {
+  background-color: var(--lgrey) !important;
+}
+
 .values-section {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 40px 20px 64px;
 }
 
 .values-title {
@@ -16,7 +26,7 @@
 }
 
 /* ===============================
-   GRID (CENTER LAST ROW)
+   GRID (REFERENCE BEHAVIOR)
 ================================ */
 .values-cards {
   display: grid;
@@ -30,26 +40,21 @@
 ================================ */
 .value-card {
   position: relative;
-  border-radius: 14px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.value-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 14px 28px rgba(0,0,0,0.18);
+  cursor: pointer;
 }
 
 /* ===============================
    IMAGE
 ================================ */
 .value-card-image {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 3 / 4;
+  height: 225px;
+  background: #fff;
+  border-radius: 8px;
   overflow: hidden;
+  margin-bottom: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .value-card-image img {
@@ -60,15 +65,15 @@
 }
 
 /* ===============================
-   BLUE TITLE BAR
+   BLUE TITLE BAR (REFERENCE MATCH)
 ================================ */
 .value-card-overlay {
   position: absolute;
-  bottom: 0;
   left: 0;
-  right: 0;
+  bottom: 0;
+  width: 100%;
   height: 52px;
-  background: #003a8f;
+  background: var(--blue);
   color: #fff;
   padding: 0 16px;
   font-size: 14px;
@@ -76,53 +81,49 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-radius: 8px;
   z-index: 4;
-  cursor: pointer;
 }
 
 /* ===============================
-   ICON (PURE CSS – FIXED)
+   PLUS / MINUS ICON (FIXED)
 ================================ */
 .value-card-overlay::after {
-  content: '';
-  width: 20px;
-  height: 20px;
-  background: #faa519;
-  border-radius: 4px;
-  position: relative;
+  content: "";
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition: transform 0.2s ease;
+  background-image:url("data:image/svg+xml,%3Csvg%20width='25'%20height='25'%20viewBox='0%200%2025%2025'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cpath%20d='M17.5%2012.5C17.5%2012.776%2017.276%2013%2017%2013H13V17C13%2017.276%2012.776%2017.5%2012.5%2017.5C12.224%2017.5%2012%2017.276%2012%2017V13H8C7.724%2013%207.5%2012.776%207.5%2012.5C7.5%2012.224%207.724%2012%208%2012H12V8C12%207.724%2012.224%207.5%2012.5%207.5C12.776%207.5%2013%207.724%2013%208V12H17C17.276%2012%2017.5%2012.224%2017.5%2012.5ZM24.5%205V20C24.5%2022.481%2022.481%2024.5%2020%2024.5H5C2.519%2024.5%200.5%2022.481%200.5%2020V5C0.5%202.519%202.519%200.5%205%200.5H20C22.481%200.5%2024.5%202.519%2024.5%205ZM23.5%205C23.5%203.07%2021.93%201.5%2020%201.5H5C3.07%201.5%201.5%203.07%201.5%205V20C1.5%2021.93%203.07%2023.5%205%2023.5H20C21.93%2023.5%2023.5%2021.93%2023.5%2020V5Z'%20fill='%23FAA519'%20stroke='%23FAA519'/%3E%3C/svg%3E");transition:opacity .2s ease,transform .2s ease
 }
 
-.value-card-overlay::before {
-  content: '+';
-  position: absolute;
-  right: 22px;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
-  z-index: 5;
+.value-card:hover .value-card-overlay::after {
+  transform: scale(1.1);
 }
 
 .value-card.active .value-card-overlay::before {
   content: '–';
 }
 
+
 /* ===============================
-   OVERLAY CONTENT
+   EXPANDED CONTENT (REFERENCE STYLE)
 ================================ */
 .value-card-content {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: var(--blue);
   color: #fff;
+  padding: 40px 24px 24px;
+  text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 24px;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.3s ease;
+  border-radius: 8px;
   z-index: 3;
 }
 
@@ -131,10 +132,12 @@
   visibility: visible;
 }
 
-/* TEXT */
+/* ===============================
+   TEXT
+================================ */
 .value-card-content .quote {
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.6;
   margin-bottom: 14px;
   font-style: italic;
 }
@@ -153,7 +156,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
   .values-cards {
     grid-template-columns: 1fr;
   }
@@ -161,4 +164,9 @@
   .values-title {
     font-size: 26px;
   }
+
+  .value-card-image {
+    margin-bottom: 48px;
+  }
 }
+
