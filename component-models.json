@@ -2767,6 +2767,33 @@
     ]
   },
   {
+    "id": "press-release-detail",
+    "fields": [
+      {
+        "component": "text",
+        "name": "backLinkText",
+        "label": "Back Link Text",
+        "valueType": "string",
+        "defaultValue": "Back to Press Releases"
+      },
+      {
+        "component": "text",
+        "name": "backLinkUrl",
+        "label": "Back Link URL",
+        "valueType": "string",
+        "defaultValue": "/press-releases"
+      },
+      {
+        "component": "text",
+        "name": "dataSourceUrl",
+        "label": "Data Source URL (JSON)",
+        "valueType": "string",
+        "description": "Path to the JSON file containing press release data",
+        "defaultValue": "/press-releases/press-release-data.json"
+      }
+    ]
+  },
+  {
     "id": "press-release-featured",
     "fields": [
       {
@@ -2963,12 +2990,6 @@
         "label": "Last Updated Date",
         "valueType": "string",
         "description": "e.g., 05 Jan 2026"
-      },
-      {
-        "component": "aem-content",
-        "name": "ctaLink",
-        "label": "Read More Link",
-        "valueType": "string"
       }
     ]
   },

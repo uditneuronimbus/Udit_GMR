@@ -140,12 +140,6 @@
           "label": "Last Updated Date",
           "valueType": "string",
           "description": "e.g., 05 Jan 2026"
-        },
-        {
-          "component": "aem-content",
-          "name": "ctaLink",
-          "label": "Read More Link",
-          "valueType": "string"
         }
       ]
     }

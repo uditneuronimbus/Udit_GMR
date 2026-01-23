@@ -287,11 +287,23 @@ export default function decorate(block) {
     return new Date(dateStr);
   };
 
+  // Helper function to create slug from title
+  const createSlug = (text) => {
+    if (!text) return '';
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '') // Remove special characters
+      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/-+/g, '-') // Replace multiple hyphens with single
+      .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+  };
+
   authoredItems.forEach((item) => {
     const cols = [...item.children];
     if (!cols.length) return;
 
-    // Item structure: category, year, image, title, publishDate, lastUpdated, ctaLink
+    // Item structure: category, year, image, title, publishDate, lastUpdated, ctaLink (optional)
     const category = cols[0]?.textContent?.trim().toLowerCase() || "";
     const year = cols[1]?.textContent?.trim() || "";
     let imageEl = null;
@@ -299,7 +311,12 @@ export default function decorate(block) {
     const title = cols[3]?.textContent?.trim() || "";
     const publishDate = cols[4]?.textContent?.trim() || "";
     const lastUpdated = cols[5]?.textContent?.trim() || "";
-    const ctaLink = cols[6]?.querySelector("a")?.href || cols[6]?.textContent?.trim() || "#";
+    
+    // Auto-generate ctaLink from category and title
+    const providedLink = cols[6]?.querySelector("a")?.href || cols[6]?.textContent?.trim() || "";
+    const categorySlug = createSlug(category) || 'general';
+    const titleSlug = createSlug(title);
+    const ctaLink = providedLink || `/press-releases/${categorySlug}/${titleSlug}`;
 
     if (!category && !year && !title && !imageEl) return;
 
