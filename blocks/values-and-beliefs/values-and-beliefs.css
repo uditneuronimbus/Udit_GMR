@@ -1,10 +1,9 @@
-
 /* ===============================
-   SECTION
+   WRAPPER & SECTION
 ================================ */
-.values-and-beliefs-wrapper{
+.values-and-beliefs-wrapper {
   margin-bottom: 64px;
-  background: var( --light-grey);
+  background: var(--light-grey);
 }
 
 .values-and-beliefs .block {
@@ -26,7 +25,7 @@
 }
 
 /* ===============================
-   GRID (REFERENCE BEHAVIOR)
+   GRID
 ================================ */
 .values-cards {
   display: grid;
@@ -36,11 +35,13 @@
 }
 
 /* ===============================
-   CARD
+   CARD BASE
 ================================ */
 .value-card {
   position: relative;
   cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 /* ===============================
@@ -60,12 +61,12 @@
 .value-card-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
 }
 
 /* ===============================
-   BLUE TITLE BAR (REFERENCE MATCH)
+   BOTTOM BAR (DEFAULT STATE)
 ================================ */
 .value-card-overlay {
   position: absolute;
@@ -81,42 +82,35 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-radius: 8px;
+  border-radius: 0 0 8px 8px;
   z-index: 4;
 }
 
-/* ===============================
-   PLUS / MINUS ICON (FIXED)
-================================ */
+/* PLUS ICON (BOTTOM RIGHT) */
 .value-card-overlay::after {
-  content: "";
+  content: "+";
   width: 24px;
   height: 24px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  transition: transform 0.2s ease;
-  background-image:url("data:image/svg+xml,%3Csvg%20width='25'%20height='25'%20viewBox='0%200%2025%2025'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cpath%20d='M17.5%2012.5C17.5%2012.776%2017.276%2013%2017%2013H13V17C13%2017.276%2012.776%2017.5%2012.5%2017.5C12.224%2017.5%2012%2017.276%2012%2017V13H8C7.724%2013%207.5%2012.776%207.5%2012.5C7.5%2012.224%207.724%2012%208%2012H12V8C12%207.724%2012.224%207.5%2012.5%207.5C12.776%207.5%2013%207.724%2013%208V12H17C17.276%2012%2017.5%2012.224%2017.5%2012.5ZM24.5%205V20C24.5%2022.481%2022.481%2024.5%2020%2024.5H5C2.519%2024.5%200.5%2022.481%200.5%2020V5C0.5%202.519%202.519%200.5%205%200.5H20C22.481%200.5%2024.5%202.519%2024.5%205ZM23.5%205C23.5%203.07%2021.93%201.5%2020%201.5H5C3.07%201.5%201.5%203.07%201.5%205V20C1.5%2021.93%203.07%2023.5%205%2023.5H20C21.93%2023.5%2023.5%2021.93%2023.5%2020V5Z'%20fill='%23FAA519'%20stroke='%23FAA519'/%3E%3C/svg%3E");transition:opacity .2s ease,transform .2s ease
+  background: #faa519;
+  color: #003a8f;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  flex-shrink: 0;
 }
-
-.value-card:hover .value-card-overlay::after {
-  transform: scale(1.1);
-}
-
-.value-card.active .value-card-overlay::before {
-  content: '–';
-}
-
 
 /* ===============================
-   EXPANDED CONTENT (REFERENCE STYLE)
+   EXPANDED CONTENT
 ================================ */
 .value-card-content {
   position: absolute;
   inset: 0;
   background: var(--blue);
   color: #fff;
-  padding: 40px 24px 24px;
-  text-align: center;
+  padding: 56px 24px 24px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -127,24 +121,49 @@
   z-index: 3;
 }
 
-.value-card.active .value-card-content {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* ===============================
-   TEXT
-================================ */
 .value-card-content .quote {
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.6;
-  margin-bottom: 14px;
-  font-style: italic;
+  margin-bottom: 16px;
 }
 
 .value-card-content .author {
   font-size: 14px;
   opacity: 0.9;
+}
+
+/* ===============================
+   ACTIVE STATE
+================================ */
+
+/* Show expanded content */
+.value-card.active .value-card-content {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Hide bottom bar when active */
+.value-card.active .value-card-overlay {
+  display: none;
+}
+
+/* MINUS ICON (TOP RIGHT) */
+.value-card.active::after {
+  content: "–";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  background: #faa519;
+  color: #003a8f;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  z-index: 6;
 }
 
 /* ===============================
@@ -170,3 +189,18 @@
   }
 }
 
+/* ===============================
+   SPECIAL CASE – 7 CARDS
+================================ */
+@media (min-width: 1200px) {
+  .values-cards:has(> .value-card:nth-child(7)) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .values-cards:has(> .value-card:nth-child(7)) > .value-card {
+    flex: 0 0 260px;
+  }
+}
