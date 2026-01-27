@@ -3252,7 +3252,7 @@
     "id": "sustainable-aviation",
     "fields": [
       {
-        "component": "text",
+        "component": "richtext",
         "valueType": "string",
         "name": "sectionTitle",
         "label": "Section Title"
