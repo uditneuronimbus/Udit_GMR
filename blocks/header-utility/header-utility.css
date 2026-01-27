@@ -171,15 +171,15 @@ button.bhashini-dropdown-btn{padding:0}
 }
 
 .accessibility-reset-btn:hover {
-  background-color: var(--dark-blue);
+  background-color: var(--yellow);
 }
 
 /* Font size levels */
-.font-size--1 { font-size: 0.7em !important; }
-.font-size--2 { font-size: 0.6em !important; }
+.font-size--1 { font-size: 0.75rem !important; }
+.font-size--2 { font-size: 0.65rem !important; }
 
-.font-size-1 { font-size: 1.1em !important; }
-.font-size-2 { font-size: 1.2em !important; }
+.font-size-1 { font-size: 1.25rem !important; }
+.font-size-2 { font-size: 1.5rem !important; }
 
 .font-size--1 *,
 .font-size--2 *,
@@ -209,13 +209,6 @@ button.bhashini-dropdown-btn{padding:0}
     .highlight-links-active a {
     background-color: var(--yellow) !important;
     color: var(--black) !important;
-    }
-    
-    /* Dark Mode - SPECIFIC COLOR INVERTER */
-    .dark-mode-active {
-    /* Background and text color inversion */
-    background-color: var(--black) !important;
-    color: var(--white) !important;
     }
     
     /* Specific color inversions */
@@ -389,62 +382,4 @@ button.bhashini-dropdown-btn{padding:0}
     filter: none !important;
     }
     
-    /* Modal specific fixes for dark mode */
-    .dark-mode-active .accessibility-modal-content {
-    background-color: #2d2d2d !important;
-    color: var(--white) !important;
-    border-color: #555 !important;
-    }
     
-    .dark-mode-active .accessibility-modal-header {
-    background-color: #3d3d3d !important;
-    border-bottom-color: #555 !important;
-    }
-    
-    .dark-mode-active .accessibility-modal-header h3 {
-    color: var(--white) !important;
-    }
-    
-    .dark-mode-active .accessibility-option-btn {
-    background-color: #3d3d3d !important;
-    border-color: #555 !important;
-    color: var(--white) !important;
-    }
-    
-    .dark-mode-active .accessibility-option-btn .option-text {
-    color: var(--white) !important;
-    }
-    
-    .dark-mode-active .option-icon {
-    color: var(--white) !important;
-    }
-    
-    .dark-mode-active .accessibility-reset-btn {
-    background-color: #495057 !important;
-    }
-    
-    .dark-mode-active .font-size-btn {
-    border-color: var(--charcoal) !important;
-    color: var(--white) !important;
-    }
-    
-    .dark-mode-active #font-size-label {
-    color: var(--white) !important;
-    }
-    
-    .dark-mode-active .font-size-dot:not(.active) {
-    background-color: #555 !important;
-    }
-    
-    /* Active button styles */
-    .accessibility-option-btn.active {
-    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.10);
-    }
-    
-    .accessibility-option-btn.active .option-checkmark {
-    display: block !important;
-    }
-    
-    .dark-mode-active .accessibility-option-btn.active {
-    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.10);
-    }
