@@ -2,9 +2,6 @@
   display: none;
 }
 
-/* =====================================================
-   SECTION
-===================================================== */
 .sdg-themes-runtime {
   padding: 80px 0;
   background: #ffffff;
@@ -24,26 +21,20 @@
   margin-bottom: 40px;
 }
 
-/* =====================================================
-   GRID
-===================================================== */
+
 .sdg-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
 
-/* =====================================================
-   CARD
-===================================================== */
+
 .sdg-card {
   position: relative;
   cursor: pointer;
 }
 
-/* =====================================================
-   IMAGE
-===================================================== */
+
 .sdg-image {
   height: 225px;
   background-color: #ffffff;
@@ -62,15 +53,13 @@
   display: block;
 }
 
-/* =====================================================
-   CONTENT BAR
-===================================================== */
+
 .sdg-content {
   position: absolute;
   left: 0;
   bottom: 0;
   width: 100%;
-  padding: 16px 20px;
+  padding: 15px 14px;
   color: #ffffff;
   border-radius: 8px;
   display: flex;
@@ -79,9 +68,6 @@
   background: var(--blue);
 }
 
-/* =====================================================
-   TITLE
-===================================================== */
 .sdg-content h3 {
   margin: 0;
   font-size: 14px;
@@ -89,9 +75,7 @@
   line-height: 1.4;
 }
 
-/* =====================================================
-   PLUS ICON
-===================================================== */
+
 .sdg-content::after {
   content: "";
   width: 24px;
@@ -106,20 +90,16 @@
   transform: scale(1.1);
 }
 
-/* =====================================================
-   SDG COLORS
-===================================================== */
-.sdg-card.sdg-1 .sdg-content { background: #E5243B; } /* No Poverty */
-.sdg-card.sdg-2 .sdg-content { background: #DDA63A; } /* Zero Hunger */
-.sdg-card.sdg-3 .sdg-content { background: #4C9F38; } /* Good Health */
-.sdg-card.sdg-5 .sdg-content { background: #EF402C; } /* Gender Equality */
-.sdg-card.sdg-6 .sdg-content { background: #27BFE6; } /* Clean Water */
-.sdg-card.sdg-7 .sdg-content { background: #FBC412; } /* Affordable Energy */
-.sdg-card.sdg-8 .sdg-content { background: #A21942; } /* Skill Development */
 
-/* =====================================================
-   RESPONSIVE
-===================================================== */
+.sdg-card.sdg-1 .sdg-content { background: #E5243B; } 
+.sdg-card.sdg-2 .sdg-content { background: #DDA63A; } 
+.sdg-card.sdg-3 .sdg-content { background: #4C9F38; } 
+.sdg-card.sdg-5 .sdg-content { background: #EF402C; } 
+.sdg-card.sdg-6 .sdg-content { background: #27BFE6; } 
+.sdg-card.sdg-7 .sdg-content { background: #FBC412; } 
+.sdg-card.sdg-8 .sdg-content { background: #A21942; } 
+
+
 @media (max-width: 1199px) {
   .sdg-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -151,3 +131,29 @@
     font-size: 15px;
   }
 }
+
+
+
+@media (min-width: 1200px) {
+  .sdg-grid:has(> .sdg-card:nth-child(7)) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .sdg-grid:has(> .sdg-card:nth-child(7)) > .sdg-card {
+    flex: 0 0 calc(25% - 20px);
+  }
+
+  .sdg-grid:has(> .sdg-card:nth-child(7)) > .sdg-card:nth-child(n + 5) {
+    flex: 0 0 calc(25% - 20px);
+  }
+}
+
+
+
+
+
+
+ 

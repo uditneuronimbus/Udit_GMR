@@ -3,20 +3,13 @@ export default function decorate(block) {
 
   const rows = [...block.children];
 
-  /* ===============================
-     1️⃣ Parent field (Title)
-  ================================ */
   const titleRow = rows.shift();
   const sectionTitle = titleRow?.textContent?.trim() || "";
 
-  /* ===============================
-     2️⃣ Item rows
-  ================================ */
+
   const itemRows = rows;
 
-  /* ===============================
-     3️⃣ Runtime container
-  ================================ */
+
   const runtime = document.createElement("div");
   runtime.className = "factsheet-runtime";
 
@@ -38,9 +31,7 @@ export default function decorate(block) {
   const grid = runtime.querySelector(".factsheet-grid");
   const tabs = [...runtime.querySelectorAll(".factsheet-tab")];
 
-  /* ===============================
-     4️⃣ Parse cards (FIXED)
-  ================================ */
+
   const cards = itemRows.map((row) => {
     const [iconEl, titleEl, descEl, categoryEl] = [...row.children];
 
@@ -52,14 +43,10 @@ export default function decorate(block) {
     };
   });
 
-  /* ===============================
-     5️⃣ Detect available categories
-  ================================ */
+ 
   const availableCategories = new Set(cards.map(c => c.category));
 
-  /* ===============================
-     6️⃣ Hide tabs with no cards
-  ================================ */
+ 
   tabs.forEach(tab => {
     const cat = tab.dataset.category;
     if (!availableCategories.has(cat)) {
@@ -69,9 +56,7 @@ export default function decorate(block) {
 
   const visibleTabs = tabs.filter(tab => tab.style.display !== "none");
 
-  /* ===============================
-     7️⃣ Render function
-  ================================ */
+ 
   function render(category) {
     grid.innerHTML = "";
 
@@ -91,9 +76,6 @@ export default function decorate(block) {
       });
   }
 
-  /* ===============================
-     8️⃣ Tab click handling
-  ================================ */
   visibleTabs.forEach(tab => {
     tab.addEventListener("click", () => {
       visibleTabs.forEach(t => t.classList.remove("active"));
@@ -102,12 +84,12 @@ export default function decorate(block) {
     });
   });
 
-  /* ===============================
-     9️⃣ Default selection (first available)
-  ================================ */
+
   if (visibleTabs.length) {
     visibleTabs[0].classList.add("active");
     render(visibleTabs[0].dataset.category);
   }
 }
+
+
 
