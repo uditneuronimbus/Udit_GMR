@@ -58,7 +58,7 @@
     --fs-xxxl: 3.5rem;
 }
 
-body{font-family:var(--font-primary);font-size:.875rem;color:var(--charcoal);padding-top:130px}
+body{font-family:var(--font-primary);font-size:var(--fs-regular);color:var(--charcoal);padding-top:130px}
 img{max-width:100%;height:auto}
 a,button,input[type=submit]{-webkit-transition:all ease .3s;-moz-transition:all ease .3s;-o-transition:all ease .3s;-ms-transition:all ease .3s;transition:all ease .3s}
 .btn-link,a{color:var(--blue)}
@@ -130,8 +130,8 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .btn-orange{white-space:nowrap;border-radius:8px;background-color:var(--lorange);min-height:4rem;min-width:14.625rem;justify-content:center}
 .btn-orange:focus,.btn-orange:hover{background-color:var(--orange)}
 .entry-container{max-width:800px;margin-left:auto;margin-right:auto}
-.entry-container .title,.entry-container h2,.entry-container h2 p{font-size:2.5rem;font-weight:400;margin-bottom:1rem}
-.entry-container p{font-size:1.125rem;font-weight:400}
+.entry-container .title,.entry-container h2,.entry-container h2 p{font-size:var(--fs-xl);font-weight:400;margin-bottom:1rem}
+.entry-container p{font-size:var(--fs-medium);font-weight:400}
 .sec-title,.sec-title h2{font-weight:var(--fw-regular)}
 .sec-title h2 strong{font-weight:var(--fw-semi-bold)}
 .sec-desc{font-size:var(--fs-medium);color: var(--charcoal);}
@@ -167,10 +167,10 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .page-corporate-governance .banner-overlay-text .col-md-7 .sec-title.mb-4{margin-top:55px;margin-bottom:2.5rem!important;position:relative}
 .page-corporate-governance .banner-overlay-text .col-md-7 .sec-title.mb-4:before{position:absolute;content:"";top:-55px;left:0;background:url(../img/wlogo.svg);background-repeat:no-repeat;width:108px;height:40px;background-size:cover}
 .page-corporate-governance .default-section .default-content-wrapper h2{font-weight:400;margin-bottom:1rem}
-.page-corporate-governance .default-section .default-content-wrapper p{font-size:1.125rem;font-weight:400;margin-bottom:1rem}
+.page-corporate-governance .default-section .default-content-wrapper p{font-size:var(--fs-medium);font-weight:400;margin-bottom:1rem}
 .mobile-layout{display:none}
 .mobile-filter-buttons{display:flex;gap:10px;margin-bottom:20px;position:sticky;z-index:999!important;top:56px;background:var(--lgrey);padding:15px 0}
-.mobile-filter-btn{flex:1;padding:12px 16px;background:var(--white);border:1px solid var(--yellow);border-radius:8px;text-align:left;cursor:pointer;font-size:1rem;font-weight:500;color:var(--black);display:flex;justify-content:space-between;align-items:center}
+.mobile-filter-btn{flex:1;padding:12px 16px;background:var(--white);border:1px solid var(--yellow);border-radius:8px;text-align:left;cursor:pointer;font-size:var(--fs-normal);font-weight:500;color:var(--black);display:flex;justify-content:space-between;align-items:center}
 .mobile-filter-btn .arrow{font-size:10px;color:var(--yellow);transition:transform .2s}
 .mobile-filter-btn.active .arrow{transform:rotate(180deg)}
 .mobile-filter-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000}
@@ -179,21 +179,21 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .mobile-filter-content{position:absolute;bottom:0;left:0;width:100%;background:var(--lgrey);border-radius:16px 16px 0 0;max-height:80vh;overflow-y:auto;box-shadow:0 -4px 20px rgba(0,0,0,.1);border:3px solid var(--white)}
 .modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px;background:var(--black)}
 .modal-header h3{margin:0;font-size:1.125rem;font-weight:600;color:var(--white)}
-.close-modal{font-size:3rem;background:0 0;border:none;cursor:pointer;color:var(--white);line-height:1;padding:0;width:30px;height:30px;display:flex;align-items:center;justify-content:center}
+.close-modal{font-size:var(--fs-xxl);background:0 0;border:none;cursor:pointer;color:var(--white);line-height:1;padding:0;width:30px;height:30px;display:flex;align-items:center;justify-content:center}
 .filter-group{padding:20px}
-.filter-group p{margin:0 0 15px 0;font-size:14px;font-weight:600;color:var(--charcoal);text-transform:uppercase;letter-spacing:.5px}
-.filter-group label{display:block;padding:12px 0;cursor:pointer;font-size:1rem;color:var(--charcoal);position:relative;padding-right:32px}
+.filter-group p{margin:0 0 15px 0;font-size:var(--fs-regular);font-weight:600;color:var(--charcoal);text-transform:uppercase;letter-spacing:.5px}
+.filter-group label{display:block;padding:12px 0;cursor:pointer;font-size:var(--fs-normal);color:var(--charcoal);position:relative;padding-right:32px}
 .filter-group input[type=radio]{position:absolute;right:0;top:50%;transform:translateY(-50%);width:20px;height:20px;margin:0;appearance:none;-webkit-appearance:none;border-radius:50%;border:2px solid var(--yellow);background:0 0;cursor:pointer}
 .filter-group input[type=radio]::before{content:"";width:10px;height:10px;background:var(--lgrey);border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
 .filter-group input[type=radio]:checked{border-color:var(--blue)}
 .filter-group input[type=radio]:checked::before{background:var(--blue)}
 .filter-group.year-group label input{display:none}
-.filter-group.year-group label{display:inline-flex;align-items:center;justify-content:center;height:44px;border-radius:10px;border:2px solid var(--yellow);padding:0 16px;margin-right:13px;color:var(--black);font-size:.875rem;font-weight:500;cursor:pointer;transition:all .25s ease;background:var(--white)}
+.filter-group.year-group label{display:inline-flex;align-items:center;justify-content:center;height:44px;border-radius:10px;border:2px solid var(--yellow);padding:0 16px;margin-right:13px;color:var(--black);font-size:var(--fs-regular);font-weight:500;cursor:pointer;transition:all .25s ease;background:var(--white)}
 .filter-group.year-group label:hover{background:var(--white)}
 .filter-group.year-group label input:checked+span,.year-pill input:checked~&{background:var(--blue);border-color:var(--blue);color:var(--white)}
 .filter-group.year-group label:has(input:checked){background:var(--blue);border-color:var(--blue);color:var(--white)}
 .apply-filter-btn{padding:20px;background:var(--white);box-shadow:0 -1px 4px rgba(0,0,0,.12)}
-.apply-btn{width:auto;min-width:95px;padding:14px;background:var(--blue);color:var(--white);border:none;border-radius:8px;cursor:pointer;font-size:1rem;font-weight:600;transition:background-color .2s ease}
+.apply-btn{width:auto;min-width:95px;padding:14px;background:var(--blue);color:var(--white);border:none;border-radius:8px;cursor:pointer;font-size:var(--fs-normal);font-weight:600;transition:background-color .2s ease}
 .apply-btn:hover{background:var(--charcoal)}
 .card-img, .card-img-bottom { border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; }
 .card-img, .card-img-top { border-top-left-radius: 4px; border-top-right-radius: 4px; }
@@ -229,11 +229,11 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .page-corporate-governance .banner-overlay-text .col-md-7 { width: 75%; }
 }
 @media (max-width:991px){
-.h1,h1{font-size:2.5rem}
-.h2,h2{font-size:2rem}
-.h3,h3{font-size:1.25rem}
-.h4,h4{font-size:1rem}
-.h5,h5{font-size:0.875rem}
+.h1,h1{font-size:var(--fs-xl)}
+.h2,h2{font-size:var(--fs-xxlarge)}
+.h3,h3{font-size:var(--fs-large)}
+.h4,h4{font-size:var(--fs-normal)}
+.h5,h5{font-size:var(--fs-regular)}
 .awards-filter-runtime, .default-section, .page-corporate-governance .overlay-banner-container, .partners-filter-runtime, .spacer { padding: 60px 0; }
 .page-corporate-governance .default-section.bg-gray { padding-bottom: 120px; }
 .businesses-section.block, .container, .default-section .default-content-wrapper, .global-leaders-aviation-wrapper, .listed-companies-wrapper { padding-left: 1rem; padding-right: 1rem; }
@@ -244,11 +244,11 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .col.w-20{max-width:100%!important}
 .businesses-section.block,.container,.default-section .default-content-wrapper,.global-leaders-aviation-wrapper,.listed-companies-wrapper{max-width:100%;padding-left:16px;padding-right:16px}
 .global-leaders-aviation-wrapper { padding-left:0;padding-right:0 }
-.h1,h1{font-size:2rem}
-.h2,h2{font-size:1.25rem}
-.h3,h3{font-size:1.125rem}
-.h4,h4{font-size:1rem}
-.h5,h5,p{font-size:.875rem}
+.h1,h1{font-size:var(--fs-xxlarge)}
+.h2,h2{font-size:var(--fs-large)}
+.h3,h3{font-size:var(--fs-medium)}
+.h4,h4{font-size:var(--fs-normal)}
+.h5,h5,p{font-size:var(--fs-regular)}
 .page-corporate-governance .banner-overlay-text .col-md-7{width:80%}
 .sec-title, .sec-title h2 { font-size: var(--fs-xlarge); line-height: 1.4; }
 .btn { height:40px; padding: 0 1rem; font-size: var(--fs-regular); }
