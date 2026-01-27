@@ -418,55 +418,86 @@ function toggleFontSize(action, button) {
 }
 
 
+// function toggleAccessibilityOption(option, button) {
+//   const html = document.documentElement;
+//   const body = document.body;
+//   const isActive = button.classList.contains('active');
+
+//   console.log(`Toggling ${option}: currently ${isActive ? 'active' : 'inactive'}`);
+
+//   switch (option) {
+//     case 'highlight-links':
+//       if (isActive) {
+//         // Remove link highlighting
+//         body.classList.remove('highlight-links-active');
+//         html.classList.remove('highlight-links-active');
+//         button.classList.remove('active');
+//         localStorage.removeItem('accessibility-highlight-links');
+//         console.log("Highlight links disabled");
+//       } else {
+//         // Add link highlighting
+//         body.classList.add('highlight-links-active');
+//         html.classList.add('highlight-links-active');
+//         button.classList.add('active');
+//         const checkmark = button.querySelector('.option-checkmark');
+//         if (checkmark) checkmark.style.display = 'block';
+//         localStorage.setItem('accessibility-highlight-links', 'true');
+//         console.log("Highlight links enabled");
+//       }
+//       break;
+
+//     case 'dark-mode':
+//       if (isActive) {
+//         // Remove dark mode
+//         body.classList.remove('dark-mode-active');
+//         html.classList.remove('dark-mode-active');
+//         button.classList.remove('active');
+//         localStorage.removeItem('accessibility-dark-mode');
+//         console.log("Dark mode disabled");
+//       } else {
+//         // Add dark mode
+//         body.classList.add('dark-mode-active');
+//         html.classList.add('dark-mode-active');
+//         button.classList.add('active');
+//         const checkmark = button.querySelector('.option-checkmark');
+//         if (checkmark) checkmark.style.display = 'block';
+//         localStorage.setItem('accessibility-dark-mode', 'true');
+//         console.log("Dark mode enabled");
+//       }
+//       break;
+//   }
+// }
+
 function toggleAccessibilityOption(option, button) {
   const html = document.documentElement;
   const body = document.body;
-  const isActive = button.classList.contains('active');
 
-  console.log(`Toggling ${option}: currently ${isActive ? 'active' : 'inactive'}`);
+  // If already active, do nothing
+  if (button.classList.contains('active')) {
+    return;
+  }
 
   switch (option) {
     case 'highlight-links':
-      if (isActive) {
-        // Remove link highlighting
-        body.classList.remove('highlight-links-active');
-        html.classList.remove('highlight-links-active');
-        button.classList.remove('active');
-        localStorage.removeItem('accessibility-highlight-links');
-        console.log("Highlight links disabled");
-      } else {
-        // Add link highlighting
-        body.classList.add('highlight-links-active');
-        html.classList.add('highlight-links-active');
-        button.classList.add('active');
-        const checkmark = button.querySelector('.option-checkmark');
-        if (checkmark) checkmark.style.display = 'block';
-        localStorage.setItem('accessibility-highlight-links', 'true');
-        console.log("Highlight links enabled");
-      }
+      body.classList.add('highlight-links-active');
+      html.classList.add('highlight-links-active');
+      button.classList.add('active');
+      localStorage.setItem('accessibility-highlight-links', 'true');
       break;
 
     case 'dark-mode':
-      if (isActive) {
-        // Remove dark mode
-        body.classList.remove('dark-mode-active');
-        html.classList.remove('dark-mode-active');
-        button.classList.remove('active');
-        localStorage.removeItem('accessibility-dark-mode');
-        console.log("Dark mode disabled");
-      } else {
-        // Add dark mode
-        body.classList.add('dark-mode-active');
-        html.classList.add('dark-mode-active');
-        button.classList.add('active');
-        const checkmark = button.querySelector('.option-checkmark');
-        if (checkmark) checkmark.style.display = 'block';
-        localStorage.setItem('accessibility-dark-mode', 'true');
-        console.log("Dark mode enabled");
-      }
+      body.classList.add('dark-mode-active');
+      html.classList.add('dark-mode-active');
+      button.classList.add('active');
+      localStorage.setItem('accessibility-dark-mode', 'true');
       break;
   }
+
+  // Show checkmark
+  const checkmark = button.querySelector('.option-checkmark');
+  if (checkmark) checkmark.style.display = 'block';
 }
+
 
 function loadAccessibilityPreferences() {
   const html = document.documentElement;
@@ -537,6 +568,54 @@ function loadAccessibilityPreferences() {
   }
 }
 
+// function resetAccessibilityOptions() {
+//   const html = document.documentElement;
+//   const body = document.body;
+//   const modal = document.getElementById('accessibility-modal');
+
+//   if (!modal) return;
+
+//   console.log("Resetting accessibility options...");
+
+
+//   // Reset Highlight Links
+//   html.classList.remove('highlight-links-active');
+//   body.classList.remove('highlight-links-active');
+
+//   // Reset Dark Mode
+//   html.classList.remove('dark-mode-active');
+//   body.classList.remove('dark-mode-active');
+
+//   // Reset button states
+//   modal.querySelectorAll('.accessibility-font-btn, .accessibility-option-btn').forEach(button => {
+//     button.classList.remove('active');
+//     const checkmark = button.querySelector('.option-checkmark');
+//     if (checkmark) checkmark.style.display = 'none';
+//   });
+
+//   fontSizeLevel = 0;
+
+//   html.classList.remove(
+//     'font-size--1',
+//     'font-size--2',
+//     'font-size-1',
+//     'font-size-2'
+//   );
+//   body.classList.remove(
+//     'font-size--1',
+//     'font-size--2',
+//     'font-size-1',
+//     'font-size-2'
+//   );
+
+//   // Clear localStorage;
+//   localStorage.removeItem('accessibility-font-level');
+//   localStorage.removeItem('accessibility-highlight-links');
+//   localStorage.removeItem('accessibility-dark-mode');
+
+//   console.log("Accessibility reset complete");
+// }
+
 function resetAccessibilityOptions() {
   const html = document.documentElement;
   const body = document.body;
@@ -544,46 +623,28 @@ function resetAccessibilityOptions() {
 
   if (!modal) return;
 
-  console.log("Resetting accessibility options...");
+  // Remove feature classes
+  html.classList.remove('highlight-links-active', 'dark-mode-active');
+  body.classList.remove('highlight-links-active', 'dark-mode-active');
 
+  // Reset font size
+  fontSizeLevel = 0;
+  html.classList.remove('font-size--1','font-size--2','font-size-1','font-size-2');
+  body.classList.remove('font-size--1','font-size--2','font-size-1','font-size-2');
 
-  // Reset Highlight Links
-  html.classList.remove('highlight-links-active');
-  body.classList.remove('highlight-links-active');
-
-  // Reset Dark Mode
-  html.classList.remove('dark-mode-active');
-  body.classList.remove('dark-mode-active');
-
-  // Reset button states
-  modal.querySelectorAll('.accessibility-font-btn, .accessibility-option-btn').forEach(button => {
-    button.classList.remove('active');
-    const checkmark = button.querySelector('.option-checkmark');
-    if (checkmark) checkmark.style.display = 'none';
+  // Reset UI state
+  modal.querySelectorAll('.accessibility-font-btn, .accessibility-option-btn').forEach(btn => {
+    btn.classList.remove('active');
+    const mark = btn.querySelector('.option-checkmark');
+    if (mark) mark.style.display = 'none';
   });
 
-  fontSizeLevel = 0;
-
-  html.classList.remove(
-    'font-size--1',
-    'font-size--2',
-    'font-size-1',
-    'font-size-2'
-  );
-  body.classList.remove(
-    'font-size--1',
-    'font-size--2',
-    'font-size-1',
-    'font-size-2'
-  );
-
-  // Clear localStorage;
+  // Clear storage
   localStorage.removeItem('accessibility-font-level');
   localStorage.removeItem('accessibility-highlight-links');
   localStorage.removeItem('accessibility-dark-mode');
-
-  console.log("Accessibility reset complete");
 }
+
 
 /* ======================================================
    BHASHINI - ACTIVE
