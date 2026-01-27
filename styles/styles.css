@@ -55,6 +55,7 @@
     --fs-xxlarge: 2rem;
     --fs-xl: 2.5rem;
     --fs-xxl: 3rem;
+    --fs-xxxl: 3.5rem;
 }
 
 body{font-family:var(--font-primary);font-size:.875rem;color:var(--charcoal);padding-top:130px}
