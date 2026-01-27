@@ -5,7 +5,7 @@
   
   .leadership-title {
     text-align: center;
-    font-size: 22px;
+    font-size: var(--fs-large);
     font-weight: 500;
     margin-bottom: 40px;
   }
@@ -37,7 +37,7 @@
   }
   
   .leader-name {
-    font-size: 14px;
+    font-size: var(--fs-regular);
     font-weight: 600;
     margin: 0 0 4px;
   }

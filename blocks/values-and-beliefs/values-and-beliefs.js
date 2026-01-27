@@ -20,8 +20,9 @@ export default function decorate(block) {
     const cells = [...row.children];
     if (cells.length < 4) return;
 
-    const picture = cells[0].querySelector('picture') || cells[0].querySelector('img');
-    const titleText  = cells[1].textContent.trim();
+    const picture =
+      cells[0].querySelector('picture') || cells[0].querySelector('img');
+    const titleText = cells[1].textContent.trim();
     const descriptionHTML = cells[2].innerHTML.trim();
     const authorText = cells[3].textContent.trim();
 
@@ -30,6 +31,7 @@ export default function decorate(block) {
 
     const imgWrap = document.createElement('div');
     imgWrap.className = 'value-card-image';
+
     if (picture) imgWrap.appendChild(picture.cloneNode(true));
 
     const overlay = document.createElement('div');
@@ -46,8 +48,39 @@ export default function decorate(block) {
     imgWrap.append(overlay, content);
     card.appendChild(imgWrap);
 
-    overlay.addEventListener('click', () => {
-      card.classList.toggle('active');
+    /* ===============================
+       OPEN (➕) — close others first
+    ================================ */
+    overlay.addEventListener('click', (e) => {
+      e.stopPropagation();
+
+      // close all other cards
+      cardsWrapper
+        .querySelectorAll('.value-card.active')
+        .forEach((activeCard) => {
+          if (activeCard !== card) {
+            activeCard.classList.remove('active');
+          }
+        });
+
+      // open this card
+      card.classList.add('active');
+    });
+
+    /* ===============================
+       CLOSE (➖ top-right hit area)
+    ================================ */
+    card.addEventListener('click', (e) => {
+      if (!card.classList.contains('active')) return;
+
+      const rect = card.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      // minus icon hit area (top-right)
+      if (clickX > rect.width - 44 && clickY < 44) {
+        card.classList.remove('active');
+      }
     });
 
     cardsWrapper.appendChild(card);

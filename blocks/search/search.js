@@ -29,31 +29,35 @@ const algoliaIndex = client.initIndex(ALGOLIA_INDEX);
 
 export default function decorate(block) {
   /* ---------- UI Markup (UNCHANGED) ---------- */
-  block.innerHTML = `
-    <button class="btn-search" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSearch" aria-expanded="false" aria-controls="collapseSearch">
-      Search
-    </button>
-    <div class="collapse" id="collapseSearch">
-      <div class="search-box" role="combobox" aria-expanded="false">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Search..."
-          aria-autocomplete="list"
-          aria-controls="search-results"
-          aria-activedescendant=""
-        />
-        <div
-          class="search-results"
-          id="search-results"
-          role="listbox"
-        ></div>
+block.innerHTML = `
+  <button class="btn-search" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSearch">
+    Search
+  </button>
+  <div class="collapse" id="collapseSearch">
+    <div class="search-box" role="combobox" aria-expanded="false">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search..."
+      />
+      <!-- 🔄 Loader -->
+      <div class="search-loader" hidden>
+        <span class="spinner"></span>
+        <span class="loader-text">Searching...</span>
       </div>
+
+      <div
+        class="search-results"
+        id="search-results"
+        role="listbox"
+      ></div>
     </div>
-  `;
+  </div>
+`;
 
   const input = block.querySelector("input");
   const resultsEl = block.querySelector(".search-results");
+  const loaderEl = block.querySelector(".search-loader");
 
   let results = [];
   let activeIndex = -1;
@@ -67,6 +71,14 @@ export default function decorate(block) {
     input.setAttribute("aria-activedescendant", "");
     block.querySelector(".search-box").setAttribute("aria-expanded", "false");
   }
+  function showLoader() {
+    loaderEl.hidden = false;
+  }
+
+  function hideLoader() {
+    loaderEl.hidden = true;
+  }
+
 
   function updateActiveResult() {
     results.forEach((el, i) => {
@@ -139,6 +151,7 @@ export default function decorate(block) {
     clearResults();
 
     if (q.length < 2) return;
+    showLoader();
 
     try {
       const parts = window.location.pathname.split("/").filter(Boolean);
@@ -167,6 +180,9 @@ export default function decorate(block) {
       }
     } catch (e) {
       console.error("Algolia search failed", e);
+    }
+    finally {
+      hideLoader(); 
     }
   }
 

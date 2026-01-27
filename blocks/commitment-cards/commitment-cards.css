@@ -48,7 +48,7 @@
     color: var(--charcoal);
     border-radius: 0.5rem;
     padding: 2rem;
-    font-size: 1.125rem;
+    font-size: var(--fs-medium);
     flex-grow: 1;
 }
 .comm-card-body h3 {
