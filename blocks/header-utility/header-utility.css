@@ -175,18 +175,56 @@ button.bhashini-dropdown-btn{padding:0}
 }
 
 /* Font size levels */
-.font-size--1 { font-size: 0.75rem !important; }
-.font-size--2 { font-size: 0.65rem !important; }
+:root.font-size--1 {  
+    --fs-xs: 0.65rem!important;
+    --fs-small: 0.75rem!important;
+    --fs-regular: 0.8rem!important;
+    --fs-normal: 0.875rem!important;
+    --fs-medium: 1rem!important;
+    --fs-large: 1.125rem!important;
+    --fs-xlarge: 1.25rem!important;
+    --fs-xxlarge: 1.5rem!important;
+    --fs-xl: 2rem!important;
+    --fs-xxl: 2.5rem!important; }
+:root.font-size--2 { --fs-xs: 0.55rem!important;
+    --fs-small: 0.65rem!important;
+    --fs-regular: 0.75rem!important;
+    --fs-normal: 0.8rem!important;
+    --fs-medium: 0.875rem!important;
+    --fs-large: 1rem!important;
+    --fs-xlarge: 1.125rem!important;
+    --fs-xxlarge: 1.25rem!important;
+    --fs-xl: 1.5rem!important;
+    --fs-xxl: 2rem!important; }
 
-.font-size-1 { font-size: 1.25rem !important; }
-.font-size-2 { font-size: 1.5rem !important; }
+:root.font-size-1 {
+    --fs-xs: 0.8rem!important;
+    --fs-small: 0.875rem!important;
+    --fs-regular: 1rem!important;
+    --fs-normal: 1.125rem!important;
+    --fs-medium: 1.25rem!important;
+    --fs-large: 1.5rem!important;
+    --fs-xlarge: 1.75rem!important;
+    --fs-xxlarge: 2.25rem!important;
+    --fs-xl: 2.75rem!important;
+    --fs-xxl: 3.25rem!important; }
+:root.font-size-2 { --fs-xs: 0.875rem!important;
+    --fs-small: 1rem!important;
+    --fs-regular: 1.125rem!important;
+    --fs-normal: 1.25rem!important;
+    --fs-medium: 1.5rem!important;
+    --fs-large: 1.75rem!important;
+    --fs-xlarge: 2rem!important;
+    --fs-xxlarge: 2.5rem!important;
+    --fs-xl: 3rem!important;
+    --fs-xxl: 3.5rem!important; }
 
-.font-size--1 *,
+/* .font-size--1 *,
 .font-size--2 *,
 .font-size-1 *,
 .font-size-2 * {
   font-size: inherit !important;
-}
+} */
     
 /* Active button styles */
 .accessibility-font-btn.active,
