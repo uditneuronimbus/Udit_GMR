@@ -10,7 +10,7 @@
 .cg-section{display:flex;align-items:center;gap:30px}
 .cg-cube{display:none}
 .cg-cube img{max-width:80px}
-.cg-content{max-width:420px}
+.cg-content{max-width:420px} 
 .cg-title{font-size:var(--fs-medium);font-weight:600;margin-bottom:18px;position:relative;padding-top:24px}
 .cg-section.theme-red .cg-title::after{background:var(--red)}
 .cg-section.theme-yellow .cg-title::after{background:var(--yellow)}
