@@ -121,18 +121,23 @@ export default async function decorate(block) {
   /* ===============================
      4️⃣ FETCH STOCK DATA (WITH CACHE – now using localStorage)
      =============================== */
-  try {
-    const stockData = await fetchStockData();
-    renderStocks(stockTrack, stockSymbols, stockData, STOCK_CODES);
-  } catch (e) {
-    console.error("Stock API Error:", e);
-    stockTrack.innerHTML = `<div class="stock-error">Market data unavailable</div>`;
-  }
+  // Use Promise.allSettled to avoid blocking if stock data fails or is slow
+  Promise.allSettled([fetchStockData()]).then((results) => {
+    const stockData = results[0].status === 'fulfilled' ? results[0].value : [];
+    if (stockData.length > 0) {
+      renderStocks(stockTrack, stockSymbols, stockData, STOCK_CODES);
+    } else {
+      stockTrack.innerHTML = `<div class="stock-error">Market data unavailable</div>`;
+    }
+  });
 
   /* ===============================
      5️⃣ INIT BHASHINI (LANGUAGE) - ACTIVE
      =============================== */
-  initBhashini(bhashiniGroup);
+  // Defer Bhashini initialization to avoid blocking main thread
+  setTimeout(() => {
+    initBhashini(bhashiniGroup);
+  }, 2000);
 
   console.log("Header Utility initialized");
 }
@@ -186,7 +191,7 @@ function initAccessibilityModal() {
                 <button class="font-size-btn font-size-increase" style="background: none; border: 1px solid #ddd; border-radius: 4px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: var(--charcoal);">+</button>
               </div>
             </div>
-            
+
             <!-- Highlight Links -->
             <button class="accessibility-option-btn" data-option="highlight-links" style="display: flex; justify-content: center; flex-direction: column; align-items: center; width: 100%; padding: 12px 16px; background-color: var(--white); border: 1px solid var(--light-grey); border-radius: 16px; cursor: pointer; transition: all 0.2s ease; text-align: left; position: relative;">
               <span class="option-icon" style="font-size: 18px; margin-right: 12px; width: 24px; text-align: center;">
@@ -202,7 +207,7 @@ function initAccessibilityModal() {
               <span class="option-text" style="font-size: 1rem; text-align: center; color: var(--blue); font-weight: 500;">Highlight Links</span>
               <span class="option-checkmark" style="display: none; width: 10px; height: 10px; border-radius: 100px; background-color: var(--yellow); position: absolute;top:10px;right:10px;"></span>
             </button>
-            
+
             <!-- Dark Mode -->
             <button class="accessibility-option-btn" data-option="dark-mode" style="display: flex; justify-content: center; flex-direction: column; align-items: center; width: 100%; padding: 12px 16px; background-color: var(--white); border: 1px solid var(--light-grey); border-radius: 16px; cursor: pointer; transition: all 0.2s ease; text-align: left; position: relative;">
               <span class="option-icon" style="font-size: 18px; width: 32px; text-align: center;">
@@ -218,7 +223,7 @@ function initAccessibilityModal() {
               <span class="option-checkmark" style="display: none; width: 10px; height: 10px; border-radius: 100px; background-color: var(--yellow); position: absolute;top:10px;right:10px;"></span>
             </button>
           </div>
-          
+
         </div>
         <div class="accessibility-actions" style="display: flex;padding: 16px 20px;box-shadow: 0px -1px 4px rgba(0, 0, 0, 0.12);">
             <button class="accessibility-reset-btn" id="accessibility-reset" style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--blue); color: var(--white); border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background-color 0.2s ease;">
@@ -238,27 +243,27 @@ function initAccessibilityModal() {
           </div>
       </div>
     </div>
-    
+
     <style id="accessibility-styles">
       /* Font Size Levels */
       .font-size-level-1 {
         font-size: 1.1em !important;
       }
-      
+
       .font-size-level-2 {
         font-size: 1.2em !important;
       }
-      
+
       .font-size-level-3 {
         font-size: 1.3em !important;
       }
-      
+
       .font-size-level-1 *,
       .font-size-level-2 *,
       .font-size-level-3 * {
         font-size: inherit !important;
       }
-      
+
       .font-size-level-1 button,
       .font-size-level-1 input,
       .font-size-level-1 select,
@@ -273,25 +278,25 @@ function initAccessibilityModal() {
       .font-size-level-3 textarea {
         font-size: 1em !important;
       }
-      
+
       /* Active font size dot */
       .font-size-dot.active {
         background-color: var(--royal-blue) !important;
       }
-      
+
       /* Highlight Links Styles */
       .highlight-links-active a {
         background-color: var(--yellow) !important;
         color: var(--black) !important;
       }
-      
+
       /* Dark Mode - SPECIFIC COLOR INVERTER */
       .dark-mode-active {
         /* Background and text color inversion */
         background-color: var(--black) !important;
         color: var(--white) !important;
       }
-      
+
       /* Specific color inversions */
       .dark-mode-active,
       .dark-mode-active * {
@@ -312,7 +317,7 @@ function initAccessibilityModal() {
         --charcoal: #cccccc !important;       /* currentColor inverted */
         --lpink: #010b1d !important;          /* #fef4e2 inverted */
       }
-      
+
       /* Apply inverted colors to elements that use these variables */
       .dark-mode-active [style*="--blue"],
       .dark-mode-active [style*="003366"],
@@ -321,7 +326,7 @@ function initAccessibilityModal() {
         color: var(--blue) !important;
         border-color: var(--blue) !important;
       }
-      
+
       .dark-mode-active [style*="--red"],
       .dark-mode-active [style*="ff0000"],
       .dark-mode-active [style*="#ff0000"] {
@@ -329,7 +334,7 @@ function initAccessibilityModal() {
         color: var(--red) !important;
         border-color: var(--red) !important;
       }
-      
+
       .dark-mode-active [style*="--yellow"],
       .dark-mode-active [style*="faa519"],
       .dark-mode-active [style*="#faa519"] {
@@ -337,7 +342,7 @@ function initAccessibilityModal() {
         color: var(--yellow) !important;
         border-color: var(--yellow) !important;
       }
-      
+
       .dark-mode-active [style*="--turquoise"],
       .dark-mode-active [style*="00abc5"],
       .dark-mode-active [style*="#00abc5"] {
@@ -345,7 +350,7 @@ function initAccessibilityModal() {
         color: var(--turquoise) !important;
         border-color: var(--turquoise) !important;
       }
-      
+
       .dark-mode-active [style*="--royal-blue"],
       .dark-mode-active [style*="305fab"],
       .dark-mode-active [style*="#305fab"] {
@@ -353,7 +358,7 @@ function initAccessibilityModal() {
         color: var(--royal-blue) !important;
         border-color: var(--royal-blue) !important;
       }
-      
+
       .dark-mode-active [style*="--gblue"],
       .dark-mode-active [style*="5584cf"],
       .dark-mode-active [style*="#5584cf"] {
@@ -361,7 +366,7 @@ function initAccessibilityModal() {
         color: var(--gblue) !important;
         border-color: var(--gblue) !important;
       }
-      
+
       .dark-mode-active [style*="--sky-blue"],
       .dark-mode-active [style*="e2eaf7"],
       .dark-mode-active [style*="#e2eaf7"] {
@@ -369,7 +374,7 @@ function initAccessibilityModal() {
         color: var(--sky-blue) !important;
         border-color: var(--sky-blue) !important;
       }
-      
+
       .dark-mode-active [style*="--orange"],
       .dark-mode-active [style*="f68b1e"],
       .dark-mode-active [style*="#f68b1e"] {
@@ -377,7 +382,7 @@ function initAccessibilityModal() {
         color: var(--orange) !important;
         border-color: var(--orange) !important;
       }
-      
+
       .dark-mode-active [style*="--lorange"],
       .dark-mode-active [style*="fbbb53"],
       .dark-mode-active [style*="#fbbb53"] {
@@ -385,7 +390,7 @@ function initAccessibilityModal() {
         color: var(--lorange) !important;
         border-color: var(--lorange) !important;
       }
-      
+
       .dark-mode-active [style*="--green"],
       .dark-mode-active [style*="2e8b57"],
       .dark-mode-active [style*="#2e8b57"] {
@@ -393,7 +398,7 @@ function initAccessibilityModal() {
         color: var(--green) !important;
         border-color: var(--green) !important;
       }
-      
+
       .dark-mode-active [style*="--light-grey"],
       .dark-mode-active [style*="e0e0e0"],
       .dark-mode-active [style*="#e0e0e0"] {
@@ -401,7 +406,7 @@ function initAccessibilityModal() {
         color: var(--light-grey) !important;
         border-color: var(--light-grey) !important;
       }
-      
+
       .dark-mode-active [style*="--white"],
       .dark-mode-active [style*="ffffff"],
       .dark-mode-active [style*="#ffffff"] {
@@ -409,7 +414,7 @@ function initAccessibilityModal() {
         color: var(--white) !important;
         border-color: var(--white) !important;
       }
-      
+
       .dark-mode-active [style*="--black"],
       .dark-mode-active [style*="000000"],
       .dark-mode-active [style*="#000000"] {
@@ -417,7 +422,7 @@ function initAccessibilityModal() {
         color: var(--black) !important;
         border-color: var(--black) !important;
       }
-      
+
       .dark-mode-active [style*="--charcoal"],
       .dark-mode-active [style*="333333"],
       .dark-mode-active [style*="currentColor"] {
@@ -425,7 +430,7 @@ function initAccessibilityModal() {
         color: var(--charcoal) !important;
         border-color: var(--charcoal) !important;
       }
-      
+
       .dark-mode-active [style*="--lpink"],
       .dark-mode-active [style*="fef4e2"],
       .dark-mode-active [style*="#fef4e2"] {
@@ -433,7 +438,7 @@ function initAccessibilityModal() {
         color: var(--lpink) !important;
         border-color: var(--lpink) !important;
       }
-      
+
       /* General color inversion for common color names */
       .dark-mode-active .blue,
       .dark-mode-active .red,
@@ -452,7 +457,7 @@ function initAccessibilityModal() {
       .dark-mode-active .lpink {
         filter: invert(1) hue-rotate(180deg) !important;
       }
-      
+
       /* Exclude images from any inversion */
       .dark-mode-active img,
       .dark-mode-active video,
@@ -461,63 +466,63 @@ function initAccessibilityModal() {
       .dark-mode-active svg {
         filter: none !important;
       }
-      
+
       /* Modal specific fixes for dark mode */
       .dark-mode-active .accessibility-modal-content {
         background-color: #2d2d2d !important;
         color: var(--white) !important;
         border-color: #555 !important;
       }
-      
+
       .dark-mode-active .accessibility-modal-header {
         background-color: #3d3d3d !important;
         border-bottom-color: #555 !important;
       }
-      
+
       .dark-mode-active .accessibility-modal-header h3 {
         color: var(--white) !important;
       }
-      
+
       .dark-mode-active .accessibility-option-btn {
         background-color: #3d3d3d !important;
         border-color: #555 !important;
         color: var(--white) !important;
       }
-      
+
       .dark-mode-active .accessibility-option-btn .option-text {
         color: var(--white) !important;
       }
-      
+
       .dark-mode-active .option-icon {
         color: var(--white) !important;
       }
-      
+
       .dark-mode-active .accessibility-reset-btn {
         background-color: #495057 !important;
       }
-      
+
       .dark-mode-active .font-size-btn {
         border-color: var(--charcoal) !important;
         color: var(--white) !important;
       }
-      
+
       .dark-mode-active #font-size-label {
         color: var(--white) !important;
       }
-      
+
       .dark-mode-active .font-size-dot:not(.active) {
         background-color: #555 !important;
       }
-      
+
       /* Active button styles */
       .accessibility-option-btn.active {
         box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.10);
       }
-      
+
       .accessibility-option-btn.active .option-checkmark {
         display: block !important;
       }
-      
+
       .dark-mode-active .accessibility-option-btn.active {
         box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.10);
       }
