@@ -1,8 +1,8 @@
 .header-utility-content{display:flex;justify-content:space-between;align-items:center;height:50px;transition-duration:.3s}
 .affix .header-utility-content{transform:translateY(-50px)}
 .stock-track,.utility-nav{display:flex;align-items:center;gap:12px}
-.exchange-wrapper{display:flex;align-items:center;gap:8px;white-space:nowrap}
-.stock-track .stock-item{border-right:1px solid rgba(0,0,0,.3);padding-right:8px;display:flex;align-items:center;gap:8px;line-height:12px;font-size:12px}
+.exchange-wrapper{display:flex;align-items:center;gap:8px;white-space:nowrap;color: var(--black);}
+.stock-track .stock-item{border-right:1px solid rgba(0,0,0,.3);padding-right:8px;display:flex;align-items:center;gap:8px;line-height:12px;font-size:12px;color: var(--black);}
 .trend-down .exchange_change,.trend-down .exchange_trend{color:var(--red)}
 .trend-up .exchange_change,.trend-up .exchange_trend{color:var(--green)}
 .stock-track .stock-item:last-child{border-right:none;padding-right:0}
@@ -11,7 +11,7 @@
 button.bhashini-dropdown-btn{padding:0}
 .nav-group{position:relative;cursor:pointer;display:flex;align-items:center;gap:5px}
 .nav-label{font-weight:600}
-.nav-dropdown{display:none;position:absolute;top:100%;right:0;background:#fff;border:1px solid #ddd;min-width:150px;box-shadow:0 4px 6px rgba(0,0,0,.1);z-index:100;padding:5px 0}
+.nav-dropdown{display:none;position:absolute;top:100%;right:0;background:var(--white);border:1px solid #ddd;min-width:150px;box-shadow:0 4px 6px rgba(0,0,0,.1);z-index:100;padding:5px 0}
 .nav-group:hover .nav-dropdown{display:block}
 .nav-dropdown a{display:block;padding:8px 15px;text-decoration:none;color:#333;transition:background .2s}
 .nav-dropdown a:hover{background:#f5f5f5}

@@ -133,7 +133,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .entry-container p{font-size:1.125rem;font-weight:400}
 .sec-title,.sec-title h2{font-weight:var(--fw-regular)}
 .sec-title h2 strong{font-weight:var(--fw-semi-bold)}
-.sec-desc{font-size:var(--fs-medium)}
+.sec-desc{font-size:var(--fs-medium);color: var(--charcoal);}
 .swiper-button{display:inline-flex;gap:1.5rem}
 .swiper-button-next,.swiper-button-prev{position:static!important;background:var(--lorange);width:3.5rem!important;height:3.5rem!important;border-radius:1rem;border:solid 2px var(--lorange);margin:0!important}
 .swiper-button-next svg,.swiper-button-prev svg{display:none}

@@ -180,7 +180,9 @@ function initAccessibilityModal() {
             <button class="accessibility-font-btn" id="text-big-btn" data-action="text-big" style="display: flex; flex-direction: column; align-items: center; width: 48%; padding: 16px; background-color: var(--white); border: 1px solid var(--light-grey); border-radius: 16px; cursor: pointer; transition: all 0.2s ease; position: relative;">
               <span class="option-icon" style="font-size: 18px; margin-bottom: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16.6666 16H20.6666V25.3333H24.6666V16H28.6666V12H16.6666V16ZM20.6666 5.33334H3.33325V9.33334H9.99992V25.3333H13.9999V9.33334H20.6666V5.33334Z" fill="#003366"/>
+                  <g transform="matrix(-1 0 0 1 32 0)">
+                    <path d="M16.6666 16H20.6666V25.3333H24.6666V16H28.6666V12H16.6666V16ZM20.6666 5.33334H3.33325V9.33334H9.99992V25.3333H13.9999V9.33334H20.6666V5.33334Z" fill="#003366"/>
+                  </g>
                 </svg>
               </span>
               <span class="option-text" style="font-size: 1rem; text-align: center; color: var(--blue); font-weight: 500;">Bigger Text</span>
@@ -275,29 +277,257 @@ function initAccessibilityModal() {
       display: block !important;
     }
     
-    /* Highlight Links Styles */
-    .highlight-links-active a {
-      background-color: var(--yellow) !important;
-      color: var(--black) !important;
-      text-decoration: underline !important;
-    }
-    
-    /* Dark Mode Styles */
-    .dark-mode-active {
-      background-color: #1a1a1a !important;
-      color: #ffffff !important;
-    }
-    
-    .dark-mode-active * {
-      background-color: inherit !important;
-      color: inherit !important;
-    }
-    
-    .dark-mode-active img,
-    .dark-mode-active video {
-      filter: brightness(0.8) !important;
-    }
+    /* Active font size dot */
+      .font-size-dot.active {
+        background-color: var(--royal-blue) !important;
+      }
+      
+      /* Highlight Links Styles */
+      .highlight-links-active a {
+        background-color: var(--yellow) !important;
+        color: var(--black) !important;
+      }
+      
+      /* Dark Mode - SPECIFIC COLOR INVERTER */
+      .dark-mode-active {
+        /* Background and text color inversion */
+        background-color: var(--black) !important;
+        color: var(--white) !important;
+      }
+      
+      /* Specific color inversions */
+      .dark-mode-active,
+      .dark-mode-active * {
+        /* Invert blue colors */
+        --blue:        #ffcc99; /* invert of #003366 */
+        --red:         #00ffff; /* invert of #ff0000 */
+        --yellow:      #055ae6; /* invert of #faa519 */
+        --turquoise:   #ff543a; /* invert of #00abc5 */
+        --royal-blue:  #cfa054; /* invert of #305fab */
+        --gblue:       #aa7b30; /* invert of #5584cf */
+        --sky-blue:    #1d1508; /* invert of #e2eaf7 */
+        --orange:      #0974e1; /* invert of #f68b1e */
+        --lorange:     #0444ac; /* invert of #fbbb53 */
+        --green:       #d172a8; /* invert of #2e8b57 */
+        --light-grey:  #1f1f1f; /* invert of #e0e0e0 */
+        --lgrey:       #090909; /* invert of #f6f6f6 */
+        --white:       #000000; /* invert of #ffffff */
+        --black:       #ffffff; /* invert of #000000 */
+        --charcoal:    #cccccc; /* invert of #333333 */
+        --lpink:       #010b1d; /* invert of #fef4e2 */
+      }
+      
+      /* Apply inverted colors to elements that use these variables */
+      .dark-mode-active [style*="--blue"],
+      .dark-mode-active [style*="003366"],
+      .dark-mode-active [style*="#003366"] {
+        background-color: var(--blue) !important;
+        color: var(--blue) !important;
+        border-color: var(--blue) !important;
+      }
+      
+      .dark-mode-active [style*="--red"],
+      .dark-mode-active [style*="ff0000"],
+      .dark-mode-active [style*="#ff0000"] {
+        background-color: var(--red) !important;
+        color: var(--red) !important;
+        border-color: var(--red) !important;
+      }
+      
+      .dark-mode-active [style*="--yellow"],
+      .dark-mode-active [style*="faa519"],
+      .dark-mode-active [style*="#faa519"] {
+        background-color: var(--yellow) !important;
+        color: var(--yellow) !important;
+        border-color: var(--yellow) !important;
+      }
+      
+      .dark-mode-active [style*="--turquoise"],
+      .dark-mode-active [style*="00abc5"],
+      .dark-mode-active [style*="#00abc5"] {
+        background-color: var(--turquoise) !important;
+        color: var(--turquoise) !important;
+        border-color: var(--turquoise) !important;
+      }
+      
+      .dark-mode-active [style*="--royal-blue"],
+      .dark-mode-active [style*="305fab"],
+      .dark-mode-active [style*="#305fab"] {
+        background-color: var(--royal-blue) !important;
+        color: var(--royal-blue) !important;
+        border-color: var(--royal-blue) !important;
+      }
+      
+      .dark-mode-active [style*="--gblue"],
+      .dark-mode-active [style*="5584cf"],
+      .dark-mode-active [style*="#5584cf"] {
+        background-color: var(--gblue) !important;
+        color: var(--gblue) !important;
+        border-color: var(--gblue) !important;
+      }
+      
+      .dark-mode-active [style*="--sky-blue"],
+      .dark-mode-active [style*="e2eaf7"],
+      .dark-mode-active [style*="#e2eaf7"] {
+        background-color: var(--sky-blue) !important;
+        color: var(--sky-blue) !important;
+        border-color: var(--sky-blue) !important;
+      }
+      
+      .dark-mode-active [style*="--orange"],
+      .dark-mode-active [style*="f68b1e"],
+      .dark-mode-active [style*="#f68b1e"] {
+        background-color: var(--orange) !important;
+        color: var(--orange) !important;
+        border-color: var(--orange) !important;
+      }
+      
+      .dark-mode-active [style*="--lorange"],
+      .dark-mode-active [style*="fbbb53"],
+      .dark-mode-active [style*="#fbbb53"] {
+        background-color: var(--lorange) !important;
+        color: var(--lorange) !important;
+        border-color: var(--lorange) !important;
+      }
+      
+      .dark-mode-active [style*="--green"],
+      .dark-mode-active [style*="2e8b57"],
+      .dark-mode-active [style*="#2e8b57"] {
+        background-color: var(--green) !important;
+        color: var(--green) !important;
+        border-color: var(--green) !important;
+      }
+      
+      .dark-mode-active [style*="--light-grey"],
+      .dark-mode-active [style*="e0e0e0"],
+      .dark-mode-active [style*="#e0e0e0"] {
+        background-color: var(--light-grey) !important;
+        color: var(--light-grey) !important;
+        border-color: var(--light-grey) !important;
+      }
+      
+      .dark-mode-active [style*="--white"],
+      .dark-mode-active [style*="ffffff"],
+      .dark-mode-active [style*="#ffffff"] {
+        background-color: var(--white) !important;
+        color: var(--white) !important;
+        border-color: var(--white) !important;
+      }
+      
+      .dark-mode-active [style*="--black"],
+      .dark-mode-active [style*="000000"],
+      .dark-mode-active [style*="#000000"] {
+        background-color: var(--black) !important;
+        color: var(--black) !important;
+        border-color: var(--black) !important;
+      }
+      
+      .dark-mode-active [style*="--charcoal"],
+      .dark-mode-active [style*="333333"],
+      .dark-mode-active [style*="currentColor"] {
+        background-color: var(--charcoal) !important;
+        color: var(--charcoal) !important;
+        border-color: var(--charcoal) !important;
+      }
+      
+      .dark-mode-active [style*="--lpink"],
+      .dark-mode-active [style*="fef4e2"],
+      .dark-mode-active [style*="#fef4e2"] {
+        background-color: var(--lpink) !important;
+        color: var(--lpink) !important;
+        border-color: var(--lpink) !important;
+      }
+      
+      /* General color inversion for common color names */
+      .dark-mode-active .blue,
+      .dark-mode-active .red,
+      .dark-mode-active .yellow,
+      .dark-mode-active .turquoise,
+      .dark-mode-active .royal-blue,
+      .dark-mode-active .gblue,
+      .dark-mode-active .sky-blue,
+      .dark-mode-active .orange,
+      .dark-mode-active .lorange,
+      .dark-mode-active .green,
+      .dark-mode-active .light-grey,
+      .dark-mode-active .white,
+      .dark-mode-active .black,
+      .dark-mode-active .charcoal,
+      .dark-mode-active .lpink {
+        filter: invert(1) hue-rotate(180deg) !important;
+      }
+      
+      /* Exclude images from any inversion */
+      .dark-mode-active img,
+      .dark-mode-active video,
+      .dark-mode-active iframe,
+      .dark-mode-active canvas,
+      .dark-mode-active svg {
+        filter: none !important;
+      }
+      
+      /* Modal specific fixes for dark mode */
+      .dark-mode-active .accessibility-modal-content {
+        background-color: #2d2d2d !important;
+        color: var(--white) !important;
+        border-color: #555 !important;
+      }
+      
+      .dark-mode-active .accessibility-modal-header {
+        background-color: #3d3d3d !important;
+        border-bottom-color: #555 !important;
+      }
+      
+      .dark-mode-active .accessibility-modal-header h3 {
+        color: var(--white) !important;
+      }
+      
+      .dark-mode-active .accessibility-option-btn {
+        background-color: #3d3d3d !important;
+        border-color: #555 !important;
+        color: var(--white) !important;
+      }
+      
+      .dark-mode-active .accessibility-option-btn .option-text {
+        color: var(--white) !important;
+      }
+      
+      .dark-mode-active .option-icon {
+        color: var(--white) !important;
+      }
+      
+      .dark-mode-active .accessibility-reset-btn {
+        background-color: #495057 !important;
+      }
+      
+      .dark-mode-active .font-size-btn {
+        border-color: var(--charcoal) !important;
+        color: var(--white) !important;
+      }
+      
+      .dark-mode-active #font-size-label {
+        color: var(--white) !important;
+      }
+      
+      .dark-mode-active .font-size-dot:not(.active) {
+        background-color: #555 !important;
+      }
+      
+      /* Active button styles */
+      .accessibility-option-btn.active {
+        box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.10);
+      }
+      
+      .accessibility-option-btn.active .option-checkmark {
+        display: block !important;
+      }
+      
+      .dark-mode-active .accessibility-option-btn.active {
+        box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.10);
+      }
+    </style>
   `;
+
   document.head.appendChild(style);
 
   console.log("Modal HTML added to body");
