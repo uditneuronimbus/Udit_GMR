@@ -37,7 +37,7 @@ button.bhashini-dropdown-btn{padding:0}
   right: 20px;
   z-index: 9999;
   width: 100%;
-  max-width: 400px;
+  max-width: 330px;
 }
 
 /* Modal box */
@@ -55,7 +55,7 @@ button.bhashini-dropdown-btn{padding:0}
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 1rem;
   border-bottom: 1px solid var(--light-grey);
 }
 
@@ -81,14 +81,14 @@ button.bhashini-dropdown-btn{padding:0}
 
 /* Body */
 .accessibility-modal-body {
-  padding: 20px;
+  padding: 1rem;
 }
 
 /* Options grid */
 .accessibility-options {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: .5rem;
 }
 
 /* Option buttons */
@@ -124,7 +124,7 @@ button.bhashini-dropdown-btn{padding:0}
 
 /* Text */
 .option-text {
-  font-size: 1rem;
+  font-size: var(--fs-regular);
   font-weight: 500;
   color: var(--blue);
   text-align: center;
@@ -150,7 +150,7 @@ button.bhashini-dropdown-btn{padding:0}
 /* Footer actions */
 .accessibility-actions {
   display: flex;
-  padding: 16px 20px;
+  padding: 1rem;
   box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.12);
 }
 
