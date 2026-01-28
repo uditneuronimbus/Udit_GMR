@@ -50,14 +50,14 @@ export default function decorate(block) {
   /* ===============================
      4️⃣ Runtime markup
   =============================== */
-  const runtime = document.createElement("section");
-  runtime.className = "gmr-tabs-runtime";
+  const runtime = document.createElement("div");
+  runtime.className = "gmr-tabs-runtime spacer";
 
   runtime.innerHTML = `
     <div class="container">
       ${
         sectionTitle
-          ? `<h2 class="gmr-tabs-title text-center mb-4">${sectionTitle}</h2>`
+          ? `<h2 class="sec-title text-white text-center mb-5">${sectionTitle}</h2>`
           : ""
       }
 
@@ -66,7 +66,7 @@ export default function decorate(block) {
           .map(
             (title, i) => `
           <button
-            class="gmr-tab-btn ${i === 0 ? "active" : ""}"
+            class="btn gmr-tab-btn ${i === 0 ? "active" : ""}"
             data-tab="${i}">
             ${title}
           </button>`
