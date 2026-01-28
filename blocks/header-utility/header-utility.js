@@ -287,6 +287,9 @@ function setupAccessibilityModalEvents() {
 
   // Load saved preferences
   loadAccessibilityPreferences();
+  setTimeout(() => {
+    sendAccessibilityToTarget(getAccessibilityProfile());
+  }, 500);
 
   // Toggle modal visibility
   accessibilityBtn.addEventListener('click', function (e) {
@@ -347,6 +350,17 @@ function setupAccessibilityModalEvents() {
 
 // Font size functionality
 let fontSizeLevel = 0;
+
+function getAccessibilityProfile() {
+  return {
+    "profile.accessibility.fontLevel": fontSizeLevel,
+    "profile.accessibility.darkMode":
+      localStorage.getItem("accessibility-dark-mode") === "true",
+    "profile.accessibility.highlightLinks":
+      localStorage.getItem("accessibility-highlight-links") === "true"
+  };
+}
+
 
 function toggleFontSize(action, button) {
   const html = document.documentElement;
@@ -415,6 +429,7 @@ function toggleFontSize(action, button) {
   }
 
   console.log("Font size level:", fontSizeLevel);
+  sendAccessibilityToTarget(getAccessibilityProfile());
 }
 
 
@@ -496,6 +511,8 @@ function toggleAccessibilityOption(option, button) {
   // Show checkmark
   const checkmark = button.querySelector('.option-checkmark');
   if (checkmark) checkmark.style.display = 'block';
+
+  sendAccessibilityToTarget(getAccessibilityProfile());
 }
 
 
@@ -643,6 +660,8 @@ function resetAccessibilityOptions() {
   localStorage.removeItem('accessibility-font-level');
   localStorage.removeItem('accessibility-highlight-links');
   localStorage.removeItem('accessibility-dark-mode');
+  sendAccessibilityToTarget(getAccessibilityProfile());
+
 }
 
 
@@ -829,4 +848,33 @@ function renderStocks(container, symbols, apiData, stockCodes) {
   if (!container.children.length) {
     container.innerHTML = `<div class="stock-empty">No active stocks</div>`;
   }
+}
+
+/* ======================================================
+   ADOBE TARGET BRIDGE
+   ====================================================== */
+
+function sendAccessibilityToTarget(payload) {
+  if (!window.alloy) {
+    console.warn("Target Alloy not loaded yet");
+    return;
+  }
+
+  const targetPayload = {
+    "profile.fontLevel": payload["profile.accessibility.fontLevel"],
+    "profile.darkMode": payload["profile.accessibility.darkMode"],
+    "profile.highlightLinks": payload["profile.accessibility.highlightLinks"]
+  };
+  console.log("🎯 Sending accessibility profile to Target:", payload);
+
+  window.alloy("sendEvent", {
+    renderDecisions: true,
+    data: {
+      "__adobe": {
+        "target": targetPayload
+      }
+    }
+  }).catch(err => {
+    console.error("Target send failed:", err);
+  });
 }
