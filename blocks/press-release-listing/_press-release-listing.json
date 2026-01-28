@@ -110,12 +110,6 @@
           ]
         },
         {
-          "component": "text",
-          "name": "year",
-          "label": "Year (e.g., 2026)",
-          "valueType": "string"
-        },
-        {
           "component": "reference",
           "name": "image",
           "label": "Press Release Image",
@@ -138,6 +132,19 @@
           "name": "lastUpdated",
           "label": "Last Updated Date",
           "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "location",
+          "label": "Location",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "contactDetails",
+          "label": "Contact Details (JSON)",
+          "valueType": "string",
+          "description": "JSON array of contact objects. Example: [{\"name\":\"John Doe\",\"role\":\"Head - Communications\",\"email\":\"john@example.com\"},{\"name\":\"Jane Smith\",\"role\":\"PR Manager\",\"email\":\"jane@example.com\"}]"
         }
       ]
     }

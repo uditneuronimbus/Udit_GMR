@@ -325,17 +325,56 @@ export default function decorate(block) {
     const cols = [...item.children];
     if (!cols.length) return;
 
-    // Item structure: category, year, image, title, publishDate, lastUpdated, ctaLink (optional)
+    // Item structure: category, image, title, publishDate, lastUpdated, location, contactDetails, ctaLink (optional)
     const category = cols[0]?.textContent?.trim().toLowerCase() || "";
-    const year = cols[1]?.textContent?.trim() || "";
     let imageEl = null;
-    if (cols[2]) imageEl = cols[2].querySelector("img") || cols[2].querySelector("picture");
-    const title = cols[3]?.textContent?.trim() || "";
-    const publishDate = cols[4]?.textContent?.trim() || "";
-    const lastUpdated = cols[5]?.textContent?.trim() || "";
+    if (cols[1]) imageEl = cols[1].querySelector("img") || cols[1].querySelector("picture");
+    const title = cols[2]?.textContent?.trim() || "";
+    const publishDate = cols[3]?.textContent?.trim() || "";
+    const lastUpdated = cols[4]?.textContent?.trim() || "";
+    const location = cols[5]?.textContent?.trim() || "";
     
-    // Auto-generate ctaLink from category and title
-    const providedLink = cols[6]?.querySelector("a")?.href || cols[6]?.textContent?.trim() || "";
+    // Parse contact details from column 6 (JSON format)
+    let contactDetails = [];
+    if (cols[6]) {
+      const contactDetailsText = cols[6]?.textContent?.trim() || "";
+      if (contactDetailsText) {
+        try {
+          // Try to parse as JSON
+          contactDetails = JSON.parse(contactDetailsText);
+          // Ensure it's an array
+          if (!Array.isArray(contactDetails)) {
+            contactDetails = [contactDetails];
+          }
+        } catch (e) {
+          // If JSON parsing fails, try to parse as structured text
+          // Format: Name|Role|Email (one per line or separated by semicolon)
+          const lines = contactDetailsText.split(/\n|;/).filter(line => line.trim());
+          contactDetails = lines.map(line => {
+            const parts = line.split('|').map(p => p.trim());
+            if (parts.length >= 3) {
+              return {
+                name: parts[0],
+                role: parts[1],
+                email: parts[2]
+              };
+            } else if (parts.length === 2) {
+              // Assume name and email
+              return {
+                name: parts[0],
+                role: '',
+                email: parts[1]
+              };
+            }
+            return null;
+          }).filter(Boolean);
+        }
+      }
+    }
+    
+    // Auto-generate ctaLink from category and title (column 7 or later)
+    const linkColIndex = cols.length > 7 ? 7 : (cols.length > 6 ? 6 : 5);
+    const providedLink = cols[linkColIndex]?.querySelector("a")?.href || cols[linkColIndex]?.textContent?.trim() || "";
     const categorySlug = createSlug(category) || 'general';
     const titleSlug = createSlug(title);
     const ctaLink = providedLink || `/press-releases/${categorySlug}/${titleSlug}`;
@@ -352,10 +391,6 @@ export default function decorate(block) {
         extractedYear = String(dateObj.getFullYear());
       }
     }
-    // Fallback to manual year field only if publishDate didn't provide year
-    if (!extractedYear && year) {
-      extractedYear = year;
-    }
 
     if (extractedYear) years.add(extractedYear);
     if (category) categories.add(category);
@@ -370,6 +405,8 @@ export default function decorate(block) {
       title,
       publishDate: formatDate(publishDate),
       lastUpdated: formatDate(lastUpdated),
+      location,
+      contactDetails,
       ctaLink,
       dateObj: parseDate(publishDate)
     });
