@@ -215,7 +215,11 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .page-about .commitment-cards-container .sec-commitment { background: none; margin-top: -4rem;}
 .page-about .commitment-cards-container .sec-commitment .sec-title { color:var(--charcoal); } 
 .page-about .flat-banner { margin-top: 0; }
-.page-about .message-from-leadership-container { padding-bottom: 80px; }
+.pt-0.message-from-leadership-container { overflow: hidden; }
+.pt-0.message-from-leadership-container .mfl-runtime { padding-top: 0; padding-bottom: 80px; }
+.pt-0.message-from-leadership-container .mfl-runtime .mfl-card { margin-top: 0; }
+.pt-0.message-from-leadership-container .mfl-runtime .mfl-navigation { opacity: 0; visibility: hidden; }
+.pt-0.highlight.message-from-leadership-container .mfl-runtime .mfl-navigation { opacity: 1; visibility: visible; }
 .all-business-cards-container .default-content-wrapper { background-color: var(--lgrey); text-align: center; padding-bottom: 80px; }
 .all-business-cards-container .default-content-wrapper .button-container { margin-bottom: 0; }
 .all-business-cards-container .default-content-wrapper .button { height: 44px; display: inline-flex; align-items: center; padding: 0 1.25rem; border-radius: .5rem; font-weight: var(--fw-semi-bold); gap: .5rem; justify-content: center; text-decoration: none; }
