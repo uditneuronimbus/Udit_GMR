@@ -146,6 +146,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .card{border-radius:.5rem;border-color:var(--light-grey);transition-duration:.3s}
 .card-ui-one{border:none;background:0 0;height:100%}
 .card-ui-one .card-body p.card-desc { min-height: 105px; }
+.page-airports .card-ui-one .card-body p.card-desc { min-height: 50px; }
 .card-ui-one .card-img,.card-ui-three .card-img,.card-ui-two .card-img{position:relative;background:var(--light-grey);border-radius:.5rem;overflow:hidden;height:100px;padding:0 0 65%;margin-bottom:.5rem}
 .card-ui-one .card-body{padding:1.25rem;font-size:var(--fs-regular);color:var(--charcoal);border-radius:.5rem;background:var(--white);height:100%}
 .card-ui-one .card-title{font-size:var(--fs-medium);font-weight:var(--fw-semi-bold)}

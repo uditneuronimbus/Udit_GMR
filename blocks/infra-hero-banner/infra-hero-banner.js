@@ -1,9 +1,10 @@
 export default function decorate(block) {
   const rows = [...block.children];
-  if (rows.length < 8) return;
+  if (rows.length < 9) return;
 
   const [
-    bgRow,
+    bgDesktopRow,
+    bgMobileRow,
     titleRow,
     subtitleRow,
     descRow,
@@ -13,9 +14,6 @@ export default function decorate(block) {
     alignmentRow,
   ] = rows;
 
-  /* =============================
-     Create wrapper
-  ============================== */
   const hero = document.createElement('div');
   hero.className = 'infra-hero';
 
@@ -26,25 +24,39 @@ export default function decorate(block) {
   content.className = 'infra-hero-content';
 
   /* =============================
-     Background image (FULL QUALITY)
+     Background Image (STYLE SAFE)
   ============================== */
-  const img = bgRow.querySelector('img');
+  const desktopImg = bgDesktopRow.querySelector('img');
+  const mobileImg = bgMobileRow.querySelector('img');
 
-  if (img) {
-    // remove Franklin params
-    const baseSrc = img.src.split('?')[0];
+  if (desktopImg) {
+    const desktopBaseSrc = desktopImg.src.split('?')[0];
+    desktopImg.src = `${desktopBaseSrc}?width=2400&quality=90&format=jpg`;
+    desktopImg.className = 'infra-hero-bg-img';
+    desktopImg.removeAttribute('width');
+    desktopImg.removeAttribute('height');
 
-    // force large + high quality
-    img.src = `${baseSrc}?width=2400&quality=90&format=jpg`;
+    // ✅ ONLY use <picture> when mobile image exists
+    if (mobileImg) {
+      const picture = document.createElement('picture');
 
-    img.className = 'infra-hero-bg-img';
-    img.removeAttribute('width');
-    img.removeAttribute('height');
+      const mobileBaseSrc = mobileImg.src.split('?')[0];
+      const source = document.createElement('source');
+      source.media = '(max-width: 767px)';
+      source.srcset = `${mobileBaseSrc}?width=900&quality=90&format=jpg`;
 
-    bg.appendChild(img);
+      picture.appendChild(source);
+      picture.appendChild(desktopImg);
+
+      bg.appendChild(picture);
+    } else {
+      // ✅ EXACT old structure → styles preserved
+      bg.appendChild(desktopImg);
+    }
   }
 
-  bgRow.remove();
+  bgDesktopRow.remove();
+  bgMobileRow.remove();
 
   /* =============================
      Alignment
@@ -54,43 +66,26 @@ export default function decorate(block) {
   alignmentRow.remove();
 
   /* =============================
-     Title
+     Content
   ============================== */
   if (titleRow?.textContent.trim()) {
     titleRow.classList.add('infra-hero-title');
     content.appendChild(titleRow);
-  } else {
-    titleRow?.remove();
-  }
+  } else titleRow?.remove();
 
-  /* =============================
-     Subtitle
-  ============================== */
   if (subtitleRow?.textContent.trim()) {
     subtitleRow.classList.add('infra-hero-subtitle');
     content.appendChild(subtitleRow);
-  } else {
-    subtitleRow?.remove();
-  }
+  } else subtitleRow?.remove();
 
-  /* =============================
-     Description
-  ============================== */
   if (descRow?.textContent.trim()) {
     descRow.classList.add('infra-hero-description');
     content.appendChild(descRow);
-  } else {
-    descRow?.remove();
-  }
+  } else descRow?.remove();
 
-  /* =============================
-     Extra row
-  ============================== */
   if (extraRow?.textContent.trim()) {
     content.appendChild(extraRow);
-  } else {
-    extraRow?.remove();
-  }
+  } else extraRow?.remove();
 
   /* =============================
      CTA
@@ -100,7 +95,7 @@ export default function decorate(block) {
 
   if (ctaText && ctaLink) {
     const cta = document.createElement('a');
-    cta.className = 'infra-hero-cta';
+    cta.className = 'btn btn-primary';
     cta.textContent = ctaText;
     cta.href = ctaLink;
     cta.setAttribute('data-aue-link', 'true');
@@ -110,9 +105,6 @@ export default function decorate(block) {
   ctaTextRow.remove();
   ctaLinkRow.remove();
 
-  /* =============================
-     Assemble
-  ============================== */
   hero.append(bg, content);
   block.prepend(hero);
 }
