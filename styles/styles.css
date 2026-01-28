@@ -258,4 +258,5 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .swiper-pagination-bullet { border-radius: 8px!important; width: 10px!important; height: 10px!important; transition-duration: .3s!important; }
 .swiper-pagination-bullet-active { background: var(--blue)!important; width: 24px!important; }
 .sec-desc p { font-weight: 300;}
+.sec-desc { font-size: var(--fs-regular); }
 }
