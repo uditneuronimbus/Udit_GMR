@@ -27,8 +27,13 @@ export default function decorate(block) {
       tabsMap[tabTitle] = [];
     }
 
+    /* icon → URL only */
+    let iconUrl = "";
+    const img = cells[2]?.querySelector("img");
+    if (img) iconUrl = img.src;
+
     tabsMap[tabTitle].push({
-      icon: cells[2]?.textContent?.trim(),
+      icon: iconUrl,
       title: cells[3]?.textContent?.trim(),
       desc: cells[4]?.textContent?.trim(),
     });
@@ -94,7 +99,9 @@ export default function decorate(block) {
             <div class="gmr-card text-center h-100">
               ${
                 card.icon
-                  ? `<div class="gmr-card-icon mb-3">${card.icon}</div>`
+                  ? `<div class="gmr-card-icon mb-3">
+                       <img src="${card.icon}" alt="${card.title}" loading="lazy" />
+                     </div>`
                   : ""
               }
               ${
@@ -104,7 +111,7 @@ export default function decorate(block) {
               }
               ${
                 card.desc
-                  ? `<div class="gmr-card-desc">${card.desc}</div>`
+                  ? `<p class="gmr-card-desc">${card.desc}</p>`
                   : ""
               }
             </div>
@@ -116,7 +123,7 @@ export default function decorate(block) {
   }
 
   /* ===============================
-     6️⃣ Tabs click
+     6️⃣ Tab click handling
   =============================== */
   tabsNav.forEach((btn) => {
     btn.addEventListener("click", () => {
