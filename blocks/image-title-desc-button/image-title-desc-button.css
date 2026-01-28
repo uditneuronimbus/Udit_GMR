@@ -11,4 +11,5 @@
 @media (max-width:767px){
 .flat-title{font-size:var(--fs-xlarge);}
 .flat-banner { min-height: 640px; }
+.flat-overlay { padding: 0 0 48px; }
 }

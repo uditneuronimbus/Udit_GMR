@@ -35,7 +35,7 @@ export default function decorate(block) {
   grid.className = "row";
 
   rows.forEach((row) => {
-    row.classList.add("col-md-6", "comm-card");
+    row.classList.add("col-md-6", "comm-card", "mb-5");
 
     const cells = [...row.children];
 
