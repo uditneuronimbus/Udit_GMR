@@ -860,12 +860,18 @@ function sendAccessibilityToTarget(payload) {
     return;
   }
 
+  const targetPayload = {
+    "profile.fontLevel": payload["profile.accessibility.fontLevel"],
+    "profile.darkMode": payload["profile.accessibility.darkMode"],
+    "profile.highlightLinks": payload["profile.accessibility.highlightLinks"]
+  };
   console.log("🎯 Sending accessibility profile to Target:", payload);
 
   window.alloy("sendEvent", {
+    renderDecisions: true,
     data: {
       "__adobe": {
-        "target": payload
+        "target": targetPayload
       }
     }
   }).catch(err => {
