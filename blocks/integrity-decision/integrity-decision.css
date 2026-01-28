@@ -9,7 +9,10 @@
 .integrity-cards .card-icon img { max-height: 80px; min-height: 80px; }
 .integrity-cards .card-title { margin-bottom: 8px; }
 .integrity-cards .card-desc p { font-size: var(--fs-normal); margin-bottom: 0; }
+.integrity-card { position: relative; }
 
 @media (max-width:767px){
 .integrity-cards{grid-template-columns:repeat(1,1fr);gap:24px}
+.integrity-card { padding: 24px; position: relative; padding-left: 100px; }
+.integrity-cards .card-icon { text-align: left; margin-bottom: 0; max-width: 56px; position: absolute; left: 24px; top: 16px; }
 }

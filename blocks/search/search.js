@@ -69,6 +69,11 @@ block.innerHTML = `
     results = [];
     activeIndex = -1;
     input.setAttribute("aria-activedescendant", "");
+    // block.querySelector(".search-box").setAttribute("aria-expanded", "false");
+  }
+  function clearAll() {
+    clearResults();
+    input.value = "";  
     block.querySelector(".search-box").setAttribute("aria-expanded", "false");
   }
   function showLoader() {
@@ -218,14 +223,25 @@ block.innerHTML = `
         break;
 
       case "Escape":
-        clearResults();
+        clearAll();
         input.blur();
         break;
     }
   });
 
-  document.addEventListener("click", (e) => {
-    if (!block.contains(e.target)) {
+  if (!clickedInsideSearch) {
+    clearAll();
+  }
+
+
+  document.addEventListener("mousedown", (e) => {
+    const searchBox = block.querySelector(".search-box");
+    const toggleBtn = block.querySelector(".btn-search");
+
+    const clickedInsideSearch =
+      searchBox.contains(e.target) || toggleBtn.contains(e.target);
+
+    if (!clickedInsideSearch) {
       clearResults();
     }
   });

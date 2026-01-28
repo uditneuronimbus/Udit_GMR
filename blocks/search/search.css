@@ -54,6 +54,15 @@
     height: 100%;
     scroll-behavior: smooth;
 }
+.search-results mark {
+  background: #ffe58a;
+  padding: 0;          /* 🔥 removes the visual gap */
+  margin: 0;
+  display: inline;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
 
 .search-results a {
     display: block;

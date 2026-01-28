@@ -56,3 +56,7 @@
     color: var(--blue);
     font-weight: 400;
 }
+@media (max-width:767px){
+    .comm-card-body { padding: 24px 16px; }
+    .sec-commitment .col-md-6.comm-card:last-child { margin-bottom: 0!important;}
+}

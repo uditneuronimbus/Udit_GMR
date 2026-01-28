@@ -83,3 +83,9 @@
   font-weight: 600;
   text-decoration: none;
 }
+@media (max-width:767px){
+.infra-hero { display: block; padding: 48px 24px; min-height: 600px; }
+.infra-hero.align-right .infra-hero-content { margin-right: 0; margin: auto; text-align: center; width: 100%; }
+.infra-hero-title p { font-size:var(--fs-xlarge); }
+.infra-hero::after { background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.15)); }
+}
