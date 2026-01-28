@@ -28,9 +28,9 @@ export default function decorate(block) {
     }
 
     tabsMap[tabTitle].push({
-      icon: cells[2]?.innerHTML || "",
+      icon: cells[2]?.textContent?.trim(),
       title: cells[3]?.textContent?.trim(),
-      desc: cells[4]?.innerHTML || "",
+      desc: cells[4]?.textContent?.trim(),
     });
   });
 
