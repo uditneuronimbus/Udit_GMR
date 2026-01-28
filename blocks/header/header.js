@@ -4,7 +4,6 @@ import { loadFragment } from "../fragment/fragment.js";
 const isDesktop = window.matchMedia("(min-width: 900px)");
 
 // --- Helper Functions ---
-
 function closeOnEscape(e) {
   if (e.code !== "Escape") return;
   const nav = document.getElementById("nav");
@@ -146,8 +145,8 @@ export default async function decorate(block) {
         logoLink.setAttribute("aria-label", "GMR Home");
         logoLink.className = "navbar-logo";
         if (picture.parentNode) {
-            picture.parentNode.insertBefore(logoLink, picture);
-            logoLink.appendChild(picture);
+          picture.parentNode.insertBefore(logoLink, picture);
+          logoLink.appendChild(picture);
         }
 
         let current = logoLink.parentElement;
@@ -174,7 +173,7 @@ export default async function decorate(block) {
       const menuImgWrapper = navBrand.querySelector(":scope > div > div");
       if (menuImgWrapper) {
         [...menuImgWrapper.children].forEach((div) => {
-          if(div.children.length >= 2) {
+          if (div.children.length >= 2) {
             const first = div.children[0];
             const second = div.children[1];
             const labelEl = second?.querySelector("p");
@@ -187,7 +186,6 @@ export default async function decorate(block) {
         menuImgWrapper.remove();
       }
 
-      // --- MEGA MENU BUILDER ---
       const mainUl = navBrand.querySelector(":scope > div > ul");
       if (mainUl) {
         [...mainUl.children].forEach((li) => {
@@ -217,18 +215,11 @@ export default async function decorate(block) {
           const mega = document.createElement("div");
           mega.className = "mega-wrapper";
 
-          // --- COLUMNS ---
           const colLeft = document.createElement("div");
           colLeft.className = "mega-col mega-left";
           const sectionTitle = document.createElement("h4");
           sectionTitle.textContent = menuTitleText;
           colLeft.append(sectionTitle);
-          if (descriptionText) {
-            const descP = document.createElement("p");
-            descP.className = "mega-description";
-            descP.textContent = descriptionText;
-            colLeft.append(descP);
-          }
           const horizontalContainer = document.createElement("div");
           horizontalContainer.className = "main-category-list";
           colLeft.append(horizontalContainer);
@@ -240,42 +231,44 @@ export default async function decorate(block) {
           colRightList.className = "mega-col mega-list-container";
 
           const colDetails = document.createElement("div");
-          colDetails.className = "mega-col mega-details-panel";
+          colDetails.className = "mega-details-panel";
 
-          // --- UPDATED RENDER FUNCTION ---
-          // Can accept an optional subList to display alongside the image
-          const updateDetailsPanel = (primaryKey, parentKey1, parentKey2, subListNode = null) => {
-             colDetails.innerHTML = "";
+          // Set initial background image
+          if (mainImgSrc) {
+            colDetails.style.backgroundImage = `url(${mainImgSrc})`;
+            colDetails.style.backgroundSize = 'cover';
+            colDetails.style.backgroundPosition = 'center';
+          }
 
-             // 1. If there's a sub-list (Level 4), append it first
-             if (subListNode) {
-                 colDetails.append(subListNode);
-             }
+          const updateDetailsPanel = (primaryKey, parentKey1 = null, parentKey2 = null, subListNode = null) => {
+            // Remove previous nested list only (keep background image)
+            colDetails.querySelectorAll('.nested-list').forEach(el => el.remove());
 
-             // 2. Resolve Image Logic (Priority: Primary -> Parent1 -> Parent2 -> Main)
-             let imgSrc = imageMap.get(primaryKey);
-             if (!imgSrc && parentKey1) imgSrc = imageMap.get(parentKey1);
-             if (!imgSrc && parentKey2) imgSrc = imageMap.get(parentKey2);
-             if (!imgSrc) imgSrc = mainImgSrc;
+            let imgSrc = imageMap.get(primaryKey);
+            if (!imgSrc && parentKey1) imgSrc = imageMap.get(parentKey1);
+            if (!imgSrc && parentKey2) imgSrc = imageMap.get(parentKey2);
+            if (!imgSrc) imgSrc = mainImgSrc;
 
-             // 3. Append Image (It will sit below the list due to Flex column)
-             if (imgSrc) {
-                 const img = document.createElement("img");
-                 img.className = "mega-right-image";
-                 img.src = imgSrc;
-                 colDetails.append(img);
-             }
+            if (imgSrc) {
+              colDetails.style.backgroundImage = `url(${imgSrc})`;
+              colDetails.style.backgroundSize = 'cover';
+              colDetails.style.backgroundPosition = 'center';
+            }
+
+            if (subListNode) {
+              colDetails.append(subListNode);
+            }
           };
 
           mega.append(colLeft, colMid, colRightList, colDetails);
 
-          li.innerHTML = "";
-          if (mainLinkEl) li.append(mainLinkEl);
+          // Preserve main link, remove only original inner <ul>
+          const originalUl = li.querySelector("ul");
+          if (originalUl) originalUl.remove();
+
           li.append(mega);
 
-          let firstItem = null;
-
-          // Level 1 Loop
+          // Event Logic
           [...innerList.children].forEach((level1Li) => {
             const l1LinkEl = level1Li.querySelector("a");
             const l1Text = l1LinkEl ? l1LinkEl.textContent.trim() : level1Li.firstChild.textContent.trim();
@@ -290,24 +283,25 @@ export default async function decorate(block) {
             itemContainer.append(l1A);
             horizontalContainer.append(itemContainer);
 
-            // Level 1 Hover
             itemContainer.addEventListener("mouseenter", () => {
               horizontalContainer.querySelectorAll(".cat-item").forEach(el => el.classList.remove("active"));
               itemContainer.classList.add("active");
 
               colMid.innerHTML = "";
+              colMid.style.display = 'none';
               colRightList.innerHTML = "";
+              colRightList.style.display = 'none';
+
               updateDetailsPanel(l1Key);
 
               const level2Ul = level1Li.querySelector("ul");
               if (level2Ul) {
+                colMid.style.display = 'block';
+
                 const l2Ul = document.createElement("ul");
                 l2Ul.className = "vertical-nav-list";
                 colMid.append(l2Ul);
 
-                let firstL2 = null;
-
-                // Level 2 Loop
                 [...level2Ul.children].forEach((level2Li) => {
                   const l2LinkEl = level2Li.querySelector("a");
                   const l2Text = l2LinkEl ? l2LinkEl.textContent.trim() : level2Li.textContent.trim();
@@ -321,68 +315,61 @@ export default async function decorate(block) {
                   l2Li.append(l2A);
                   l2Ul.append(l2Li);
 
-                  // Level 2 Hover
                   l2Li.addEventListener("mouseenter", () => {
                     l2Ul.querySelectorAll("li").forEach(el => el.classList.remove("active"));
                     l2Li.classList.add("active");
 
                     colRightList.innerHTML = "";
+                    colRightList.style.display = 'none';
                     updateDetailsPanel(l2Key, l1Key);
 
                     const level3Ul = level2Li.querySelector("ul");
                     if (level3Ul) {
+                      colRightList.style.display = 'block';
+
                       const l3Ul = document.createElement("ul");
                       l3Ul.className = "vertical-nav-list";
                       colRightList.append(l3Ul);
 
-                      // Level 3 Loop
                       [...level3Ul.children].forEach((level3Li) => {
-                         const l3LinkEl = level3Li.querySelector("a");
-                         const l3Text = l3LinkEl ? l3LinkEl.textContent.trim() : level3Li.firstChild.textContent.trim();
-                         const l3Href = l3LinkEl ? l3LinkEl.href : "#";
-                         const l3Key = l3Text.toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-");
+                        const l3LinkEl = level3Li.querySelector("a");
+                        const l3Text = l3LinkEl ? l3LinkEl.textContent.trim() : level3Li.firstChild.textContent.trim();
+                        const l3Href = l3LinkEl ? l3LinkEl.href : "#";
+                        const l3Key = l3Text.toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-");
 
-                         const l3Li = document.createElement("li");
-                         const l3A = document.createElement("a");
-                         l3A.href = l3Href;
+                        const l3Li = document.createElement("li");
+                        const l3A = document.createElement("a");
+                        l3A.href = l3Href;
 
-                         const level4Ul = level3Li.querySelector("ul");
-                         if(level4Ul) {
-                             l3A.innerHTML = `${l3Text} <span class="right-arrow">›</span>`;
-                             l3A.classList.add("has-children");
-                         } else {
-                             l3A.textContent = l3Text;
-                         }
+                        const level4Ul = level3Li.querySelector("ul");
+                        if (level4Ul) {
+                          l3A.innerHTML = `${l3Text} <span class="right-arrow">›</span>`;
+                        } else {
+                          l3A.textContent = l3Text;
+                        }
 
-                         l3Li.append(l3A);
-                         l3Ul.append(l3Li);
+                        l3Li.append(l3A);
+                        l3Ul.append(l3Li);
 
-                         // Level 3 Hover (UPDATED)
-                         l3Li.addEventListener("mouseenter", () => {
-                            l3Ul.querySelectorAll("li").forEach(el => el.classList.remove("active"));
-                            l3Li.classList.add("active");
+                        l3Li.addEventListener("mouseenter", () => {
+                          l3Ul.querySelectorAll("li").forEach(el => el.classList.remove("active"));
+                          l3Li.classList.add("active");
 
-                            let l4List = null;
-                            if(level4Ul) {
-                                l4List = level4Ul.cloneNode(true);
-                                l4List.className = "vertical-nav-list nested-list";
-                            }
+                          let l4List = null;
+                          if (level4Ul) {
+                            l4List = level4Ul.cloneNode(true);
+                            l4List.className = "vertical-nav-list nested-list";
+                          }
 
-                            // Pass both the list AND the keys to resolve image
-                            updateDetailsPanel(l3Key, l2Key, l1Key, l4List);
-                         });
+                          updateDetailsPanel(l3Key, l2Key, l1Key, l4List);
+                        });
                       });
                     }
                   });
-
-                  if (!firstL2) firstL2 = l2Li;
                 });
-                if (firstL2) firstL2.dispatchEvent(new MouseEvent("mouseenter"));
               }
             });
-            if (!firstItem) firstItem = itemContainer;
           });
-          if (firstItem) firstItem.dispatchEvent(new MouseEvent("mouseenter"));
         });
       }
     }
@@ -429,6 +416,6 @@ export default async function decorate(block) {
 
     block.append(navWrapper);
   } catch(e) {
-      console.error("Navigation Decorate Failed:", e);
+    console.error("Navigation Decorate Failed:", e);
   }
 }
