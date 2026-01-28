@@ -205,7 +205,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 /* corporate-governance */
 /* about gmr impact */
 .gmr-impact .gla-wrapper.spacer { padding-bottom: 160px;}
-.gmr-impact .gla-wrapper>.container .col-lg-4.col-md-5, .gmr-impact .gla-wrapper>.container .col-md-7.col-lg-8 {flex: 0 0 auto; width: 100%;}
+.gmr-impact .gla-wrapper>.container .col-lg-5.col-md-5, .gmr-impact .gla-wrapper>.container .col-md-7.col-lg-6 {flex: 0 0 auto; width: 100%;}
 .gmr-impact .gla-wrapper>.container { text-align: center;}
 .gmr-impact .gla-wrapper>.container>.row { max-width: 650px; margin: auto;}
 .gmr-impact .gla-wrapper>.container>.row .sec-title { margin-bottom: 1.5rem;}
