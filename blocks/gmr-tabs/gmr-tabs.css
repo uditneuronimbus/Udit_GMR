@@ -1,0 +1,16 @@
+.gmr-tab-btn {
+  border: 1px solid #f5b400;
+  background: transparent;
+  padding: 10px 20px;
+  margin: 0 6px;
+  border-radius: 6px;
+}
+
+.gmr-tab-btn.active {
+  background: #f5b400;
+  color: #000;
+}
+
+.gmr-card {
+  padding: 24px;
+}
