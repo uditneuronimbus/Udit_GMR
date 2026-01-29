@@ -67,16 +67,10 @@
           "label": "Message"
         },
         {
-          "component": "text",
+          "component": "richtext",
           "valueType": "string",
           "name": "titleName",
           "label": "Title Name"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "designation",
-          "label": "Designation"
         }
       ]
     }
