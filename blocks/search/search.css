@@ -38,7 +38,7 @@
     right: 0;
     width: 400px;
     padding: 1.5rem;
-    height: 60vh;
+    max-height: 60vh;
     background: var(--white);
     display: flex;
     flex-direction: column;
@@ -54,6 +54,15 @@
     height: 100%;
     scroll-behavior: smooth;
 }
+.search-results mark {
+  background: #ffe58a;
+  padding: 0;          /* 🔥 removes the visual gap */
+  margin: 0;
+  display: inline;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
 
 .search-results a {
     display: block;
@@ -84,12 +93,36 @@
     white-space: normal;
 }
 .search-snippet {
-  font-size: 0.9rem;
-  color: #555;
-  line-height: 1.4;
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.4;
 }
 
 .search-snippet em {
-  background: #ffe58a;
-  font-style: normal;
+    background: #ffe58a;
+    font-style: normal;
+}
+
+.search-loader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.search-loader .spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

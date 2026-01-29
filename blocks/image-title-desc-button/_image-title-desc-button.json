@@ -22,8 +22,14 @@
       "fields": [
         {
           "component": "reference",
-          "name": "backgroundImage",
-          "label": "Background Image",
+          "name": "backgroundImage Desktop",
+          "label": "Background Image Desktop",
+          "valueType": "string"
+        },
+        {
+          "component": "reference",
+          "name": "backgroundImageMobile",
+          "label": "Background Image Mobile",
           "valueType": "string"
         },
         {

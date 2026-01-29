@@ -338,7 +338,8 @@ function openConsentModal(block) {
           <h2>${conf.title}</h2>
           <div class="cookie-description">${conf.note}</div>
           <div class="cookie-description cookie-note">
-            You can choose which optional cookies you allow and change your preferences at any time.
+            You can choose which optional cookies you allow and change your preferences at any time.<br/><br/>
+            Learn more in our <br/><a href="#"><u>Privacy Policy</u></a> and <a href="/en/cookie-policy"><u>Cookie Policy</u></a>.
           </div>
         </div>
         <div class="cookie-right">

@@ -1,5 +1,16 @@
-export default function decorate(block) {
-  // 1. Find authored slide items (adjust selector to your reality)
+import { loadCSS, loadScript } from '../../../scripts/aem.js';
+
+const SWIPER_JS = '../../../scripts/swiper-bundle.min.js';
+const SWIPER_CSS = '../../../styles/swiper-bundle.min.css';
+
+export default async function decorate(block) {
+  const isAuthorMode =
+    document.body.classList.contains('aem-AuthorLayer-Edit') ||
+    window.location.search.includes('wcmmode=edit');
+
+  /* ================================
+     COLLECT AUTHORED ITEMS
+  ================================ */
   const items = [...block.children].filter((child) => {
     return (
       child.tagName === 'DIV' &&
@@ -8,87 +19,88 @@ export default function decorate(block) {
     );
   });
 
-  if (items.length === 0) {
-    console.warn('No leadership message items found in block');
-    return;
-  }
+  if (!items.length) return;
 
-  // 2. Extract data
-  const slidesData = items.map((item) => {
-    const cells = [...item.children];
-    if (cells.length < 4) return null;
+  /* ================================
+     READ AUTHORED CONTENT
+  ================================ */
+  const slidesData = items
+    .map((item) => {
+      const cells = [...item.children];
+      if (cells.length < 4) return null;
 
-    return {
-      image: cells[0].innerHTML.trim(),              
-      subtitle: cells[1].textContent.trim(),
-      message: cells[2].innerHTML.trim(),
-      designation: cells[3].textContent.trim(),
-    };
-  }).filter(Boolean);
+      return {
+        image: cells[0].innerHTML.trim(),
+        subtitle: cells[1].textContent.trim(),
+        message: cells[2].innerHTML.trim(),
+        designation: cells[3].textContent.trim(),
+      };
+    })
+    .filter(Boolean);
 
-  if (slidesData.length === 0) return;
+  /* ================================
+     HIDE AUTHORED CONTENT (NOT DELETE)
+  ================================ */
+  block.classList.add('mfl-initialized');
 
-  block.innerHTML = '';
-
+  /* ================================
+     BUILD RUNTIME SWIPER
+  ================================ */
   const container = document.createElement('div');
-  container.className = 'mfl-container';
+  container.className = 'mfl-runtime';
 
   container.innerHTML = `
-    <div class="mfl-slider">
-      <div class="mfl-slides"></div>
+    <div class="swiper mfl-swiper">
+      <div class="swiper-wrapper"></div>
+
       <div class="mfl-navigation">
-        <button class="mfl-prev" aria-label="Previous slide">←</button>
-        <button class="mfl-next" aria-label="Next slide">→</button>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
       </div>
     </div>
   `;
 
   block.append(container);
-  block.classList.add('mfl-decorated');
 
-  const slidesWrapper = container.querySelector('.mfl-slides');
-  const prevBtn = container.querySelector('.mfl-prev');
-  const nextBtn = container.querySelector('.mfl-next');
+  const swiperWrapper = container.querySelector('.swiper-wrapper');
 
-  slidesData.forEach((data, idx) => {
+  slidesData.forEach((data) => {
     const slide = document.createElement('div');
-    slide.className = 'mfl-slide';
-    if (idx === 0) slide.classList.add('active');
+    slide.className = 'swiper-slide';
 
     slide.innerHTML = `
       <div class="mfl-card">
         <div class="mfl-image">${data.image}</div>
+
         <div class="mfl-content">
-          <h2 class="mfl-title">Message from Leadership</h2>
-          <h4 class="mfl-subtitle">${data.subtitle}</h4>
+          <h2 class="mfl-title">${data.subtitle}</h2>
           <div class="mfl-message">${data.message}</div>
           <div class="mfl-author">${data.designation}</div>
         </div>
       </div>
     `;
-    slidesWrapper.appendChild(slide);
+
+    swiperWrapper.appendChild(slide);
   });
 
-  let current = 0;
-  const slides = slidesWrapper.children;
+  /* ================================
+     DO NOT INIT SWIPER IN EDIT MODE
+  ================================ */
+  if (isAuthorMode) return;
 
-  function showSlide(idx) {
-    [...slides].forEach((s, i) => {
-      s.classList.toggle('active', i === idx);
-    });
-  }
+  /* ================================
+     LOAD SWIPER & INIT
+  ================================ */
+  await loadCSS(SWIPER_CSS);
+  await loadScript(SWIPER_JS);
 
-  prevBtn.addEventListener('click', () => {
-    current = (current - 1 + slides.length) % slides.length;
-    showSlide(current);
+  new Swiper(container.querySelector('.mfl-swiper'), {
+    slidesPerView: 1,
+    spaceBetween: 24,
+    loop: true,
+    navigation: {
+      nextEl: container.querySelector('.swiper-button-next'),
+      prevEl: container.querySelector('.swiper-button-prev'),
+    },
   });
-
-  nextBtn.addEventListener('click', () => {
-    current = (current + 1) % slides.length;
-    showSlide(current);
-  });
-
-  showSlide(0);
-
-
 }

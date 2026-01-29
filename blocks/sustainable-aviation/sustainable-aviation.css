@@ -16,9 +16,10 @@
 }
 
 .sa-header h2 {
-  font-size: 44px;
-  font-weight: 600;
-  color: #0b2e2a;
+  font-size: 48px;
+  font-weight: 400;
+  color:var(--black);
+
 }
 
 .sa-description {
@@ -66,8 +67,8 @@
 .sa-card-content p {
   font-size: 16px;
   color: #333333;
-  line-height: 1.6;
 }
+
 
 @media (max-width: 992px) {
   .sa-header {
@@ -82,4 +83,15 @@
 /* 🔑 THIS IS THE FIX */
 .sustainable-aviation.sa-initialized > :not(.sustainable-aviation-runtime) {
   display: none;
+}
+
+
+
+/* Center 5th card when total cards = 5 (desktop only) */
+@media (min-width: 993px) {
+  .sa-items > .sa-card:last-child:nth-child(5) {
+    grid-column: 1 / -1;      /* span both columns */
+    max-width: 50%;           /* keep same card width */
+    justify-self: center;     /* center horizontally */
+  }
 }

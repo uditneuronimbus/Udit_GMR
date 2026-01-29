@@ -1,8 +1,7 @@
 /* BLOCK ROOT — MANDATORY */
 .our-approach {
   padding: 80px 0;
-  background:var(--light-grey);
-  margin-top: 70px;
+  background:var( --lgrey);
 }
 
 /* WRAPPER */
@@ -25,11 +24,16 @@
   margin-bottom: 20px;
 }
 
-.our-approach .our-approach-left p,
-.our-approach .our-approach-left h3 {
-  font-size: 26px;
-  color: #003366;
-  line-height: 1.4;
+.our-approach-heading P{
+  color: var(--black);
+  font-weight: 400;
+  font-size: 48px;
+}
+
+.our-approach-title P{
+  color: var(--blue);
+  font-weight: 400;
+  font-size: 32px;
 }
 
 /* RIGHT COLUMN */

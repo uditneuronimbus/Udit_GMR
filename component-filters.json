@@ -51,7 +51,10 @@
       "partners-filter",
       "awards-filter",
       "breadcrumbs",
-      "Message from Leadership",
+      "message-from-leadership",
+      "gmr-tabs",
+      "image-slider",
+      "integrity-decision",
       "press-release-featured",
       "press-release-listing"
     ]
@@ -219,6 +222,12 @@
     ]
   },
   {
+    "id": "gmr-tabs",
+    "components": [
+      "gmr-tabs-item"
+    ]
+  },
+  {
     "id": "header-img",
     "components": [
       "menu-img"
@@ -243,6 +252,12 @@
     ]
   },
   {
+    "id": "image-slider",
+    "components": [
+      "image-slider-item"
+    ]
+  },
+  {
     "id": "infra-hero-banner",
     "components": []
   },
@@ -260,6 +275,12 @@
     "id": "innovation-cards",
     "components": [
       "innovation-card-item"
+    ]
+  },
+  {
+    "id": "integrity-decision",
+    "components": [
+      "integrity-decision-item"
     ]
   },
   {

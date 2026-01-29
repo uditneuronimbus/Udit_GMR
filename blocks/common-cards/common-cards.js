@@ -1,52 +1,80 @@
 export default function decorate(block) {
-    // ===== Read authorable content from existing DOM =====
-    const rows = [...block.children];
-  
-    // Section title (parent model)
-    const sectionTitle =
-      rows[0]?.querySelector("p")?.textContent?.trim() ||
-      "Group Holding Board";
-  
-    // Card items (child models)
-    const cards = rows.slice(1).map((row) => {
-      const image = row.querySelector("img")?.getAttribute("src") || "";
-      const title = row.querySelector('[data-aue-prop="cardTitle"]')?.textContent?.trim() || "";
-      const subtitle = row.querySelector('[data-aue-prop="subTitle"]')?.innerHTML || "";
-      const actionText = row.querySelector('[data-aue-prop="actionText"]')?.textContent?.trim() || "READ PROFILE";
-      const actionLink = row.querySelector('[data-aue-prop="actionLink"]')?.textContent?.trim() || "#";
-  
-      return { image, title, subtitle, actionText, actionLink };
-    });
-  
-    block.innerHTML = "";
-  
-    const section = document.createElement("section");
-    section.className = "leadership-section";
-  
-    section.innerHTML = `
-      <h2 class="leadership-title">${sectionTitle}</h2>
-      <div class="leadership-grid">
-        ${cards
-          .map(
-            (card) => `
-          <article class="leader-card">
-            <div class="leader-image">
-              <img src="${card.image}" alt="${card.title}" loading="lazy" />
-            </div>
-  
-            <div class="leader-content">
-              <h3 class="leader-name">${card.title}</h3>
-              <div class="leader-role">${card.subtitle}</div>
-              <a href="${card.actionLink}" class="leader-link">
-                ${card.actionText} <span>›</span>
-              </a>
-            </div>
-          </article>
-        `
-          )
-          .join("")}
-      </div>
-    `;
-  
-    block.appendChild(section);
-  }
+  const isAuthorMode =
+    document.body.classList.contains('aem-AuthorLayer-Edit') ||
+    window.location.search.includes('wcmmode=edit');
+
+  const rows = [...block.children];
+  if (!rows.length) return;
+
+  /* ================================
+     READ SECTION TITLE
+  ================================ */
+  const sectionTitle =
+    rows[0].querySelector('p')?.textContent?.trim() ||
+    'Group Holding Board';
+
+  /* ================================
+     READ CARD DATA
+  ================================ */
+  const cards = rows.slice(1)
+    .map((row) => {
+      const cells = [...row.children];
+      if (cells.length < 5) return null;
+
+      return {
+        image: cells[0].innerHTML.trim(),
+        title: cells[1].textContent.trim(),
+        subtitle: cells[2].innerHTML.trim(),
+        actionText: cells[3].textContent.trim() || 'READ PROFILE',
+        actionLink: cells[4].querySelector('a')?.getAttribute('href') || '#',
+      };
+    })
+    .filter(Boolean);
+
+  if (!cards.length) return;
+
+  /* ================================
+     STOP HERE IN EDIT MODE
+     (PREVENT DUPLICATION)
+  ================================ */
+  if (isAuthorMode) return;
+
+  /* ================================
+     HIDE AUTHORED CONTENT
+  ================================ */
+  block.classList.add('leadership-initialized');
+
+  /* ================================
+     BUILD RUNTIME UI
+  ================================ */
+  const section = document.createElement('section');
+  section.className = 'leadership-runtime';
+
+  section.innerHTML = `
+    <h2 class="leadership-title">${sectionTitle}</h2>
+
+    <div class="leadership-grid">
+      ${cards
+        .map(
+          (card) => `
+        <article class="leader-card">
+          <div class="leader-image">
+            ${card.image}
+          </div>
+
+          <div class="leader-content">
+            <h3 class="leader-name">${card.title}</h3>
+            <div class="leader-role">${card.subtitle}</div>
+            <a href="${card.actionLink}" class="leader-link">
+              ${card.actionText} <span>›</span>
+            </a>
+          </div>
+        </article>
+      `
+        )
+        .join('')}
+    </div>
+  `;
+
+  block.append(section);
+}

@@ -62,7 +62,7 @@ export default function decorate(block) {
     /* LEFT COLUMN → LOGO + TITLE */
     if (hasLogo || hasTitle) {
       const leftCol = document.createElement("div");
-      leftCol.className = "col-lg-4 col-md-5";
+      leftCol.className = "col-lg-5 col-md-5";
 
       if (hasLogo) {
         logoEl.remove();
@@ -84,7 +84,7 @@ export default function decorate(block) {
     /* RIGHT COLUMN → DESCRIPTION ONLY */
     if (hasDesc) {
       const rightCol = document.createElement("div");
-      rightCol.className = "col-md-7 col-lg-8 fs-md";
+      rightCol.className = "col-md-7 col-lg-6 fs-md";
 
       descEl.remove();
       descEl.removeAttribute("data-aue-label");

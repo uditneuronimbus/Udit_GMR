@@ -52,7 +52,9 @@
 }
 
 .infra-hero-description {
-  font-size: 16px;
+  font-size: 19px;
+  font-weight: 400;
+  color: #E0E0E0;
 }
 
 .infra-hero.align-left {
@@ -80,4 +82,10 @@
   border-radius: 10px;
   font-weight: 600;
   text-decoration: none;
+}
+@media (max-width:767px){
+.infra-hero { display: block; padding: 48px 24px; min-height: 600px; }
+.infra-hero.align-right .infra-hero-content { margin-right: 0; margin: auto; text-align: center; width: 100%; }
+.infra-hero-title p { font-size:var(--fs-xlarge); }
+.infra-hero::after { background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.15)); }
 }

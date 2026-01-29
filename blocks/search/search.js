@@ -1,9 +1,7 @@
 import algoliasearch from "https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.esm.browser.js";
 
 // Algolia config (FRONTEND SAFE)
-const ALGOLIA_APP_ID = "BARVAFD3OC";
-const ALGOLIA_SEARCH_KEY = "e3ba8576fac702f5c6826b7b24cf221c";
-const ALGOLIA_INDEX = "site_pages";
+const { ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY, ALGOLIA_INDEX } = window.APP_CONFIG;
 
 // ⚠️ Force stable hosts (fixes unreachable-host errors on corp networks)
 const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY, {
@@ -31,31 +29,35 @@ const algoliaIndex = client.initIndex(ALGOLIA_INDEX);
 
 export default function decorate(block) {
   /* ---------- UI Markup (UNCHANGED) ---------- */
-  block.innerHTML = `
-    <button class="btn-search" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSearch" aria-expanded="false" aria-controls="collapseSearch">
-      Search
-    </button>
-    <div class="collapse" id="collapseSearch">
-      <div class="search-box" role="combobox" aria-expanded="false">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Search..."
-          aria-autocomplete="list"
-          aria-controls="search-results"
-          aria-activedescendant=""
-        />
-        <div
-          class="search-results"
-          id="search-results"
-          role="listbox"
-        ></div>
+block.innerHTML = `
+  <button class="btn-search" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSearch">
+    Search
+  </button>
+  <div class="collapse" id="collapseSearch">
+    <div class="search-box" role="combobox" aria-expanded="false">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search..."
+      />
+      <!-- 🔄 Loader -->
+      <div class="search-loader" hidden>
+        <span class="spinner"></span>
+        <span class="loader-text">Searching...</span>
       </div>
+
+      <div
+        class="search-results"
+        id="search-results"
+        role="listbox"
+      ></div>
     </div>
-  `;
+  </div>
+`;
 
   const input = block.querySelector("input");
   const resultsEl = block.querySelector(".search-results");
+  const loaderEl = block.querySelector(".search-loader");
 
   let results = [];
   let activeIndex = -1;
@@ -67,8 +69,21 @@ export default function decorate(block) {
     results = [];
     activeIndex = -1;
     input.setAttribute("aria-activedescendant", "");
+    // block.querySelector(".search-box").setAttribute("aria-expanded", "false");
+  }
+  function clearAll() {
+    clearResults();
+    input.value = "";  
     block.querySelector(".search-box").setAttribute("aria-expanded", "false");
   }
+  function showLoader() {
+    loaderEl.hidden = false;
+  }
+
+  function hideLoader() {
+    loaderEl.hidden = true;
+  }
+
 
   function updateActiveResult() {
     results.forEach((el, i) => {
@@ -141,6 +156,7 @@ export default function decorate(block) {
     clearResults();
 
     if (q.length < 2) return;
+    showLoader();
 
     try {
       const parts = window.location.pathname.split("/").filter(Boolean);
@@ -169,6 +185,9 @@ export default function decorate(block) {
       }
     } catch (e) {
       console.error("Algolia search failed", e);
+    }
+    finally {
+      hideLoader(); 
     }
   }
 
@@ -204,14 +223,25 @@ export default function decorate(block) {
         break;
 
       case "Escape":
-        clearResults();
+        clearAll();
         input.blur();
         break;
     }
   });
 
-  document.addEventListener("click", (e) => {
-    if (!block.contains(e.target)) {
+  if (!clickedInsideSearch) {
+    clearAll();
+  }
+
+
+  document.addEventListener("mousedown", (e) => {
+    const searchBox = block.querySelector(".search-box");
+    const toggleBtn = block.querySelector(".btn-search");
+
+    const clickedInsideSearch =
+      searchBox.contains(e.target) || toggleBtn.contains(e.target);
+
+    if (!clickedInsideSearch) {
       clearResults();
     }
   });

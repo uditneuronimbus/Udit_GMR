@@ -1,19 +1,18 @@
 export default function decorate(block) {
   const rows = [...block.children];
-  if (rows.length < 5) return;
+  if (rows.length < 6) return;
 
   block.classList.add("image-title-desc-button");
 
   /* =========================
      Read UE-authored fields
   ========================== */
-  const imageRow = rows[0];
-  const titleRow = rows[1];
-  const descRow = rows[2];
-  const buttonTextRow = rows[3];
-  const buttonLinkRow = rows[4];
-
-  const picture = imageRow.querySelector("picture");
+  const imageDesktopRow = rows[0];
+  const imageMobileRow = rows[1];
+  const titleRow = rows[2];
+  const descRow = rows[3];
+  const buttonTextRow = rows[4];
+  const buttonLinkRow = rows[5];
 
   const titleCell = titleRow.children[0];
   const descCell = descRow.children[0];
@@ -31,11 +30,38 @@ export default function decorate(block) {
   const flat = document.createElement("section");
   flat.className = "flat-banner position-relative";
 
-  /* ---- Background Image ---- */
-  if (picture) {
-    picture.classList.add("flat-bg");
-    flat.append(picture);
+  /* =========================
+     Background Image (SAME LOGIC AS INFRA HERO)
+  ========================== */
+  const desktopImg = imageDesktopRow.querySelector("img");
+  const mobileImg = imageMobileRow.querySelector("img");
+
+  if (desktopImg) {
+    const desktopBaseSrc = desktopImg.src.split("?")[0];
+    desktopImg.src = `${desktopBaseSrc}?width=2400&quality=90&format=jpg`;
+    desktopImg.classList.add("flat-bg");
+    desktopImg.removeAttribute("width");
+    desktopImg.removeAttribute("height");
+
+    if (mobileImg) {
+      const picture = document.createElement("picture");
+
+      const mobileBaseSrc = mobileImg.src.split("?")[0];
+      const source = document.createElement("source");
+      source.media = "(max-width: 767px)";
+      source.srcset = `${mobileBaseSrc}?width=900&quality=90&format=jpg`;
+
+      picture.appendChild(source);
+      picture.appendChild(desktopImg);
+
+      flat.append(picture);
+    } else {
+      flat.append(desktopImg);
+    }
   }
+
+  imageDesktopRow.remove();
+  imageMobileRow.remove();
 
   /* ---- Overlay Content ---- */
   const overlay = document.createElement("div");
@@ -58,7 +84,7 @@ export default function decorate(block) {
     col.append(titleCell);
   }
 
-  /* ---- Description (optional) ---- */
+  /* ---- Description ---- */
   if (hasDesc) {
     descCell.classList.add("flat-desc", "mb-4");
     col.append(descCell);
@@ -68,7 +94,7 @@ export default function decorate(block) {
   if (hasButton) {
     const btn = document.createElement("a");
     btn.href = btnLink;
-    btn.className = "btn btn-primary btn-lg";
+    btn.className = "btn btn-primary";
     btn.textContent = btnText;
     col.append(btn);
   }
