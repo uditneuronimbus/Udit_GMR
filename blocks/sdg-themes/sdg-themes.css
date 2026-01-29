@@ -1,13 +1,9 @@
-  /* ===============================
-   HIDE ORIGINAL CONTENT
-================================ */
+/* 
 .sdg-themes.sdg-themes-initialized > :not(.sdg-themes-runtime) {
   display: none;
 }
 
-/* ===============================
-   RUNTIME WRAPPER
-================================ */
+
 .sdg-themes-runtime {
   padding: 80px 0;
   background: #ffffff;
@@ -27,18 +23,14 @@
   margin-bottom: 40px;
 }
 
-/* ===============================
-   GRID
-================================ */
+
 .sdg-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
 
-/* ===============================
-   CARD BASE
-================================ */
+
 .sdg-card {
   position: relative;
   cursor: pointer;
@@ -46,15 +38,13 @@
   overflow: hidden;
 }
 
-/* ===============================
-   IMAGE
-================================ */
+
 .sdg-image {
   height: 225px;
   background-color: #ffffff;
   border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 60px; /* space for blue bar */
+  margin-bottom: 60px; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,22 +57,20 @@
   display: block;
 }
 
-/* ===============================
-   BOTTOM BLUE BAR
-================================ */
+
 .sdg-content {
   position: absolute;
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 52px; /* fixed height like reference */
+  height: 52px; 
   padding: 0 14px;
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: var(--blue);
-  border-radius: 0 0 8px 8px; /* only bottom corners */
+  border-radius: 0 0 8px 8px; 
   z-index: 4;
 }
 
@@ -93,7 +81,6 @@
   line-height: 1.4;
 }
 
-/* ICON (PLUS) */
 .sdg-content::after {
   content: "";
   width: 24px;
@@ -109,9 +96,7 @@
   transform: scale(1.1);
 }
 
-/* ===============================
-   COLOR VARIANTS
-================================ */
+
 .sdg-card.sdg-1 .sdg-content { background: #E5243B; } 
 .sdg-card.sdg-2 .sdg-content { background: #DDA63A; } 
 .sdg-card.sdg-3 .sdg-content { background: #4C9F38; } 
@@ -120,9 +105,7 @@
 .sdg-card.sdg-7 .sdg-content { background: #FBC412; } 
 .sdg-card.sdg-8 .sdg-content { background: #A21942; }
 
-/* ===============================
-   RESPONSIVE
-================================ */
+
 @media (max-width: 1199px) {
   .sdg-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -155,9 +138,7 @@
   }
 }
 
-/* ===============================
-   SPECIAL CASE – 7 CARDS
-================================ */
+
 @media (min-width: 1200px) {
   .sdg-grid:has(> .sdg-card:nth-child(7)) {
     display: flex;
@@ -172,5 +153,223 @@
 
   .sdg-grid:has(> .sdg-card:nth-child(7)) > .sdg-card:nth-child(n + 5) {
     flex: 0 0 calc(25% - 20px);
+  }
+}
+
+
+ */
+
+
+
+/* =====================================================
+   HIDE AUTHORED CONTENT
+===================================================== */
+.sdg-themes.sdg-themes-initialized > :not(.sdg-themes-runtime) {
+  display: none;
+}
+
+/* =====================================================
+   SECTION
+===================================================== */
+.sdg-themes-runtime {
+  padding: 80px 0;
+  background: #ffffff;
+}
+
+.sdg-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.sdg-title {
+  text-align: center;
+  font-size: 48px;
+  font-weight: 400;
+  color: #000;
+  margin-bottom: 40px;
+}
+
+/* =====================================================
+   GRID
+===================================================== */
+.sdg-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* =====================================================
+   CARD
+===================================================== */
+.sdg-card {
+  position: relative;
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* =====================================================
+   IMAGE
+===================================================== */
+.sdg-image {
+  height: 225px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sdg-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* =====================================================
+   BOTTOM BAR (DEFAULT STATE)
+===================================================== */
+.sdg-content {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0 0 8px 8px;
+  z-index: 4;
+}
+
+.sdg-content h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* =====================================================
+   PLUS ICON (BOTTOM RIGHT)
+===================================================== */
+.sdg-content::after {
+  content: "+";
+  width: 24px;
+  height: 24px;
+  background: #faa519;
+  color: #003a8f;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* =====================================================
+   EXPANDED CONTENT (HIDDEN)
+===================================================== */
+.sdg-description {
+  display: none;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-top: 16px;
+  color: #fff;
+}
+
+/* =====================================================
+   ACTIVE STATE
+===================================================== */
+
+/* Show expanded overlay */
+.sdg-card.active .sdg-content {
+  position: absolute;
+  inset: 0;
+  height: auto;
+  padding: 56px 24px 24px;
+  border-radius: 8px;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Show description */
+.sdg-card.active .sdg-description {
+  display: block;
+}
+
+/* Hide bottom bar look */
+.sdg-card.active .sdg-content::after {
+  display: none;
+}
+
+/* =====================================================
+   MINUS ICON (TOP RIGHT – CARD LEVEL)
+===================================================== */
+.sdg-card.active::after {
+  content: "–";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  background: #faa519;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  z-index: 6;
+}
+
+/* =====================================================
+   SDG COLOR VARIANTS
+===================================================== */
+.sdg-card.sdg-1 .sdg-content { background: #E5243B; }
+.sdg-card.sdg-2 .sdg-content { background: #DDA63A; }
+.sdg-card.sdg-3 .sdg-content { background: #4C9F38; }
+.sdg-card.sdg-5 .sdg-content { background: #EF402C; }
+.sdg-card.sdg-6 .sdg-content { background: #27BFE6; }
+.sdg-card.sdg-7 .sdg-content { background: #FBC412; }
+.sdg-card.sdg-8 .sdg-content { background: #A21942; }
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+@media (max-width: 1199px) {
+  .sdg-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 991px) {
+  .sdg-title {
+    font-size: 28px;
+  }
+
+  .sdg-image {
+    height: 220px;
+    margin-bottom: 50px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sdg-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sdg-image {
+    height: 200px;
+    margin-bottom: 40px;
   }
 }
