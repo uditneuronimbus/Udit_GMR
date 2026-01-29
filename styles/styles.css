@@ -212,8 +212,9 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .gmr-impact .global-leaders-aviation .gla-stats { border-bottom-color: #e0e0e0; }
 .gmr-impact .global-leaders-aviation .gla-footer>div { background-color: #e0e0e0; }
 
-.page-about .commitment-cards-container .sec-commitment { background: none; margin-top: -4rem;}
-.page-about .commitment-cards-container .sec-commitment .sec-title { color:var(--charcoal); } 
+.bg-sky-blue.commitment-cards-container .sec-commitment { background: none; }
+.page-about .commitment-cards-container .sec-commitment { margin-top: -4rem;}
+.bg-sky-blue.commitment-cards-container .sec-commitment .sec-title { color:var(--charcoal); } 
 .page-about .flat-banner { margin-top: 0; }
 .pt-0.message-from-leadership-container { overflow: hidden; }
 .pt-0.message-from-leadership-container .mfl-runtime { padding-top: 0; padding-bottom: 80px; }
