@@ -11,7 +11,8 @@ export default function decorate(block) {
   const allReleasesLabel = children[1]?.textContent?.trim() || "All";
   const filterPanelTitle = children[2]?.textContent?.trim() || "Filter by";
   const defaultYear = children[3]?.textContent?.trim() || "";
-  const items = children.slice(4);
+  const itemsPerPage = parseInt(children[4]?.textContent?.trim(), 10) || 10;
+  const items = children.slice(5);
 
   /* ================================
      2️⃣ Check for Author Mode (AEM SAFE)
@@ -74,43 +75,91 @@ export default function decorate(block) {
       <div class="press-layout desktop-layout">
         <aside class="press-filter-panel">
           <h4>${filterPanelTitle}</h4>
-          <div class="filter-group">
-            <label class="filter-label">Year</label>
-            <select class="year-filter">
-              <option value="">All Years</option>
-            </select>
+          <div class="filter-group filter-group-collapsible">
+            <button class="filter-toggle active" data-target="year-options">
+              <span>Year - <span class="selected-year">${defaultYear || new Date().getFullYear()}</span></span>
+              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="filter-options" id="year-options">
+              <label class="filter-option">
+                <input type="radio" name="desktop-year" value="">
+                <span>All Years</span>
+              </label>
+            </div>
           </div>
-          <div class="filter-group">
-            <label class="filter-label">Month</label>
-            <select class="month-filter">
-              <option value="">All Months</option>
-              <option value="01">January</option>
-              <option value="02">February</option>
-              <option value="03">March</option>
-              <option value="04">April</option>
-              <option value="05">May</option>
-              <option value="06">June</option>
-              <option value="07">July</option>
-              <option value="08">August</option>
-              <option value="09">September</option>
-              <option value="10">October</option>
-              <option value="11">November</option>
-              <option value="12">December</option>
-            </select>
+          <div class="filter-group filter-group-collapsible">
+            <button class="filter-toggle" data-target="month-options">
+              <span>Month</span>
+              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="filter-options hidden" id="month-options">
+              <label class="filter-option">
+                <input type="radio" name="desktop-month" value="" checked>
+                <span>All Months</span>
+              </label>
+              <label class="filter-option"><input type="radio" name="desktop-month" value="01"><span>January</span></label>
+              <label class="filter-option"><input type="radio" name="desktop-month" value="02"><span>February</span></label>
+              <label class="filter-option"><input type="radio" name="desktop-month" value="03"><span>March</span></label>
+              <label class="filter-option"><input type="radio" name="desktop-month" value="04"><span>April</span></label>
+              <label class="filter-option"><input type="radio" name="desktop-month" value="05"><span>May</span></label>
+              <label class="filter-option"><input type="radio" name="desktop-month" value="06"><span>June</span></label>
+              <label class="filter-option"><input type="radio" name="desktop-month" value="07"><span>July</span></label>
+              <label class="filter-option"><input type="radio" name="desktop-month" value="08"><span>August</span></label>
+              <label class="filter-option"><input type="radio" name="desktop-month" value="09"><span>September</span></label>
+              <label class="filter-option"><input type="radio" name="desktop-month" value="10"><span>October</span></label>
+              <label class="filter-option"><input type="radio" name="desktop-month" value="11"><span>November</span></label>
+              <label class="filter-option"><input type="radio" name="desktop-month" value="12"><span>December</span></label>
+            </div>
           </div>
-          <div class="filter-group category-group">
-            <label class="filter-label">Business Category</label>
-            <ul class="category-filter">
-              <li data-category="all" class="active">${allReleasesLabel}</li>
-            </ul>
+          <div class="filter-group filter-group-collapsible">
+            <button class="filter-toggle" data-target="category-options">
+              <span>Business Categories</span>
+              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="filter-options hidden" id="category-options">
+              <label class="filter-option active" data-category="all">
+                <input type="radio" name="desktop-category" value="all" checked>
+                <span>${allReleasesLabel}</span>
+                <svg class="icon-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.333 8h9.334M8 3.333L12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </label>
+            </div>
           </div>
         </aside>
         <div class="press-main">
           <div class="press-header">
-            <h2 class="press-title">${sectionTitle} - <span class="year-display">${defaultYear || new Date().getFullYear()}</span></h2>
-            <p class="press-count">Displaying <span class="count-display">0</span></p>
+            <div class="press-header-info">
+              <h2 class="press-title">${sectionTitle} - <span class="year-display">${defaultYear || new Date().getFullYear()}</span></h2>
+              <p class="press-count">Displaying <span class="count-display">0</span></p>
+            </div>
+            <div class="press-sort">
+              <div class="sort-dropdown">
+                <button class="sort-toggle" id="sort-toggle">
+                  <span>Sort by</span>
+                  <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="sort-options" id="sort-options">
+                  <label class="sort-option">
+                    <input type="radio" name="sort" value="newest" checked>
+                    <span>Newest First</span>
+                  </label>
+                  <label class="sort-option">
+                    <input type="radio" name="sort" value="oldest">
+                    <span>Oldest First</span>
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="press-list"></div>
+          <div class="press-pagination"></div>
         </div>
       </div>
 
@@ -129,6 +178,7 @@ export default function decorate(block) {
           </button>
         </div>
         <div class="press-list"></div>
+        <div class="press-pagination"></div>
         
         <!-- Mobile Filter Modal -->
         <div class="mobile-filter-modal">
@@ -175,9 +225,16 @@ export default function decorate(block) {
   ================================ */
   const desktopList = runtime.querySelector('.desktop-layout .press-list');
   const mobileList = runtime.querySelector('.mobile-layout .press-list');
-  const yearSelectDesktop = runtime.querySelector('.year-filter');
-  const monthSelectDesktop = runtime.querySelector('.month-filter');
-  const categoryListDesktop = runtime.querySelector('.category-filter');
+  const desktopPagination = runtime.querySelector('.desktop-layout .press-pagination');
+  const mobilePagination = runtime.querySelector('.mobile-layout .press-pagination');
+  const yearFilterToggle = runtime.querySelector('[data-target="year-options"]');
+  const monthFilterToggle = runtime.querySelector('[data-target="month-options"]');
+  const categoryFilterToggle = runtime.querySelector('[data-target="category-options"]');
+  const yearOptionsDesktop = runtime.querySelector('#year-options');
+  const monthOptionsDesktop = runtime.querySelector('#month-options');
+  const categoryOptionsDesktop = runtime.querySelector('#category-options');
+  const sortToggle = runtime.querySelector('#sort-toggle');
+  const sortOptions = runtime.querySelector('#sort-options');
   const yearFilterBtn = runtime.querySelector('.year-btn');
   const categoryFilterBtn = runtime.querySelector('.category-btn');
   const mobileModal = runtime.querySelector('.mobile-filter-modal');
@@ -190,24 +247,17 @@ export default function decorate(block) {
   const closeModalBtn = runtime.querySelector('.close-modal');
   const countDisplay = runtime.querySelector('.count-display');
   const yearDisplay = runtime.querySelector('.year-display');
+  const selectedYearDisplay = runtime.querySelector('.selected-year');
 
   /* ================================
      6️⃣ Data Collection & Card Building
   ================================ */
   const years = new Set();
   const categories = new Set();
-  const cardsDesktop = [];
-  const cardsMobile = [];
+  const allCardsData = [];
 
   // Use the items from the authored content wrapper
-  const authoredItems = [...authoredContentWrapper.children]
-    .slice(4)
-    .sort((a, b) => {
-      // Sort by date (newest first)
-      const dateA = a.children[3]?.textContent?.trim() || "";
-      const dateB = b.children[3]?.textContent?.trim() || "";
-      return new Date(dateB) - new Date(dateA);
-    });
+  const authoredItems = [...authoredContentWrapper.children].slice(5);
 
   // Helper function to extract image URL
   const extractImageUrl = (imgElement) => {
@@ -221,90 +271,145 @@ export default function decorate(block) {
     return '';
   };
 
+  // Helper function to parse date (handles ISO and "01 Jan 2026" formats)
+  const parseDate = (dateStr) => {
+    if (!dateStr) return new Date(0);
+    
+    // Try ISO format first (from datepicker: 2026-01-23T00:00:00.000Z)
+    const isoDate = new Date(dateStr);
+    if (!isNaN(isoDate.getTime())) {
+      return isoDate;
+    }
+    
+    // Try "01 Jan 2026" format
+    const dateMatch = dateStr.match(/(\d{1,2})\s+(\w{3})\s+(\d{4})/);
+    if (dateMatch) {
+      const monthNames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+      const day = parseInt(dateMatch[1], 10);
+      const monthIndex = monthNames.indexOf(dateMatch[2].toLowerCase());
+      const year = parseInt(dateMatch[3], 10);
+      if (monthIndex !== -1) {
+        return new Date(year, monthIndex, day);
+      }
+    }
+    
+    return new Date(0);
+  };
+
+  // Helper function to format date for display (returns "23 Jan 2026")
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    const date = parseDate(dateStr);
+    if (isNaN(date.getTime()) || date.getTime() === 0) return dateStr;
+    
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+
+  // Helper function to create slug from title
+  const createSlug = (text) => {
+    if (!text) return '';
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '') // Remove special characters
+      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/-+/g, '-') // Replace multiple hyphens with single
+      .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+  };
+
   authoredItems.forEach((item) => {
     const cols = [...item.children];
     if (!cols.length) return;
 
-    // Item structure: category, year, image, title, publishDate, lastUpdated, ctaLink
+    // Item structure: category, image, title, publishDate, lastUpdated, location, contactDetails, ctaLink (optional)
     const category = cols[0]?.textContent?.trim().toLowerCase() || "";
-    const year = cols[1]?.textContent?.trim() || "";
     let imageEl = null;
-    if (cols[2]) imageEl = cols[2].querySelector("img") || cols[2].querySelector("picture");
-    const title = cols[3]?.textContent?.trim() || "";
-    const publishDate = cols[4]?.textContent?.trim() || "";
-    const lastUpdated = cols[5]?.textContent?.trim() || "";
-    const ctaLink = cols[6]?.querySelector("a")?.href || cols[6]?.textContent?.trim() || "#";
-
-    if (!category && !year && !title && !imageEl) return;
-
-    // Extract month from publishDate (format: "01 Jan 2026")
-    let month = "";
-    if (publishDate) {
-      const dateMatch = publishDate.match(/(\d{2})\s+(\w{3})\s+(\d{4})/);
-      if (dateMatch) {
-        const monthNames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-        const monthIndex = monthNames.indexOf(dateMatch[2].toLowerCase());
-        if (monthIndex !== -1) {
-          month = String(monthIndex + 1).padStart(2, '0');
+    if (cols[1]) imageEl = cols[1].querySelector("img") || cols[1].querySelector("picture");
+    const title = cols[2]?.textContent?.trim() || "";
+    const publishDate = cols[3]?.textContent?.trim() || "";
+    const lastUpdated = cols[4]?.textContent?.trim() || "";
+    const location = cols[5]?.textContent?.trim() || "";
+    
+    // Parse contact details from column 6 (JSON format)
+    let contactDetails = [];
+    if (cols[6]) {
+      const contactDetailsText = cols[6]?.textContent?.trim() || "";
+      if (contactDetailsText) {
+        try {
+          // Try to parse as JSON
+          contactDetails = JSON.parse(contactDetailsText);
+          // Ensure it's an array
+          if (!Array.isArray(contactDetails)) {
+            contactDetails = [contactDetails];
+          }
+        } catch (e) {
+          // If JSON parsing fails, try to parse as structured text
+          // Format: Name|Role|Email (one per line or separated by semicolon)
+          const lines = contactDetailsText.split(/\n|;/).filter(line => line.trim());
+          contactDetails = lines.map(line => {
+            const parts = line.split('|').map(p => p.trim());
+            if (parts.length >= 3) {
+              return {
+                name: parts[0],
+                role: parts[1],
+                email: parts[2]
+              };
+            } else if (parts.length === 2) {
+              // Assume name and email
+              return {
+                name: parts[0],
+                role: '',
+                email: parts[1]
+              };
+            }
+            return null;
+          }).filter(Boolean);
         }
       }
     }
+    
+    // Auto-generate ctaLink from category and title (column 7 or later)
+    const linkColIndex = cols.length > 7 ? 7 : (cols.length > 6 ? 6 : 5);
+    const providedLink = cols[linkColIndex]?.querySelector("a")?.href || cols[linkColIndex]?.textContent?.trim() || "";
+    const categorySlug = createSlug(category) || 'general';
+    const titleSlug = createSlug(title);
+    const ctaLink = providedLink || `/press-releases/${categorySlug}/${titleSlug}`;
 
-    if (year) years.add(year);
+    if (!category && !title && !imageEl) return;
+
+    // Extract month and year from publishDate (date-time picker is the source of truth)
+    let month = "";
+    let extractedYear = "";
+    if (publishDate) {
+      const dateObj = parseDate(publishDate);
+      if (dateObj && dateObj.getTime() > 0) {
+        month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        extractedYear = String(dateObj.getFullYear());
+      }
+    }
+
+    if (extractedYear) years.add(extractedYear);
     if (category) categories.add(category);
 
-    const createCard = () => {
-      const card = document.createElement("article");
-      card.className = "press-card";
-      card.dataset.year = year;
-      card.dataset.month = month;
-      card.dataset.category = category;
+    const imageUrl = extractImageUrl(imageEl);
 
-      const imageUrl = extractImageUrl(imageEl);
-      const badgeClass = category.replace(/\s+/g, '-').replace(/&/g, '');
-
-      card.innerHTML = `
-        <div class="press-card-image">
-          ${imageUrl ? `<img src="${imageUrl}" alt="${title}" loading="lazy">` : ''}
-        </div>
-        <div class="press-card-body">
-          <h3 class="press-card-title">${title}</h3>
-          <div class="press-card-meta">
-            ${category ? `<span class="badge ${badgeClass}">${category.charAt(0).toUpperCase() + category.slice(1)}</span>` : ''}
-            ${category ? '<span class="meta-separator">|</span>' : ''}
-            ${publishDate ? `
-              <span class="meta-date">
-                <svg class="icon-calendar" width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <path d="M12.667 2.667H3.333C2.597 2.667 2 3.264 2 4v9.333c0 .737.597 1.334 1.333 1.334h9.334c.736 0 1.333-.597 1.333-1.334V4c0-.736-.597-1.333-1.333-1.333z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M10.667 1.333v2.667M5.333 1.333v2.667M2 6.667h12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                ${publishDate}
-              </span>
-            ` : ''}
-          </div>
-          <div class="press-card-footer">
-            <a href="${ctaLink}" class="btn-read-more">
-              READ MORE
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3.333 8h9.334M8 3.333L12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-            ${lastUpdated ? `<span class="meta-updated">Last Updated : ${lastUpdated}</span>` : ''}
-          </div>
-        </div>
-      `;
-
-      return card;
-    };
-
-    const cardDesktop = createCard();
-    const cardMobile = createCard();
-
-    desktopList.appendChild(cardDesktop);
-    mobileList.appendChild(cardMobile);
-
-    cardsDesktop.push(cardDesktop);
-    cardsMobile.push(cardMobile);
+    allCardsData.push({
+      category,
+      year: extractedYear,
+      month,
+      imageUrl,
+      title,
+      publishDate: formatDate(publishDate),
+      lastUpdated: formatDate(lastUpdated),
+      location,
+      contactDetails,
+      ctaLink,
+      dateObj: parseDate(publishDate)
+    });
   });
 
   /* ================================
@@ -315,19 +420,19 @@ export default function decorate(block) {
 
   // Desktop Year Filter
   sortedYears.forEach(y => {
-    const opt = document.createElement("option");
-    opt.value = y;
-    opt.textContent = y;
-    if (y === defaultYear) opt.selected = true;
-    yearSelectDesktop.appendChild(opt);
+    const label = document.createElement("label");
+    label.className = "filter-option";
+    label.innerHTML = `<input type="radio" name="desktop-year" value="${y}" ${y === defaultYear ? 'checked' : ''}><span>${y}</span>`;
+    yearOptionsDesktop.appendChild(label);
   });
 
   // Desktop Category Filter
   sortedCategories.forEach(cat => {
-    const li = document.createElement("li");
-    li.dataset.category = cat;
-    li.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
-    categoryListDesktop.appendChild(li);
+    const label = document.createElement("label");
+    label.className = "filter-option";
+    label.dataset.category = cat;
+    label.innerHTML = `<input type="radio" name="desktop-category" value="${cat}"><span>${cat.charAt(0).toUpperCase() + cat.slice(1)}</span>`;
+    categoryOptionsDesktop.appendChild(label);
   });
 
   // Mobile Year Filter
@@ -351,32 +456,155 @@ export default function decorate(block) {
     year: defaultYear || "",
     month: "",
     category: "all",
+    sort: "newest",
+    currentPage: 1,
     tempYear: "",
     tempMonth: "",
     tempCategory: "all"
   };
 
   /* ================================
-     9️⃣ Filter Functions
+     9️⃣ Create Card HTML
   ================================ */
-  function applyFilter(yearVal, monthVal, catVal, cards) {
-    state.year = yearVal;
-    state.month = monthVal;
-    state.category = catVal;
+  function createCardHTML(cardData) {
+    const badgeClass = cardData.category.replace(/\s+/g, '-').replace(/&/g, '');
+    return `
+      <article class="press-card" data-year="${cardData.year}" data-month="${cardData.month}" data-category="${cardData.category}">
+        <div class="press-card-image">
+          ${cardData.imageUrl ? `<img src="${cardData.imageUrl}" alt="${cardData.title}" loading="lazy">` : ''}
+        </div>
+        <div class="press-card-body">
+          <h3 class="press-card-title">${cardData.title}</h3>
+          <div class="press-card-meta">
+            ${cardData.category ? `<span class="badge ${badgeClass}">${cardData.category.charAt(0).toUpperCase() + cardData.category.slice(1)}</span>` : ''}
+            ${cardData.category ? '<span class="meta-separator">|</span>' : ''}
+            ${cardData.publishDate ? `
+              <span class="meta-date">
+                <svg class="icon-calendar" width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <path d="M12.667 2.667H3.333C2.597 2.667 2 3.264 2 4v9.333c0 .737.597 1.334 1.333 1.334h9.334c.736 0 1.333-.597 1.333-1.334V4c0-.736-.597-1.333-1.333-1.333z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10.667 1.333v2.667M5.333 1.333v2.667M2 6.667h12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                ${cardData.publishDate}
+              </span>
+            ` : ''}
+          </div>
+          <div class="press-card-footer">
+            <a href="${cardData.ctaLink}" class="btn-read-more">
+              READ MORE
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3.333 8h9.334M8 3.333L12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            ${cardData.lastUpdated ? `<span class="meta-updated">Last Updated : ${cardData.lastUpdated}</span>` : ''}
+          </div>
+        </div>
+      </article>
+    `;
+  }
 
-    let visibleCount = 0;
-    cards.forEach(card => {
-      const yearMatch = !yearVal || card.dataset.year === yearVal;
-      const monthMatch = !monthVal || card.dataset.month === monthVal;
-      const catMatch = catVal === "all" || card.dataset.category === catVal;
-      const isVisible = yearMatch && monthMatch && catMatch;
-      card.style.display = isVisible ? "" : "none";
-      if (isVisible) visibleCount++;
+  /* ================================
+     🔟 Filter, Sort & Pagination Functions
+  ================================ */
+  function getFilteredAndSortedCards() {
+    let filtered = allCardsData.filter(card => {
+      const yearMatch = !state.year || card.year === state.year;
+      const monthMatch = !state.month || card.month === state.month;
+      const catMatch = state.category === "all" || card.category === state.category;
+      return yearMatch && monthMatch && catMatch;
     });
 
+    // Sort
+    filtered.sort((a, b) => {
+      if (state.sort === "newest") {
+        return b.dateObj - a.dateObj;
+      } else {
+        return a.dateObj - b.dateObj;
+      }
+    });
+
+    return filtered;
+  }
+
+  function renderCards(listEl, paginationEl, filtered) {
+    const totalItems = filtered.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const startIndex = (state.currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+    const pageItems = filtered.slice(startIndex, endIndex);
+
+    // Render cards
+    listEl.innerHTML = pageItems.map(card => createCardHTML(card)).join('');
+
     // Update count display
-    countDisplay.textContent = visibleCount;
-    yearDisplay.textContent = yearVal || "All Years";
+    if (totalItems > 0) {
+      countDisplay.textContent = `${startIndex + 1} - ${endIndex} of ${totalItems}`;
+    } else {
+      countDisplay.textContent = '0';
+    }
+
+    // Render pagination
+    renderPagination(paginationEl, totalPages);
+  }
+
+  function renderPagination(paginationEl, totalPages) {
+    if (totalPages <= 1) {
+      paginationEl.innerHTML = '';
+      return;
+    }
+
+    const maxVisible = 5;
+    let startPage = Math.max(1, state.currentPage - Math.floor(maxVisible / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+    if (endPage - startPage < maxVisible - 1) {
+      startPage = Math.max(1, endPage - maxVisible + 1);
+    }
+
+    let html = `
+      <button class="page-btn prev ${state.currentPage === 1 ? 'disabled' : ''}" data-page="${state.currentPage - 1}" ${state.currentPage === 1 ? 'disabled' : ''}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    `;
+
+    if (startPage > 1) {
+      html += `<button class="page-btn" data-page="1">1</button>`;
+      if (startPage > 2) html += `<span class="page-ellipsis">...</span>`;
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      html += `<button class="page-btn ${i === state.currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) html += `<span class="page-ellipsis">...</span>`;
+      html += `<button class="page-btn" data-page="${totalPages}">${totalPages}</button>`;
+    }
+
+    html += `
+      <button class="page-btn next ${state.currentPage === totalPages ? 'disabled' : ''}" data-page="${state.currentPage + 1}" ${state.currentPage === totalPages ? 'disabled' : ''}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    `;
+
+    paginationEl.innerHTML = html;
+  }
+
+  function applyFiltersAndRender() {
+    const filtered = getFilteredAndSortedCards();
+    
+    // Update year display
+    yearDisplay.textContent = state.year || "All Years";
+    selectedYearDisplay.textContent = state.year || new Date().getFullYear();
+
+    // Render for desktop
+    renderCards(desktopList, desktopPagination, filtered);
+    
+    // Render for mobile
+    renderCards(mobileList, mobilePagination, filtered);
 
     updateButtonText();
   }
@@ -397,6 +625,9 @@ export default function decorate(block) {
 </svg></span>`;
   }
 
+  /* ================================
+     1️⃣1️⃣ Modal Functions
+  ================================ */
   function openModal(filterType) {
     mobileModal.classList.add("open");
     document.body.style.overflow = 'hidden';
@@ -448,26 +679,110 @@ export default function decorate(block) {
   }
 
   /* ================================
-     🔟 Event Listeners
+     1️⃣2️⃣ Event Listeners
   ================================ */
-  // Desktop Filters
-  yearSelectDesktop.addEventListener("change", () => {
-    const activeCat = categoryListDesktop.querySelector(".active")?.dataset.category || "all";
-    applyFilter(yearSelectDesktop.value, monthSelectDesktop.value, activeCat, cardsDesktop);
+  // Desktop Filter Toggles
+  runtime.querySelectorAll('.filter-toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const targetId = toggle.getAttribute('data-target');
+      const options = runtime.querySelector(`#${targetId}`);
+      toggle.classList.toggle('active');
+      options.classList.toggle('hidden');
+    });
   });
 
-  monthSelectDesktop.addEventListener("change", () => {
-    const activeCat = categoryListDesktop.querySelector(".active")?.dataset.category || "all";
-    applyFilter(yearSelectDesktop.value, monthSelectDesktop.value, activeCat, cardsDesktop);
+  // Desktop Year Filter
+  yearOptionsDesktop.querySelectorAll('input[name="desktop-year"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      state.year = radio.value;
+      state.currentPage = 1;
+      
+      // Update active state
+      yearOptionsDesktop.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('active'));
+      radio.closest('.filter-option').classList.add('active');
+      
+      applyFiltersAndRender();
+    });
   });
 
-  categoryListDesktop.addEventListener("click", e => {
-    if (e.target.tagName !== "LI") return;
+  // Desktop Month Filter
+  monthOptionsDesktop.querySelectorAll('input[name="desktop-month"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      state.month = radio.value;
+      state.currentPage = 1;
+      
+      // Update active state
+      monthOptionsDesktop.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('active'));
+      radio.closest('.filter-option').classList.add('active');
+      
+      applyFiltersAndRender();
+    });
+  });
 
-    categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
-    e.target.classList.add("active");
+  // Desktop Category Filter
+  categoryOptionsDesktop.querySelectorAll('input[name="desktop-category"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      state.category = radio.value;
+      state.currentPage = 1;
+      
+      // Update active state with arrow
+      categoryOptionsDesktop.querySelectorAll('.filter-option').forEach(opt => {
+        opt.classList.remove('active');
+        const arrow = opt.querySelector('.icon-arrow');
+        if (arrow) arrow.remove();
+      });
+      const label = radio.closest('.filter-option');
+      label.classList.add('active');
+      label.insertAdjacentHTML('beforeend', '<svg class="icon-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.333 8h9.334M8 3.333L12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+      
+      applyFiltersAndRender();
+    });
+  });
 
-    applyFilter(yearSelectDesktop.value, monthSelectDesktop.value, e.target.dataset.category, cardsDesktop);
+  // Sort Toggle
+  sortToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    sortOptions.classList.toggle('show');
+    sortToggle.classList.toggle('active');
+  });
+
+  // Close sort dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!sortToggle.contains(e.target) && !sortOptions.contains(e.target)) {
+      sortOptions.classList.remove('show');
+      sortToggle.classList.remove('active');
+    }
+  });
+
+  // Sort Options
+  sortOptions.querySelectorAll('input[name="sort"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      state.sort = radio.value;
+      state.currentPage = 1;
+      sortOptions.classList.remove('show');
+      sortToggle.classList.remove('active');
+      applyFiltersAndRender();
+    });
+  });
+
+  // Pagination Click Handler (Desktop)
+  desktopPagination.addEventListener('click', (e) => {
+    const btn = e.target.closest('.page-btn');
+    if (btn && !btn.disabled && !btn.classList.contains('disabled')) {
+      state.currentPage = parseInt(btn.dataset.page, 10);
+      applyFiltersAndRender();
+      runtime.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  // Pagination Click Handler (Mobile)
+  mobilePagination.addEventListener('click', (e) => {
+    const btn = e.target.closest('.page-btn');
+    if (btn && !btn.disabled && !btn.classList.contains('disabled')) {
+      state.currentPage = parseInt(btn.dataset.page, 10);
+      applyFiltersAndRender();
+      runtime.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   });
 
   // Mobile Filters
@@ -496,10 +811,14 @@ export default function decorate(block) {
     });
   });
 
-  // Apply Button
+  // Apply Button (Mobile)
   applyButton.addEventListener('click', () => {
-    applyFilter(state.tempYear, state.tempMonth, state.tempCategory, cardsMobile);
+    state.year = state.tempYear;
+    state.month = state.tempMonth;
+    state.category = state.tempCategory;
+    state.currentPage = 1;
     closeModal();
+    applyFiltersAndRender();
   });
 
   // Escape Key
@@ -510,18 +829,18 @@ export default function decorate(block) {
   });
 
   /* ================================
-     1️⃣1️⃣ Initialize
+     1️⃣3️⃣ Initialize
   ================================ */
-  // Set initial state
+  // Set initial year if default provided
   if (defaultYear) {
-    yearSelectDesktop.value = defaultYear;
+    const yearRadio = yearOptionsDesktop.querySelector(`input[name="desktop-year"][value="${defaultYear}"]`);
+    if (yearRadio) {
+      yearRadio.checked = true;
+      yearRadio.closest('.filter-option').classList.add('active');
+    }
   }
-  applyFilter(state.year, state.month, "all", cardsDesktop);
-  applyFilter(state.year, state.month, "all", cardsMobile);
 
-  // Initialize desktop UI
-  categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
-  categoryListDesktop.querySelector('li[data-category="all"]').classList.add("active");
+  applyFiltersAndRender();
 
   console.log("Press Release Listing block initialized");
 }
