@@ -453,7 +453,8 @@ export default function decorate(block) {
      8️⃣ State Management
   ================================ */
   const state = {
-    year: defaultYear || "",
+    //year: defaultYear || "",
+    year: "",
     month: "",
     category: "all",
     sort: "newest",
@@ -598,7 +599,7 @@ export default function decorate(block) {
     
     // Update year display
     yearDisplay.textContent = state.year || "All Years";
-    selectedYearDisplay.textContent = state.year || new Date().getFullYear();
+selectedYearDisplay.textContent = state.year || "All";
 
     // Render for desktop
     renderCards(desktopList, desktopPagination, filtered);
@@ -832,13 +833,13 @@ export default function decorate(block) {
      1️⃣3️⃣ Initialize
   ================================ */
   // Set initial year if default provided
-  if (defaultYear) {
-    const yearRadio = yearOptionsDesktop.querySelector(`input[name="desktop-year"][value="${defaultYear}"]`);
-    if (yearRadio) {
-      yearRadio.checked = true;
-      yearRadio.closest('.filter-option').classList.add('active');
-    }
-  }
+  const allYearRadio = yearOptionsDesktop.querySelector(
+  'input[name="desktop-year"][value=""]'
+);
+if (allYearRadio) {
+  allYearRadio.checked = true;
+  allYearRadio.closest('.filter-option').classList.add('active');
+}
 
   applyFiltersAndRender();
 
