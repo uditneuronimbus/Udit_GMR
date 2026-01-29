@@ -8,6 +8,9 @@ export default async function decorate(block) {
     document.body.classList.contains('aem-AuthorLayer-Edit') ||
     window.location.search.includes('wcmmode=edit');
 
+  /* ================================
+     COLLECT AUTHORED ITEMS
+  ================================ */
   const items = [...block.children].filter((child) => {
     return (
       child.tagName === 'DIV' &&
@@ -50,9 +53,10 @@ export default async function decorate(block) {
     <div class="swiper mfl-swiper">
       <div class="swiper-wrapper"></div>
 
-      <div class="swiper-pagination"></div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
+      <div class="mfl-navigation">
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
     </div>
   `;
 
@@ -69,7 +73,7 @@ export default async function decorate(block) {
         <div class="mfl-image">${data.image}</div>
 
         <div class="mfl-content">
-          <h2 class="mfl-title">${data.subtitle || 'Message From Leadership'}</h2>
+          <h2 class="mfl-title">${data.subtitle}</h2>
           <div class="mfl-message">${data.message}</div>
           <div class="mfl-author">${data.designation}</div>
         </div>
@@ -84,6 +88,9 @@ export default async function decorate(block) {
   ================================ */
   if (isAuthorMode) return;
 
+  /* ================================
+     LOAD SWIPER & INIT
+  ================================ */
   await loadCSS(SWIPER_CSS);
   await loadScript(SWIPER_JS);
 
@@ -91,14 +98,9 @@ export default async function decorate(block) {
     slidesPerView: 1,
     spaceBetween: 24,
     loop: true,
-    pagination: {
-      el: container.querySelector('.swiper-pagination'),
-      clickable: true,
-    },
     navigation: {
       nextEl: container.querySelector('.swiper-button-next'),
       prevEl: container.querySelector('.swiper-button-prev'),
     },
   });
 }
-
