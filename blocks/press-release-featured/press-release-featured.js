@@ -97,7 +97,6 @@ export default function decorate(block) {
   const badgeClass = badge ? badge.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '') : 'general';
 
   runtime.innerHTML = `
-    <div class="container">
       <div class="featured-wrapper">
         <div class="featured-content">
           <span class="featured-label">${sectionLabel}</span>
@@ -128,11 +127,8 @@ export default function decorate(block) {
             ` : ''}
           </div>
 
-          <a href="${ctaLink}" class="btn-read-more">
+          <a href="${ctaLink}" class="btn-link">
             ${ctaText}
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3.333 8h9.334M8 3.333L12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
           </a>
         </div>
 
@@ -140,7 +136,6 @@ export default function decorate(block) {
           ${imageUrl ? `<img src="${imageUrl}" alt="${imageAlt}" loading="eager">` : ''}
         </div>
       </div>
-    </div>
   `;
 
   block.appendChild(runtime);
