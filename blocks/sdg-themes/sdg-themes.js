@@ -1,84 +1,42 @@
-// export default function decorate(block) {
-//   if (block.classList.contains('sdg-themes-initialized')) return;
-//   block.classList.add('sdg-themes-initialized');
-
-//   const rows = [...block.children];
-//   if (rows.length < 2) return;
-
-  
-//   const title = rows[0]?.textContent?.trim() || '';
-
- 
-//   const itemRows = rows.slice(1);
-
- 
-//   const runtime = document.createElement('div');
-//   runtime.className = 'sdg-themes-runtime';
-
-//   runtime.innerHTML = `
-//     <div class="sdg-container">
-//       <h2 class="sdg-title">${title}</h2>
-//       <div class="sdg-grid"></div>
-//     </div>
-//   `;
-
-//   const grid = runtime.querySelector('.sdg-grid');
-
- 
-//   itemRows.forEach((row) => {
-//     const cells = [...row.children];
-//     if (cells.length < 4) return;
-
-//     const imgEl = cells[0].querySelector('img');
-//     const imgSrc = imgEl?.getAttribute('src') || '';
-//     const imgAlt = imgEl?.getAttribute('alt') || '';
-
-//     const number = cells[1]?.textContent?.trim() || '';
-//     const title = cells[2]?.textContent?.trim() || '';
-//     const desc = cells[3]?.innerHTML || '';
-
-//     const card = document.createElement('article');
-//     card.className = 'sdg-card';
-
-//     card.innerHTML = `
-//       <div class="sdg-image">
-//         ${imgSrc ? `<img src="${imgSrc}" alt="${imgAlt}">` : ''}
-//         ${number ? `<span class="sdg-number">${number}</span>` : ''}
-//       </div>
-//       <div class="sdg-content">
-//         <h3>${title}</h3>
-//         <div class="sdg-desc">${desc}</div>
-//       </div>
-//     `;
-
-//     grid.append(card);
-//   });
-
-//   block.append(runtime);
-// }
-
-
-
 export default function decorate(block) {
-  if (block.classList.contains('sdg-themes-initialized')) return;
-  block.classList.add('sdg-themes-initialized');
+  const isAuthorMode =
+    document.body.classList.contains('aem-AuthorLayer-Edit') ||
+    window.location.search.includes('wcmmode=edit');
 
+  /* ===============================
+     COLLECT AUTHORED ROWS
+  =============================== */
   const rows = [...block.children];
   if (rows.length < 2) return;
 
-  /* ===============================
-     1️⃣ Section title
-  =============================== */
   const sectionTitle = rows[0]?.textContent?.trim() || '';
-
-  /* ===============================
-     2️⃣ Item rows
-  =============================== */
   const itemRows = rows.slice(1);
-  block.innerHTML = '';
+
+  const items = itemRows
+    .map((row) => {
+      const cells = [...row.children];
+      if (cells.length < 4) return null;
+
+      const imgEl = cells[0].querySelector('img');
+
+      return {
+        image: imgEl ? imgEl.outerHTML : '',
+        number: cells[1]?.textContent?.trim() || '',
+        title: cells[2]?.textContent?.trim() || '',
+        desc: cells[3]?.innerHTML || '',
+      };
+    })
+    .filter(Boolean);
+
+  if (!items.length) return;
 
   /* ===============================
-     3️⃣ Runtime wrapper
+     HIDE AUTHORED CONTENT (NOT DELETE)
+  =============================== */
+  block.classList.add('sdg-themes-initialized');
+
+  /* ===============================
+     BUILD RUNTIME MARKUP
   =============================== */
   const runtime = document.createElement('div');
   runtime.className = 'sdg-themes-runtime';
@@ -98,72 +56,55 @@ export default function decorate(block) {
   block.append(runtime);
 
   /* ===============================
-     4️⃣ Build cards
+     BUILD CARDS
   =============================== */
-  itemRows.forEach((row) => {
-    const cells = [...row.children];
-    if (cells.length < 4) return;
-
-    const imgEl = cells[0].querySelector('img');
-    const imgSrc = imgEl?.getAttribute('src');
-    const imgAlt = imgEl?.getAttribute('alt') || '';
-
-    const number = cells[1]?.textContent?.trim() || '';
-    const title = cells[2]?.textContent?.trim() || '';
-    const desc = cells[3]?.innerHTML || '';
-
+  items.forEach((item) => {
     const card = document.createElement('article');
     card.className = 'sdg-card';
 
-    /* IMAGE */
-    const imgWrap = document.createElement('div');
-    imgWrap.className = 'sdg-image';
+    card.innerHTML = `
+      <div class="sdg-image">
+        ${item.image}
+        ${item.number ? `<span class="sdg-number">${item.number}</span>` : ''}
+      </div>
 
-    if (imgSrc) {
-      const img = document.createElement('img');
-      img.src = imgSrc;
-      img.alt = imgAlt;
-      imgWrap.appendChild(img);
-    }
+      <div class="sdg-content">
+        <h3>${item.title}</h3>
+      </div>
 
-    if (number) {
-      const num = document.createElement('span');
-      num.className = 'sdg-number';
-      num.textContent = number;
-      imgWrap.appendChild(num);
-    }
-
-    /* BOTTOM BAR */
-    const overlay = document.createElement('div');
-    overlay.className = 'sdg-content';
-
-    overlay.innerHTML = `
-      <div>
-        <h3>${title}</h3>
-        <div class="sdg-description">${desc}</div>
+      <div class="sdg-overlay">
+        <p>${item.desc}</p>
       </div>
     `;
 
-    card.appendChild(imgWrap);
-    card.appendChild(overlay);
     grid.appendChild(card);
 
     /* ===============================
-       TOGGLE (➕ / ➖)
+       INTERACTIONS (DISABLED IN EDIT)
     =============================== */
-    overlay.addEventListener('click', (e) => {
+    if (isAuthorMode) return;
+
+    const bottomBar = card.querySelector('.sdg-content');
+
+    bottomBar.addEventListener('click', (e) => {
       e.stopPropagation();
 
-      const isActive = card.classList.contains('active');
-
-      // Close all cards (reference behavior)
       grid.querySelectorAll('.sdg-card.active').forEach((c) => {
-        c.classList.remove('active');
+        if (c !== card) c.classList.remove('active');
       });
 
-      // Toggle current
-      if (!isActive) {
-        card.classList.add('active');
+      card.classList.add('active');
+    });
+
+    card.addEventListener('click', (e) => {
+      if (!card.classList.contains('active')) return;
+
+      const rect = card.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      if (clickX > rect.width - 44 && clickY < 44) {
+        card.classList.remove('active');
       }
     });
   });
