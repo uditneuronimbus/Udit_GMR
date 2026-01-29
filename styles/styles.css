@@ -142,7 +142,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .swiper-button-prev:before{-webkit-transform:scaleX(-1);transform:scaleX(-1)}
 .swiper-button-next.swiper-button-disabled,.swiper-button-prev.swiper-button-disabled{background:0 0;opacity:1!important}
 .swiper-button-next.swiper-button-disabled:before,.swiper-button-prev.swiper-button-disabled:before{background:url(../../icons/nav-arrow-yellow.svg) no-repeat center}
-.businesses-section.block,.container,.default-section .default-content-wrapper,.global-leaders-aviation-wrapper,.listed-companies-wrapper{max-width:1440px;width:100%;margin:0 auto;padding-left:4rem;padding-right:4rem}
+.businesses-section.block,.container,.message-from-leadership-wrapper, .default-section .default-content-wrapper,.global-leaders-aviation-wrapper,.listed-companies-wrapper{max-width:1440px;width:100%;margin:0 auto;padding-left:4rem;padding-right:4rem}
 .card{border-radius:.5rem;border-color:var(--light-grey);transition-duration:.3s}
 .card-ui-one{border:none;background:0 0;height:100%}
 .card-ui-one .card-body p.card-desc { min-height: 105px; }
@@ -230,7 +230,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 
 
 @media (max-width:1199px){
-.businesses-section.block, .container, .default-section .default-content-wrapper, .global-leaders-aviation-wrapper, .listed-companies-wrapper { padding-left: 2rem; padding-right: 2rem; }
+.businesses-section.block, .container, .message-from-leadership-wrapper, .default-section .default-content-wrapper, .global-leaders-aviation-wrapper, .listed-companies-wrapper { padding-left: 2rem; padding-right: 2rem; }
 .page-corporate-governance .banner-overlay-text .col-md-7 { width: 75%; }
 }
 @media (max-width:991px){
@@ -241,13 +241,13 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .h5,h5{font-size:var(--fs-regular)}
 .awards-filter-runtime, .default-section, .page-corporate-governance .overlay-banner-container, .partners-filter-runtime, .spacer { padding: 60px 0; }
 .page-corporate-governance .default-section.bg-gray { padding-bottom: 120px; }
-.businesses-section.block, .container, .default-section .default-content-wrapper, .global-leaders-aviation-wrapper, .listed-companies-wrapper { padding-left: 1rem; padding-right: 1rem; }
+.businesses-section.block, .container, .message-from-leadership-wrapper, .default-section .default-content-wrapper, .global-leaders-aviation-wrapper, .listed-companies-wrapper { padding-left: 1rem; padding-right: 1rem; }
 .global-leaders-aviation-wrapper { padding-left: 0; padding-right: 0;}
 .sec-title, .sec-title h2 { font-size: var(--fs-xxlarge);}
 }
 @media (max-width:767px){
 .col.w-20{max-width:100%!important}
-.businesses-section.block,.container,.default-section .default-content-wrapper,.global-leaders-aviation-wrapper,.listed-companies-wrapper{max-width:100%;padding-left:16px;padding-right:16px}
+.businesses-section.block,.container,.message-from-leadership-wrapper, .default-section .default-content-wrapper,.global-leaders-aviation-wrapper,.listed-companies-wrapper{max-width:100%;padding-left:16px;padding-right:16px}
 .global-leaders-aviation-wrapper { padding-left:0;padding-right:0 }
 .h1,h1{font-size:var(--fs-xxlarge)}
 .h2,h2{font-size:var(--fs-large)}
