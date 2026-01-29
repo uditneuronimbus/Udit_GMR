@@ -189,7 +189,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .filter-group input[type=radio]:checked{border-color:var(--blue)}
 .filter-group input[type=radio]:checked::before{background:var(--blue)}
 .filter-group.year-group label input{display:none}
-.filter-group.year-group label{display:inline-flex;align-items:center;justify-content:center;height:44px;border-radius:10px;border:2px solid var(--yellow);padding:0 16px;margin-right:13px;color:var(--black);font-size:var(--fs-regular);font-weight:500;cursor:pointer;transition:all .25s ease;background:var(--white)}
+.filter-group.year-group label{display:inline-flex;align-items:center;justify-content:center;height:44px;border-radius:10px;border:2px solid var(--yellow);padding:0 16px;margin-right:13px; margin-bottom: 1rem; color:var(--black);font-size:var(--fs-regular);font-weight:500;cursor:pointer;transition:all .25s ease;background:var(--white)}
 .filter-group.year-group label:hover{background:var(--white)}
 .filter-group.year-group label input:checked+span,.year-pill input:checked~&{background:var(--blue);border-color:var(--blue);color:var(--white)}
 .filter-group.year-group label:has(input:checked){background:var(--blue);border-color:var(--blue);color:var(--white)}

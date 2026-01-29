@@ -147,12 +147,12 @@ export default function decorate(block) {
                 </button>
                 <div class="sort-options" id="sort-options">
                   <label class="sort-option">
-                    <input type="radio" name="sort" value="newest" checked>
                     <span>Newest First</span>
+                    <input type="radio" name="sort" value="newest" checked>
                   </label>
                   <label class="sort-option">
-                    <input type="radio" name="sort" value="oldest">
                     <span>Oldest First</span>
+                    <input type="radio" name="sort" value="oldest">
                   </label>
                 </div>
               </div>
@@ -481,20 +481,19 @@ export default function decorate(block) {
             ${cardData.category ? '<span class="meta-separator">|</span>' : ''}
             ${cardData.publishDate ? `
               <span class="meta-date">
-                <svg class="icon-calendar" width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <path d="M12.667 2.667H3.333C2.597 2.667 2 3.264 2 4v9.333c0 .737.597 1.334 1.333 1.334h9.334c.736 0 1.333-.597 1.333-1.334V4c0-.736-.597-1.333-1.333-1.333z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M10.667 1.333v2.667M5.333 1.333v2.667M2 6.667h12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg class="icon-calendar" width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.66669 10C1.66669 6.85734 1.66669 5.286 2.643 4.30968C3.61931 3.33337 5.19066 3.33337 8.33335 3.33337H11.6667C14.8094 3.33337 16.3807 3.33337 17.357 4.30968C18.3334 5.286 18.3334 6.85734 18.3334 10V11.6667C18.3334 14.8094 18.3334 16.3808 17.357 17.3571C16.3807 18.3334 14.8094 18.3334 11.6667 18.3334H8.33335C5.19066 18.3334 3.61931 18.3334 2.643 17.3571C1.66669 16.3808 1.66669 14.8094 1.66669 11.6667V10Z" stroke="#333333" stroke-width="1.5"/>
+                <path d="M5.83331 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M14.1667 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M2.08331 7.5H17.9166" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
                 ${cardData.publishDate}
               </span>
             ` : ''}
           </div>
           <div class="press-card-footer">
-            <a href="${cardData.ctaLink}" class="btn-read-more">
+            <a href="${cardData.ctaLink}" class="btn-link">
               READ MORE
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3.333 8h9.334M8 3.333L12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
             </a>
             ${cardData.lastUpdated ? `<span class="meta-updated">Last Updated : ${cardData.lastUpdated}</span>` : ''}
           </div>
@@ -563,9 +562,10 @@ export default function decorate(block) {
 
     let html = `
       <button class="page-btn prev ${state.currentPage === 1 ? 'disabled' : ''}" data-page="${state.currentPage - 1}" ${state.currentPage === 1 ? 'disabled' : ''}>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+<svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M26.6667 16H5.33335M5.33335 16L13.3334 8M5.33335 16L13.3334 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M26.6667 16H5.33335M5.33335 16L13.3334 8M5.33335 16L13.3334 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
       </button>
     `;
 
@@ -585,9 +585,10 @@ export default function decorate(block) {
 
     html += `
       <button class="page-btn next ${state.currentPage === totalPages ? 'disabled' : ''}" data-page="${state.currentPage + 1}" ${state.currentPage === totalPages ? 'disabled' : ''}>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+<svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.33334 16H26.6667M26.6667 16L18.6667 8M26.6667 16L18.6667 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M5.33334 16H26.6667M26.6667 16L18.6667 8M26.6667 16L18.6667 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
       </button>
     `;
 
