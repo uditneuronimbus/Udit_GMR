@@ -52,10 +52,9 @@
 ===================================================== */
 .mfl-card {
   display: grid;
-  grid-template-columns: 48% 37%;
+  grid-template-columns: 48% 43%;
   gap: 56px;
   align-items: stretch;
-  /* margin-top: 48px; */
 }
 
 /* =====================================================
@@ -70,7 +69,7 @@
 .mfl-image img,
 .mfl-image picture img {
   /* width: 100%; */
-  height: 100%;
+  /* height: 100%; */
   /* object-fit: cover; */
   display: block;
   border-radius: 24px;
@@ -122,7 +121,7 @@
   z-index: -1;
   height: 55px;   
   min-width: 100%;
-  border-radius: 8px; /* optional */
+  border-radius: 8px; 
   margin-left: 1px;
 }
 
@@ -159,7 +158,7 @@
 ===================================================== */
 .mfl-navigation {
   display: flex;
-  justify-content: center; /* matches shared image */
+  justify-content: center; 
   gap: 1rem;
   margin-top: 2rem;
 }
