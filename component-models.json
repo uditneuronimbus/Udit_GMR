@@ -1910,6 +1910,42 @@
     ]
   },
   {
+    "id": "image-scroll-card",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Section Heading",
+        "valueType": "string",
+        "default": "Curated Global and Indian Brands"
+      },
+      {
+        "component": "text",
+        "name": "description",
+        "label": "Section Description",
+        "valueType": "string",
+        "default": "Delhi Duty Free is built through strong partnerships and a curated brand ecosystem."
+      }
+    ]
+  },
+  {
+    "id": "image-scroll-card-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Image Title",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "logo",
+        "label": "Logo Image"
+      }
+    ]
+  },
+  {
     "id": "image-slider",
     "fields": [
       {
