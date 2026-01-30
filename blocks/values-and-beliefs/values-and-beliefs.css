@@ -137,6 +137,11 @@
   margin-bottom: 16px;
 }
 
+.value-card-content .quote h5 
+{ font-family: var(--font-secondary); font-weight: 600;
+}
+ 
+
 .value-card-content .author {
   font-size: 14px;
   opacity: 0.9;
