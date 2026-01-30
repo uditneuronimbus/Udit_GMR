@@ -64,7 +64,236 @@ export default function decorate(block) {
   block.appendChild(authoredContentWrapper);
 
   /* ================================
-     4️⃣ Runtime wrapper
+     4️⃣ Helper functions
+  ================================ */
+  // Helper function to extract image URL
+  const extractImageUrl = (imgElement) => {
+    if (!imgElement) return '';
+    if (imgElement.tagName === 'IMG') {
+      return imgElement.src;
+    } else if (imgElement.tagName === 'PICTURE') {
+      const img = imgElement.querySelector('img');
+      return img ? img.src : '';
+    }
+    return '';
+  };
+
+  // Helper function to parse date
+  const parseDate = (dateStr) => {
+    if (!dateStr) return new Date(0);
+    
+    // Try ISO format first
+    const isoDate = new Date(dateStr);
+    if (!isNaN(isoDate.getTime())) {
+      return isoDate;
+    }
+    
+    // Try "01 Jan 2026" format
+    const dateMatch = dateStr.match(/(\d{1,2})\s+(\w{3})\s+(\d{4})/);
+    if (dateMatch) {
+      const monthNames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+      const day = parseInt(dateMatch[1], 10);
+      const monthIndex = monthNames.indexOf(dateMatch[2].toLowerCase());
+      const year = parseInt(dateMatch[3], 10);
+      if (monthIndex !== -1) {
+        return new Date(year, monthIndex, day);
+      }
+    }
+    
+    return new Date(0);
+  };
+
+  // Helper function to format date for display
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    const date = parseDate(dateStr);
+    if (isNaN(date.getTime()) || date.getTime() === 0) return dateStr;
+    
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+
+  // Helper function to create slug from title
+  const createSlug = (text) => {
+    if (!text) return '';
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
+  /* ================================
+     5️⃣ Process items and separate featured post
+  ================================ */
+  const authoredItems = [...authoredContentWrapper.children].slice(5);
+  const allCardsData = [];
+
+  authoredItems.forEach((item) => {
+    const cols = [...item.children];
+    if (!cols.length) return;
+
+    // Item structure: category, image, title, publishDate, lastUpdated, location, contactDetails, ctaLink (optional)
+    const category = cols[0]?.textContent?.trim().toLowerCase() || "";
+    let imageEl = null;
+    if (cols[1]) imageEl = cols[1].querySelector("img") || cols[1].querySelector("picture");
+    const title = cols[2]?.textContent?.trim() || "";
+    const publishDate = cols[3]?.textContent?.trim() || "";
+    const lastUpdated = cols[4]?.textContent?.trim() || "";
+    const location = cols[5]?.textContent?.trim() || "";
+    
+    // Parse contact details from column 6 (JSON format)
+    let contactDetails = [];
+    if (cols[6]) {
+      const contactDetailsText = cols[6]?.textContent?.trim() || "";
+      if (contactDetailsText) {
+        try {
+          contactDetails = JSON.parse(contactDetailsText);
+          if (!Array.isArray(contactDetails)) {
+            contactDetails = [contactDetails];
+          }
+        } catch (e) {
+          const lines = contactDetailsText.split(/\n|;/).filter(line => line.trim());
+          contactDetails = lines.map(line => {
+            const parts = line.split('|').map(p => p.trim());
+            if (parts.length >= 3) {
+              return {
+                name: parts[0],
+                role: parts[1],
+                email: parts[2]
+              };
+            } else if (parts.length === 2) {
+              return {
+                name: parts[0],
+                role: '',
+                email: parts[1]
+              };
+            }
+            return null;
+          }).filter(Boolean);
+        }
+      }
+    }
+    
+    // Auto-generate ctaLink from category and title
+    const linkColIndex = cols.length > 7 ? 7 : (cols.length > 6 ? 6 : 5);
+    const providedLink = cols[linkColIndex]?.querySelector("a")?.href || cols[linkColIndex]?.textContent?.trim() || "";
+    const categorySlug = createSlug(category) || 'general';
+    const titleSlug = createSlug(title);
+    const ctaLink = providedLink || `/press-releases/${categorySlug}/${titleSlug}`;
+
+    if (!category && !title && !imageEl) return;
+
+    // Extract month and year from publishDate
+    let month = "";
+    let extractedYear = "";
+    const dateObj = parseDate(publishDate);
+    if (dateObj && dateObj.getTime() > 0) {
+      month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      extractedYear = String(dateObj.getFullYear());
+    }
+
+    const imageUrl = extractImageUrl(imageEl);
+
+    allCardsData.push({
+      category,
+      year: extractedYear,
+      month,
+      imageUrl,
+      title,
+      publishDate: formatDate(publishDate),
+      lastUpdated: formatDate(lastUpdated),
+      location,
+      contactDetails,
+      ctaLink,
+      dateObj: dateObj,
+      rawPublishDate: publishDate
+    });
+  });
+
+  // Sort all cards by date to find the latest post for featured section
+  const sortedByDate = [...allCardsData].sort((a, b) => b.dateObj - a.dateObj);
+  const featuredCardData = sortedByDate.length > 0 ? sortedByDate[0] : null;
+  
+  // Create array for listing (EXCLUDING the featured post)
+  const listingCardsData = featuredCardData 
+    ? allCardsData.filter(card => card.title !== featuredCardData.title || card.dateObj.getTime() !== featuredCardData.dateObj.getTime())
+    : [...allCardsData];
+
+  // Extract years and categories from LISTING cards only (excluding featured)
+  const years = new Set();
+  const categories = new Set();
+  
+  listingCardsData.forEach(card => {
+    if (card.year) years.add(card.year);
+    if (card.category) categories.add(card.category);
+  });
+
+  /* ================================
+     6️⃣ Create featured section HTML (if we have a featured post)
+  ================================ */
+  let featuredSectionHTML = '';
+  if (featuredCardData) {
+    const badgeClass = featuredCardData.category ? featuredCardData.category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '') : '';
+    
+    featuredSectionHTML = `
+      <section class="press-release-featured-runtime">
+        <div class="featured-wrapper">
+          <div class="featured-content">
+            <span class="featured-label">LATEST PRESS UPDATE</span>
+            <h1 class="featured-title">${featuredCardData.title}</h1>
+            <div class="featured-description">
+              ${featuredCardData.location || `<p>${featuredCardData.title}</p>`}
+            </div>
+            
+            <div class="featured-meta">
+              ${badgeClass ? `<span class="badge ${badgeClass}">${featuredCardData.category.charAt(0).toUpperCase() + featuredCardData.category.slice(1)}</span>` : ''}
+              ${badgeClass && featuredCardData.publishDate ? '<span class="meta-separator">|</span>' : ''}
+              ${featuredCardData.publishDate ? `
+                <span class="meta-date">
+                  <svg class="icon-calendar" width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1.66669 10C1.66669 6.85734 1.66669 5.286 2.643 4.30968C3.61931 3.33337 5.19066 3.33337 8.33335 3.33337H11.6667C14.8094 3.33337 16.3807 3.33337 17.357 4.30968C18.3334 5.286 18.3334 6.85734 18.3334 10V11.6667C18.3334 14.8094 18.3334 16.3808 17.357 17.3571C16.3807 18.3334 14.8094 18.3334 11.6667 18.3334H8.33335C5.19066 18.3334 3.61931 18.3334 2.643 17.3571C1.66669 16.3808 1.66669 14.8094 1.66669 11.6667V10Z" stroke="#333333" stroke-width="1.5"/>
+                  <path d="M5.83331 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M14.1667 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M2.08331 7.5H17.9166" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                  ${featuredCardData.publishDate}
+                </span>
+              ` : ''}
+              ${featuredCardData.lastUpdated && featuredCardData.lastUpdated !== featuredCardData.publishDate ? `
+                <span class="meta-separator">|</span>
+                <span class="meta-updated">
+                  <svg class="icon-calendar" width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1.66669 10C1.66669 6.85734 1.66669 5.286 2.643 4.30968C3.61931 3.33337 5.19066 3.33337 8.33335 3.33337H11.6667C14.8094 3.33337 16.3807 3.33337 17.357 4.30968C18.3334 5.286 18.3334 6.85734 18.3334 10V11.6667C18.3334 14.8094 18.3334 16.3808 17.357 17.3571C16.3807 18.3334 14.8094 18.3334 11.6667 18.3334H8.33335C5.19066 18.3334 3.61931 18.3334 2.643 17.3571C1.66669 16.3808 1.66669 14.8094 1.66669 11.6667V10Z" stroke="#333333" stroke-width="1.5"/>
+                  <path d="M5.83331 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M14.1667 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M2.08331 7.5H17.9166" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                  Last Updated : ${featuredCardData.lastUpdated}
+                </span>
+              ` : ''}
+            </div>
+
+            <a href="${featuredCardData.ctaLink}" class="btn-link">
+              READ MORE
+            </a>
+          </div>
+
+          <div class="featured-image">
+            ${featuredCardData.imageUrl ? `<img src="${featuredCardData.imageUrl}" alt="${featuredCardData.title}" loading="eager">` : ''}
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  /* ================================
+     7️⃣ Create the listing section (USING listingCardsData - WITHOUT featured post)
   ================================ */
   const runtime = document.createElement("section");
   runtime.className = "press-listing-runtime bg-gray";
@@ -218,10 +447,24 @@ export default function decorate(block) {
     </div>
   `;
 
+  /* ================================
+     8️⃣ Append featured section first, then listing section
+  ================================ */
+  // Clear the block first
+  block.innerHTML = '';
+  
+  // Add featured section if exists
+  if (featuredSectionHTML) {
+    const featuredSection = document.createElement('div');
+    featuredSection.innerHTML = featuredSectionHTML;
+    block.appendChild(featuredSection);
+  }
+  
+  // Add the listing section
   block.appendChild(runtime);
 
   /* ================================
-     5️⃣ DOM References
+     9️⃣ DOM References
   ================================ */
   const desktopList = runtime.querySelector('.desktop-layout .press-list');
   const mobileList = runtime.querySelector('.mobile-layout .press-list');
@@ -250,170 +493,7 @@ export default function decorate(block) {
   const selectedYearDisplay = runtime.querySelector('.selected-year');
 
   /* ================================
-     6️⃣ Data Collection & Card Building
-  ================================ */
-  const years = new Set();
-  const categories = new Set();
-  const allCardsData = [];
-
-  // Use the items from the authored content wrapper
-  const authoredItems = [...authoredContentWrapper.children].slice(5);
-
-  // Helper function to extract image URL
-  const extractImageUrl = (imgElement) => {
-    if (!imgElement) return '';
-    if (imgElement.tagName === 'IMG') {
-      return imgElement.src;
-    } else if (imgElement.tagName === 'PICTURE') {
-      const img = imgElement.querySelector('img');
-      return img ? img.src : '';
-    }
-    return '';
-  };
-
-  // Helper function to parse date (handles ISO and "01 Jan 2026" formats)
-  const parseDate = (dateStr) => {
-    if (!dateStr) return new Date(0);
-    
-    // Try ISO format first (from datepicker: 2026-01-23T00:00:00.000Z)
-    const isoDate = new Date(dateStr);
-    if (!isNaN(isoDate.getTime())) {
-      return isoDate;
-    }
-    
-    // Try "01 Jan 2026" format
-    const dateMatch = dateStr.match(/(\d{1,2})\s+(\w{3})\s+(\d{4})/);
-    if (dateMatch) {
-      const monthNames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-      const day = parseInt(dateMatch[1], 10);
-      const monthIndex = monthNames.indexOf(dateMatch[2].toLowerCase());
-      const year = parseInt(dateMatch[3], 10);
-      if (monthIndex !== -1) {
-        return new Date(year, monthIndex, day);
-      }
-    }
-    
-    return new Date(0);
-  };
-
-  // Helper function to format date for display (returns "23 Jan 2026")
-  const formatDate = (dateStr) => {
-    if (!dateStr) return '';
-    const date = parseDate(dateStr);
-    if (isNaN(date.getTime()) || date.getTime() === 0) return dateStr;
-    
-    return date.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    });
-  };
-
-  // Helper function to create slug from title
-  const createSlug = (text) => {
-    if (!text) return '';
-    return text
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, '') // Remove special characters
-      .replace(/\s+/g, '-') // Replace spaces with hyphens
-      .replace(/-+/g, '-') // Replace multiple hyphens with single
-      .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
-  };
-
-  authoredItems.forEach((item) => {
-    const cols = [...item.children];
-    if (!cols.length) return;
-
-    // Item structure: category, image, title, publishDate, lastUpdated, location, contactDetails, ctaLink (optional)
-    const category = cols[0]?.textContent?.trim().toLowerCase() || "";
-    let imageEl = null;
-    if (cols[1]) imageEl = cols[1].querySelector("img") || cols[1].querySelector("picture");
-    const title = cols[2]?.textContent?.trim() || "";
-    const publishDate = cols[3]?.textContent?.trim() || "";
-    const lastUpdated = cols[4]?.textContent?.trim() || "";
-    const location = cols[5]?.textContent?.trim() || "";
-    
-    // Parse contact details from column 6 (JSON format)
-    let contactDetails = [];
-    if (cols[6]) {
-      const contactDetailsText = cols[6]?.textContent?.trim() || "";
-      if (contactDetailsText) {
-        try {
-          // Try to parse as JSON
-          contactDetails = JSON.parse(contactDetailsText);
-          // Ensure it's an array
-          if (!Array.isArray(contactDetails)) {
-            contactDetails = [contactDetails];
-          }
-        } catch (e) {
-          // If JSON parsing fails, try to parse as structured text
-          // Format: Name|Role|Email (one per line or separated by semicolon)
-          const lines = contactDetailsText.split(/\n|;/).filter(line => line.trim());
-          contactDetails = lines.map(line => {
-            const parts = line.split('|').map(p => p.trim());
-            if (parts.length >= 3) {
-              return {
-                name: parts[0],
-                role: parts[1],
-                email: parts[2]
-              };
-            } else if (parts.length === 2) {
-              // Assume name and email
-              return {
-                name: parts[0],
-                role: '',
-                email: parts[1]
-              };
-            }
-            return null;
-          }).filter(Boolean);
-        }
-      }
-    }
-    
-    // Auto-generate ctaLink from category and title (column 7 or later)
-    const linkColIndex = cols.length > 7 ? 7 : (cols.length > 6 ? 6 : 5);
-    const providedLink = cols[linkColIndex]?.querySelector("a")?.href || cols[linkColIndex]?.textContent?.trim() || "";
-    const categorySlug = createSlug(category) || 'general';
-    const titleSlug = createSlug(title);
-    const ctaLink = providedLink || `/press-releases/${categorySlug}/${titleSlug}`;
-
-    if (!category && !title && !imageEl) return;
-
-    // Extract month and year from publishDate (date-time picker is the source of truth)
-    let month = "";
-    let extractedYear = "";
-    if (publishDate) {
-      const dateObj = parseDate(publishDate);
-      if (dateObj && dateObj.getTime() > 0) {
-        month = String(dateObj.getMonth() + 1).padStart(2, '0');
-        extractedYear = String(dateObj.getFullYear());
-      }
-    }
-
-    if (extractedYear) years.add(extractedYear);
-    if (category) categories.add(category);
-
-    const imageUrl = extractImageUrl(imageEl);
-
-    allCardsData.push({
-      category,
-      year: extractedYear,
-      month,
-      imageUrl,
-      title,
-      publishDate: formatDate(publishDate),
-      lastUpdated: formatDate(lastUpdated),
-      location,
-      contactDetails,
-      ctaLink,
-      dateObj: parseDate(publishDate)
-    });
-  });
-
-  /* ================================
-     7️⃣ Populate Filters
+     1️⃣0️⃣ Populate Filters (using listingCardsData only)
   ================================ */
   const sortedYears = Array.from(years).sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
   const sortedCategories = Array.from(categories).sort();
@@ -450,10 +530,9 @@ export default function decorate(block) {
   });
 
   /* ================================
-     8️⃣ State Management
+     1️⃣1️⃣ State Management
   ================================ */
   const state = {
-    //year: defaultYear || "",
     year: "",
     month: "",
     category: "all",
@@ -465,7 +544,7 @@ export default function decorate(block) {
   };
 
   /* ================================
-     9️⃣ Create Card HTML
+     1️⃣2️⃣ Create Card HTML
   ================================ */
   function createCardHTML(cardData) {
     const badgeClass = cardData.category.replace(/\s+/g, '-').replace(/&/g, '');
@@ -503,10 +582,10 @@ export default function decorate(block) {
   }
 
   /* ================================
-     🔟 Filter, Sort & Pagination Functions
+     1️⃣3️⃣ Filter, Sort & Pagination Functions (using listingCardsData only)
   ================================ */
   function getFilteredAndSortedCards() {
-    let filtered = allCardsData.filter(card => {
+    let filtered = listingCardsData.filter(card => {
       const yearMatch = !state.year || card.year === state.year;
       const monthMatch = !state.month || card.month === state.month;
       const catMatch = state.category === "all" || card.category === state.category;
@@ -600,7 +679,7 @@ export default function decorate(block) {
     
     // Update year display
     yearDisplay.textContent = state.year || "All Years";
-selectedYearDisplay.textContent = state.year || "All";
+    selectedYearDisplay.textContent = state.year || "All";
 
     // Render for desktop
     renderCards(desktopList, desktopPagination, filtered);
@@ -628,7 +707,7 @@ selectedYearDisplay.textContent = state.year || "All";
   }
 
   /* ================================
-     1️⃣1️⃣ Modal Functions
+     1️⃣4️⃣ Modal Functions (YOUR ORIGINAL CODE)
   ================================ */
   function openModal(filterType) {
     mobileModal.classList.add("open");
@@ -681,7 +760,7 @@ selectedYearDisplay.textContent = state.year || "All";
   }
 
   /* ================================
-     1️⃣2️⃣ Event Listeners
+     1️⃣5️⃣ Event Listeners (YOUR ORIGINAL CODE)
   ================================ */
   // Desktop Filter Toggles
   runtime.querySelectorAll('.filter-toggle').forEach(toggle => {
@@ -831,7 +910,7 @@ selectedYearDisplay.textContent = state.year || "All";
   });
 
   /* ================================
-     1️⃣3️⃣ Initialize
+     1️⃣6️⃣ Initialize
   ================================ */
   // Set initial year if default provided
   const allYearRadio = yearOptionsDesktop.querySelector(
@@ -844,5 +923,5 @@ if (allYearRadio) {
 
   applyFiltersAndRender();
 
-  console.log("Press Release Listing block initialized");
+  console.log("Press Release Listing block initialized with featured post excluded from listing");
 }
