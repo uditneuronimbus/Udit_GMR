@@ -226,9 +226,11 @@ export default async function decorate(block) {
 
           const colMid = document.createElement("div");
           colMid.className = "mega-col mega-mid";
+          colMid.style.display = "none"; // hidden by default
 
           const colRightList = document.createElement("div");
           colRightList.className = "mega-col mega-list-container";
+          colRightList.style.display = "none"; // hidden by default
 
           const colDetails = document.createElement("div");
           colDetails.className = "mega-details-panel";
@@ -296,7 +298,7 @@ export default async function decorate(block) {
 
               const level2Ul = level1Li.querySelector("ul");
               if (level2Ul) {
-                colMid.style.display = 'block';
+                colMid.style.display = 'block'; // show on hover
 
                 const l2Ul = document.createElement("ul");
                 l2Ul.className = "vertical-nav-list";
@@ -325,7 +327,7 @@ export default async function decorate(block) {
 
                     const level3Ul = level2Li.querySelector("ul");
                     if (level3Ul) {
-                      colRightList.style.display = 'block';
+                      colRightList.style.display = 'block'; // show on hover
 
                       const l3Ul = document.createElement("ul");
                       l3Ul.className = "vertical-nav-list";
