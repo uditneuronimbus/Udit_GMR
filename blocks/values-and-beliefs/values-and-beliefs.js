@@ -1,9 +1,35 @@
 export default function decorate(block) {
-  const rows = [...block.children];
-  const sectionTitle = rows[0]?.textContent?.trim() || 'Values & Beliefs';
-  const cardRows = rows.slice(1);
+  /* ================================
+     AUTHOR MODE DETECTION
+  ================================= */
+  const isAuthorMode =
+    document.body.classList.contains('aem-AuthorLayer-Edit') ||
+    window.location.search.includes('wcmmode=edit');
 
-  block.innerHTML = '';
+  /* ================================
+     INIT GUARD
+  ================================= */
+  if (block.classList.contains('values-initialized')) return;
+  block.classList.add('values-initialized');
+
+  /* ================================
+     READ AUTHORED CONTENT (DO NOT FILTER YET)
+  ================================= */
+  const children = [...block.children];
+  if (children.length < 2) return;
+
+  /* TITLE = FIRST ROW */
+  const sectionTitle =
+    children[0]?.textContent?.trim() || 'Values & Beliefs';
+
+  /* CARD ROWS = REST */
+  const cardRows = children.slice(1);
+
+  /* ================================
+     BUILD RUNTIME
+  ================================= */
+  const runtime = document.createElement('div');
+  runtime.className = 'values-runtime';
 
   const section = document.createElement('div');
   section.className = 'values-section';
@@ -11,17 +37,25 @@ export default function decorate(block) {
   const titleEl = document.createElement('h2');
   titleEl.className = 'values-title';
   titleEl.textContent = sectionTitle;
-  section.appendChild(titleEl);
 
   const cardsWrapper = document.createElement('div');
   cardsWrapper.className = 'values-cards';
 
+  section.append(titleEl, cardsWrapper);
+  runtime.appendChild(section);
+  block.appendChild(runtime);
+
+  /* ================================
+     BUILD CARDS
+  ================================= */
   cardRows.forEach((row) => {
     const cells = [...row.children];
     if (cells.length < 4) return;
 
     const picture =
-      cells[0].querySelector('picture') || cells[0].querySelector('img');
+      cells[0].querySelector('picture') ||
+      cells[0].querySelector('img');
+
     const titleText = cells[1].textContent.trim();
     const descriptionHTML = cells[2].innerHTML.trim();
     const authorText = cells[3].textContent.trim();
@@ -32,11 +66,13 @@ export default function decorate(block) {
     const imgWrap = document.createElement('div');
     imgWrap.className = 'value-card-image';
 
-    if (picture) imgWrap.appendChild(picture.cloneNode(true));
+    if (picture) {
+      imgWrap.appendChild(picture.cloneNode(true));
+    }
 
     const overlay = document.createElement('div');
     overlay.className = 'value-card-overlay';
-    overlay.innerHTML = `<span>${titleText}</span><span class="icon"></span>`;
+    overlay.innerHTML = `<span>${titleText}</span>`;
 
     const content = document.createElement('div');
     content.className = 'value-card-content';
@@ -47,45 +83,33 @@ export default function decorate(block) {
 
     imgWrap.append(overlay, content);
     card.appendChild(imgWrap);
+    cardsWrapper.appendChild(card);
 
-    /* ===============================
-       OPEN (➕) — close others first
-    ================================ */
+    /* ================================
+       INTERACTIONS (PUBLISH ONLY)
+    ================================= */
+    if (isAuthorMode) return;
+
     overlay.addEventListener('click', (e) => {
       e.stopPropagation();
 
-      // close all other cards
       cardsWrapper
         .querySelectorAll('.value-card.active')
-        .forEach((activeCard) => {
-          if (activeCard !== card) {
-            activeCard.classList.remove('active');
-          }
-        });
+        .forEach((c) => c !== card && c.classList.remove('active'));
 
-      // open this card
       card.classList.add('active');
     });
 
-    /* ===============================
-       CLOSE (➖ top-right hit area)
-    ================================ */
     card.addEventListener('click', (e) => {
       if (!card.classList.contains('active')) return;
 
       const rect = card.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const clickY = e.clientY - rect.top;
-
-      // minus icon hit area (top-right)
-      if (clickX > rect.width - 44 && clickY < 44) {
+      if (
+        e.clientX - rect.left > rect.width - 44 &&
+        e.clientY - rect.top < 44
+      ) {
         card.classList.remove('active');
       }
     });
-
-    cardsWrapper.appendChild(card);
   });
-
-  section.appendChild(cardsWrapper);
-  block.appendChild(section);
 }

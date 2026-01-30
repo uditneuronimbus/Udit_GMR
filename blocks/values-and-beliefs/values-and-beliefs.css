@@ -1,4 +1,13 @@
 /* ===============================
+   AEM AUTHORING SUPPORT
+================================ */
+
+/* Hide authored content AFTER JS decoration */
+.values-and-beliefs.values-initialized > :not(.values-runtime) {
+  display: none;
+}
+
+/* ===============================
    WRAPPER & SECTION
 ================================ */
 .values-and-beliefs-wrapper {
@@ -110,7 +119,7 @@
   inset: 0;
   background: var(--blue);
   color: #fff;
-  padding: 56px 24px 24px;
+  padding: 52px 15px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
