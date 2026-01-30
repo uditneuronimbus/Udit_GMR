@@ -26,7 +26,7 @@ function getSlugFromURL() {
 
 export default async function decorate(block) {
   const slug = getSlugFromURL();
-
+  
   block.innerHTML = "";
 
   if (!slug) {
@@ -54,15 +54,15 @@ export default async function decorate(block) {
   ================================ */
   try {
     const apiUrl =
-      `${getApiHost()}/api/v1/web/gmr-api/news-update/detail` +
-      `?post=${encodeURIComponent(slug)}`;
+      `${getApiHost()}/api/v1/web/gmr-api/news-details` +
+      `?slugUrl=${encodeURIComponent(slug)}`;
 
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`API error ${res.status}`);
 
     const json = await res.json();
-    const item = json?.data?.data;
-
+    const item = json?.data?.data?.newsList?.items[0];
+    
     if (!item) {
       contentWrapper.innerHTML = "<p>News not found.</p>";
       return;
@@ -95,10 +95,10 @@ export default async function decorate(block) {
         </h1>
 
         ${
-          item.bannerImage?._publishUrl
+          item.cardImage?._publishUrl
             ? `
               <div class="news-banner mb-4">
-                <img src="${item.bannerImage._publishUrl}" alt="${item.title || ""}">
+                <img src="${item.cardImage._publishUrl}" alt="${item.title || ""}">
               </div>
             `
             : ""

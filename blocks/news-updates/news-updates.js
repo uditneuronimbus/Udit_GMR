@@ -73,8 +73,7 @@ export default async function decorate(block) {
     const apiUrl =
       `${getApiHost()}/api/v1/web/gmr-api/news-update` +
       `?category=${encodeURIComponent(category)}` +
-      `&limit=${encodeURIComponent(limit)}`;
-
+      `&limit=${encodeURIComponent(limit)}`;    
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`API error ${res.status}`);
 
@@ -128,7 +127,7 @@ export default async function decorate(block) {
             </p>
 
             <div class="card-cta">
-              <a class="btn-link" href="/en/news-update?post=${encodeURIComponent(item.slugUrl)}">
+              <a class="btn-link" href="/en/news-update?slug=${encodeURIComponent(item.slugUrl)}">
                 ${item.ctaLabel || "READ MORE"}
               </a>
             </div>
