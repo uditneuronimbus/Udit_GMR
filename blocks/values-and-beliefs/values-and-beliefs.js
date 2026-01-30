@@ -78,7 +78,7 @@ export default function decorate(block) {
     content.className = 'value-card-content';
     content.innerHTML = `
       <div class="quote">${descriptionHTML}</div>
-      <p class="author">— ${authorText}</p>
+      <p class="author"> ${authorText}</p>
     `;
 
     imgWrap.append(overlay, content);
