@@ -97,7 +97,6 @@ export default function decorate(block) {
   const badgeClass = badge ? badge.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '') : 'general';
 
   runtime.innerHTML = `
-    <div class="container">
       <div class="featured-wrapper">
         <div class="featured-content">
           <span class="featured-label">${sectionLabel}</span>
@@ -109,9 +108,11 @@ export default function decorate(block) {
             ${badge ? '<span class="meta-separator">|</span>' : ''}
             ${publishDate ? `
               <span class="meta-date">
-                <svg class="icon-calendar" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M12.667 2.667H3.333C2.597 2.667 2 3.264 2 4v9.333c0 .737.597 1.334 1.333 1.334h9.334c.736 0 1.333-.597 1.333-1.334V4c0-.736-.597-1.333-1.333-1.333z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M10.667 1.333v2.667M5.333 1.333v2.667M2 6.667h12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg class="icon-calendar" width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.66669 10C1.66669 6.85734 1.66669 5.286 2.643 4.30968C3.61931 3.33337 5.19066 3.33337 8.33335 3.33337H11.6667C14.8094 3.33337 16.3807 3.33337 17.357 4.30968C18.3334 5.286 18.3334 6.85734 18.3334 10V11.6667C18.3334 14.8094 18.3334 16.3808 17.357 17.3571C16.3807 18.3334 14.8094 18.3334 11.6667 18.3334H8.33335C5.19066 18.3334 3.61931 18.3334 2.643 17.3571C1.66669 16.3808 1.66669 14.8094 1.66669 11.6667V10Z" stroke="#333333" stroke-width="1.5"/>
+                <path d="M5.83331 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M14.1667 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M2.08331 7.5H17.9166" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
                 ${publishDate}
               </span>
@@ -119,20 +120,19 @@ export default function decorate(block) {
             ${lastUpdated ? `
               <span class="meta-separator">|</span>
               <span class="meta-updated">
-                <svg class="icon-calendar" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M12.667 2.667H3.333C2.597 2.667 2 3.264 2 4v9.333c0 .737.597 1.334 1.333 1.334h9.334c.736 0 1.333-.597 1.333-1.334V4c0-.736-.597-1.333-1.333-1.333z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M10.667 1.333v2.667M5.333 1.333v2.667M2 6.667h12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg class="icon-calendar" width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.66669 10C1.66669 6.85734 1.66669 5.286 2.643 4.30968C3.61931 3.33337 5.19066 3.33337 8.33335 3.33337H11.6667C14.8094 3.33337 16.3807 3.33337 17.357 4.30968C18.3334 5.286 18.3334 6.85734 18.3334 10V11.6667C18.3334 14.8094 18.3334 16.3808 17.357 17.3571C16.3807 18.3334 14.8094 18.3334 11.6667 18.3334H8.33335C5.19066 18.3334 3.61931 18.3334 2.643 17.3571C1.66669 16.3808 1.66669 14.8094 1.66669 11.6667V10Z" stroke="#333333" stroke-width="1.5"/>
+                <path d="M5.83331 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M14.1667 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M2.08331 7.5H17.9166" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
                 Last Updated : ${lastUpdated}
               </span>
             ` : ''}
           </div>
 
-          <a href="${ctaLink}" class="btn-read-more">
+          <a href="${ctaLink}" class="btn-link">
             ${ctaText}
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3.333 8h9.334M8 3.333L12.667 8 8 12.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
           </a>
         </div>
 
@@ -140,7 +140,6 @@ export default function decorate(block) {
           ${imageUrl ? `<img src="${imageUrl}" alt="${imageAlt}" loading="eager">` : ''}
         </div>
       </div>
-    </div>
   `;
 
   block.appendChild(runtime);

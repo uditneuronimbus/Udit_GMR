@@ -207,7 +207,7 @@ async function loadLazy(doc) {
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
   if (hash && element) element.scrollIntoView();
 
-  // loadHeader(doc.querySelector("header")); // MOVED TO EAGER
+  loadHeader(doc.querySelector("header"));
   loadFooter(doc.querySelector("footer"));
 
   /* ✅ Manual Load Call for Breadcrumbs */
@@ -314,8 +314,6 @@ if (!localStorage.getItem(KEY)) {
    LOAD PAGE
    =============================== */
 async function loadPage() {
-  // Move loadHeader to loadEager to start loading it immediately
-  loadHeader(document.querySelector("header"));
   await loadEager(document);
   await loadLazy(document);
   loadDelayed();

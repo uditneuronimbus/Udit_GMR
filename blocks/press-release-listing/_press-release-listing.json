@@ -63,6 +63,13 @@
           "label": "Default Year to Show",
           "valueType": "string",
           "description": "e.g., 2026 (leave empty for all years)"
+        },
+        {
+          "component": "number",
+          "name": "itemsPerPage",
+          "label": "Items Per Page",
+          "valueType": "number",
+          "description": "Number of items per page (default: 10)"
         }
       ]
     },
@@ -103,12 +110,6 @@
           ]
         },
         {
-          "component": "text",
-          "name": "year",
-          "label": "Year (e.g., 2026)",
-          "valueType": "string"
-        },
-        {
           "component": "reference",
           "name": "image",
           "label": "Press Release Image",
@@ -121,24 +122,29 @@
           "valueType": "string"
         },
         {
-          "component": "text",
+          "component": "date-time",
           "name": "publishDate",
           "label": "Publish Date",
-          "valueType": "string",
-          "description": "e.g., 01 Jan 2026"
+          "valueType": "string"
+        },
+        {
+          "component": "date-time",
+          "name": "lastUpdated",
+          "label": "Last Updated Date",
+          "valueType": "string"
         },
         {
           "component": "text",
-          "name": "lastUpdated",
-          "label": "Last Updated Date",
-          "valueType": "string",
-          "description": "e.g., 05 Jan 2026"
+          "name": "location",
+          "label": "Location",
+          "valueType": "string"
         },
         {
-          "component": "aem-content",
-          "name": "ctaLink",
-          "label": "Read More Link",
-          "valueType": "string"
+          "component": "text",
+          "name": "contactDetails",
+          "label": "Contact Details (JSON)",
+          "valueType": "string",
+          "description": "JSON array of contact objects. Example: [{\"name\":\"John Doe\",\"role\":\"Head - Communications\",\"email\":\"john@example.com\"},{\"name\":\"Jane Smith\",\"role\":\"PR Manager\",\"email\":\"jane@example.com\"}]"
         }
       ]
     }

@@ -1,13 +1,13 @@
-  /* ===============================
-   HIDE ORIGINAL CONTENT
-================================ */
+/* =====================================================
+   HIDE AUTHORED CONTENT
+===================================================== */
 .sdg-themes.sdg-themes-initialized > :not(.sdg-themes-runtime) {
   display: none;
 }
 
-/* ===============================
-   RUNTIME WRAPPER
-================================ */
+/* =====================================================
+   SECTION
+===================================================== */
 .sdg-themes-runtime {
   padding: 80px 0;
   background: #ffffff;
@@ -27,18 +27,19 @@
   margin-bottom: 40px;
 }
 
-/* ===============================
-   GRID
-================================ */
+/* =====================================================
+   GRID (MATCH REFERENCE)
+===================================================== */
 .sdg-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(4, 260px);
+  gap: 24px;
+  justify-content: center;
 }
 
-/* ===============================
+/* =====================================================
    CARD BASE
-================================ */
+===================================================== */
 .sdg-card {
   position: relative;
   cursor: pointer;
@@ -46,15 +47,15 @@
   overflow: hidden;
 }
 
-/* ===============================
+/* =====================================================
    IMAGE
-================================ */
+===================================================== */
 .sdg-image {
   height: 225px;
-  background-color: #ffffff;
+  background: #fff;
   border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 60px; /* space for blue bar */
+  margin-bottom: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -63,26 +64,28 @@
 .sdg-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* 🔥 KEY FIX */
   display: block;
 }
 
-/* ===============================
-   BOTTOM BLUE BAR
-================================ */
+/* =====================================================
+   BOTTOM BAR (DEFAULT STATE)
+===================================================== */
 .sdg-content {
   position: absolute;
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 52px; /* fixed height like reference */
-  padding: 0 14px;
-  color: #ffffff;
+  height: 52px;
+  background: var(--blue);
+  color: #fff;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--blue);
-  border-radius: 0 0 8px 8px; /* only bottom corners */
+  border-radius: 0 0 8px 8px;
   z-index: 4;
 }
 
@@ -90,53 +93,110 @@
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  line-height: 1.4;
 }
 
-/* ICON (PLUS) */
+/* PLUS ICON */
 .sdg-content::after {
-  content: "";
+  content: "+";
   width: 24px;
   height: 24px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  transition: transform 0.2s ease;
-  background-image:url("data:image/svg+xml,%3Csvg%20width='25'%20height='25'%20viewBox='0%200%2025%2025'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cpath%20d='M17.5%2012.5C17.5%2012.776%2017.276%2013%2017%2013H13V17C13%2017.276%2012.776%2017.5%2012.5%2017.5C12.224%2017.5%2012%2017.276%2012%2017V13H8C7.724%2013%207.5%2012.776%207.5%2012.5C7.5%2012.224%207.724%2012%208%2012H12V8C12%207.724%2012.224%207.5%2012.5%207.5C12.776%207.5%2013%207.724%2013%208V12H17C17.276%2012%2017.5%2012.224%2017.5%2012.5ZM24.5%205V20C24.5%2022.481%2022.481%2024.5%2020%2024.5H5C2.519%2024.5%200.5%2022.481%200.5%2020V5C0.5%202.519%202.519%200.5%205%200.5H20C22.481%200.5%2024.5%202.519%2024.5%205ZM23.5%205C23.5%203.07%2021.93%201.5%2020%201.5H5C3.07%201.5%201.5%203.07%201.5%205V20C1.5%2021.93%203.07%2023.5%205%2023.5H20C21.93%2023.5%2023.5%2021.93%2023.5%2020V5Z'%20fill='%23FAA519'%20stroke='%23FAA519'/%3E%3C/svg%3E");
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  background: #faa519;
+  color: #003a8f;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  flex-shrink: 0;
 }
 
-.sdg-card:hover .sdg-content::after {
-  transform: scale(1.1);
+/* =====================================================
+   EXPANDED OVERLAY (REFERENCE STYLE)
+===================================================== */
+.sdg-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--blue);
+  color: #fff;
+  padding: 56px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  border-radius: 8px;
+  z-index: 3;
 }
 
-/* ===============================
-   COLOR VARIANTS
-================================ */
-.sdg-card.sdg-1 .sdg-content { background: #E5243B; } 
-.sdg-card.sdg-2 .sdg-content { background: #DDA63A; } 
-.sdg-card.sdg-3 .sdg-content { background: #4C9F38; } 
-.sdg-card.sdg-5 .sdg-content { background: #EF402C; } 
-.sdg-card.sdg-6 .sdg-content { background: #27BFE6; } 
-.sdg-card.sdg-7 .sdg-content { background: #FBC412; } 
-.sdg-card.sdg-8 .sdg-content { background: #A21942; }
+.sdg-overlay p {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
 
-/* ===============================
+/* =====================================================
+   ACTIVE STATE
+===================================================== */
+.sdg-card.active .sdg-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sdg-card.active .sdg-content {
+  display: none;
+}
+
+/* MINUS ICON (TOP RIGHT) */
+.sdg-card.active::after {
+  content: "–";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  background: #faa519;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  z-index: 6;
+}
+
+/* =====================================================
+   SDG COLOR VARIANTS
+===================================================== */
+.sdg-card.sdg-1 .sdg-content,
+.sdg-card.sdg-1 .sdg-overlay { background: #E5243B; }
+
+.sdg-card.sdg-2 .sdg-content,
+.sdg-card.sdg-2 .sdg-overlay { background: #DDA63A; }
+
+.sdg-card.sdg-3 .sdg-content,
+.sdg-card.sdg-3 .sdg-overlay { background: #4C9F38; }
+
+.sdg-card.sdg-5 .sdg-content,
+.sdg-card.sdg-5 .sdg-overlay { background: #EF402C; }
+
+.sdg-card.sdg-6 .sdg-content,
+.sdg-card.sdg-6 .sdg-overlay { background: #27BFE6; }
+
+.sdg-card.sdg-7 .sdg-content,
+.sdg-card.sdg-7 .sdg-overlay { background: #FBC412; }
+
+.sdg-card.sdg-8 .sdg-content,
+.sdg-card.sdg-8 .sdg-overlay { background: #A21942; }
+
+/* =====================================================
    RESPONSIVE
-================================ */
-@media (max-width: 1199px) {
+===================================================== */
+@media (max-width: 1024px) {
   .sdg-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 991px) {
-  .sdg-title {
-    font-size: 28px;
-  }
-
-  .sdg-image {
-    height: 220px;
-    margin-bottom: 50px;
+    grid-template-columns: repeat(2, 260px);
   }
 }
 
@@ -145,32 +205,29 @@
     grid-template-columns: 1fr;
   }
 
-  .sdg-image {
-    height: 200px;
-    margin-bottom: 40px;
+  .sdg-title {
+    font-size: 28px;
   }
 
-  .sdg-content h3 {
-    font-size: 15px;
+  .sdg-image {
+    height: 200px;
+    margin-bottom: 48px;
   }
 }
 
-/* ===============================
-   SPECIAL CASE – 7 CARDS
-================================ */
+
+/* =====================================================
+   SPECIAL CASE – 7 CARDS (CENTER LAST ROW)
+===================================================== */
 @media (min-width: 1200px) {
   .sdg-grid:has(> .sdg-card:nth-child(7)) {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
+    gap: 24px;
   }
 
   .sdg-grid:has(> .sdg-card:nth-child(7)) > .sdg-card {
-    flex: 0 0 calc(25% - 20px);
-  }
-
-  .sdg-grid:has(> .sdg-card:nth-child(7)) > .sdg-card:nth-child(n + 5) {
-    flex: 0 0 calc(25% - 20px);
+    flex: 0 0 260px;
   }
 }

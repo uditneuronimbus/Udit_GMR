@@ -351,6 +351,10 @@
     ]
   },
   {
+    "id": "press-release-detail",
+    "components": []
+  },
+  {
     "id": "press-release-featured",
     "components": []
   },
