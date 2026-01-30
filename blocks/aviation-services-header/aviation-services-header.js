@@ -14,7 +14,7 @@ export default function decorate(block) {
 
   const headerCells = [...headerRow.children];
   const dropdownButtonText =
-    headerCells[1]?.textContent?.trim() || "Wind Energy";
+    headerCells[1]?.textContent?.trim();
 
   rows.forEach((row) => (row.style.display = "none"));
 
