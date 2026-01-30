@@ -3109,6 +3109,19 @@
         "valueType": "string"
       },
       {
+        "component": "textarea",
+        "name": "sort_description",
+        "label": "Sort Description",
+        "valueType": "string",
+        "rows": 4
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      },
+      {
         "component": "date-time",
         "name": "publishDate",
         "label": "Publish Date",
