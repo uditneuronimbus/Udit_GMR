@@ -10,7 +10,9 @@ function closeOnEscape(e) {
   if (!nav) return;
   const navSections = nav.querySelector(".nav-sections");
   if (!navSections) return;
-  const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
+  const navSectionExpanded = navSections.querySelector(
+    '[aria-expanded="true"]',
+  );
   if (navSectionExpanded && isDesktop.matches) {
     toggleAllNavSections(navSections);
     navSectionExpanded.focus();
@@ -27,7 +29,9 @@ function closeOnFocusLost(e) {
   if (!nav.contains(e.relatedTarget)) {
     const navSections = nav.querySelector(".nav-sections");
     if (!navSections) return;
-    const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
+    const navSectionExpanded = navSections.querySelector(
+      '[aria-expanded="true"]',
+    );
     if (navSectionExpanded && isDesktop.matches) {
       toggleAllNavSections(navSections, false);
     } else if (!isDesktop.matches) {
@@ -58,22 +62,28 @@ function focusNavSection() {
 function toggleAllNavSections(sections, expanded = false) {
   if (!sections) return;
   const value = expanded ? "true" : "false";
-  sections.querySelectorAll(":scope .default-content-wrapper > ul > li")
+  sections
+    .querySelectorAll(":scope .default-content-wrapper > ul > li")
     .forEach((section) => section.setAttribute("aria-expanded", value));
 }
 
 function toggleMenu(nav, navSections, forceExpanded = null) {
   if (!nav || !navSections) return;
   const currentlyExpanded = nav.getAttribute("aria-expanded") === "true";
-  const willBeExpanded = forceExpanded !== null ? !!forceExpanded : !currentlyExpanded;
+  const willBeExpanded =
+    forceExpanded !== null ? !!forceExpanded : !currentlyExpanded;
   const button = nav.querySelector(".nav-hamburger button");
 
-  document.body.style.overflowY = willBeExpanded && !isDesktop.matches ? "hidden" : "";
+  document.body.style.overflowY =
+    willBeExpanded && !isDesktop.matches ? "hidden" : "";
   nav.setAttribute("aria-expanded", willBeExpanded ? "true" : "false");
   toggleAllNavSections(navSections, willBeExpanded && !isDesktop.matches);
 
   if (button) {
-    button.setAttribute("aria-label", willBeExpanded ? "Close navigation" : "Open navigation");
+    button.setAttribute(
+      "aria-label",
+      willBeExpanded ? "Close navigation" : "Open navigation",
+    );
   }
 
   const navDrops = navSections.querySelectorAll(".nav-drop");
@@ -106,7 +116,9 @@ export default async function decorate(block) {
   try {
     const imageMap = new Map();
     const navMeta = getMetadata("nav");
-    const navPathMain = navMeta ? new URL(navMeta, window.location).pathname : "/en/nav";
+    const navPathMain = navMeta
+      ? new URL(navMeta, window.location).pathname
+      : "/en/nav";
     const isAero = window.location.pathname.startsWith("/aero-gmr/");
     const navPath = isAero ? "/aero-gmr/nav" : navPathMain;
 
@@ -151,8 +163,11 @@ export default async function decorate(block) {
 
         let current = logoLink.parentElement;
         while (current && current !== navBrand) {
-          if ((current.tagName === "P" || current.tagName === "DIV") &&
-              current.children.length <= 1 && !current.textContent.trim()) {
+          if (
+            (current.tagName === "P" || current.tagName === "DIV") &&
+            current.children.length <= 1 &&
+            !current.textContent.trim()
+          ) {
             const next = current.parentNode;
             next.insertBefore(logoLink, current);
             current.remove();
@@ -165,7 +180,12 @@ export default async function decorate(block) {
 
       navBrand.querySelectorAll("p").forEach((p) => {
         const text = p.textContent.trim();
-        if (text.startsWith("http") || text.startsWith("/") || text === "#" || text.includes("gmrcorp")) {
+        if (
+          text.startsWith("http") ||
+          text.startsWith("/") ||
+          text === "#" ||
+          text.includes("gmrcorp")
+        ) {
           p.remove();
         }
       });
@@ -179,7 +199,11 @@ export default async function decorate(block) {
             const labelEl = second?.querySelector("p");
             const imgEl = first?.querySelector("img");
             if (!labelEl || !imgEl) return;
-            const key = labelEl.textContent.trim().toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-");
+            const key = labelEl.textContent
+              .trim()
+              .toLowerCase()
+              .replace(/\u00A0/g, " ")
+              .replace(/\s+/g, "-");
             imageMap.set(key, imgEl.src);
           }
         });
@@ -205,9 +229,13 @@ export default async function decorate(block) {
           });
 
           if (customTitleEl) menuTitleText = customTitleEl.textContent.trim();
-          if (!menuTitleText && li.firstChild) menuTitleText = li.firstChild.textContent.trim();
+          if (!menuTitleText && li.firstChild)
+            menuTitleText = li.firstChild.textContent.trim();
 
-          const mainLabelKey = menuTitleText.toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-");
+          const mainLabelKey = menuTitleText
+            .toLowerCase()
+            .replace(/\u00A0/g, " ")
+            .replace(/\s+/g, "-");
           const mainImgSrc = imageMap.get(mainLabelKey);
 
           li.classList.add("has-mega");
@@ -238,13 +266,20 @@ export default async function decorate(block) {
           // Set initial background image
           if (mainImgSrc) {
             colDetails.style.backgroundImage = `url(${mainImgSrc})`;
-            colDetails.style.backgroundSize = 'cover';
-            colDetails.style.backgroundPosition = 'center';
+            colDetails.style.backgroundSize = "cover";
+            colDetails.style.backgroundPosition = "center";
           }
 
-          const updateDetailsPanel = (primaryKey, parentKey1 = null, parentKey2 = null, subListNode = null) => {
+          const updateDetailsPanel = (
+            primaryKey,
+            parentKey1 = null,
+            parentKey2 = null,
+            subListNode = null,
+          ) => {
             // Remove previous nested list only (keep background image)
-            colDetails.querySelectorAll('.nested-list').forEach(el => el.remove());
+            colDetails
+              .querySelectorAll(".nested-list")
+              .forEach((el) => el.remove());
 
             let imgSrc = imageMap.get(primaryKey);
             if (!imgSrc && parentKey1) imgSrc = imageMap.get(parentKey1);
@@ -253,8 +288,8 @@ export default async function decorate(block) {
 
             if (imgSrc) {
               colDetails.style.backgroundImage = `url(${imgSrc})`;
-              colDetails.style.backgroundSize = 'cover';
-              colDetails.style.backgroundPosition = 'center';
+              colDetails.style.backgroundSize = "cover";
+              colDetails.style.backgroundPosition = "center";
             }
 
             if (subListNode) {
@@ -273,9 +308,14 @@ export default async function decorate(block) {
           // Event Logic
           [...innerList.children].forEach((level1Li) => {
             const l1LinkEl = level1Li.querySelector("a");
-            const l1Text = l1LinkEl ? l1LinkEl.textContent.trim() : level1Li.firstChild.textContent.trim();
+            const l1Text = l1LinkEl
+              ? l1LinkEl.textContent.trim()
+              : level1Li.firstChild.textContent.trim();
             const l1Href = l1LinkEl ? l1LinkEl.href : "#";
-            const l1Key = l1Text.toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-");
+            const l1Key = l1Text
+              .toLowerCase()
+              .replace(/\u00A0/g, " ")
+              .replace(/\s+/g, "-");
 
             const itemContainer = document.createElement("div");
             itemContainer.className = "cat-item";
@@ -286,19 +326,21 @@ export default async function decorate(block) {
             horizontalContainer.append(itemContainer);
 
             itemContainer.addEventListener("mouseenter", () => {
-              horizontalContainer.querySelectorAll(".cat-item").forEach(el => el.classList.remove("active"));
+              horizontalContainer
+                .querySelectorAll(".cat-item")
+                .forEach((el) => el.classList.remove("active"));
               itemContainer.classList.add("active");
 
               colMid.innerHTML = "";
-              colMid.style.display = 'none';
+              colMid.style.display = "none";
               colRightList.innerHTML = "";
-              colRightList.style.display = 'none';
+              colRightList.style.display = "none";
 
               updateDetailsPanel(l1Key);
 
               const level2Ul = level1Li.querySelector("ul");
               if (level2Ul) {
-                colMid.style.display = 'block'; // show on hover
+                colMid.style.display = "block"; // show on hover
 
                 const l2Ul = document.createElement("ul");
                 l2Ul.className = "vertical-nav-list";
@@ -306,9 +348,14 @@ export default async function decorate(block) {
 
                 [...level2Ul.children].forEach((level2Li) => {
                   const l2LinkEl = level2Li.querySelector("a");
-                  const l2Text = l2LinkEl ? l2LinkEl.textContent.trim() : level2Li.textContent.trim();
+                  const l2Text = l2LinkEl
+                    ? l2LinkEl.textContent.trim()
+                    : level2Li.textContent.trim();
                   const l2Href = l2LinkEl ? l2LinkEl.href : "#";
-                  const l2Key = l2Text.toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-");
+                  const l2Key = l2Text
+                    .toLowerCase()
+                    .replace(/\u00A0/g, " ")
+                    .replace(/\s+/g, "-");
 
                   const l2Li = document.createElement("li");
                   const l2A = document.createElement("a");
@@ -318,16 +365,18 @@ export default async function decorate(block) {
                   l2Ul.append(l2Li);
 
                   l2Li.addEventListener("mouseenter", () => {
-                    l2Ul.querySelectorAll("li").forEach(el => el.classList.remove("active"));
+                    l2Ul
+                      .querySelectorAll("li")
+                      .forEach((el) => el.classList.remove("active"));
                     l2Li.classList.add("active");
 
                     colRightList.innerHTML = "";
-                    colRightList.style.display = 'none';
+                    colRightList.style.display = "none";
                     updateDetailsPanel(l2Key, l1Key);
 
                     const level3Ul = level2Li.querySelector("ul");
                     if (level3Ul) {
-                      colRightList.style.display = 'block'; // show on hover
+                      colRightList.style.display = "block"; // show on hover
 
                       const l3Ul = document.createElement("ul");
                       l3Ul.className = "vertical-nav-list";
@@ -335,9 +384,14 @@ export default async function decorate(block) {
 
                       [...level3Ul.children].forEach((level3Li) => {
                         const l3LinkEl = level3Li.querySelector("a");
-                        const l3Text = l3LinkEl ? l3LinkEl.textContent.trim() : level3Li.firstChild.textContent.trim();
+                        const l3Text = l3LinkEl
+                          ? l3LinkEl.textContent.trim()
+                          : level3Li.firstChild.textContent.trim();
                         const l3Href = l3LinkEl ? l3LinkEl.href : "#";
-                        const l3Key = l3Text.toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-");
+                        const l3Key = l3Text
+                          .toLowerCase()
+                          .replace(/\u00A0/g, " ")
+                          .replace(/\s+/g, "-");
 
                         const l3Li = document.createElement("li");
                         const l3A = document.createElement("a");
@@ -354,7 +408,9 @@ export default async function decorate(block) {
                         l3Ul.append(l3Li);
 
                         l3Li.addEventListener("mouseenter", () => {
-                          l3Ul.querySelectorAll("li").forEach(el => el.classList.remove("active"));
+                          l3Ul
+                            .querySelectorAll("li")
+                            .forEach((el) => el.classList.remove("active"));
                           l3Li.classList.add("active");
 
                           let l4List = null;
@@ -378,14 +434,20 @@ export default async function decorate(block) {
 
     const navSections = nav.querySelector(".nav-sections");
     if (navSections) {
-      navSections.querySelectorAll(":scope .default-content-wrapper > ul > li")
+      navSections
+        .querySelectorAll(":scope .default-content-wrapper > ul > li")
         .forEach((navSection) => {
-          if (navSection.querySelector("ul")) navSection.classList.add("nav-drop");
+          if (navSection.querySelector("ul"))
+            navSection.classList.add("nav-drop");
           navSection.addEventListener("click", () => {
             if (isDesktop.matches) {
-              const expanded = navSection.getAttribute("aria-expanded") === "true";
+              const expanded =
+                navSection.getAttribute("aria-expanded") === "true";
               toggleAllNavSections(navSections);
-              navSection.setAttribute("aria-expanded", expanded ? "false" : "true");
+              navSection.setAttribute(
+                "aria-expanded",
+                expanded ? "false" : "true",
+              );
             }
           });
         });
@@ -398,7 +460,9 @@ export default async function decorate(block) {
     nav.prepend(hamburger);
 
     toggleMenu(nav, navSections, isDesktop.matches);
-    isDesktop.addEventListener("change", () => toggleMenu(nav, navSections, isDesktop.matches));
+    isDesktop.addEventListener("change", () =>
+      toggleMenu(nav, navSections, isDesktop.matches),
+    );
 
     const navWrapper = document.createElement("div");
     navWrapper.className = "primary-header header-wrapper";
@@ -417,7 +481,7 @@ export default async function decorate(block) {
     window.addEventListener("scroll", handleHeaderAffix, { passive: true });
 
     block.append(navWrapper);
-  } catch(e) {
+  } catch (e) {
     console.error("Navigation Decorate Failed:", e);
   }
 }
