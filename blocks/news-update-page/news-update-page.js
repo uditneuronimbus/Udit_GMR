@@ -105,7 +105,7 @@ export default async function decorate(block) {
         }
 
         <div class="news-content">
-          ${item.description?.html || item.description?.plaintext || ""}
+          ${item.description?.html || ""}
         </div>
       </article>
     `;
