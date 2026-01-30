@@ -2,6 +2,9 @@ export default function decorate(block) {
   const rows = [...block.children];
   if (rows.length < 2) return;
 
+  /* ================================
+     1️⃣ Identify rows (EDS safe)
+  ================================ */
   const headerRow = rows[0];
 
   const tabRows = rows.filter(
@@ -12,14 +15,42 @@ export default function decorate(block) {
     (row, index) => index > 0 && row.children.length === 2
   );
 
-  const headerCells = [...headerRow.children];
-  const dropdownButtonText =
-    headerCells[1]?.textContent?.trim();
+  /* ================================
+     2️⃣ Helpers
+  ================================ */
+  const cleanPath = (url) =>
+    url?.replace(/^(https?:\/\/)?[^/]+/, "").replace(/\/$/, "");
 
+  const currentPath = cleanPath(window.location.href);
+
+  /* ================================
+     3️⃣ Resolve dropdown button text
+     (match URL → fallback first item)
+  ================================ */
+  let dropdownButtonText = "";
+
+  dropdownRows.forEach((row) => {
+    const cells = [...row.children];
+    const text = cells[0]?.textContent?.trim();
+    const url = cells[1]?.textContent?.trim();
+
+    if (text && url && cleanPath(url) === currentPath) {
+      dropdownButtonText = text;
+    }
+  });
+
+  if (!dropdownButtonText && dropdownRows.length) {
+    dropdownButtonText =
+      dropdownRows[0].children[0]?.textContent?.trim();
+  }
+
+  /* ================================
+     4️⃣ Hide authored rows
+  ================================ */
   rows.forEach((row) => (row.style.display = "none"));
 
   /* ================================
-     Runtime wrapper
+     5️⃣ Runtime HTML
   ================================ */
   const runtime = document.createElement("div");
   runtime.className = "aviation-tabs-runtime";
@@ -28,7 +59,9 @@ export default function decorate(block) {
     <section class="aviation-tabs-section">
       <div class="container aviation-tabs-wrap">
         <ul class="aviation-tabs-list"></ul>
-        ${dropdownRows.length ? `
+        ${
+          dropdownRows.length
+            ? `
           <div class="aviation-dropdown">
             <button class="aviation-dropdown-btn">
               ${dropdownButtonText}
@@ -36,7 +69,9 @@ export default function decorate(block) {
             </button>
             <ul class="aviation-dropdown-menu"></ul>
           </div>
-        ` : ``}
+        `
+            : ""
+        }
       </div>
     </section>
   `;
@@ -47,13 +82,8 @@ export default function decorate(block) {
   const dropdownBtn = runtime.querySelector(".aviation-dropdown-btn");
   const dropdownMenu = runtime.querySelector(".aviation-dropdown-menu");
 
-  const cleanPath = (url) =>
-    url?.replace(/^(https?:\/\/)?[^/]+/, "").replace(/\/$/, "");
-
-  const currentPath = cleanPath(window.location.href);
-
   /* ================================
-     Tabs
+     6️⃣ Build tabs (LEFT)
   ================================ */
   tabRows.forEach((row) => {
     const cells = [...row.children];
@@ -73,7 +103,7 @@ export default function decorate(block) {
   });
 
   /* ================================
-     Dropdown (ONLY if exists)
+     7️⃣ Build dropdown (RIGHT)
   ================================ */
   if (dropdownMenu && dropdownBtn) {
     dropdownRows.forEach((row) => {
@@ -88,11 +118,13 @@ export default function decorate(block) {
       dropdownMenu.appendChild(li);
     });
 
+    /* Toggle */
     dropdownBtn.addEventListener("click", (e) => {
       e.preventDefault();
       dropdownMenu.classList.toggle("open");
     });
 
+    /* Outside click */
     document.addEventListener("click", (e) => {
       if (!runtime.contains(e.target)) {
         dropdownMenu.classList.remove("open");
