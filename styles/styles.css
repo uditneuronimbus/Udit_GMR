@@ -228,6 +228,8 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .all-business-cards-container .default-content-wrapper .primary:hover { background-color: var(--white); }
 /* about gmr impact */
 
+.bg-gray.all-business-cards-container .spacer { padding-bottom: 160px; }
+
 
 
 @media (max-width:1199px){
