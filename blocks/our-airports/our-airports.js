@@ -11,10 +11,22 @@ export default function decorate(block) {
   const configCells = [...configRow.children];
 
   const title = configCells[0]?.textContent?.trim();
-  const domesticBtnLabel =
-    configCells[1]?.textContent?.trim() || "Domestic Network";
-  const internationalBtnLabel =
-    configCells[2]?.textContent?.trim() || "International Network";
+  const descriptionHead = configCells[1]?.innerHTML?.trim() || ""; // New: description after heading
+  
+  // Dynamic categories - all remaining config cells after title and description are category buttons
+  const categoryLabels = [];
+  const categoryFilters = [];
+  
+  // Start from cell 2 (after title and description)
+  for (let i = 2; i < configCells.length; i++) {
+    const categoryName = configCells[i]?.textContent?.trim();
+    if (categoryName) {
+      categoryLabels.push(categoryName);
+      // Create filter key from category name (lowercase, hyphenated)
+      const filterKey = categoryName.toLowerCase().replace(/\s+/g, '-');
+      categoryFilters.push(filterKey);
+    }
+  }
 
   const itemRows = rows.slice(1);
 
@@ -29,18 +41,28 @@ export default function decorate(block) {
   const runtime = document.createElement("section");
   runtime.className = "airport-overview-runtime";
 
+  // Generate dynamic tab buttons
+  let tabButtonsHTML = '';
+  if (categoryLabels.length > 0) {
+    tabButtonsHTML = '<div class="airport-tabs">';
+    categoryLabels.forEach((label, index) => {
+      const filter = categoryFilters[index];
+      const activeClass = index === 0 ? 'active' : '';
+      tabButtonsHTML += `
+        <button class="tab-btn ${activeClass}" data-filter="${filter}">
+          ${label}
+        </button>
+      `;
+    });
+    tabButtonsHTML += '</div>';
+  }
+
   runtime.innerHTML = `
     <div class="container">
       <div class="airport-overview-header text-center mb-5">
         ${title ? `<h2 class="sec-title">${title}</h2>` : ""}
-        <div class="airport-tabs">
-          <button class="tab-btn active" data-filter="domestic">
-            ${domesticBtnLabel}
-          </button>
-          <button class="tab-btn" data-filter="international">
-            ${internationalBtnLabel}
-          </button>
-        </div>
+        ${descriptionHead ? `<div class="description-head">${descriptionHead}</div>` : ""}
+        ${tabButtonsHTML}
       </div>
 
       <div class="airport-cards row"></div>
@@ -58,14 +80,24 @@ export default function decorate(block) {
   const loadMoreBtn = runtime.querySelector(".load-more-btn");
 
   /* ================================
-     4️⃣ Build cards (SAMPLE STRUCTURE)
+     4️⃣ Build cards (DYNAMIC CATEGORIES)
      ================================ */
+  // Create a map of all unique categories from items
+  const allCategories = new Set();
+  
   itemRows.forEach((row) => {
     if (!row.textContent?.trim()) return;
 
     const cells = [...row.children];
-    const type = cells[0]?.textContent?.trim().toLowerCase();
-    if (!["domestic", "international"].includes(type)) return;
+    const networkType = cells[0]?.textContent?.trim();
+    if (!networkType) return;
+
+    // Get the category from the options
+    const categoryMatch = networkType.match(/^(\w+)/);
+    if (!categoryMatch) return;
+    
+    const category = categoryMatch[1].toLowerCase();
+    allCategories.add(category);
 
     /* Image */
     let imageUrl = "";
@@ -86,7 +118,7 @@ export default function decorate(block) {
     /* LI wrapper for filtering */
     const li = document.createElement("div");
     li.className = "airport-card col-md-6 mt-4";
-    li.dataset.type = type;
+    li.dataset.category = category;
 
     li.innerHTML = `
       <div class="card card-ui-one">
@@ -130,9 +162,9 @@ export default function decorate(block) {
     return window.innerWidth <= 768;
   }
 
-  function applyLoadMore(filterType, reset = false) {
+  function applyLoadMore(filterCategory, reset = false) {
     const cards = [...cardList.querySelectorAll(".airport-card")].filter(
-      (card) => card.dataset.type === filterType
+      (card) => card.dataset.category === filterCategory
     );
 
     if (!isMobile()) {
@@ -153,21 +185,29 @@ export default function decorate(block) {
 
   loadMoreBtn.addEventListener("click", () => {
     visibleCount += MOBILE_LIMIT;
-    const active =
-      runtime.querySelector(".tab-btn.active").dataset.filter;
+    const active = runtime.querySelector(".tab-btn.active").dataset.filter;
     applyLoadMore(active);
   });
 
   /* ================================
      6️⃣ Tab filtering
      ================================ */
-  function filterCards(type) {
+  function filterCards(filterCategory) {
     const cards = cardList.querySelectorAll(".airport-card");
     cards.forEach((card) => {
-      card.style.display =
-        card.dataset.type === type ? "block" : "none";
+      // Show cards that match the filter category
+      // If no filterCategory is provided, show all cards
+      const shouldShow = !filterCategory || card.dataset.category === filterCategory;
+      card.style.display = shouldShow ? "block" : "none";
     });
-    applyLoadMore(type, true);
+    
+    // If we have categories from config, filter by them
+    if (categoryFilters.length > 0) {
+      applyLoadMore(filterCategory, true);
+    } else {
+      // Fallback to original behavior if no categories defined
+      applyLoadMore('', true);
+    }
   }
 
   tabButtons.forEach((btn) => {
@@ -181,13 +221,23 @@ export default function decorate(block) {
   /* ================================
      7️⃣ Init
      ================================ */
-  filterCards("domestic");
+  // Set initial active filter based on available categories
+  let initialFilter = '';
+  if (categoryFilters.length > 0) {
+    initialFilter = categoryFilters[0];
+  } else if (allCategories.size > 0) {
+    // If no categories in config, use first category from items
+    initialFilter = [...allCategories][0];
+  }
+  
+  filterCards(initialFilter);
 
   window.addEventListener("resize", () => {
-    const active =
-      runtime.querySelector(".tab-btn.active").dataset.filter;
-    applyLoadMore(active, true);
+    const active = runtime.querySelector(".tab-btn.active");
+    if (active) {
+      applyLoadMore(active.dataset.filter, true);
+    }
   });
 
-  console.log("Our Airports block initialized");
+  console.log("Our Airports block initialized with dynamic categories:", categoryLabels);
 }
