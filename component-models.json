@@ -3375,5 +3375,9 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "news-update-page",
+    "fields": []
   }
 ]
