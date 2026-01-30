@@ -1,12 +1,8 @@
 import { getApiHost } from "../../scripts/api.js";
 
 /* ================================
-   Helpers
-   ================================ */
-function getQueryParam(name) {
-  return new URLSearchParams(window.location.search).get(name);
-}
-
+   Date formatter
+================================ */
 function formatDate(dateString) {
   if (!dateString) return "";
 
@@ -21,30 +17,45 @@ function formatDate(dateString) {
 }
 
 /* ================================
-   Decorate
-   ================================ */
+   Read slug from URL
+================================ */
+function getSlugFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("slug");
+}
+
 export default async function decorate(block) {
+  const slug = getSlugFromURL();
+
   block.innerHTML = "";
 
-  const newsId = getQueryParam("id");
-
-  if (!newsId) {
-    block.innerHTML = "<p>Missing news id.</p>";
+  if (!slug) {
+    block.innerHTML = "<p>Invalid news item.</p>";
     return;
   }
 
-  const section = document.createElement("section");
-  section.className = "news-detail";
+  const container = document.createElement("section");
+  container.className = "news-detail spacer";
 
-  const container = document.createElement("div");
-  container.className = "container";
+  container.innerHTML = `
+    <div class="container">
+      <div class="news-detail-wrapper">
+        <p class="loading">Loading article...</p>
+      </div>
+    </div>
+  `;
 
-  section.appendChild(container);
-  block.appendChild(section);
+  block.appendChild(container);
 
+  const contentWrapper = container.querySelector(".news-detail-wrapper");
+
+  /* ================================
+     Fetch news detail
+  ================================ */
   try {
     const apiUrl =
-      `${getApiHost()}/api/v1/web/gmr-api/news-update/${encodeURIComponent(newsId)}`;
+      `${getApiHost()}/api/v1/web/gmr-api/news-update/detail` +
+      `?post=${encodeURIComponent(slug)}`;
 
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`API error ${res.status}`);
@@ -53,7 +64,7 @@ export default async function decorate(block) {
     const item = json?.data?.data;
 
     if (!item) {
-      container.innerHTML = "<p>News not found.</p>";
+      contentWrapper.innerHTML = "<p>News not found.</p>";
       return;
     }
 
@@ -65,31 +76,41 @@ export default async function decorate(block) {
 
     const publishDateFormatted = formatDate(publishDateRaw);
 
-    container.innerHTML = `
-      <span class="badge ${item.category || ""}">
-        ${item.category || ""}
-      </span>
+    /* ================================
+       Render detail page
+    ================================ */
+    contentWrapper.innerHTML = `
+      <article class="news-article">
+        <div class="news-meta mb-3">
+          <span class="badge ${item.category || ""}">
+            ${item.category || ""}
+          </span>
+          <span class="meta-date">
+            ${publishDateFormatted}
+          </span>
+        </div>
 
-      <h1 class="news-title">${item.title || ""}</h1>
+        <h1 class="news-title mb-4">
+          ${item.title || ""}
+        </h1>
 
-      <div class="news-meta">
-        <span>${publishDateFormatted}</span>
-      </div>
+        ${
+          item.bannerImage?._publishUrl
+            ? `
+              <div class="news-banner mb-4">
+                <img src="${item.bannerImage._publishUrl}" alt="${item.title || ""}">
+              </div>
+            `
+            : ""
+        }
 
-      ${
-        item.cardImage?._publishUrl
-          ? `<div class="news-hero">
-               <img src="${item.cardImage._publishUrl}" alt="${item.title || ""}">
-             </div>`
-          : ""
-      }
-
-      <div class="news-content">
-        ${item.description?.html || item.description?.plaintext || ""}
-      </div>
+        <div class="news-content">
+          ${item.description?.html || item.description?.plaintext || ""}
+        </div>
+      </article>
     `;
   } catch (err) {
-    console.error("News Update Page error:", err);
-    container.innerHTML = "<p>Error loading news.</p>";
+    console.error("News detail error:", err);
+    contentWrapper.innerHTML = "<p>Error loading article.</p>";
   }
 }

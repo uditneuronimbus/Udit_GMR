@@ -71,7 +71,7 @@ export default async function decorate(block) {
      ================================ */
   try {
     const apiUrl =
-      `${getApiHost()}/api/v1/web/gmr/news-update` +
+      `${getApiHost()}/api/v1/web/gmr-api/news-update` +
       `?category=${encodeURIComponent(category)}` +
       `&limit=${encodeURIComponent(limit)}`;
 
@@ -80,7 +80,8 @@ export default async function decorate(block) {
 
     const json = await res.json();
     const items = json?.data?.data?.newsList?.items || [];
-
+    console.log("------------------------------------", items);
+    
     if (!items.length) {
       cardsWrapper.innerHTML = "<p>No news found.</p>";
       return;
@@ -97,7 +98,8 @@ export default async function decorate(block) {
         "";
 
       const publishDateFormatted = formatDate(publishDateRaw);
-
+      console.log("_____________________________________", item.slugUrl);
+      
       const card = document.createElement("div");
       card.className = "col-md-6 col-lg-4 mt-4";
 
@@ -126,7 +128,7 @@ export default async function decorate(block) {
             </p>
 
             <div class="card-cta">
-              <a class="btn-link" href="${item.ctaLink || "#"}">
+              <a class="btn-link" href="/en/news-update?post=${encodeURIComponent(item.slugUrl)}">
                 ${item.ctaLabel || "READ MORE"}
               </a>
             </div>
