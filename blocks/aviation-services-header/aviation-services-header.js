@@ -1,67 +1,62 @@
 export default function decorate(block) {
   const rows = [...block.children];
-  if (rows.length < 3) return;
+  if (rows.length < 2) return;
+
+  const headerRow = rows[0];
+
+  const tabRows = rows.filter(
+    (row, index) => index > 0 && row.children.length === 3
+  );
+
+  const dropdownRows = rows.filter(
+    (row, index) => index > 0 && row.children.length === 2
+  );
+
+  const headerCells = [...headerRow.children];
+  const dropdownButtonText =
+    headerCells[1]?.textContent?.trim() || "Wind Energy";
+
+  rows.forEach((row) => (row.style.display = "none"));
 
   /* ================================
-     1️⃣ Read authored content
-     ================================ */
-  const headerTitleRow = rows[0];
-  const dropdownLabelRow = rows[1];
-  const itemRows = rows.slice(2); // aviation-service-item
-
-  /* ================================
-     2️⃣ Hide authored rows (DO NOT REMOVE)
-     ================================ */
-  rows.forEach((row) => {
-    row.style.display = "none";
-  });
-
-  /* ================================
-     3️⃣ Runtime wrapper (OUTSIDE UE structure)
-     ================================ */
+     Runtime wrapper
+  ================================ */
   const runtime = document.createElement("div");
   runtime.className = "aviation-tabs-runtime";
 
   runtime.innerHTML = `
     <section class="aviation-tabs-section">
-      <div class="container">
+      <div class="container aviation-tabs-wrap">
         <ul class="aviation-tabs-list"></ul>
+        ${dropdownRows.length ? `
+          <div class="aviation-dropdown">
+            <button class="aviation-dropdown-btn">
+              ${dropdownButtonText}
+              <span class="chevron"></span>
+            </button>
+            <ul class="aviation-dropdown-menu"></ul>
+          </div>
+        ` : ``}
       </div>
     </section>
   `;
 
   block.after(runtime);
 
-  const ul = runtime.querySelector(".aviation-tabs-list");
+  const tabsUL = runtime.querySelector(".aviation-tabs-list");
+  const dropdownBtn = runtime.querySelector(".aviation-dropdown-btn");
+  const dropdownMenu = runtime.querySelector(".aviation-dropdown-menu");
+
+  const cleanPath = (url) =>
+    url?.replace(/^(https?:\/\/)?[^/]+/, "").replace(/\/$/, "");
+
+  const currentPath = cleanPath(window.location.href);
 
   /* ================================
-     4️⃣ Helper function to get clean path
-     ================================ */
-  const getCleanPath = (url) => {
-    if (!url) return '';
-
-    let path = url
-      .replace(/^(https?:\/\/)?[^\/]+/, '')
-      .replace(/\/$/, '');
-
-    if (path && !path.startsWith('/')) {
-      path = '/' + path;
-    }
-
-    return path;
-  };
-
-  /* ================================
-     5️⃣ Get current page path
-     ================================ */
-  const currentPath = getCleanPath(window.location.href);
-
-  /* ================================
-     6️⃣ Build tabs
-     ================================ */
-  itemRows.forEach((row) => {
+     Tabs
+  ================================ */
+  tabRows.forEach((row) => {
     const cells = [...row.children];
-
     const label = cells[0]?.textContent?.trim();
     const link = cells[1]?.textContent?.trim();
     const isActive = cells[2]?.textContent?.trim() === "true";
@@ -69,33 +64,39 @@ export default function decorate(block) {
     if (!label || !link) return;
 
     const li = document.createElement("li");
-    const linkPath = getCleanPath(link);
-    const isCurrentPage = currentPath === linkPath;
-
-    if (isActive || isCurrentPage) {
+    if (isActive || cleanPath(link) === currentPath) {
       li.classList.add("active");
     }
 
-    const a = document.createElement("a");
-    a.href = link;
-    a.textContent = label;
-
-    li.appendChild(a);
-    ul.appendChild(li);
+    li.innerHTML = `<a href="${link}">${label}</a>`;
+    tabsUL.appendChild(li);
   });
 
   /* ================================
-     7️⃣ Scroll ACTIVE li to center
-     ================================ */
-  requestAnimationFrame(() => {
-    const activeLi = ul.querySelector("li.active");
+     Dropdown (ONLY if exists)
+  ================================ */
+  if (dropdownMenu && dropdownBtn) {
+    dropdownRows.forEach((row) => {
+      const cells = [...row.children];
+      const text = cells[0]?.textContent?.trim();
+      const url = cells[1]?.textContent?.trim();
 
-    if (activeLi) {
-      activeLi.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "center"
-      });
-    }
-  });
+      if (!text || !url) return;
+
+      const li = document.createElement("li");
+      li.innerHTML = `<a href="${url}">${text}</a>`;
+      dropdownMenu.appendChild(li);
+    });
+
+    dropdownBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      dropdownMenu.classList.toggle("open");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!runtime.contains(e.target)) {
+        dropdownMenu.classList.remove("open");
+      }
+    });
+  }
 }
