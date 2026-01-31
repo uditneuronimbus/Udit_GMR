@@ -1,4 +1,10 @@
 /* Tabs wrapper */
+.aviation-services-header-container {
+  position: sticky;
+  top: 80px;
+  background: var(--white); z-index: 5;
+}
+
 .aviation-tabs-section {
   border-bottom: 1px solid rgba(231, 231, 231);
 }
@@ -113,6 +119,11 @@
 .aviation-dropdown-menu li a:hover {
   background: rgba(0, 0, 0, 0.04);
 }
+.aviation-dropdown .aviation-dropdown-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 
 /* Mobile */
 @media (max-width: 767px) {
@@ -123,4 +134,13 @@
   .aviation-tabs-list a {
     font-size: var(--fs-regular);
   }
+
+  .aviation-tabs-wrap {
+    align-items: flex-start;
+    gap: 0;
+    flex-direction: column;
+  }
+  .aviation-dropdown, .aviation-dropdown .aviation-dropdown-btn { width: 100%; }
+  .aviation-dropdown .aviation-dropdown-btn { margin-bottom: 1rem; }
+
 }
