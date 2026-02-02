@@ -4,20 +4,21 @@ const SWIPER_JS = "../../scripts/swiper-bundle.min.js";
 const SWIPER_CSS = "../../styles/swiper-bundle.min.css";
 
 export default async function decorate(block) {
-  /* ---------- Load Swiper assets ---------- */
+  /* ---------- Load Swiper ---------- */
   await loadCSS(SWIPER_CSS);
   await loadScript(SWIPER_JS);
 
-  /* ---------- Read authored content ---------- */
-  const rows = [...block.children];
-  if (rows.length < 3) return;
+  /* ---------- Preserve authored content ---------- */
+  const original = [...block.children];
+  if (original.length < 3) return;
 
-  const headingRow = rows.shift();
-  const descRow = rows.shift();
+  const headingRow = original[0];
+  const descRow = original[1];
+  const slideRows = original.slice(2);
 
   block.classList.add("sec-image-slider");
 
-  /* ---------- Container ---------- */
+  /* ---------- Wrapper ---------- */
   const container = document.createElement("div");
   container.className = "container";
 
@@ -28,44 +29,48 @@ export default async function decorate(block) {
   const col = document.createElement("div");
   col.className = "col-md-7 text-center mx-auto mb-5";
 
-  const headingP = headingRow.querySelector("p");
-  const descP = descRow.querySelector("p");
-
-  if (headingP) {
-    const heading = document.createElement("h2");
-    heading.className = "sec-title";
-    heading.textContent = headingP.textContent.trim();
-    col.append(heading);
+  /* Heading */
+  const headingText = headingRow.textContent.trim();
+  if (headingText) {
+    const h2 = document.createElement("h2");
+    h2.className = "sec-title";
+    h2.textContent = headingText;
+    col.append(h2);
   }
 
-  if (descP) {
+  /* Description */
+  const descContent = descRow.innerHTML.trim();
+  if (descContent) {
     const desc = document.createElement("div");
     desc.className = "sec-desc";
-    desc.append(descP); // move node (UE-safe)
+    desc.innerHTML = descContent;
     col.append(desc);
   }
 
   headerRow.append(col);
+  container.append(headerRow);
 
   /* ---------- Swiper ---------- */
-  const swiperEl = document.createElement("div");
-  swiperEl.className = "swiper image-slider-swiper";
+  const swiper = document.createElement("div");
+  swiper.className = "swiper image-slider-swiper";
 
   const swiperWrapper = document.createElement("div");
   swiperWrapper.className = "swiper-wrapper";
 
-  rows.forEach((row) => {
-    const picture = row.querySelector("picture");
-    if (!picture) return;
-
+  /* ---------- Slides ---------- */
+  slideRows.forEach((row) => {
     const slide = document.createElement("div");
     slide.className = "swiper-slide";
-    slide.append(picture); // move node
-
+    
+    // Copy ALL content from the original row to preserve AEM editability
+    // This keeps the data-cmp attributes intact
+    slide.innerHTML = row.innerHTML;
+    
+    // Add the slide to swiper wrapper
     swiperWrapper.append(slide);
   });
 
-  swiperEl.append(swiperWrapper);
+  swiper.append(swiperWrapper);
 
   /* ---------- Navigation ---------- */
   const prev = document.createElement("div");
@@ -74,33 +79,26 @@ export default async function decorate(block) {
   const next = document.createElement("div");
   next.className = "swiper-button-next";
 
-  swiperEl.append(prev, next);
-
-  container.append(headerRow, swiperEl);
+  swiper.append(prev, next);
+  container.append(swiper);
 
   /* ---------- Replace block ---------- */
   block.innerHTML = "";
   block.append(container);
 
-  /* ---------- Init Swiper (IMPORTANT) ---------- */
-  new window.Swiper(swiperEl, {
+  /* ---------- Init Swiper ---------- */
+  new Swiper(swiper, {
     slidesPerView: 2.5,
     spaceBetween: 20,
-    loop: false,
+    loop: slideRows.length > 1,
     navigation: {
       nextEl: next,
       prevEl: prev,
     },
     breakpoints: {
-      0: {
-        slidesPerView: 1.2,
-      },
-      576: {
-        slidesPerView: 2,
-      },
-      992: {
-        slidesPerView: 2.5,
-      },
+      0: { slidesPerView: 1.2 },
+      576: { slidesPerView: 2 },
+      992: { slidesPerView: 2.5 },
     },
   });
 }
