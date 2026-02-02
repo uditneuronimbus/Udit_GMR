@@ -49,8 +49,8 @@
       "fields": [
         {
           "component": "text",
-          "name": "title",
-          "label": "Title Name",
+          "name": "sectionTitle",
+          "label": "Section Heading",
           "valueType": "string"
         },
         {
