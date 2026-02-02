@@ -20,45 +20,7 @@
   "models": [
     {
       "id": "press-hero",
-      "fields": [
-        {
-          "component": "text",
-          "name": "title",
-          "label": "Title",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "category",
-          "label": "Category Tag",
-          "valueType": "string"
-        },
-        {
-          "component": "reference",
-          "name": "backgroundImage",
-          "label": "Background Image",
-          "valueType": "string",
-          "multi": false
-        },
-        {
-          "component": "text",
-          "name": "publishDate",
-          "label": "Publish Date",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "updatedDate",
-          "label": "Last Updated Date",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "location",
-          "label": "Location",
-          "valueType": "string"
-        }
-      ]
+      "fields": []
     }
   ],
   "filters": [
