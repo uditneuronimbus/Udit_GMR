@@ -57,7 +57,8 @@
       "integrity-decision",
       "press-release-featured",
       "press-release-listing",
-      "news-update-page"
+      "news-update-page",
+      "press-hero"
     ]
   },
   {
@@ -394,5 +395,11 @@
   {
     "id": "news-update-page",
     "components": []
+  },
+  {
+    "id": "press-hero",
+    "components": [
+      "press-hero"
+    ]
   }
 ]

@@ -1,5 +1,17 @@
 import { getApiHost } from "../../scripts/api.js";
 
+
+const PUBLISH_DOMAIN = 'https://publish-p168597-e1803019.adobeaemcloud.com';
+ 
+function fixImageSrc(html) {
+  if (!html) return html;
+ 
+  return html.replace(
+    /<img([^>]+)src="(\/content\/dam[^"]+)"/g,
+    `<img$1src="${PUBLISH_DOMAIN}$2"`
+  );
+}
+
 /* ================================
    Date formatter
 ================================ */
@@ -105,7 +117,7 @@ export default async function decorate(block) {
         }
 
         <div class="news-content">
-          ${item.description?.html || ""}
+          ${fixImageSrc(item.description?.html) || ""}
         </div>
       </article>
     `;
