@@ -155,7 +155,7 @@ export default async function decorate(block) {
   if (children[2] && children[3]) {
     const btn = document.createElement('a');
     btn.href = children[3].textContent.trim() || '#';
-    btn.className = 'btn btn-orange';
+    btn.className = 'btn btn-primary';
     btn.textContent = children[2].textContent.trim();
     header.appendChild(btn);
   }

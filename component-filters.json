@@ -312,6 +312,10 @@
     ]
   },
   {
+    "id": "news-update-page",
+    "components": []
+  },
+  {
     "id": "news-updates",
     "components": []
   },

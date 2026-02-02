@@ -2488,6 +2488,10 @@
     ]
   },
   {
+    "id": "news-update-page",
+    "fields": []
+  },
+  {
     "id": "news-updates",
     "fields": [
       {
@@ -2557,6 +2561,12 @@
         "defaultValue": "Our Airports"
       },
       {
+        "component": "richtext",
+        "name": "descriptionHead",
+        "label": "Description Head",
+        "valueType": "string"
+      },
+      {
         "component": "text",
         "name": "domesticBtnLabel",
         "label": "Domestic Button Text",
@@ -2589,6 +2599,18 @@
           {
             "name": "International",
             "value": "international"
+          },
+          {
+            "name": "Wind Energy",
+            "value": "windEnergy"
+          },
+          {
+            "name": "Solar Energy",
+            "value": "solarEnergy"
+          },
+          {
+            "name": "Hydro Energy",
+            "value": "hydroEnergy"
           }
         ]
       },
@@ -3106,6 +3128,19 @@
         "component": "text",
         "name": "title",
         "label": "Title / Headline",
+        "valueType": "string"
+      },
+      {
+        "component": "textarea",
+        "name": "sort_description",
+        "label": "Sort Description",
+        "valueType": "string",
+        "rows": 4
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
         "valueType": "string"
       },
       {

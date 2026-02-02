@@ -2,7 +2,7 @@ export default function decorate(block) {
   const rows = [...block.children];
   if (!rows.length) return;
 
-  block.classList.add("social-connect", "mb-5");
+  block.classList.add("social-connect", "mb-5", "mt-5");
 
   /* ================================
      1️⃣ Extract authored elements
