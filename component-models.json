@@ -3385,38 +3385,42 @@
     "fields": []
   },
   {
-      "id": "contact-cards",
-      "fields": [
-        {
-          "component": "text",
-          "name": "heading",
-          "label": "Section Heading",
-          "valueType": "string"
-        }
-      ]
-    },
-    {
-      "id": "contact-cards-item",
-      "fields": [
-        {
-          "component": "text",
-          "name": "sectionTitle",
-          "label": "Section Heading",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "title",
-          "label": "Designation",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "email",
-          "label": "Email Address",
-          "valueType": "string",
-          "format": "email"
-        }
-      ]
-    }
+    "id": "contact-cards",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Section Heading",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "contact-cards-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Designation",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "email",
+        "label": "Email Address",
+        "valueType": "string",
+        "format": "email"
+      }
+    ]
+  },
+  {
+    "id": "press-nav",
+    "fields": []
+  }
 ]

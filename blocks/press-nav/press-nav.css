@@ -1,0 +1,88 @@
+.press-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 48px 0;
+}
+
+/* Side wrappers */
+.press-nav-side {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Buttons */
+.nav-btn {
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-decoration: none;
+  border: 1px solid #f2b233;
+  color: #f2b233;
+  background: transparent;
+  white-space: nowrap;
+}
+
+.nav-btn.primary {
+  background: #f2b233;
+  color: #000;
+}
+
+.nav-btn.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Hover card */
+.nav-hover-card {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #f3f3f3;
+  padding: 16px 20px;
+  border-radius: 10px;
+  width: 360px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.prev .nav-hover-card {
+  left: 110%;
+}
+
+.next .nav-hover-card {
+  right: 110%;
+}
+
+/* Show on hover */
+.press-nav-side:hover .nav-hover-card {
+  opacity: 1;
+}
+
+/* Text */
+.nav-hover-card .label {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 6px;
+}
+
+.nav-hover-card .title {
+  font-size: 15px;
+  color: #000;
+  line-height: 1.4;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .press-nav {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .nav-hover-card {
+    display: none;
+  }
+}

@@ -59,7 +59,8 @@
       "press-release-listing",
       "news-update-page",
       "press-hero",
-      "contact-cards"
+      "contact-cards",
+      "press-nav"
     ]
   },
   {
@@ -404,9 +405,13 @@
     ]
   },
   {
-      "id": "contact-cards",
-      "components": [
-        "contact-cards-item"
-      ]
-    }
+    "id": "contact-cards",
+    "components": [
+      "contact-cards-item"
+    ]
+  },
+  {
+    "id": "press-nav",
+    "components": []
+  }
 ]
