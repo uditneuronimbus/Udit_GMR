@@ -41,13 +41,6 @@
           "name": "heading",
           "label": "Section Heading",
           "valueType": "string"
-        },
-        {
-          "component": "container",
-          "name": "cards",
-          "label": "Contact Cards",
-          "model": "contact-cards-item",
-          "filter": "contact-cards"
         }
       ]
     },
