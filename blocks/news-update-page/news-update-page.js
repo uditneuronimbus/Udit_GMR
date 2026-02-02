@@ -1,5 +1,4 @@
-import { getApiHost } from "../../scripts/api.js";
-
+import { getNewsDetail } from "../../scripts/news-api.js";
 
 const PUBLISH_DOMAIN = 'https://publish-p168597-e1803019.adobeaemcloud.com';
  
@@ -65,15 +64,7 @@ export default async function decorate(block) {
      Fetch news detail
   ================================ */
   try {
-    const apiUrl =
-      `${getApiHost()}/api/v1/web/gmr-api/news-details` +
-      `?slugUrl=${encodeURIComponent(slug)}`;
-
-    const res = await fetch(apiUrl);
-    if (!res.ok) throw new Error(`API error ${res.status}`);
-
-    const json = await res.json();
-    const item = json?.data?.data?.newsList?.items[0];
+    const item = await getNewsDetail();
     
     if (!item) {
       contentWrapper.innerHTML = "<p>News not found.</p>";

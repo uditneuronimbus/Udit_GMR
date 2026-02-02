@@ -1,80 +1,104 @@
-async function fetchData(url) {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) return null;
-    const json = await res.json();
-    return json?.data || null;
-  } catch {
-    return null;
-  }
-}
+import { getApiHost } from "../../scripts/api.js";
 
-function getPublishDate() {
-  return document
-    .querySelector('meta[name="publishDate"]')
-    ?.getAttribute('content');
-}
 
 export default async function decorate(block) {
-  block.classList.add('press-nav');
+  console.log("PRESS NAV JS LOADED");
 
-  const publishDate = getPublishDate();
-  if (!publishDate) return;
+  block.classList.add("press-nav");
+  block.innerHTML = "";
 
-  const prevUrl = `https://publish-p168597-e1803019.adobeaemcloud.com/graphql/execute.json/GMR/pre-news;publishDate=${publishDate}`;
-  const nextUrl = `https://publish-p168597-e1803019.adobeaemcloud.com/graphql/execute.json/GMR/next-news;publishDate=${publishDate}`;
-
-  const [prevData, nextData] = await Promise.all([
-    fetchData(prevUrl),
-    fetchData(nextUrl),
-  ]);
-
-  block.innerHTML = '';
-
-  const prevItem = prevData?.preNews?.items?.[0];
-  const nextItem = nextData?.nextNews?.items?.[0];
-
-  // PREV
-  const prev = document.createElement('div');
-  prev.className = 'press-nav-side prev';
-
-  prev.innerHTML = `
-    <a class="nav-btn ${prevItem ? '' : 'disabled'}" ${
-      prevItem ? `href="${prevItem._path}"` : ''
-    }>
-      ← Previous
-    </a>
-    ${
-      prevItem
-        ? `
+  /* ================================
+     Base UI (always visible)
+  ================================ */
+  block.innerHTML = `
+    <div class="press-nav-side prev">
+      <a class="nav-btn disabled">← Previous</a>
       <div class="nav-hover-card">
         <div class="label">Previous Press Release</div>
-        <div class="title">${prevItem.title}</div>
-      </div>`
-        : ''
-    }
-  `;
+        <div class="title">No previous article</div>
+      </div>
+    </div>
 
-  // NEXT
-  const next = document.createElement('div');
-  next.className = 'press-nav-side next';
-
-  next.innerHTML = `
-    ${
-      nextItem
-        ? `
+    <div class="press-nav-side next">
       <div class="nav-hover-card">
         <div class="label">Next Press Release</div>
-        <div class="title">${nextItem.title}</div>
-      </div>`
-        : ''
-    }
-    <a class="nav-btn primary ${nextItem ? '' : 'disabled'}" ${
-      nextItem ? `href="${nextItem._path}"` : ''
-    }>
-      Next →
-    </a>
+        <div class="title">No next article</div>
+      </div>
+      <a class="nav-btn primary disabled">Next →</a>
+    </div>
   `;
 
-  block.append(prev, next);
+  /* ================================
+     Step 1: Get slug
+  ================================ */
+  const slug = getSlugFromURL();
+  if (!slug) {
+    console.warn("press-nav: slug missing");
+    return;
+  }
+
+  /* ================================
+     Step 2: Fetch current article
+  ================================ */
+  const detailUrl =
+    `${getApiHost()}/api/v1/web/gmr-api/news-details` +
+    `?slugUrl=${encodeURIComponent(slug)}`;
+
+  const detailRes = await fetchJSON(detailUrl);
+  const item = detailRes?.data?.data?.newsList?.items?.[0];
+
+  if (!item || !item.publishDate) {
+    console.warn("press-nav: publishDate not found");
+    return;
+  }
+
+  const publishDate =
+    item.publishDate?.iso ||
+    item.publishDate?.value ||
+    item.publishDate;
+
+  /* ================================
+     Step 3: Fetch prev / next
+  ================================ */
+  const prevUrl =
+    `${PUBLISH_DOMAIN}/graphql/execute.json/GMR/pre-news` +
+    `;publishDate=${publishDate}`;
+
+  const nextUrl =
+    `${PUBLISH_DOMAIN}/graphql/execute.json/GMR/next-news` +
+    `;publishDate=${publishDate}`;
+
+  const [prevRes, nextRes] = await Promise.all([
+    fetchJSON(prevUrl),
+    fetchJSON(nextUrl),
+  ]);
+
+  const prevItem = prevRes?.data?.preNews?.items?.[0];
+  const nextItem = nextRes?.data?.nextNews?.items?.[0];
+
+  /* ================================
+     Step 4: Wire PREV
+  ================================ */
+  if (prevItem) {
+    const prevBtn = block.querySelector(".prev .nav-btn");
+    const prevCard = block.querySelector(".prev .nav-hover-card");
+
+    prevBtn.href = prevItem._path;
+    prevBtn.classList.remove("disabled");
+
+    prevCard.querySelector(".title").textContent = prevItem.title;
+  }
+
+  /* ================================
+     Step 5: Wire NEXT
+  ================================ */
+  if (nextItem) {
+    const nextBtn = block.querySelector(".next .nav-btn");
+    const nextCard = block.querySelector(".next .nav-hover-card");
+
+    nextBtn.href = nextItem._path;
+    nextBtn.classList.remove("disabled");
+
+    nextCard.querySelector(".title").textContent = nextItem.title;
+  }
 }
