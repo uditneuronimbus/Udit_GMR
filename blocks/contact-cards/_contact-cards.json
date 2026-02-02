@@ -73,7 +73,7 @@
   "filters": [
     {
       "id": "contact-cards",
-      "components": ["contact-cards-item"]
+      "components": []
     }
   ]
 }
