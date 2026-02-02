@@ -3398,8 +3398,7 @@
           "name": "cards",
           "label": "Contact Cards",
           "model": "contact-cards-item",
-          "filter": "contact-cards",
-          "multi": true
+          "filter": "contact-cards"
         }
       ]
     },
