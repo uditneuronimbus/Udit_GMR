@@ -15,6 +15,21 @@
           }
         }
       }
+    },
+    {
+      "title": "Contact Card",
+      "id": "contact-cards-item",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "contact-cards-item",
+              "model": "contact-cards-item"
+            }
+          }
+        }
+      }
     }
   ],
   "models": [
@@ -22,9 +37,35 @@
       "id": "contact-cards",
       "fields": [
         {
+          "component": "text",
           "name": "heading",
-          "label": "Heading Text",
-          "type": "text"
+          "label": "Section Heading",
+          "valueType": "string",
+          "defaultValue": "For further details, please contact:"
+        }
+      ]
+    },
+    {
+      "id": "contact-cards-item",
+      "itemLabel": "name",
+      "fields": [
+        {
+          "component": "text",
+          "name": "name",
+          "label": "Name",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Designation",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "email",
+          "label": "Email Address",
+          "valueType": "string"
         }
       ]
     }
@@ -32,7 +73,7 @@
   "filters": [
     {
       "id": "contact-cards",
-      "components": ["contact-cards"]
+      "components": ["contact-cards-item"]
     }
   ]
 }

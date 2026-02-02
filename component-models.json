@@ -3388,9 +3388,35 @@
     "id": "contact-cards",
     "fields": [
       {
+        "component": "text",
         "name": "heading",
-        "label": "Heading Text",
-        "type": "text"
+        "label": "Section Heading",
+        "valueType": "string",
+        "defaultValue": "For further details, please contact:"
+      }
+    ]
+  },
+  {
+    "id": "contact-cards-item",
+    "itemLabel": "name",
+    "fields": [
+      {
+        "component": "text",
+        "name": "name",
+        "label": "Name",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Designation",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "email",
+        "label": "Email Address",
+        "valueType": "string"
       }
     ]
   }

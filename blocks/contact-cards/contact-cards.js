@@ -1,11 +1,10 @@
 export default function decorate(block) {
-  const rows = [...block.children];
+  const config = block.querySelector(":scope > div");
+  const items = [...block.querySelectorAll(":scope > .contact-cards-item")];
+
+  const heading = config?.dataset?.heading;
+
   block.innerHTML = "";
-
-  if (!rows.length) return;
-
-  /* Heading */
-  const headingText = rows[0]?.textContent?.trim();
 
   const section = document.createElement("section");
   section.className = "contact-cards";
@@ -13,39 +12,37 @@ export default function decorate(block) {
   const container = document.createElement("div");
   container.className = "container";
 
-  if (headingText) {
-    const heading = document.createElement("p");
-    heading.className = "contact-cards-heading";
-    heading.textContent = headingText;
-    container.append(heading);
+  if (heading) {
+    const h = document.createElement("p");
+    h.className = "contact-cards-heading";
+    h.textContent = heading;
+    container.append(h);
   }
 
-  /* Cards wrapper */
-  const cardsWrap = document.createElement("div");
-  cardsWrap.className = "contact-cards-grid";
+  const grid = document.createElement("div");
+  grid.className = "contact-cards-grid";
 
-  rows.slice(1).forEach((row) => {
-    const cols = [...row.children];
-    if (cols.length < 3) return;
+  items.forEach((item) => {
+    const { name, title, email } = item.dataset;
 
-    const [nameCol, titleCol, emailCol] = cols;
+    if (!name || !email) return;
 
     const card = document.createElement("div");
     card.className = "contact-card";
 
     card.innerHTML = `
-      <h4 class="contact-name">${nameCol.textContent.trim()}</h4>
-      <p class="contact-title">${titleCol.textContent.trim()}</p>
-      <a class="contact-email" href="mailto:${emailCol.textContent.trim()}">
+      <h4 class="contact-name">${name}</h4>
+      <p class="contact-title">${title || ""}</p>
+      <a class="contact-email" href="mailto:${email}">
         <span class="email-icon"></span>
-        ${emailCol.textContent.trim()}
+        ${email}
       </a>
     `;
 
-    cardsWrap.append(card);
+    grid.append(card);
   });
 
-  container.append(cardsWrap);
+  container.append(grid);
   section.append(container);
   block.append(section);
 }

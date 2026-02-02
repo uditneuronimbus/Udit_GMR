@@ -406,7 +406,7 @@
   {
     "id": "contact-cards",
     "components": [
-      "contact-cards"
+      "contact-cards-item"
     ]
   }
 ]
