@@ -1,67 +1,73 @@
-import Swiper from "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs";
+import { loadCSS, loadScript } from "../../scripts/aem.js";
+
+const SWIPER_JS = "../../scripts/swiper-bundle.min.js";
+const SWIPER_CSS = "../../styles/swiper-bundle.min.css";
 
 export default async function decorate(block) {
-  const rows = [...block.children];
+  /* ---------- Load Swiper assets ---------- */
+  await loadCSS(SWIPER_CSS);
+  await loadScript(SWIPER_JS);
 
-  // Extract heading & description
+  /* ---------- Read authored content ---------- */
+  const rows = [...block.children];
+  if (rows.length < 3) return;
+
   const headingRow = rows.shift();
   const descRow = rows.shift();
 
-  block.innerHTML = "";
   block.classList.add("sec-image-slider");
 
+  /* ---------- Container ---------- */
   const container = document.createElement("div");
   container.className = "container";
 
-  /* Header */
+  /* ---------- Header ---------- */
   const headerRow = document.createElement("div");
   headerRow.className = "row";
 
   const col = document.createElement("div");
   col.className = "col-md-7 text-center mx-auto mb-5";
 
-  // Extract original <p> elements
   const headingP = headingRow.querySelector("p");
   const descP = descRow.querySelector("p");
 
-  // Create heading
-  const heading = document.createElement("h2");
-  heading.className = "sec-title";
-  heading.textContent = headingP.textContent;
+  if (headingP) {
+    const heading = document.createElement("h2");
+    heading.className = "sec-title";
+    heading.textContent = headingP.textContent.trim();
+    col.append(heading);
+  }
 
-  // Create description wrapper
-  const desc = document.createElement("div");
-  desc.className = "sec-desc";
+  if (descP) {
+    const desc = document.createElement("div");
+    desc.className = "sec-desc";
+    desc.append(descP); // move node (UE-safe)
+    col.append(desc);
+  }
 
-  const descInner = document.createElement("div");
-  descInner.append(descP);
-
-  desc.append(descInner);
-
-  // Assemble
-  col.append(heading, desc);
   headerRow.append(col);
 
-  /* Swiper Structure */
+  /* ---------- Swiper ---------- */
   const swiperEl = document.createElement("div");
   swiperEl.className = "swiper image-slider-swiper";
 
-  const wrapper = document.createElement("div");
-  wrapper.className = "swiper-wrapper";
+  const swiperWrapper = document.createElement("div");
+  swiperWrapper.className = "swiper-wrapper";
 
   rows.forEach((row) => {
+    const picture = row.querySelector("picture");
+    if (!picture) return;
+
     const slide = document.createElement("div");
     slide.className = "swiper-slide";
+    slide.append(picture); // move node
 
-    const picture = row.querySelector("picture");
-    if (picture) slide.append(picture);
-
-    wrapper.append(slide);
+    swiperWrapper.append(slide);
   });
 
-  swiperEl.append(wrapper);
+  swiperEl.append(swiperWrapper);
 
-  /* Navigation */
+  /* ---------- Navigation ---------- */
   const prev = document.createElement("div");
   prev.className = "swiper-button-prev";
 
@@ -71,10 +77,13 @@ export default async function decorate(block) {
   swiperEl.append(prev, next);
 
   container.append(headerRow, swiperEl);
+
+  /* ---------- Replace block ---------- */
+  block.innerHTML = "";
   block.append(container);
 
-  /* Init Swiper */
-  new Swiper(swiperEl, {
+  /* ---------- Init Swiper (IMPORTANT) ---------- */
+  new window.Swiper(swiperEl, {
     slidesPerView: 2.5,
     spaceBetween: 20,
     loop: false,
