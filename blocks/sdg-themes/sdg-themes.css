@@ -100,8 +100,7 @@
   content: "+";
   width: 24px;
   height: 24px;
-  background: #faa519;
-  color: #003a8f;
+  color: #faa519;
   font-size: 18px;
   font-weight: 700;
   display: flex;
@@ -109,6 +108,7 @@
   justify-content: center;
   border-radius: 4px;
   flex-shrink: 0;
+  border: 2px solid #faa519;
 }
 
 /* =====================================================
@@ -133,7 +133,6 @@
 .sdg-overlay p {
   font-size: 15px;
   line-height: 1.6;
-  margin: 0;
 }
 
 /* =====================================================

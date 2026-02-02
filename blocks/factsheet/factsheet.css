@@ -54,10 +54,12 @@
    Grid
 ================================ */
 .factsheet-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* grid-template-columns: repeat(3, minmax(0, 1fr)); */
   gap: 1.5rem;
   margin-top: 3rem;
+  display: block;
+  column-count: 3;
+  column-gap: 18px;
 }
 
 /* ===============================
@@ -68,18 +70,16 @@
   background: linear-gradient(135deg, #1f5aa6, #00a6c7);
   color: #ffffff;
   border-radius: 12px;
-  padding: 1.75rem;
-  min-height: 200px;
+  padding: 22px;
   overflow: hidden;
+  margin-bottom: 18px;
 }
 
 /* ===============================
    Icon (TOP RIGHT)
 ================================ */
 .factsheet-icon {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  text-align: right;
 }
 
 .factsheet-icon img {
@@ -98,12 +98,11 @@
 }
 
 .factsheet-card p {
-  font-size: var(--fs-xlarge);
+  font-size: 21px;
   opacity: 0.95;
-  font-weight: 300;
+  font-weight: 400;
   opacity: 0.95;
   line-height: 1.4;
-  padding-right: 120px; /* space for icon */
 }
 
 .factsheet-card strong {
