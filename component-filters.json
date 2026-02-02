@@ -252,6 +252,12 @@
     ]
   },
   {
+    "id": "image-scroll-card",
+    "components": [
+      "image-scroll-card-item"
+    ]
+  },
+  {
     "id": "image-slider",
     "components": [
       "image-slider-item"
