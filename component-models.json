@@ -3383,5 +3383,15 @@
   {
     "id": "press-hero",
     "fields": []
+  },
+  {
+    "id": "contact-cards",
+    "fields": [
+      {
+        "name": "heading",
+        "label": "Heading Text",
+        "type": "text"
+      }
+    ]
   }
 ]
