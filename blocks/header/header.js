@@ -3,7 +3,7 @@ import { loadFragment } from "../fragment/fragment.js";
 
 const isDesktop = window.matchMedia("(min-width: 900px)");
 
-// --- Helper Functions --- (unchanged)
+// --- Helper Functions ---
 function closeOnEscape(e) {
   if (e.code !== "Escape") return;
   const nav = document.getElementById("nav");
@@ -20,6 +20,7 @@ function closeOnEscape(e) {
     if (btn) btn.focus();
   }
 }
+
 function closeOnFocusLost(e) {
   const nav = e.currentTarget;
   if (!nav) return;
@@ -34,6 +35,7 @@ function closeOnFocusLost(e) {
     }
   }
 }
+
 function openOnKeydown(e) {
   const focused = document.activeElement;
   if (!focused) return;
@@ -48,26 +50,38 @@ function openOnKeydown(e) {
     focused.setAttribute("aria-expanded", dropExpanded ? "false" : "true");
   }
 }
+
 function focusNavSection() {
   document.activeElement?.addEventListener("keydown", openOnKeydown);
 }
+
 function toggleAllNavSections(sections, expanded = false) {
   if (!sections) return;
   const value = expanded ? "true" : "false";
-  sections.querySelectorAll(":scope .default-content-wrapper > ul > li")
+  sections
+    .querySelectorAll(":scope .default-content-wrapper > ul > li")
     .forEach((section) => section.setAttribute("aria-expanded", value));
 }
+
 function toggleMenu(nav, navSections, forceExpanded = null) {
   if (!nav || !navSections) return;
   const currentlyExpanded = nav.getAttribute("aria-expanded") === "true";
-  const willBeExpanded = forceExpanded !== null ? !!forceExpanded : !currentlyExpanded;
+  const willBeExpanded =
+    forceExpanded !== null ? !!forceExpanded : !currentlyExpanded;
   const button = nav.querySelector(".nav-hamburger button");
-  document.body.style.overflowY = willBeExpanded && !isDesktop.matches ? "hidden" : "";
+
+  document.body.style.overflowY =
+    willBeExpanded && !isDesktop.matches ? "hidden" : "";
   nav.setAttribute("aria-expanded", willBeExpanded ? "true" : "false");
   toggleAllNavSections(navSections, willBeExpanded && !isDesktop.matches);
+
   if (button) {
-    button.setAttribute("aria-label", willBeExpanded ? "Close navigation" : "Open navigation");
+    button.setAttribute(
+      "aria-label",
+      willBeExpanded ? "Close navigation" : "Open navigation",
+    );
   }
+
   const navDrops = navSections.querySelectorAll(".nav-drop");
   if (isDesktop.matches) {
     navDrops.forEach((drop) => {
@@ -82,6 +96,7 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
       drop.removeEventListener("focus", focusNavSection);
     });
   }
+
   if (willBeExpanded || isDesktop.matches) {
     window.addEventListener("keydown", closeOnEscape);
     nav.addEventListener("focusout", closeOnFocusLost);
@@ -91,12 +106,45 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   }
 }
 
+// Add mobile backdrop functionality
+function addMobileBackdrop(nav) {
+  const backdrop = document.createElement('div');
+  backdrop.className = 'mobile-menu-backdrop';
+  nav.appendChild(backdrop);
+
+  backdrop.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const navSections = nav.querySelector('.nav-sections');
+    if (navSections) {
+      toggleMenu(nav, navSections, false);
+    }
+  });
+}
+
+// Collapse all mobile menus
+function collapseAllMobileMenus(nav) {
+  const expandedItems = nav.querySelectorAll('.mobile-root-item.expanded, .mobile-menu-container li.expanded');
+  expandedItems.forEach(item => {
+    item.classList.remove('expanded');
+  });
+
+  const mobileContainers = nav.querySelectorAll('.mobile-menu-container.show');
+  mobileContainers.forEach(container => {
+    container.classList.remove('show');
+  });
+}
+
 // --- Main Decorate Function ---
+
 export default async function decorate(block) {
   try {
     const imageMap = new Map();
     const navMeta = getMetadata("nav");
-    const navPathMain = navMeta ? new URL(navMeta, window.location).pathname : "/en/nav";
+    const navPathMain = navMeta
+      ? new URL(navMeta, window.location).pathname
+      : "/en/nav";
     const isAero = window.location.pathname.startsWith("/aero-gmr/");
     const navPath = isAero ? "/aero-gmr/nav" : navPathMain;
 
@@ -122,6 +170,32 @@ export default async function decorate(block) {
     const navBrand = nav.querySelector(".nav-brand");
     const navSections = nav.querySelector(".nav-sections");
 
+    // MOBILE ROOT LIST (top-level list like screenshot 3)
+    const mobileRootList = document.createElement("ul");
+    mobileRootList.className = "mobile-root-list";
+
+    // Add language selector to mobile menu (like "ENG ▼" from screenshot)
+    const languageSelector = document.createElement('div');
+    languageSelector.className = 'mobile-language-selector';
+    languageSelector.innerHTML = `
+      <select aria-label="Select language">
+        <option value="en">ENG</option>
+        <option value="es">ESP</option>
+        <option value="fr">FRA</option>
+        <option value="de">DEU</option>
+      </select>
+    `;
+
+    if (navBrand) {
+      // Add language selector first
+      navBrand.append(languageSelector);
+      // Then add the mobile root list
+      navBrand.append(mobileRootList);
+    }
+
+    // Add mobile backdrop
+    addMobileBackdrop(nav);
+
     if (navBrand) {
       const brandLink = navBrand.querySelector(".button");
       if (brandLink) {
@@ -129,31 +203,40 @@ export default async function decorate(block) {
         const btnContainer = brandLink.closest(".button-container");
         if (btnContainer) btnContainer.className = "";
       }
-
       const logoPictures = navBrand.querySelectorAll("picture");
       logoPictures.forEach((picture) => {
         const logoLink = document.createElement("a");
         logoLink.href = "/en/";
         logoLink.setAttribute("aria-label", "GMR Home");
         logoLink.className = "navbar-logo";
-        picture.parentNode.insertBefore(logoLink, picture);
-        logoLink.appendChild(picture);
-
+        if (picture.parentNode) {
+          picture.parentNode.insertBefore(logoLink, picture);
+          logoLink.appendChild(picture);
+        }
         let current = logoLink.parentElement;
         while (current && current !== navBrand) {
-          if ((current.tagName === "P" || current.tagName === "DIV") &&
-              current.children.length <= 1 && !current.textContent.trim()) {
+          if (
+            (current.tagName === "P" || current.tagName === "DIV") &&
+            current.children.length <= 1 &&
+            !current.textContent.trim()
+          ) {
             const next = current.parentNode;
             next.insertBefore(logoLink, current);
             current.remove();
             current = next;
-          } else break;
+          } else {
+            break;
+          }
         }
       });
-
       navBrand.querySelectorAll("p").forEach((p) => {
         const text = p.textContent.trim();
-        if (text.startsWith("http") || text.startsWith("/") || text === "#" || text.includes("gmrcorp")) {
+        if (
+          text.startsWith("http") ||
+          text.startsWith("/") ||
+          text === "#" ||
+          text.includes("gmrcorp")
+        ) {
           p.remove();
         }
       });
@@ -162,10 +245,16 @@ export default async function decorate(block) {
       if (menuImgWrapper) {
         [...menuImgWrapper.children].forEach((div) => {
           if (div.children.length >= 2) {
-            const labelEl = div.children[1]?.querySelector("p");
-            const imgEl = div.children[0]?.querySelector("img");
+            const first = div.children[0];
+            const second = div.children[1];
+            const labelEl = second?.querySelector("p");
+            const imgEl = first?.querySelector("img");
             if (!labelEl || !imgEl) return;
-            const key = labelEl.textContent.trim().toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-");
+            const key = labelEl.textContent
+              .trim()
+              .toLowerCase()
+              .replace(/\u00A0/g, " ")
+              .replace(/\s+/g, "-");
             imageMap.set(key, imgEl.src);
           }
         });
@@ -183,14 +272,18 @@ export default async function decorate(block) {
           let menuTitleText = mainLinkEl ? mainLinkEl.textContent.trim() : "";
           const customTitleEl = li.querySelector("h4");
           if (customTitleEl) menuTitleText = customTitleEl.textContent.trim();
-          if (!menuTitleText && li.firstChild) menuTitleText = li.firstChild.textContent.trim();
+          if (!menuTitleText && li.firstChild)
+            menuTitleText = li.firstChild.textContent.trim();
 
-          const mainLabelKey = menuTitleText.toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-");
+          const mainLabelKey = menuTitleText
+            .toLowerCase()
+            .replace(/\u00A0/g, " ")
+            .replace(/\s+/g, "-");
           const mainImgSrc = imageMap.get(mainLabelKey);
 
           li.classList.add("has-mega");
 
-          // Desktop mega wrapper
+          // 1. DESKTOP MEGA WRAPPER
           const mega = document.createElement("div");
           mega.className = "mega-wrapper";
 
@@ -205,11 +298,11 @@ export default async function decorate(block) {
 
           const colMid = document.createElement("div");
           colMid.className = "mega-col mega-mid";
-          colMid.style.display = 'none';
+          colMid.style.display = "none";
 
           const colRightList = document.createElement("div");
           colRightList.className = "mega-col mega-list-container";
-          colRightList.style.display = 'none';
+          colRightList.style.display = "none";
 
           const colDetails = document.createElement("div");
           colDetails.className = "mega-details-panel";
@@ -217,13 +310,19 @@ export default async function decorate(block) {
           const bgImg = document.createElement("img");
           bgImg.className = "mega-bg-image";
           bgImg.src = "";
+          bgImg.alt = "";
           colDetails.append(bgImg);
 
           const nestedListContainer = document.createElement("div");
           nestedListContainer.className = "nested-list-container";
           colDetails.append(nestedListContainer);
 
-          const updateDetailsPanel = (primaryKey, parentKey1 = null, parentKey2 = null, subListNode = null) => {
+          const updateDetailsPanel = (
+            primaryKey,
+            parentKey1,
+            parentKey2,
+            subListNode = null,
+          ) => {
             let imgSrc = imageMap.get(primaryKey);
             if (!imgSrc && parentKey1) imgSrc = imageMap.get(parentKey1);
             if (!imgSrc && parentKey2) imgSrc = imageMap.get(parentKey2);
@@ -231,36 +330,40 @@ export default async function decorate(block) {
 
             if (imgSrc) {
               bgImg.src = imgSrc;
-              bgImg.style.display = 'block';
+              bgImg.style.display = "block";
             } else {
-              bgImg.style.display = 'none';
+              bgImg.style.display = "none";
             }
 
             nestedListContainer.innerHTML = "";
-            if (subListNode) nestedListContainer.append(subListNode);
+            if (subListNode) {
+              nestedListContainer.append(subListNode);
+            }
           };
-
           updateDetailsPanel(mainLabelKey);
 
           mega.append(colLeft, colMid, colRightList, colDetails);
 
-          // Mobile accordion
+          // 2. MOBILE MENU LOGIC
           innerList.className = "mobile-menu-container";
 
           const addMobileToggles = (parentList) => {
-            [...parentList.children].forEach(childLi => {
-              const subUl = childLi.querySelector("ul");
+            [...parentList.children].forEach((childLi) => {
+              const subUl = childLi.querySelector(":scope > ul");
               if (subUl) {
                 childLi.classList.add("has-children");
-
-                if (!childLi.querySelector('.mobile-toggle-btn')) {
+                if (!childLi.querySelector(".mobile-toggle-btn")) {
                   const arrow = document.createElement("span");
                   arrow.className = "mobile-toggle-btn";
                   arrow.innerHTML = "›";
+                  arrow.setAttribute("aria-label", "Toggle submenu");
 
-                  const link = childLi.querySelector("a");
-                  if (link) link.after(arrow);
-                  else childLi.prepend(arrow);
+                  const link = childLi.querySelector(":scope > a");
+                  if (link) {
+                    link.after(arrow);
+                  } else {
+                    childLi.prepend(arrow);
+                  }
 
                   arrow.addEventListener("click", (e) => {
                     if (window.innerWidth < 900) {
@@ -270,51 +373,80 @@ export default async function decorate(block) {
                     }
                   });
                 }
-
                 addMobileToggles(subUl);
               }
             });
           };
           addMobileToggles(innerList);
 
-          // Top-level toggle arrow
-          const mainToggleBtn = document.createElement("span");
-          mainToggleBtn.className = "mobile-toggle-btn";
-          mainToggleBtn.innerHTML = "›";
+          // 3. BUILD MOBILE ROOT ITEM (top level – About us, Businesses…)
+          const mobileRootLi = document.createElement("li");
+          mobileRootLi.className = "mobile-root-item";
 
-          if (mainLinkEl) mainLinkEl.after(mainToggleBtn);
-          else li.prepend(mainToggleBtn);
+          const mobileRootLink = document.createElement("a");
+          mobileRootLink.textContent = menuTitleText;
+          mobileRootLink.href = mainLinkEl ? mainLinkEl.href : "#";
+          mobileRootLink.setAttribute("role", "menuitem");
+          mobileRootLi.append(mobileRootLink);
 
-          mainToggleBtn.addEventListener("click", (e) => {
-            if (window.innerWidth < 900) {
-              e.preventDefault();
-              e.stopPropagation();
-              li.classList.toggle("expanded");
-            }
-          });
+          // Only add toggle arrow if there are submenus
+          if (innerList.children.length > 0) {
+            const mobileRootArrow = document.createElement("span");
+            mobileRootArrow.className = "mobile-root-toggle";
+            mobileRootArrow.innerHTML = "›";
+            mobileRootArrow.setAttribute("aria-label", "Toggle menu");
+            mobileRootLi.append(mobileRootArrow);
 
-          // Back button for sub-menus
-          const backBtn = document.createElement("div");
-          backBtn.className = "mobile-back";
-          backBtn.innerHTML = menuTitleText || "Back";
-          backBtn.addEventListener("click", () => {
-            li.classList.remove("expanded");
-          });
-          innerList.prepend(backBtn);
+            mobileRootArrow.addEventListener("click", (e) => {
+              if (window.innerWidth < 900) {
+                e.preventDefault();
+                e.stopPropagation();
+                mobileRootLi.classList.toggle("expanded");
+              }
+            });
 
-          // Attach desktop & mobile
+            // Link click handler for items with children
+            mobileRootLink.addEventListener("click", (e) => {
+              if (window.innerWidth < 900) {
+                e.preventDefault();
+                e.stopPropagation();
+                mobileRootLi.classList.toggle("expanded");
+              }
+            });
+          } else {
+            // Link click handler for items without children
+            mobileRootLink.addEventListener("click", (e) => {
+              if (window.innerWidth < 900) {
+                // Close menu when clicking on a leaf item
+                const navSections = nav.querySelector('.nav-sections');
+                if (navSections) {
+                  toggleMenu(nav, navSections, false);
+                  collapseAllMobileMenus(nav);
+                }
+              }
+            });
+          }
+
+          // attach the inner mobile container under this item
+          mobileRootLi.append(innerList);
+          mobileRootList.append(mobileRootLi);
+
+          // 4. ATTACH DESKTOP STRUCTURE TO ORIGINAL LI
           li.innerHTML = "";
           if (mainLinkEl) li.append(mainLinkEl);
-          li.append(mainToggleBtn);
-          li.append(mega);        // Desktop
-          li.append(innerList);   // Mobile
+          li.append(mega); // desktop only
 
-          // Desktop hover events (unchanged)
+          // 5. DESKTOP EVENTS
           [...innerList.children].forEach((level1Li) => {
             const l1LinkEl = level1Li.querySelector("a");
-            const l1Text = l1LinkEl ? l1LinkEl.textContent.trim() : level1Li.firstChild.textContent.trim();
+            const l1Text = l1LinkEl
+              ? l1LinkEl.textContent.trim()
+              : level1Li.firstChild.textContent.trim();
             const l1Href = l1LinkEl ? l1LinkEl.href : "#";
-            const l1Key = l1Text.toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-");
+            const l1Key = l1Text
+              .toLowerCase()
+              .replace(/\u00A0/g, " ")
+              .replace(/\s+/g, "-");
 
             const itemContainer = document.createElement("div");
             itemContainer.className = "cat-item";
@@ -325,60 +457,6 @@ export default async function decorate(block) {
             horizontalContainer.append(itemContainer);
 
             itemContainer.addEventListener("mouseenter", () => {
-              horizontalContainer.querySelectorAll(".cat-item").forEach(el => el.classList.remove("active"));
-              itemContainer.classList.add("active");
+              horizontalContainer
+                .querySelectorAll(".cat-item")
 
-              colMid.innerHTML = "";
-              colMid.style.display = 'none';
-              colRightList.innerHTML = "";
-              colRightList.style.display = 'none';
-
-              updateDetailsPanel(l1Key);
-
-              const level2Ul = level1Li.querySelector("ul");
-              if (level2Ul) {
-                colMid.style.display = 'flex';
-                const l2Ul = document.createElement("ul");
-                l2Ul.className = "vertical-nav-list";
-                colMid.append(l2Ul);
-
-                [...level2Ul.children].forEach((level2Li) => {
-                  // ... your original level 2/3/4 hover logic (keep it unchanged)
-                });
-              }
-            });
-          });
-        });
-      }
-    }
-
-    const hamburger = document.createElement("div");
-    hamburger.classList.add("nav-hamburger");
-    hamburger.innerHTML = `<button type="button"><span class="nav-hamburger-icon"></span></button>`;
-    hamburger.addEventListener("click", () => toggleMenu(nav, navSections));
-    nav.prepend(hamburger);
-
-    toggleMenu(nav, navSections, isDesktop.matches);
-    isDesktop.addEventListener("change", () => toggleMenu(nav, navSections, isDesktop.matches));
-
-    const navWrapper = document.createElement("header");
-    navWrapper.className = "primary-header header-wrapper";
-    const container = document.createElement("div");
-    container.className = "container position-relative";
-
-    while (nav.firstChild) container.append(nav.firstChild);
-    nav.append(container);
-    navWrapper.append(nav);
-
-    function handleHeaderAffix() {
-      if (window.scrollY > 10) navWrapper.classList.add("affix");
-      else navWrapper.classList.remove("affix");
-    }
-    handleHeaderAffix();
-    window.addEventListener("scroll", handleHeaderAffix, { passive: true });
-
-    block.append(navWrapper);
-  } catch (e) {
-    console.error("Navigation Decorate Failed:", e);
-  }
-}
