@@ -1,109 +1,97 @@
-import { loadCSS, loadScript } from "../../scripts/aem.js";
-
-const SWIPER_JS = "../../scripts/swiper-bundle.min.js";
-const SWIPER_CSS = "../../styles/swiper-bundle.min.css";
+import Swiper from "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs";
 
 export default async function decorate(block) {
-  /* ---------- Load Swiper ---------- */
-  await loadCSS(SWIPER_CSS);
-  await loadScript(SWIPER_JS);
+  const rows = [...block.children];
 
-  /* ---------- Preserve authored content ---------- */
-  const original = [...block.children];
-  if (original.length < 3) return;
+  // Extract heading & description
+  const headingRow = rows.shift();
+  const descRow = rows.shift();
 
-  const headingRow = original[0];
-  const descRow = original[1];
-  const slideRows = original.slice(2);
-
+  block.innerHTML = "";
   block.classList.add("sec-image-slider");
 
-  /* ---------- Wrapper ---------- */
   const container = document.createElement("div");
   container.className = "container";
 
-  /* ---------- Header ---------- */
+  /* Header */
   const headerRow = document.createElement("div");
   headerRow.className = "row";
 
   const col = document.createElement("div");
   col.className = "col-md-7 text-center mx-auto mb-5";
 
-  /* Heading */
-  const headingText = headingRow.textContent.trim();
-  if (headingText) {
-    const h2 = document.createElement("h2");
-    h2.className = "sec-title";
-    h2.textContent = headingText;
-    col.append(h2);
-  }
+  // Extract original <p> elements
+  const headingP = headingRow.querySelector("p");
+  const descP = descRow.querySelector("p");
 
-  /* Description */
-  const descContent = descRow.innerHTML.trim();
-  if (descContent) {
-    const desc = document.createElement("div");
-    desc.className = "sec-desc";
-    desc.innerHTML = descContent;
-    col.append(desc);
-  }
+  // Create heading
+  const heading = document.createElement("h2");
+  heading.className = "sec-title";
+  heading.textContent = headingP.textContent;
 
+  // Create description wrapper
+  const desc = document.createElement("div");
+  desc.className = "sec-desc";
+
+  const descInner = document.createElement("div");
+  descInner.append(descP);
+
+  desc.append(descInner);
+
+  // Assemble
+  col.append(heading, desc);
   headerRow.append(col);
-  container.append(headerRow);
 
-  /* ---------- Swiper ---------- */
-  const swiper = document.createElement("div");
-  swiper.className = "swiper image-slider-swiper";
+  /* Swiper Structure */
+  const swiperEl = document.createElement("div");
+  swiperEl.className = "swiper image-slider-swiper";
 
-  const swiperWrapper = document.createElement("div");
-  swiperWrapper.className = "swiper-wrapper";
+  const wrapper = document.createElement("div");
+  wrapper.className = "swiper-wrapper";
 
-  /* ---------- Slides ---------- */
-  slideRows.forEach((row) => {
-    const picture = row.querySelector("picture");
-    if (!picture) return;
-
+  rows.forEach((row) => {
     const slide = document.createElement("div");
     slide.className = "swiper-slide";
 
-    /* Move node (UE-safe like reference code) */
-    slide.append(picture);
+    const picture = row.querySelector("picture");
+    if (picture) slide.append(picture);
 
-    /* Keep row editable */
-    row.innerHTML = "";
-    row.append(slide);
-
-    swiperWrapper.append(row);
+    wrapper.append(slide);
   });
 
-  swiper.append(swiperWrapper);
+  swiperEl.append(wrapper);
 
-  /* ---------- Navigation ---------- */
+  /* Navigation */
   const prev = document.createElement("div");
   prev.className = "swiper-button-prev";
 
   const next = document.createElement("div");
   next.className = "swiper-button-next";
 
-  swiper.append(prev, next);
-  container.append(swiper);
+  swiperEl.append(prev, next);
 
-  /* ---------- Replace block ---------- */
-  block.innerHTML = "";
+  container.append(headerRow, swiperEl);
   block.append(container);
 
-  /* ---------- Init Swiper ---------- */
-  new Swiper(swiper, {
+  /* Init Swiper */
+  new Swiper(swiperEl, {
     slidesPerView: 2.5,
     spaceBetween: 20,
-    loop: slideRows.length > 1,
+    loop: false,
     navigation: {
       nextEl: next,
       prevEl: prev,
     },
     breakpoints: {
-      0: { slidesPerView: 1.2 },
-      576: { slidesPerView: 2 },
-      992: { slidesPerView: 2.5 },
+      0: {
+        slidesPerView: 1.2,
+      },
+      576: {
+        slidesPerView: 2,
+      },
+      992: {
+        slidesPerView: 2.5,
+      },
     },
   });
 }
