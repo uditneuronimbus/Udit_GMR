@@ -555,6 +555,13 @@
         "label": "Section Title",
         "valueType": "string",
         "defaultValue": "Awards & Global Recognition"
+      },
+      {
+        "component": "richtext",
+        "name": "sectionDesc",
+        "label": "Section Description",
+        "valueType": "string",
+        "defaultValue": "Awards & Global Recognition"
       }
     ]
   },
@@ -579,6 +586,19 @@
         "name": "description",
         "label": "Award Description",
         "valueType": "string"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "ctaLabel",
+        "label": "CTA Label",
+        "comment": "e.g., READ MORE"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "ctaLink",
+        "label": "CTA Link"
       }
     ]
   },
@@ -2522,6 +2542,10 @@
         "label": "Title Name"
       }
     ]
+  },
+  {
+    "id": "news-update-page",
+    "fields": []
   },
   {
     "id": "news-updates",

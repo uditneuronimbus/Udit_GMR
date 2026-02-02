@@ -1,67 +1,92 @@
 export default function decorate(block) {
   const rows = [...block.children];
-  if (rows.length < 3) return;
+  if (rows.length < 2) return;
 
   /* ================================
-     1️⃣ Read authored content
-     ================================ */
-  const headerTitleRow = rows[0];
-  const dropdownLabelRow = rows[1];
-  const itemRows = rows.slice(2); // aviation-service-item
+     1️⃣ Identify rows (EDS safe)
+  ================================ */
+  const headerRow = rows[0];
+
+  const tabRows = rows.filter(
+    (row, index) => index > 0 && row.children.length === 3
+  );
+
+  const dropdownRows = rows.filter(
+    (row, index) => index > 0 && row.children.length === 2
+  );
 
   /* ================================
-     2️⃣ Hide authored rows (DO NOT REMOVE)
-     ================================ */
-  rows.forEach((row) => {
-    row.style.display = "none";
+     2️⃣ Helpers
+  ================================ */
+  const cleanPath = (url) =>
+    url?.replace(/^(https?:\/\/)?[^/]+/, "").replace(/\/$/, "");
+
+  const currentPath = cleanPath(window.location.href);
+
+  /* ================================
+     3️⃣ Resolve dropdown button text
+     (match URL → fallback first item)
+  ================================ */
+  let dropdownButtonText = "";
+
+  dropdownRows.forEach((row) => {
+    const cells = [...row.children];
+    const text = cells[0]?.textContent?.trim();
+    const url = cells[1]?.textContent?.trim();
+
+    if (text && url && cleanPath(url) === currentPath) {
+      dropdownButtonText = text;
+    }
   });
 
+  if (!dropdownButtonText && dropdownRows.length) {
+    dropdownButtonText =
+      dropdownRows[0].children[0]?.textContent?.trim();
+  }
+
   /* ================================
-     3️⃣ Runtime wrapper (OUTSIDE UE structure)
-     ================================ */
+     4️⃣ Hide authored rows
+  ================================ */
+  rows.forEach((row) => (row.style.display = "none"));
+
+  /* ================================
+     5️⃣ Runtime HTML
+  ================================ */
   const runtime = document.createElement("div");
   runtime.className = "aviation-tabs-runtime";
 
   runtime.innerHTML = `
     <section class="aviation-tabs-section">
-      <div class="container">
+      <div class="container aviation-tabs-wrap">
         <ul class="aviation-tabs-list"></ul>
+        ${
+          dropdownRows.length
+            ? `
+          <div class="aviation-dropdown">
+            <button class="aviation-dropdown-btn">
+              ${dropdownButtonText}
+              <span class="chevron"></span>
+            </button>
+            <ul class="aviation-dropdown-menu"></ul>
+          </div>
+        `
+            : ""
+        }
       </div>
     </section>
   `;
 
   block.after(runtime);
 
-  const ul = runtime.querySelector(".aviation-tabs-list");
+  const tabsUL = runtime.querySelector(".aviation-tabs-list");
+  const dropdownBtn = runtime.querySelector(".aviation-dropdown-btn");
+  const dropdownMenu = runtime.querySelector(".aviation-dropdown-menu");
 
   /* ================================
-     4️⃣ Helper function to get clean path
-     ================================ */
-  const getCleanPath = (url) => {
-    if (!url) return '';
-
-    let path = url
-      .replace(/^(https?:\/\/)?[^\/]+/, '')
-      .replace(/\/$/, '');
-
-    if (path && !path.startsWith('/')) {
-      path = '/' + path;
-    }
-
-    return path;
-  };
-
-  /* ================================
-     5️⃣ Get current page path
-     ================================ */
-  const currentPath = getCleanPath(window.location.href);
-
-  /* ================================
-     6️⃣ Build tabs
-     ================================ */
-  itemRows.forEach((row) => {
+     6️⃣ Build tabs (LEFT)
+  ================================ */
+  tabRows.forEach((row) => {
     const cells = [...row.children];
-
     const label = cells[0]?.textContent?.trim();
     const link = cells[1]?.textContent?.trim();
     const isActive = cells[2]?.textContent?.trim() === "true";
@@ -69,33 +94,41 @@ export default function decorate(block) {
     if (!label || !link) return;
 
     const li = document.createElement("li");
-    const linkPath = getCleanPath(link);
-    const isCurrentPage = currentPath === linkPath;
-
-    if (isActive || isCurrentPage) {
+    if (isActive || cleanPath(link) === currentPath) {
       li.classList.add("active");
     }
 
-    const a = document.createElement("a");
-    a.href = link;
-    a.textContent = label;
-
-    li.appendChild(a);
-    ul.appendChild(li);
+    li.innerHTML = `<a href="${link}">${label}</a>`;
+    tabsUL.appendChild(li);
   });
 
   /* ================================
-     7️⃣ Scroll ACTIVE li to center
-     ================================ */
-  requestAnimationFrame(() => {
-    const activeLi = ul.querySelector("li.active");
+     7️⃣ Build dropdown (RIGHT)
+  ================================ */
+  if (dropdownMenu && dropdownBtn) {
+    dropdownRows.forEach((row) => {
+      const cells = [...row.children];
+      const text = cells[0]?.textContent?.trim();
+      const url = cells[1]?.textContent?.trim();
 
-    if (activeLi) {
-      activeLi.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "center"
-      });
-    }
-  });
+      if (!text || !url) return;
+
+      const li = document.createElement("li");
+      li.innerHTML = `<a href="${url}">${text}</a>`;
+      dropdownMenu.appendChild(li);
+    });
+
+    /* Toggle */
+    dropdownBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      dropdownMenu.classList.toggle("open");
+    });
+
+    /* Outside click */
+    document.addEventListener("click", (e) => {
+      if (!runtime.contains(e.target)) {
+        dropdownMenu.classList.remove("open");
+      }
+    });
+  }
 }

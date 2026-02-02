@@ -1,0 +1,47 @@
+.news-detail {
+  padding: 4rem 0;
+}
+
+.news-detail .news-title {
+  font-size: var(--fs-xlarge);
+  font-weight: var(--fw-semi-bold);
+  margin-bottom: 1rem;
+}
+
+.news-detail .news-meta {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  font-size: var(--fs-small);
+  opacity: 0.7;
+}
+
+.news-detail .news-hero {
+  margin-bottom: 2rem;
+}
+
+.news-detail .news-hero img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.news-detail .news-content {
+  font-size: var(--fs-regular);
+  line-height: 1.7;
+}
+
+.news-detail .badge {
+  text-transform: capitalize;
+  padding: 0.4rem 0.8rem;
+}
+
+.badge.press-release {
+  background-color: var(--turquoise);
+  color: var(--white);
+}
+
+.badge.blog {
+  background-color: var(--royal-blue);
+  color: var(--white);
+}
