@@ -10,7 +10,9 @@ function closeOnEscape(e) {
   if (!nav) return;
   const navSections = nav.querySelector(".nav-sections");
   if (!navSections) return;
-  const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
+  const navSectionExpanded = navSections.querySelector(
+    '[aria-expanded="true"]',
+  );
   if (navSectionExpanded && isDesktop.matches) {
     toggleAllNavSections(navSections);
     navSectionExpanded.focus();
@@ -27,7 +29,9 @@ function closeOnFocusLost(e) {
   if (!nav.contains(e.relatedTarget)) {
     const navSections = nav.querySelector(".nav-sections");
     if (!navSections) return;
-    const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
+    const navSectionExpanded = navSections.querySelector(
+      '[aria-expanded="true"]',
+    );
     if (navSectionExpanded && isDesktop.matches) {
       toggleAllNavSections(navSections, false);
     } else if (!isDesktop.matches) {
@@ -106,36 +110,6 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   }
 }
 
-// Add mobile backdrop functionality
-function addMobileBackdrop(nav) {
-  const backdrop = document.createElement('div');
-  backdrop.className = 'mobile-menu-backdrop';
-  nav.appendChild(backdrop);
-
-  backdrop.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const navSections = nav.querySelector('.nav-sections');
-    if (navSections) {
-      toggleMenu(nav, navSections, false);
-    }
-  });
-}
-
-// Collapse all mobile menus
-function collapseAllMobileMenus(nav) {
-  const expandedItems = nav.querySelectorAll('.mobile-root-item.expanded, .mobile-menu-container li.expanded');
-  expandedItems.forEach(item => {
-    item.classList.remove('expanded');
-  });
-
-  const mobileContainers = nav.querySelectorAll('.mobile-menu-container.show');
-  mobileContainers.forEach(container => {
-    container.classList.remove('show');
-  });
-}
-
 // --- Main Decorate Function ---
 
 export default async function decorate(block) {
@@ -168,34 +142,6 @@ export default async function decorate(block) {
     });
 
     const navBrand = nav.querySelector(".nav-brand");
-    const navSections = nav.querySelector(".nav-sections");
-
-    // MOBILE ROOT LIST (top-level list like screenshot 3)
-    const mobileRootList = document.createElement("ul");
-    mobileRootList.className = "mobile-root-list";
-
-    // Add language selector to mobile menu (like "ENG ▼" from screenshot)
-    const languageSelector = document.createElement('div');
-    languageSelector.className = 'mobile-language-selector';
-    languageSelector.innerHTML = `
-      <select aria-label="Select language">
-        <option value="en">ENG</option>
-        <option value="es">ESP</option>
-        <option value="fr">FRA</option>
-        <option value="de">DEU</option>
-      </select>
-    `;
-
-    if (navBrand) {
-      // Add language selector first
-      navBrand.append(languageSelector);
-      // Then add the mobile root list
-      navBrand.append(mobileRootList);
-    }
-
-    // Add mobile backdrop
-    addMobileBackdrop(nav);
-
     if (navBrand) {
       const brandLink = navBrand.querySelector(".button");
       if (brandLink) {
@@ -203,6 +149,7 @@ export default async function decorate(block) {
         const btnContainer = brandLink.closest(".button-container");
         if (btnContainer) btnContainer.className = "";
       }
+
       const logoPictures = navBrand.querySelectorAll("picture");
       logoPictures.forEach((picture) => {
         const logoLink = document.createElement("a");
@@ -213,6 +160,7 @@ export default async function decorate(block) {
           picture.parentNode.insertBefore(logoLink, picture);
           logoLink.appendChild(picture);
         }
+
         let current = logoLink.parentElement;
         while (current && current !== navBrand) {
           if (
@@ -229,6 +177,7 @@ export default async function decorate(block) {
           }
         }
       });
+
       navBrand.querySelectorAll("p").forEach((p) => {
         const text = p.textContent.trim();
         if (
@@ -271,6 +220,14 @@ export default async function decorate(block) {
           const mainLinkEl = li.querySelector("a");
           let menuTitleText = mainLinkEl ? mainLinkEl.textContent.trim() : "";
           const customTitleEl = li.querySelector("h4");
+          let descriptionText = "";
+          const allPs = li.querySelectorAll(":scope > p");
+          allPs.forEach((p) => {
+            if (!p.contains(mainLinkEl) && p.textContent.trim().length > 10) {
+              descriptionText = p.textContent.trim();
+            }
+          });
+
           if (customTitleEl) menuTitleText = customTitleEl.textContent.trim();
           if (!menuTitleText && li.firstChild)
             menuTitleText = li.firstChild.textContent.trim();
@@ -283,7 +240,6 @@ export default async function decorate(block) {
 
           li.classList.add("has-mega");
 
-          // 1. DESKTOP MEGA WRAPPER
           const mega = document.createElement("div");
           mega.className = "mega-wrapper";
 
@@ -298,145 +254,58 @@ export default async function decorate(block) {
 
           const colMid = document.createElement("div");
           colMid.className = "mega-col mega-mid";
-          colMid.style.display = "none";
+          colMid.style.display = "none"; // hidden by default
 
           const colRightList = document.createElement("div");
           colRightList.className = "mega-col mega-list-container";
-          colRightList.style.display = "none";
+          colRightList.style.display = "none"; // hidden by default
 
           const colDetails = document.createElement("div");
           colDetails.className = "mega-details-panel";
 
-          const bgImg = document.createElement("img");
-          bgImg.className = "mega-bg-image";
-          bgImg.src = "";
-          bgImg.alt = "";
-          colDetails.append(bgImg);
-
-          const nestedListContainer = document.createElement("div");
-          nestedListContainer.className = "nested-list-container";
-          colDetails.append(nestedListContainer);
+          // Set initial background image
+          if (mainImgSrc) {
+            colDetails.style.backgroundImage = `url(${mainImgSrc})`;
+            colDetails.style.backgroundSize = "cover";
+            colDetails.style.backgroundPosition = "center";
+          }
 
           const updateDetailsPanel = (
             primaryKey,
-            parentKey1,
-            parentKey2,
+            parentKey1 = null,
+            parentKey2 = null,
             subListNode = null,
           ) => {
+            // Remove previous nested list only (keep background image)
+            colDetails
+              .querySelectorAll(".nested-list")
+              .forEach((el) => el.remove());
+
             let imgSrc = imageMap.get(primaryKey);
             if (!imgSrc && parentKey1) imgSrc = imageMap.get(parentKey1);
             if (!imgSrc && parentKey2) imgSrc = imageMap.get(parentKey2);
             if (!imgSrc) imgSrc = mainImgSrc;
 
             if (imgSrc) {
-              bgImg.src = imgSrc;
-              bgImg.style.display = "block";
-            } else {
-              bgImg.style.display = "none";
+              colDetails.style.backgroundImage = `url(${imgSrc})`;
+              colDetails.style.backgroundSize = "cover";
+              colDetails.style.backgroundPosition = "center";
             }
 
-            nestedListContainer.innerHTML = "";
             if (subListNode) {
-              nestedListContainer.append(subListNode);
+              colDetails.append(subListNode);
             }
           };
-          updateDetailsPanel(mainLabelKey);
 
           mega.append(colLeft, colMid, colRightList, colDetails);
 
-          // 2. MOBILE MENU LOGIC
-          innerList.className = "mobile-menu-container";
+          // Preserve main link, remove only original inner <ul>
+          const originalUl = li.querySelector("ul");
+          if (originalUl) originalUl.remove();
 
-          const addMobileToggles = (parentList) => {
-            [...parentList.children].forEach((childLi) => {
-              const subUl = childLi.querySelector(":scope > ul");
-              if (subUl) {
-                childLi.classList.add("has-children");
-                if (!childLi.querySelector(".mobile-toggle-btn")) {
-                  const arrow = document.createElement("span");
-                  arrow.className = "mobile-toggle-btn";
-                  arrow.innerHTML = "›";
-                  arrow.setAttribute("aria-label", "Toggle submenu");
+          li.append(mega);
 
-                  const link = childLi.querySelector(":scope > a");
-                  if (link) {
-                    link.after(arrow);
-                  } else {
-                    childLi.prepend(arrow);
-                  }
-
-                  arrow.addEventListener("click", (e) => {
-                    if (window.innerWidth < 900) {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      childLi.classList.toggle("expanded");
-                    }
-                  });
-                }
-                addMobileToggles(subUl);
-              }
-            });
-          };
-          addMobileToggles(innerList);
-
-          // 3. BUILD MOBILE ROOT ITEM (top level – About us, Businesses…)
-          const mobileRootLi = document.createElement("li");
-          mobileRootLi.className = "mobile-root-item";
-
-          const mobileRootLink = document.createElement("a");
-          mobileRootLink.textContent = menuTitleText;
-          mobileRootLink.href = mainLinkEl ? mainLinkEl.href : "#";
-          mobileRootLink.setAttribute("role", "menuitem");
-          mobileRootLi.append(mobileRootLink);
-
-          // Only add toggle arrow if there are submenus
-          if (innerList.children.length > 0) {
-            const mobileRootArrow = document.createElement("span");
-            mobileRootArrow.className = "mobile-root-toggle";
-            mobileRootArrow.innerHTML = "›";
-            mobileRootArrow.setAttribute("aria-label", "Toggle menu");
-            mobileRootLi.append(mobileRootArrow);
-
-            mobileRootArrow.addEventListener("click", (e) => {
-              if (window.innerWidth < 900) {
-                e.preventDefault();
-                e.stopPropagation();
-                mobileRootLi.classList.toggle("expanded");
-              }
-            });
-
-            // Link click handler for items with children
-            mobileRootLink.addEventListener("click", (e) => {
-              if (window.innerWidth < 900) {
-                e.preventDefault();
-                e.stopPropagation();
-                mobileRootLi.classList.toggle("expanded");
-              }
-            });
-          } else {
-            // Link click handler for items without children
-            mobileRootLink.addEventListener("click", (e) => {
-              if (window.innerWidth < 900) {
-                // Close menu when clicking on a leaf item
-                const navSections = nav.querySelector('.nav-sections');
-                if (navSections) {
-                  toggleMenu(nav, navSections, false);
-                  collapseAllMobileMenus(nav);
-                }
-              }
-            });
-          }
-
-          // attach the inner mobile container under this item
-          mobileRootLi.append(innerList);
-          mobileRootList.append(mobileRootLi);
-
-          // 4. ATTACH DESKTOP STRUCTURE TO ORIGINAL LI
-          li.innerHTML = "";
-          if (mainLinkEl) li.append(mainLinkEl);
-          li.append(mega); // desktop only
-
-          // 5. DESKTOP EVENTS
+          // Event Logic
           [...innerList.children].forEach((level1Li) => {
             const l1LinkEl = level1Li.querySelector("a");
             const l1Text = l1LinkEl
@@ -459,4 +328,160 @@ export default async function decorate(block) {
             itemContainer.addEventListener("mouseenter", () => {
               horizontalContainer
                 .querySelectorAll(".cat-item")
+                .forEach((el) => el.classList.remove("active"));
+              itemContainer.classList.add("active");
 
+              colMid.innerHTML = "";
+              colMid.style.display = "none";
+              colRightList.innerHTML = "";
+              colRightList.style.display = "none";
+
+              updateDetailsPanel(l1Key);
+
+              const level2Ul = level1Li.querySelector("ul");
+              if (level2Ul) {
+                colMid.style.display = "block"; // show on hover
+
+                const l2Ul = document.createElement("ul");
+                l2Ul.className = "vertical-nav-list";
+                colMid.append(l2Ul);
+
+                [...level2Ul.children].forEach((level2Li) => {
+                  const l2LinkEl = level2Li.querySelector("a");
+                  const l2Text = l2LinkEl
+                    ? l2LinkEl.textContent.trim()
+                    : level2Li.textContent.trim();
+                  const l2Href = l2LinkEl ? l2LinkEl.href : "#";
+                  const l2Key = l2Text
+                    .toLowerCase()
+                    .replace(/\u00A0/g, " ")
+                    .replace(/\s+/g, "-");
+
+                  const l2Li = document.createElement("li");
+                  const l2A = document.createElement("a");
+                  l2A.href = l2Href;
+                  l2A.textContent = l2Text;
+                  l2Li.append(l2A);
+                  l2Ul.append(l2Li);
+
+                  l2Li.addEventListener("mouseenter", () => {
+                    l2Ul
+                      .querySelectorAll("li")
+                      .forEach((el) => el.classList.remove("active"));
+                    l2Li.classList.add("active");
+
+                    colRightList.innerHTML = "";
+                    colRightList.style.display = "none";
+                    updateDetailsPanel(l2Key, l1Key);
+
+                    const level3Ul = level2Li.querySelector("ul");
+                    if (level3Ul) {
+                      colRightList.style.display = "block"; // show on hover
+
+                      const l3Ul = document.createElement("ul");
+                      l3Ul.className = "vertical-nav-list";
+                      colRightList.append(l3Ul);
+
+                      [...level3Ul.children].forEach((level3Li) => {
+                        const l3LinkEl = level3Li.querySelector("a");
+                        const l3Text = l3LinkEl
+                          ? l3LinkEl.textContent.trim()
+                          : level3Li.firstChild.textContent.trim();
+                        const l3Href = l3LinkEl ? l3LinkEl.href : "#";
+                        const l3Key = l3Text
+                          .toLowerCase()
+                          .replace(/\u00A0/g, " ")
+                          .replace(/\s+/g, "-");
+
+                        const l3Li = document.createElement("li");
+                        const l3A = document.createElement("a");
+                        l3A.href = l3Href;
+
+                        const level4Ul = level3Li.querySelector("ul");
+                        if (level4Ul) {
+                          l3A.innerHTML = `${l3Text} <span class="right-arrow">›</span>`;
+                        } else {
+                          l3A.textContent = l3Text;
+                        }
+
+                        l3Li.append(l3A);
+                        l3Ul.append(l3Li);
+
+                        l3Li.addEventListener("mouseenter", () => {
+                          l3Ul
+                            .querySelectorAll("li")
+                            .forEach((el) => el.classList.remove("active"));
+                          l3Li.classList.add("active");
+
+                          let l4List = null;
+                          if (level4Ul) {
+                            l4List = level4Ul.cloneNode(true);
+                            l4List.className = "vertical-nav-list nested-list";
+                          }
+
+                          updateDetailsPanel(l3Key, l2Key, l1Key, l4List);
+                        });
+                      });
+                    }
+                  });
+                });
+              }
+            });
+          });
+        });
+      }
+    }
+
+    const navSections = nav.querySelector(".nav-sections");
+    if (navSections) {
+      navSections
+        .querySelectorAll(":scope .default-content-wrapper > ul > li")
+        .forEach((navSection) => {
+          if (navSection.querySelector("ul"))
+            navSection.classList.add("nav-drop");
+          navSection.addEventListener("click", () => {
+            if (isDesktop.matches) {
+              const expanded =
+                navSection.getAttribute("aria-expanded") === "true";
+              toggleAllNavSections(navSections);
+              navSection.setAttribute(
+                "aria-expanded",
+                expanded ? "false" : "true",
+              );
+            }
+          });
+        });
+    }
+
+    const hamburger = document.createElement("div");
+    hamburger.classList.add("nav-hamburger");
+    hamburger.innerHTML = `<button type="button"><span class="nav-hamburger-icon"></span></button>`;
+    hamburger.addEventListener("click", () => toggleMenu(nav, navSections));
+    nav.prepend(hamburger);
+
+    toggleMenu(nav, navSections, isDesktop.matches);
+    isDesktop.addEventListener("change", () =>
+      toggleMenu(nav, navSections, isDesktop.matches),
+    );
+
+    const navWrapper = document.createElement("div");
+    navWrapper.className = "primary-header header-wrapper";
+    const container = document.createElement("div");
+    container.className = "container position-relative";
+
+    while (nav.firstChild) container.append(nav.firstChild);
+    nav.append(container);
+    navWrapper.append(nav);
+
+    function handleHeaderAffix() {
+      if (window.scrollY > 10) navWrapper.classList.add("affix");
+      else navWrapper.classList.remove("affix");
+    }
+    handleHeaderAffix();
+    window.addEventListener("scroll", handleHeaderAffix, { passive: true });
+
+    block.append(navWrapper);
+  } catch (e) {
+    console.error("Navigation Decorate Failed:", e);
+  }
+}
