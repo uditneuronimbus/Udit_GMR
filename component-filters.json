@@ -56,8 +56,7 @@
       "image-slider",
       "integrity-decision",
       "press-release-featured",
-      "press-release-listing",
-      "news-update-page"
+      "press-release-listing"
     ]
   },
   {
@@ -313,6 +312,10 @@
     ]
   },
   {
+    "id": "news-update-page",
+    "components": []
+  },
+  {
     "id": "news-updates",
     "components": []
   },
@@ -390,9 +393,5 @@
     "components": [
       "value-cards"
     ]
-  },
-  {
-    "id": "news-update-page",
-    "components": []
   }
 ]

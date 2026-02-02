@@ -1401,6 +1401,22 @@
           }
         },
         {
+          "title": "News Update Page",
+          "id": "news-update-page",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "News Update Page",
+                  "model": "news-update-page",
+                  "filter": "news-update-page"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "News & Updates",
           "id": "news-updates",
           "plugins": {
@@ -1819,22 +1835,6 @@
                 "template": {
                   "name": "value-cards",
                   "model": "value-cards"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "News Update Page",
-          "id": "news-update-page",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "News Update Page",
-                  "model": "news-update-page",
-                  "filter": "news-update-page"
                 }
               }
             }

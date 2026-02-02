@@ -623,6 +623,12 @@
         "comment": "The large image displayed on the left when this item is active"
       },
       {
+        "component": "text",
+        "valueType": "string",
+        "name": "altText",
+        "label": "Alt Text"
+      },
+      {
         "component": "text-input",
         "valueType": "string",
         "name": "title",
@@ -2488,6 +2494,10 @@
     ]
   },
   {
+    "id": "news-update-page",
+    "fields": []
+  },
+  {
     "id": "news-updates",
     "fields": [
       {
@@ -3393,9 +3403,5 @@
         "valueType": "string"
       }
     ]
-  },
-  {
-    "id": "news-update-page",
-    "fields": []
   }
 ]
