@@ -56,6 +56,7 @@
 .sa-card-content {
   padding: 24px 26px 30px;
   background-color: var(--white );
+  min-height: 230px;
 }
 
 .sa-card-content h3 {
