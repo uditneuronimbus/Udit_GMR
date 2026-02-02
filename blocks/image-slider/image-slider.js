@@ -27,16 +27,17 @@ export default async function decorate(block) {
   // Create heading
   const heading = document.createElement("h2");
   heading.className = "sec-title";
-  heading.textContent = headingP.textContent;
+  heading.textContent = headingP?.textContent || "";
 
   // Create description wrapper
   const desc = document.createElement("div");
   desc.className = "sec-desc";
 
-  const descInner = document.createElement("div");
-  descInner.append(descP);
-
-  desc.append(descInner);
+  if (descP) {
+    const descInner = document.createElement("div");
+    descInner.append(descP);
+    desc.append(descInner);
+  }
 
   // Assemble
   col.append(heading, desc);
@@ -52,10 +53,14 @@ export default async function decorate(block) {
   rows.forEach((row) => {
     const slide = document.createElement("div");
     slide.className = "swiper-slide";
-
-    const picture = row.querySelector("picture");
-    if (picture) slide.append(picture);
-
+    
+    // Clone the entire row content to preserve all elements including images
+    const content = row.innerHTML;
+    
+    // Instead of just extracting picture, preserve all original content
+    // This ensures AEM's image handling (data attributes, etc.) is preserved
+    slide.innerHTML = content;
+    
     wrapper.append(slide);
   });
 
