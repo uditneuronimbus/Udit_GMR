@@ -3385,39 +3385,46 @@
     "fields": []
   },
   {
-    "id": "contact-cards",
-    "fields": [
-      {
-        "component": "text",
-        "name": "heading",
-        "label": "Section Heading",
-        "valueType": "string",
-        "defaultValue": "For further details, please contact:"
-      }
-    ]
-  },
-  {
-    "id": "contact-cards-item",
-    "itemLabel": "name",
-    "fields": [
-      {
-        "component": "text",
-        "name": "name",
-        "label": "Name",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "title",
-        "label": "Designation",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "email",
-        "label": "Email Address",
-        "valueType": "string"
-      }
-    ]
-  }
+      "id": "contact-cards",
+      "fields": [
+        {
+          "component": "text",
+          "name": "heading",
+          "label": "Section Heading",
+          "valueType": "string"
+        },
+        {
+          "component": "container",
+          "name": "cards",
+          "label": "Contact Cards",
+          "model": "contact-cards-item",
+          "filter": "contact-cards",
+          "multi": true
+        }
+      ]
+    },
+    {
+      "id": "contact-cards-item",
+      "fields": [
+        {
+          "component": "text",
+          "name": "name",
+          "label": "Name",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Designation",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "email",
+          "label": "Email Address",
+          "valueType": "string",
+          "format": "email"
+        }
+      ]
+    }
 ]

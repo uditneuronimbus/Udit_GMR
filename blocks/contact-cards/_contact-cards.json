@@ -40,14 +40,20 @@
           "component": "text",
           "name": "heading",
           "label": "Section Heading",
-          "valueType": "string",
-          "defaultValue": "For further details, please contact:"
+          "valueType": "string"
+        },
+        {
+          "component": "container",
+          "name": "cards",
+          "label": "Contact Cards",
+          "model": "contact-cards-item",
+          "filter": "contact-cards",
+          "multi": true
         }
       ]
     },
     {
       "id": "contact-cards-item",
-      "itemLabel": "name",
       "fields": [
         {
           "component": "text",
@@ -65,7 +71,8 @@
           "component": "text",
           "name": "email",
           "label": "Email Address",
-          "valueType": "string"
+          "valueType": "string",
+          "format": "email"
         }
       ]
     }
@@ -73,7 +80,9 @@
   "filters": [
     {
       "id": "contact-cards",
-      "components": []
+      "components": [
+        "contact-cards-item"
+      ]
     }
   ]
 }

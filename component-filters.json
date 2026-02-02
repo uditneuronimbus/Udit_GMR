@@ -405,7 +405,9 @@
     ]
   },
   {
-    "id": "contact-cards",
-    "components": []
-  }
+      "id": "contact-cards",
+      "components": [
+        "contact-cards-item"
+      ]
+    }
 ]
