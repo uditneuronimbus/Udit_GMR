@@ -155,6 +155,14 @@ export default function decorate(block) {
     if (imgEl) {
       imageClone = imgEl.cloneNode(true);
 
+      // ✅ ALT handling (AEM DAM Meta Title fallback)
+      const existingAlt = imageClone.getAttribute("alt");
+      const assetTitle = imageClone.dataset.assetTitle;
+
+      if ((!existingAlt || existingAlt.trim() === "") && assetTitle) {
+        imageClone.setAttribute("alt", assetTitle);
+      }
+
       // Image inside accordion
       const imgDiv = document.createElement("div");
       imgDiv.className = "business-image";
