@@ -1,0 +1,60 @@
+.contact-cards-wrapper {
+  background: #f3f6fb;
+  padding: 32px;
+  border-radius: 12px;
+}
+
+.contact-cards-heading {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  color: #000;
+}
+
+/* Grid */
+.contact-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* Card */
+.contact-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* Name */
+.contact-card > div:first-child {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 4px;
+}
+
+/* Designation */
+.contact-card > div:nth-child(2) {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+/* Email row */
+.contact-card > div:nth-child(3) {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Email icon */
+.contact-card > div:nth-child(3)::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  background: url('/icons/mail.svg') no-repeat center;
+  background-size: contain;
+}
