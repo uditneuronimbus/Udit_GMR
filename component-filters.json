@@ -60,7 +60,8 @@
       "news-update-page",
       "press-hero",
       "contact-cards",
-      "press-nav"
+      "press-nav",
+      "recent-posts"
     ]
   },
   {
@@ -413,5 +414,9 @@
   {
     "id": "press-nav",
     "components": []
-  }
+  },
+  {
+      "id": "recent-posts",
+      "components": [ ]
+    }
 ]
