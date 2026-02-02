@@ -93,29 +93,7 @@ export default async function decorate(block) {
     ================================ */
     contentWrapper.innerHTML = `
       <article class="news-article">
-        <div class="news-meta mb-3">
-          <span class="badge ${item.category || ""}">
-            ${item.category || ""}
-          </span>
-          <span class="meta-date">
-            ${publishDateFormatted}
-          </span>
-        </div>
-
-        <h1 class="news-title mb-4">
-          ${item.title || ""}
-        </h1>
-
-        ${
-          item.cardImage?._publishUrl
-            ? `
-              <div class="news-banner mb-4">
-                <img src="${item.cardImage._publishUrl}" alt="${item.title || ""}">
-              </div>
-            `
-            : ""
-        }
-
+        <h2 class="news-key-highlight">KEY HIGHLIGHT</h2>
         <div class="news-content">
           ${fixImageSrc(item.description?.html) || ""}
         </div>
