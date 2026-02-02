@@ -1,25 +1,3 @@
-async function applyAltFromDam(img) {
-  if (!img || img.alt) return;
-
-  try {
-    const cleanSrc = img.src.split("?")[0];
-    const res = await fetch(`${cleanSrc}.json`);
-    if (!res.ok) return;
-
-    const data = await res.json();
-
-    const damTitle =
-      data?.["dc:title"] ||
-      data?.["jcr:title"] ||
-      data?.title;
-
-    if (damTitle) {
-      img.alt = damTitle;
-    }
-  } catch (e) {
-    console.warn("DAM alt fallback failed", e);
-  }
-}
 export default function decorate(block) {
   const children = [...block.children];
 
@@ -176,8 +154,6 @@ export default function decorate(block) {
 
     if (imgEl) {
       imageClone = imgEl.cloneNode(true);
-
-      applyAltFromDam(imageClone);
 
       // Image inside accordion
       const imgDiv = document.createElement("div");
