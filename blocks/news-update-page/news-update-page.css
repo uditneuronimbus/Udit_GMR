@@ -45,3 +45,11 @@
   background-color: var(--royal-blue);
   color: var(--white);
 }
+.news-key-highlight {
+  color: #1f4fd8; /* blue like your screenshot */
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}

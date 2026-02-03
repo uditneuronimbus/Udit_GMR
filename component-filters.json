@@ -57,6 +57,11 @@
       "integrity-decision",
       "press-release-featured",
       "press-release-listing",
+      "news-update-page",
+      "press-hero",
+      "contact-cards",
+      "press-nav",
+      "recent-posts"
       "image-scroll-card"
     ]
   },
@@ -400,5 +405,30 @@
     "components": [
       "value-cards"
     ]
+  },
+  {
+    "id": "news-update-page",
+    "components": []
+  },
+  {
+    "id": "press-hero",
+    "components": [
+      "press-hero"
+    ]
+  },
+  {
+    "id": "contact-cards",
+    "components": [
+      "contact-cards-item"
+    ]
+  },
+  {
+    "id": "press-nav",
+    "components": []
+  },
+  {
+      "id": "recent-posts",
+      "components": [ ]
+    }
   }
 ]
