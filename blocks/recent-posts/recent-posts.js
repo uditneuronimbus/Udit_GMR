@@ -73,7 +73,7 @@ export default async function decorate(block) {
           <div class="card-body">
             <div class="card-meta">
               <span class="badge ${item.category || ""}">
-                ${item.category || ""}
+                ${slugToTitle(item.category || "")}
               </span>
               <span class="meta-date">
                 ${publishDateFormatted}
@@ -91,11 +91,11 @@ export default async function decorate(block) {
             <div class="card-cta">
               <a
                 class="btn-link"
-                href="/en/news-update?slug=${encodeURIComponent(
+                href="/en/news-update?post=${encodeURIComponent(
                   item.slugUrl || ""
                 )}"
               >
-                ${item.ctaLabel || "READ MORE"}
+                 READ MORE
               </a>
             </div>
           </div>
