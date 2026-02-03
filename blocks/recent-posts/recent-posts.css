@@ -145,3 +145,9 @@
     grid-template-columns: 1fr;
   }
 }
+
+.news-updates-title {
+  grid-column: 1 / -1;
+  margin-bottom: 16px;
+  
+}

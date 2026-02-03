@@ -11,7 +11,12 @@ function formatDate(dateString) {
     year: "numeric",
   });
 }
-
+function slugToTitle(str) {
+  return str
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
 export default async function decorate(block) {
   const item = await getNewsDetail();
   const limit = 3;
@@ -45,13 +50,19 @@ export default async function decorate(block) {
       return;
     }
 
+    const titleDiv = document.createElement("div");
+    titleDiv.className = "news-updates-title";
+    titleDiv.innerHTML = `<h2>Related ${slugToTitle(category)}</h2>`;
+    container.appendChild(titleDiv);
     items.forEach((item) => {
       const publishDateFormatted = formatDate(item.publishDate);
 
       const card = document.createElement("div");
 
       card.innerHTML = `
+
         <div class="card card-news">
+            
           <div class="card-img">
             <img
               src="${item.cardImage?._publishUrl || ""}"
