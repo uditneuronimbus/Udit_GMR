@@ -76,11 +76,11 @@
           "valueType": "string",
           "options": [
             {
-              "name": "Domestic",
+              "name": "Domestic Network",
               "value": "domestic"
             },
             {
-              "name": "International",
+              "name": "International Network",
               "value": "international"
             },
             {
