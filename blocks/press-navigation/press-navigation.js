@@ -13,24 +13,31 @@ async function fetchJSON(url) {
     return null;
   }
 }
+function slugToTitle(str) {
+  return str
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
 
 export default async function decorate(block) {
-  
-  block.classList.add("press-nav");
+  const item = await getNewsDetail();
 
+  block.classList.add("press-nav");
+  const nextcat =slugToTitle(item.category);
   block.innerHTML = `
     <div class="press-nav-actions">
       <div class="press-nav-side prev">
         <a class="nav-btn disabled" >← Previous</a>
         <div class="nav-hover-card">
-          <div class="label">Previous Press Release</div>
+          <div class="label">Previous ${nextcat}</div>
           <div class="title">No previous article</div>
         </div>
       </div>
 
       <div class="press-nav-side next">
         <div class="nav-hover-card">
-          <div class="label">Next Press Release</div>
+          <div class="label">Next ${nextcat}</div>
           <div class="title">No next article</div>
         </div>
         <a class="nav-btn primary disabled">Next →</a>
@@ -38,8 +45,7 @@ export default async function decorate(block) {
     </div>
   `;
 
-  const item = await getNewsDetail();
-
+  
   
   if (!item || !item.publishDate) {
     console.warn("press-nav: publishDate missing");
