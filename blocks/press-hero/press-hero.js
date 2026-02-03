@@ -17,10 +17,15 @@ function formatDate(dateString) {
     year: "numeric",
   });
 }
-
+function slugToTitle(str) {
+  return str
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
 function getSlugFromURL() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("slug");
+  return params.get("post");
 }
 
 
@@ -118,7 +123,7 @@ function buildPressHero(item) {
         <div class="press-hero-meta">
           ${item.subCategory || item.category ? `
             <span class="press-hero-tag">
-                ${item.subCategory || item.category}
+                ${slugToTitle(item.subCategory || item.category)}
             </span>
             ` : ""}
           ${publishDate ? `

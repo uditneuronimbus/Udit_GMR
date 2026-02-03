@@ -101,7 +101,7 @@ export default async function decorate(block) {
     const prevBtn = block.querySelector(".prev .nav-btn");
     const prevCard = block.querySelector(".prev .nav-hover-card");
 
-    prevBtn.href = `/${lang}/news-update?slug=${prevItem.slugUrl}`;
+    prevBtn.href = `/${lang}/news-update?post=${prevItem.slugUrl}`;
     prevBtn.classList.remove("disabled");
     prevCard.querySelector(".title").textContent = prevItem.title;
   }
@@ -110,7 +110,7 @@ export default async function decorate(block) {
     const nextBtn = block.querySelector(".next .nav-btn");
     const nextCard = block.querySelector(".next .nav-hover-card");
 
-    nextBtn.href = `/${lang}/news-update?slug=${nextItem.slugUrl}`;
+    nextBtn.href = `/${lang}/news-update?post=${nextItem.slugUrl}`;
     nextBtn.classList.remove("disabled");
     nextCard.querySelector(".title").textContent = nextItem.title;
   }

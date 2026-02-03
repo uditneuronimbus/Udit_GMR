@@ -7,7 +7,7 @@ let newsPromise = null;
 ================================ */
 function getSlugFromURL() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("slug");
+  return params.get("post");
 }
 
 /* ================================

@@ -32,7 +32,7 @@ function formatDate(dateString) {
 ================================ */
 function getSlugFromURL() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("slug");
+  return params.get("post");
 }
 
 export default async function decorate(block) {
