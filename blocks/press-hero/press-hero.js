@@ -127,8 +127,8 @@ function buildPressHero(item) {
           ${lastUpdated ? `
             <span><i class="icon-clock"></i>|   Last Updated: ${lastUpdated}</span>
           ` : ""}
-          ${item.location ? `
-            <span><i class="icon-location"></i>${item.location}</span>
+          ${item.city ? `
+            <span><i class="icon-location"></i>${item.city}</span>
           ` : ""}
         </div>
 
@@ -182,7 +182,7 @@ export default async function decorate(block) {
       contentWrapper.innerHTML = "<p>News not found.</p>";
       return;
     }
-    // console.log("_____________________________", item);
+    console.log("_____________________________", item);
     
 
     /* Inject Hero */
