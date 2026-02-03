@@ -86,9 +86,13 @@ export default async function decorate(block) {
 
       /* Title */
       if (fields[1]) {
-        const title = document.createElement("h3");
-        title.textContent = fields[1].textContent.trim();
-        content.append(title);
+        const text = fields[1].textContent.trim();
+
+        if (text !== "") {
+          const title = document.createElement("h3");
+          title.textContent = text;
+          content.append(title);
+        }
       }
 
       /* Description */
