@@ -85,8 +85,8 @@
 .aviation-dropdown-btn .chevron {
   width: 6px;
   height: 6px;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
+  border-right: 2px solid var(--yellow);
+  border-bottom: 2px solid var(--yellow);
   transform: rotate(45deg);
   margin-top: -2px;
 }
