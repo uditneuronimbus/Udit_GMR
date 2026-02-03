@@ -24,7 +24,7 @@
     text-decoration: none;
     color: var(--charcoal);
     position: relative;
-    font-size: var(--fs-xs);
+    font-size: var(--fs-small);
 }
 
 .footer-bottoms ul li a:before {

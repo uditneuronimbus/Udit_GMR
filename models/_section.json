@@ -155,7 +155,8 @@
         "image-slider",
         "integrity-decision",
         "press-release-featured",
-        "press-release-listing"
+        "press-release-listing",
+        "image-scroll-card"
       ]
     }
   ]

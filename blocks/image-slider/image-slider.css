@@ -7,8 +7,8 @@
 .image-slider-swiper {
     width: calc(100vw - ((100vw - 1320px) / 2));
     margin-left: auto;
-    display: flex;
-    flex-wrap: wrap;
+    display: flex!important;
+    flex-wrap: wrap; 
     gap: 1rem;
     justify-content: center;
 }

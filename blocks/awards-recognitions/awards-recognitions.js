@@ -13,7 +13,8 @@ export default async function decorate(block) {
   if (!original.length) return;
 
   const sectionTitle = original[0];
-  const items = original.slice(1);
+  const sectionDesc = original[1];
+  const items = original.slice(2);
 
   block.classList.add("awards-recognitions");
 
@@ -21,22 +22,35 @@ export default async function decorate(block) {
   const wrapper = document.createElement("div");
   wrapper.className = "awards-wrapper";
 
-  /* ---------- Header ---------- */
-if (sectionTitle) {
-  const header = document.createElement("header");
-  header.className = "entry-container text-center mb-5";
+  /* ---------- Header (Title + Description in same container) ---------- */
+  if (sectionTitle || sectionDesc) {
+    const header = document.createElement("header");
+    header.className = "entry-container text-center mb-5";
 
-  // Extract authored content safely
-  const titleText = sectionTitle.textContent.trim();
+    // Title
+    if (sectionTitle) {
+      const titleText = sectionTitle.textContent.trim();
+      if (titleText) {
+        const h2 = document.createElement("h2");
+        h2.className = "title";
+        h2.textContent = titleText;
+        header.appendChild(h2);
+      }
+    }
 
-  if (titleText) {
-    header.innerHTML = `
-      <h2 class="title">${titleText}</h2>
-    `;
+    // Description
+    if (sectionDesc) {
+      const descText = sectionDesc.textContent.trim();
+      if (descText) {
+        const p = document.createElement("p");
+        p.className = "sec-desc";
+        p.textContent = descText;
+        header.appendChild(p);
+      }
+    }
+
+    wrapper.append(header);
   }
-
-  wrapper.append(header);
-}
 
   /* ---------- Swiper ---------- */
   const swiper = document.createElement("div");
@@ -66,28 +80,27 @@ if (sectionTitle) {
     }
 
     /* Title + Description Wrapper */
-if (fields[1] || fields[2]) {
-  const content = document.createElement("div");
-  content.className = "award-card-body";
+    if (fields[1] || fields[2]) {
+      const content = document.createElement("div");
+      content.className = "award-card-body";
 
-  /* Title */
-  if (fields[1]) {
-    const title = document.createElement("h3");
-    title.textContent = fields[1].textContent.trim();
-    content.append(title);
-  }
+      /* Title */
+      if (fields[1]) {
+        const title = document.createElement("h3");
+        title.textContent = fields[1].textContent.trim();
+        content.append(title);
+      }
 
-  /* Description */
-  if (fields[2]) {
-    const desc = document.createElement("div");
-    desc.className = "award-desc";
-    desc.innerHTML = fields[2].innerHTML;
-    content.append(desc);
-  }
+      /* Description */
+      if (fields[2]) {
+        const desc = document.createElement("div");
+        desc.className = "award-desc";
+        desc.innerHTML = fields[2].innerHTML;
+        content.append(desc);
+      }
 
-  card.append(content);
-}
-
+      card.append(content);
+    }
 
     // keep award-item wrapper (important for UE)
     item.innerHTML = "";

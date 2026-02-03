@@ -166,9 +166,9 @@ export default async function decorate(block) {
 
   const swiperInstance = new Swiper(swiper, {
     loop: true,
-    speed: 800,
+    speed: 3000,
     autoplay: {
-      delay: 3000,
+      delay: 5000,
       disableOnInteraction: false,
     },
   });
