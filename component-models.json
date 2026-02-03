@@ -2650,11 +2650,11 @@
         "options": [
           {
             "name": "Domestic Network",
-            "value": "domestic"
+            "value": "domesticNetwork"
           },
           {
             "name": "International Network",
-            "value": "international"
+            "value": "internationalNetwork"
           },
           {
             "name": "Wind Energy",
