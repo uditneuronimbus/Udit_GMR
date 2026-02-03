@@ -31,3 +31,8 @@
 .icon-facebook {
     background-image: url(../../icons/fb-icon.svg);
 }
+@media (max-width:767px){
+.social-connect-title {
+    text-align: center;
+}
+}

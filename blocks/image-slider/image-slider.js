@@ -1,97 +1,97 @@
-import Swiper from "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs";
+import { loadCSS, loadScript } from "../../scripts/aem.js";
+
+const SWIPER_JS = "../../scripts/swiper-bundle.min.js";
+const SWIPER_CSS = "../../styles/swiper-bundle.min.css";
 
 export default async function decorate(block) {
-  const rows = [...block.children];
+  /* ---------- Load Swiper ---------- */
+  await loadCSS(SWIPER_CSS);
+  await loadScript(SWIPER_JS);
 
-  // Extract heading & description
-  const headingRow = rows.shift();
-  const descRow = rows.shift();
+  /* ---------- Preserve authored structure ---------- */
+  const original = [...block.children];
+  if (original.length < 3) return;
 
-  block.innerHTML = "";
+  const headingRow = original[0];
+  const descRow = original[1];
+  const items = original.slice(2); // image-slider-item
+
   block.classList.add("sec-image-slider");
 
+  /* ---------- Container ---------- */
   const container = document.createElement("div");
   container.className = "container";
 
-  /* Header */
+  /* ---------- Header ---------- */
   const headerRow = document.createElement("div");
   headerRow.className = "row";
 
   const col = document.createElement("div");
   col.className = "col-md-7 text-center mx-auto mb-5";
 
-  // Extract original <p> elements
-  const headingP = headingRow.querySelector("p");
-  const descP = descRow.querySelector("p");
+  const headingText = headingRow.textContent.trim();
+  if (headingText) {
+    const h2 = document.createElement("h2");
+    h2.className = "sec-title";
+    h2.textContent = headingText;
+    col.append(h2);
+  }
 
-  // Create heading
-  const heading = document.createElement("h2");
-  heading.className = "sec-title";
-  heading.textContent = headingP.textContent;
+  if (descRow.innerHTML.trim()) {
+    const desc = document.createElement("div");
+    desc.className = "sec-desc";
+    desc.innerHTML = descRow.innerHTML;
+    col.append(desc);
+  }
 
-  // Create description wrapper
-  const desc = document.createElement("div");
-  desc.className = "sec-desc";
-
-  const descInner = document.createElement("div");
-  descInner.append(descP);
-
-  desc.append(descInner);
-
-  // Assemble
-  col.append(heading, desc);
   headerRow.append(col);
+  container.append(headerRow);
 
-  /* Swiper Structure */
-  const swiperEl = document.createElement("div");
-  swiperEl.className = "swiper image-slider-swiper";
+  /* ---------- Swiper ---------- */
+  const swiper = document.createElement("div");
+  swiper.className = "swiper image-slider-swiper";
 
-  const wrapper = document.createElement("div");
-  wrapper.className = "swiper-wrapper";
+  const swiperWrapper = document.createElement("div");
+  swiperWrapper.className = "swiper-wrapper";
 
-  rows.forEach((row) => {
+  /* ---------- Keep image-slider-item intact ---------- */
+  items.forEach((item) => {
     const slide = document.createElement("div");
     slide.className = "swiper-slide";
 
-    const picture = row.querySelector("picture");
-    if (picture) slide.append(picture);
-
-    wrapper.append(slide);
+    slide.append(item); // ✅ KEEP image-slider-item
+    swiperWrapper.append(slide);
   });
 
-  swiperEl.append(wrapper);
+  swiper.append(swiperWrapper);
 
-  /* Navigation */
+  /* ---------- Navigation ---------- */
   const prev = document.createElement("div");
   prev.className = "swiper-button-prev";
 
   const next = document.createElement("div");
   next.className = "swiper-button-next";
 
-  swiperEl.append(prev, next);
+  swiper.append(prev, next);
+  container.append(swiper);
 
-  container.append(headerRow, swiperEl);
+  /* ---------- Replace block ---------- */
+  block.innerHTML = "";
   block.append(container);
 
-  /* Init Swiper */
-  new Swiper(swiperEl, {
+  /* ---------- Init Swiper ---------- */
+  new window.Swiper(swiper, {
     slidesPerView: 2.5,
     spaceBetween: 20,
-    loop: false,
+    loop: items.length > 1,
     navigation: {
       nextEl: next,
       prevEl: prev,
     },
     breakpoints: {
-      0: {
-        slidesPerView: 1.2,
-      },
-      576: {
-        slidesPerView: 2,
-      },
-      992: {
-        slidesPerView: 2.5,
-      },
+      0: { slidesPerView: 1.2 },
+      576: { slidesPerView: 2 },
+      992: { slidesPerView: 2.5 },
     },
   });
 }

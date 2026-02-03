@@ -62,6 +62,7 @@
       "contact-cards",
       "press-nav",
       "recent-posts"
+      "image-scroll-card"
     ]
   },
   {
@@ -257,6 +258,12 @@
     ]
   },
   {
+    "id": "image-scroll-card",
+    "components": [
+      "image-scroll-card-item"
+    ]
+  },
+  {
     "id": "image-slider",
     "components": [
       "image-slider-item"
@@ -315,6 +322,10 @@
     "components": [
       "message-from-leadership-item"
     ]
+  },
+  {
+    "id": "news-update-page",
+    "components": []
   },
   {
     "id": "news-updates",
@@ -419,4 +430,5 @@
       "id": "recent-posts",
       "components": [ ]
     }
+  }
 ]

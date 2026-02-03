@@ -28,7 +28,11 @@ async function fetchStockPrices() {
       }
     }
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000); // 2s timeout
+
     const response = await fetch(STOCK_API_URL, {
+      signal: controller.signal,
       method: 'GET',
       headers: {
         Authorization: AUTH_TOKEN,
@@ -38,6 +42,7 @@ async function fetchStockPrices() {
       mode: 'cors',
       cache: 'no-store',
     });
+    clearTimeout(timeoutId);
 
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
@@ -87,7 +92,7 @@ function renderStockOverview(companyData, displayName) {
   }
 
   let html = `
-    <div class="d-flex align-items-center">  
+    <div class="d-flex align-items-center">
       <div class="market-title">${displayName} - MARKET OVERVIEW</div>
       <div class="as-on">As on ${displayTime}</div>
     </div>
@@ -155,7 +160,7 @@ export default async function decorate(block) {
   if (children[2] && children[3]) {
     const btn = document.createElement('a');
     btn.href = children[3].textContent.trim() || '#';
-    btn.className = 'btn btn-orange';
+    btn.className = 'btn btn-primary';
     btn.textContent = children[2].textContent.trim();
     header.appendChild(btn);
   }
@@ -239,34 +244,37 @@ export default async function decorate(block) {
 
   if (stockDivsMap.size === 0) return;
 
-  try {
-    const rawData = await fetchStockPrices();
+  // Defer execution to avoid blocking rendering
+  setTimeout(async () => {
+    try {
+      const rawData = await fetchStockPrices();
 
-    const apiDataByCode = {};
-    rawData.forEach((item) => {
-      if (item.companyCode) {
-        apiDataByCode[String(item.companyCode)] = item;
+      const apiDataByCode = {};
+      rawData.forEach((item) => {
+        if (item.companyCode) {
+          apiDataByCode[String(item.companyCode)] = item;
+        }
+      });
+
+      const symbolToCompanyCode = {
+        GAL: '15210029',
+        GPUIL: '15131133',
+      };
+
+      for (const [symbol, stockDiv] of stockDivsMap.entries()) {
+        const code = symbolToCompanyCode[symbol];
+        const companyData = code ? apiDataByCode[code] : null;
+
+        stockDiv.innerHTML = companyData
+          ? renderStockOverview(companyData, symbol)
+          : `<div class="error">No data found for ${symbol}</div>`;
       }
-    });
-
-    const symbolToCompanyCode = {
-      GAL: '15210029',
-      GPUIL: '15131133',
-    };
-
-    for (const [symbol, stockDiv] of stockDivsMap.entries()) {
-      const code = symbolToCompanyCode[symbol];
-      const companyData = code ? apiDataByCode[code] : null;
-
-      stockDiv.innerHTML = companyData
-        ? renderStockOverview(companyData, symbol)
-        : `<div class="error">No data found for ${symbol}</div>`;
+    } catch (err) {
+      console.error('[Stock API] Failed to load data:', err);
+      for (const stockDiv of stockDivsMap.values()) {
+        stockDiv.innerHTML =
+          '<div class="error">Market data unavailable</div>';
+      }
     }
-  } catch (err) {
-    console.error('[Stock API] Failed to load data:', err);
-    for (const stockDiv of stockDivsMap.values()) {
-      stockDiv.innerHTML =
-        '<div class="error">Market data unavailable</div>';
-    }
-  }
+  }, 0);
 }
