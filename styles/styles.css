@@ -305,7 +305,7 @@ hr {
     right: 0.25rem;
 }
 .btn,
-.button {
+.button.primary {
     height: 44px;
     display: inline-flex;
     align-items: center;
