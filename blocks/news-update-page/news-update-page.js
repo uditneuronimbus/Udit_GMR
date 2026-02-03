@@ -65,7 +65,25 @@ export default async function decorate(block) {
   ================================ */
   try {
     const item = await getNewsDetail();
-    
+    console.log("_________________________", item);
+    document.title = item.metaTitle || item.title;
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.name = 'description';
+      document.head.appendChild(meta);
+    }
+    meta.content = item.metaDescription?.plaintext || '';
+
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (!metaKeywords) {
+      metaKeywords = document.createElement('meta');
+      metaKeywords.setAttribute('name', 'keywords');
+      document.head.appendChild(metaKeywords);
+    }
+  
+    metaKeywords.setAttribute('content', item.metaKeywords || '');
+
     if (!item) {
       contentWrapper.innerHTML = "<p>News not found.</p>";
       return;
@@ -85,8 +103,20 @@ export default async function decorate(block) {
     contentWrapper.innerHTML = `
       <article class="news-article">
         <h2 class="news-key-highlight">KEY HIGHLIGHT</h2>
+        <div class="news-title">
+          <h1>${item.title || ""}</h1>
+        </div>
+        <div class="news-card"></div>
+          <img
+            src="${item.cardImage?._publishUrl || ""}"
+            alt="${item.title || ""}"
+          />
+        </div>
         <div class="news-content">
           ${fixImageSrc(item.description?.html) || ""}
+        </div>
+        <div class="news-contact-cards">
+          ${item.contacts?.html || ""}
         </div>
       </article>
     `;
