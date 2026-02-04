@@ -66,7 +66,8 @@
       "years",
       "months",
       "tags",
-      "sub-category"
+      "sub-category",
+      "filter-panel"
     ]
   },
   {
@@ -445,15 +446,30 @@
     ]
   },
   {
-      "id": "months",
-      "components": ["month-item"]
-    },
-    {
-      "id": "tags",
-      "components": ["tag-item"]
-    },
-    {
-      "id": "sub-category",
-      "components": ["sub-category-item"]
-    }
+    "id": "months",
+    "components": [
+      "month-item"
+    ]
+  },
+  {
+    "id": "tags",
+    "components": [
+      "tag-item"
+    ]
+  },
+  {
+    "id": "sub-category",
+    "components": [
+      "sub-category-item"
+    ]
+  },
+  {
+    "id": "filter-panel",
+    "components": [
+      "years",
+      "months",
+      "tags",
+      "sub-category"
+    ]
+  }
 ]
