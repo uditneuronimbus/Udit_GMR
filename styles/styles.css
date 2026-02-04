@@ -316,6 +316,11 @@ hr {
     justify-content: center;
     text-decoration: none;
 }
+.btn-sm {
+    font-size: var(--fs-regular);
+    height: 38px;
+    padding: 0 .8rem;
+}
 .btn-lg {
     font-size: var(--fs-normal);
     height: 54px;
