@@ -11,12 +11,14 @@ function formatDate(dateString) {
     year: "numeric",
   });
 }
+
 function slugToTitle(str) {
   return str
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 }
+
 export default async function decorate(block) {
   const item = await getNewsDetail();
   const limit = 3;
@@ -24,12 +26,31 @@ export default async function decorate(block) {
   const category = item.category;
   const slugUrl = item.slugUrl;
 
+  // Clear block content
   block.innerHTML = "";
 
-  // ✅ Create container ONCE
-  const container = document.createElement("div");
-  container.className = "news-updates-container";
-  block.appendChild(container);
+  // Create section with proper classes
+  const section = document.createElement("section");
+  section.className = "sec-news bg-sky-blue spacer";
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "container";
+
+  // Create header section
+  const headerHtml = `
+    <div class="news-header mb-5">
+      <div class="news-header-left text-center">
+        <h2 class="text-primary sec-title">Related ${slugToTitle(category)}</h2>
+      </div>
+    </div>
+    <div class="row"></div>
+  `;
+
+  wrapper.innerHTML = headerHtml;
+  section.appendChild(wrapper);
+  block.appendChild(section);
+
+  const cardsWrapper = wrapper.querySelector(".row");
 
   try {
     const apiUrl =
@@ -46,32 +67,35 @@ export default async function decorate(block) {
     const items = json?.data?.data?.newsList?.items || [];
 
     if (!items.length) {
-      block.innerHTML = "<p>No news available.</p>";
+      cardsWrapper.innerHTML = "<p>No related news found.</p>";
       return;
     }
 
-    const titleDiv = document.createElement("div");
-    titleDiv.className = "news-updates-title";
-    titleDiv.innerHTML = `<h2>Related ${slugToTitle(category)}</h2>`;
-    container.appendChild(titleDiv);
+    // Render news cards
     items.forEach((item) => {
-      const publishDateFormatted = formatDate(item.publishDate);
-
+      const publishDateRaw =
+        item.publishDate?.iso ||
+        item.publishDate?.value ||
+        item.publishDate ||
+        "";
+      
+      const publishDateFormatted = formatDate(publishDateRaw);
+      
       const card = document.createElement("div");
+      card.className = "col-md-6 col-lg-4 mt-4";
 
       card.innerHTML = `
-
         <div class="card card-news">
-            
           <div class="card-img">
             <img
               src="${item.cardImage?._publishUrl || ""}"
               alt="${item.title || ""}"
+              loading="lazy"
             />
           </div>
 
           <div class="card-body">
-            <div class="card-meta">
+            <div class="card-meta d-flex gap-4 align-items-center mb-3">
               <span class="badge ${item.category || ""}">
                 ${slugToTitle(item.category || "")}
               </span>
@@ -80,9 +104,7 @@ export default async function decorate(block) {
               </span>
             </div>
 
-            <h3 class="card-title">
-              ${item.title || ""}
-            </h3>
+            <h3 class="card-title">${item.title || ""}</h3>
 
             <p class="card-text d-none">
               ${item.description?.plaintext || ""}
@@ -91,22 +113,19 @@ export default async function decorate(block) {
             <div class="card-cta">
               <a
                 class="btn-link"
-                href="/en/news-update?post=${encodeURIComponent(
-                  item.slugUrl || ""
-                )}"
+                href="/en/news-update?post=${encodeURIComponent(item.slugUrl || "")}"
               >
-                 READ MORE
+                READ MORE
               </a>
             </div>
           </div>
         </div>
       `;
 
-      // ✅ Append card only to container
-      container.appendChild(card);
+      cardsWrapper.appendChild(card);
     });
   } catch (err) {
-    console.error("News Updates error:", err);
-    block.innerHTML = "<p>Failed to load news.</p>";
+    console.error("Related News Updates error:", err);
+    cardsWrapper.innerHTML = "<p>Error loading related news.</p>";
   }
 }
