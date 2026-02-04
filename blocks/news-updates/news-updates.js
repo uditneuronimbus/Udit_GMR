@@ -111,8 +111,8 @@ export default async function decorate(block) {
 
           <div class="card-body">
             <div class="card-meta d-flex gap-4 align-items-center mb-3">
-              <span class="badge ${item.subCategory || ""}">
-                ${slugToTitle(item.subCategory || "")}
+              <span class="badge ${item.category || ""}">
+                ${item.category || ""}
               </span>
               <span class="meta-date">
                 ${publishDateFormatted}
