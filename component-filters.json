@@ -438,7 +438,7 @@
   {
     "id": "years",
     "components": [
-      "years"
+      "year-item"
     ]
   }
 ]

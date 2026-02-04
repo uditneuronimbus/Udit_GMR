@@ -3555,11 +3555,16 @@
   },
   {
     "id": "years",
+    "fields": []
+  },
+  {
+    "id": "year-item",
+    "itemLabel": "year",
     "fields": [
       {
-        "name": "items",
-        "label": "Years",
-        "component": "multifield",
+        "component": "text",
+        "name": "year",
+        "label": "Year",
         "valueType": "string"
       }
     ]

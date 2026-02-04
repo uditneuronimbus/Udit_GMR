@@ -8,9 +8,24 @@
           "page": {
             "resourceType": "core/franklin/components/block/v1/block",
             "template": {
-              "name": "Years",
+              "name": "years",
               "model": "years",
               "filter": "years"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Year Item",
+      "id": "year-item",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "year-item",
+              "model": "year-item"
             }
           }
         }
@@ -21,11 +36,16 @@
   "models": [
     {
       "id": "years",
+      "fields": []
+    },
+    {
+      "id": "year-item",
+      "itemLabel": "year",
       "fields": [
         {
-          "name": "items",
-          "label": "Years",
-          "component": "multifield",
+          "component": "text",
+          "name": "year",
+          "label": "Year",
           "valueType": "string"
         }
       ]
@@ -35,7 +55,9 @@
   "filters": [
     {
       "id": "years",
-      "components": ["years"]
+      "components": [
+        "year-item"
+      ]
     }
   ]
 }
