@@ -23,56 +23,32 @@
       "id": "filter-by",
       "fields": [
         {
-          "component": "multifield",
+          "component": "text",
           "name": "years",
           "label": "Years",
-          "fields": [
-            {
-              "component": "text",
-              "name": "year",
-              "label": "Year",
-              "valueType": "string"
-            }
-          ]
+          "valueType": "string",
+          "multi": true
         },
         {
-          "component": "multifield",
+          "component": "text",
           "name": "months",
           "label": "Months",
-          "fields": [
-            {
-              "component": "text",
-              "name": "month",
-              "label": "Month",
-              "valueType": "string"
-            }
-          ]
+          "valueType": "string",
+          "multi": true
         },
         {
-          "component": "multifield",
+          "component": "text",
           "name": "tags",
-          "label": "Business Categories",
-          "fields": [
-            {
-              "component": "text",
-              "name": "tag",
-              "label": "Tag",
-              "valueType": "string"
-            }
-          ]
+          "label": "Tags",
+          "valueType": "string",
+          "multi": true
         },
         {
-          "component": "multifield",
+          "component": "text",
           "name": "subCategories",
           "label": "Sub Categories",
-          "fields": [
-            {
-              "component": "text",
-              "name": "subCategory",
-              "label": "Sub Category",
-              "valueType": "string"
-            }
-          ]
+          "valueType": "string",
+          "multi": true
         }
       ]
     }
