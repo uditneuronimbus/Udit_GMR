@@ -19,7 +19,7 @@
 .nav-btn svg {
     max-width: 15px;
 }
-.nav-btn.disabled{opacity:.4;pointer-events:none}
+.nav-btn.disabled{opacity:.3;pointer-events:none;background-color: var(--white);color: var(--lorange);}
 .nav-hover-card{position:absolute;top:50%;transform:translateY(-50%);background:var(--lgrey);padding:16px 20px;border-radius:10px;width:360px;opacity:0;pointer-events:none;transition:opacity .2s ease}
 .prev .nav-hover-card{left:110%}
 .next .nav-hover-card{right:110%}
