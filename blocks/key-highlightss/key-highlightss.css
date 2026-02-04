@@ -1,3 +1,23 @@
+.sec-title {
+    font-size: 44px;
+}
+
+.sec-desc p{
+    font-size: 21px;
+}
+
+.card-ui-three .card-body h3{
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.card-ui-three .card-body p{
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--light-grey);
+}
+
+
 .sec-key{background-color:var(--lpink)}
 @media screen and (min-width:768px){
 .sec-grid-2 .key-col{width:34%}
