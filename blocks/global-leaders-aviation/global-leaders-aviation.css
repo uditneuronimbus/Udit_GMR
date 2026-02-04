@@ -1,6 +1,6 @@
 .gla-wrapper .spacer{display:flex}
 .global-leaders-aviation .gla-content{display:flex;gap:64px}
-.service-logo img{max-height:45px;width:auto}
+.service-logo img{max-height:100px;width:auto}
 .global-leaders-aviation .gla-title h2{line-height:1.5;font-weight:400;color:var(--black);margin:0 0 24px;max-width:370px}
 .global-leaders-aviation .gla-title h2 strong{font-weight:600}
 .global-leaders-aviation .gla-description{font-size:1.125rem;line-height:1.7;color:var(--charcoal);max-width:700px;margin-left:auto}
