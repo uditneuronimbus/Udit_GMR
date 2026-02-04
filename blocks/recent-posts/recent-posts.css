@@ -4,7 +4,7 @@
 .card-news .card-body{padding:1.25rem;font-size:var(--fs-regular);color:var(--charcoal);border-radius:.5rem;background:var(--white);height:100%}
 .card-news .card-title{font-size:var(--fs-medium);font-weight:var(--fw-regular)}
 .card-news .badge{text-transform:capitalize;padding:.5rem 1rem}
-.badge.press-release{background-color:var(--turquoise);color:var(--white)}
+.badge{background-color:var(--royal-blue);color:var(--white)}
 .badge.blog{background-color:var(--royal-blue);color:var(--white)}
 .meta-date{background:url(../../icons/calendar-icon.svg) no-repeat 1rem center;padding-left:3rem;font-weight:var(--fw-semi-bold);font-size:var(--fs-small);opacity:.5;border-left:solid 2px var(--charcoal);line-height:1.4}
 .recent-posts .card-title {
@@ -14,5 +14,4 @@
     overflow: hidden;
     text-overflow: ellipsis;
     min-height: 52px;
-    line-height: 1.4;
-}
+    line-height: 1.4; }
