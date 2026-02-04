@@ -76,12 +76,12 @@
           "valueType": "string",
           "options": [
             {
-              "name": "Domestic",
-              "value": "domestic"
+              "name": "Domestic Network",
+              "value": "domesticNetwork"
             },
             {
-              "name": "International",
-              "value": "international"
+              "name": "International Network",
+              "value": "internationalNetwork"
             },
             {
               "name": "Wind Energy",

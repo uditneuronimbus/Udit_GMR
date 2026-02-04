@@ -57,7 +57,8 @@
       "integrity-decision",
       "press-release-featured",
       "press-release-listing",
-      "image-scroll-card"
+      "image-scroll-card",
+      "key-highlight-button"
     ]
   },
   {
@@ -301,10 +302,20 @@
     "components": []
   },
   {
+    "id": "key-highlight-button",
+    "components": [
+      "key-highlight-items"
+    ]
+  },
+  {
     "id": "key-highlightss",
     "components": [
       "key-highlight-item"
     ]
+  },
+  {
+    "id": "latest-press-update",
+    "components": []
   },
   {
     "id": "listed-companies",
@@ -316,6 +327,12 @@
     "id": "message-from-leadership",
     "components": [
       "message-from-leadership-item"
+    ]
+  },
+  {
+    "id": "months",
+    "components": [
+      "month-item"
     ]
   },
   {
@@ -362,6 +379,16 @@
     ]
   },
   {
+    "id": "press-hero",
+    "components": [
+      "press-hero"
+    ]
+  },
+  {
+    "id": "press-nav",
+    "components": []
+  },
+  {
     "id": "press-release-detail",
     "components": []
   },
@@ -376,6 +403,10 @@
     ]
   },
   {
+    "id": "recent-posts",
+    "components": []
+  },
+  {
     "id": "sdg-themes",
     "components": [
       "sdg-themes-item"
@@ -384,6 +415,12 @@
   {
     "id": "search-results",
     "components": []
+  },
+  {
+    "id": "sub-category",
+    "components": [
+      "sub-category-item"
+    ]
   },
   {
     "id": "success-stories",
@@ -396,9 +433,21 @@
     ]
   },
   {
+    "id": "tags",
+    "components": [
+      "tag-item"
+    ]
+  },
+  {
     "id": "values-and-beliefs",
     "components": [
       "value-cards"
+    ]
+  },
+  {
+    "id": "years",
+    "components": [
+      "year-item"
     ]
   }
 ]
