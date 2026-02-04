@@ -61,8 +61,8 @@
       "press-hero",
       "contact-cards",
       "press-nav",
-      "recent-posts"
-      "image-scroll-card"
+      "recent-posts",
+      "latest-press-update"
     ]
   },
   {
@@ -427,8 +427,11 @@
     "components": []
   },
   {
-      "id": "recent-posts",
-      "components": [ ]
-    }
+    "id": "recent-posts",
+    "components": []
+  },
+  {
+    "id": "latest-press-update",
+    "components": []
   }
 ]

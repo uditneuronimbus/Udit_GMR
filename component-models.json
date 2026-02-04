@@ -3541,5 +3541,16 @@
         "label": "Section Limit"
       }
     ]
+  },
+  {
+    "id": "latest-press-update",
+    "fields": [
+      {
+        "name": "label",
+        "label": "Section Label",
+        "component": "text",
+        "valueType": "string"
+      }
+    ]
   }
 ]
