@@ -57,16 +57,8 @@
       "integrity-decision",
       "press-release-featured",
       "press-release-listing",
-      "news-update-page",
-      "press-hero",
-      "contact-cards",
-      "press-nav",
-      "recent-posts",
-      "latest-press-update",
-      "years",
-      "months",
-      "tags",
-      "sub-category"
+      "image-scroll-card",
+      "key-highlight-button"
     ]
   },
   {
@@ -310,10 +302,20 @@
     "components": []
   },
   {
+    "id": "key-highlight-button",
+    "components": [
+      "key-highlight-item"
+    ]
+  },
+  {
     "id": "key-highlightss",
     "components": [
       "key-highlight-item"
     ]
+  },
+  {
+    "id": "latest-press-update",
+    "components": []
   },
   {
     "id": "listed-companies",
@@ -325,6 +327,12 @@
     "id": "message-from-leadership",
     "components": [
       "message-from-leadership-item"
+    ]
+  },
+  {
+    "id": "months",
+    "components": [
+      "month-item"
     ]
   },
   {
@@ -371,6 +379,16 @@
     ]
   },
   {
+    "id": "press-hero",
+    "components": [
+      "press-hero"
+    ]
+  },
+  {
+    "id": "press-nav",
+    "components": []
+  },
+  {
     "id": "press-release-detail",
     "components": []
   },
@@ -385,6 +403,10 @@
     ]
   },
   {
+    "id": "recent-posts",
+    "components": []
+  },
+  {
     "id": "sdg-themes",
     "components": [
       "sdg-themes-item"
@@ -393,6 +415,12 @@
   {
     "id": "search-results",
     "components": []
+  },
+  {
+    "id": "sub-category",
+    "components": [
+      "sub-category-item"
+    ]
   },
   {
     "id": "success-stories",
@@ -405,55 +433,21 @@
     ]
   },
   {
+    "id": "tags",
+    "components": [
+      "tag-item"
+    ]
+  },
+  {
     "id": "values-and-beliefs",
     "components": [
       "value-cards"
     ]
   },
   {
-    "id": "news-update-page",
-    "components": []
-  },
-  {
-    "id": "press-hero",
-    "components": [
-      "press-hero"
-    ]
-  },
-  {
-    "id": "contact-cards",
-    "components": [
-      "contact-cards-item"
-    ]
-  },
-  {
-    "id": "press-nav",
-    "components": []
-  },
-  {
-    "id": "recent-posts",
-    "components": []
-  },
-  {
-    "id": "latest-press-update",
-    "components": []
-  },
-  {
     "id": "years",
     "components": [
       "year-item"
     ]
-  },
-  {
-      "id": "months",
-      "components": ["month-item"]
-    },
-    {
-      "id": "tags",
-      "components": ["tag-item"]
-    },
-    {
-      "id": "sub-category",
-      "components": ["sub-category-item"]
-    }
+  }
 ]

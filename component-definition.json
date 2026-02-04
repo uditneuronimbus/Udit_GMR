@@ -1336,6 +1336,37 @@
           }
         },
         {
+          "title": "Key Highlights Button",
+          "id": "key-highlight-button",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "key-highlight-button",
+                  "model": "key-highlight-button",
+                  "filter": "key-highlight-button"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Key Highlight Card",
+          "id": "key-highlight-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "key-highlight-item",
+                  "model": "key-highlight-item"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Key Highlights",
           "id": "key-highlightss",
           "plugins": {
@@ -1361,6 +1392,22 @@
                 "template": {
                   "name": "key-highlight-item",
                   "model": "key-highlight-item"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Latest Press Update",
+          "id": "latest-press-update",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Latest Press Update",
+                  "model": "latest-press-update",
+                  "filter": "latest-press-update"
                 }
               }
             }
@@ -1426,6 +1473,37 @@
                 "template": {
                   "name": "Leadership Message Item",
                   "model": "message-from-leadership-item"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Months",
+          "id": "months",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "months",
+                  "model": "months",
+                  "filter": "months"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Month Item",
+          "id": "month-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "month-item",
+                  "model": "month-item"
                 }
               }
             }
@@ -1650,6 +1728,38 @@
           }
         },
         {
+          "title": "Press Hero",
+          "id": "press-hero",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "press-hero",
+                  "model": "press-hero",
+                  "filter": "press-hero"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Press Nav",
+          "id": "press-nav",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Press Nav",
+                  "model": "press-nav",
+                  "filter": "press-nav"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Press Release Detail",
           "id": "press-release-detail",
           "plugins": {
@@ -1731,6 +1841,22 @@
           }
         },
         {
+          "title": "Recent Posts",
+          "id": "recent-posts",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Recent Posts",
+                  "model": "recent-posts",
+                  "filter": "recent-posts"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "SDG Themes",
           "id": "sdg-themes",
           "plugins": {
@@ -1794,6 +1920,37 @@
           }
         },
         {
+          "title": "Sub Category",
+          "id": "sub-category",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "sub-category",
+                  "model": "sub-category",
+                  "filter": "sub-category"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Sub Category Item",
+          "id": "sub-category-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "sub-category-item",
+                  "model": "sub-category-item"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Success Stories",
           "id": "success-stories",
           "plugins": {
@@ -1841,210 +1998,6 @@
           }
         },
         {
-          "title": "Values and Beliefs",
-          "id": "values-and-beliefs",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "values-and-beliefs",
-                  "model": "values-and-beliefs",
-                  "filter": "values-and-beliefs"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Value Card",
-          "id": "value-cards",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "value-cards",
-                  "model": "value-cards"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "News Update Page",
-          "id": "news-update-page",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "News Update Page",
-                  "model": "news-update-page",
-                  "filter": "news-update-page"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Press Hero",
-          "id": "press-hero",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "press-hero",
-                  "model": "press-hero",
-                  "filter": "press-hero"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Contact Cards",
-          "id": "contact-cards",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "contact-cards",
-                  "model": "contact-cards",
-                  "filter": "contact-cards"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Contact Card",
-          "id": "contact-cards-item",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "contact-cards-item",
-                  "model": "contact-cards-item"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Press Navigation",
-          "id": "press-nav",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Press Navigation",
-                  "model": "press-nav",
-                  "filter": "press-nav"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Recent Posts",
-          "id": "recent-posts",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Recent Posts",
-                  "model": "recent-posts",
-                  "filter": "recent-posts"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Latest Press Update",
-          "id": "latest-press-update",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Latest Press Update",
-                  "model": "latest-press-update",
-                  "filter": "latest-press-update"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Years",
-          "id": "years",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "years",
-                  "model": "years",
-                  "filter": "years"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Year Item",
-          "id": "year-item",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "year-item",
-                  "model": "year-item"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Months",
-          "id": "months",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "months",
-                  "model": "months",
-                  "filter": "months"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Month Item",
-          "id": "month-item",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "month-item",
-                  "model": "month-item"
-                }
-              }
-            }
-          }
-        },
-        {
           "title": "Tags",
           "id": "tags",
           "plugins": {
@@ -2076,31 +2029,62 @@
           }
         },
         {
-          "title": "Sub Category",
-          "id": "sub-category",
+          "title": "Values and Beliefs",
+          "id": "values-and-beliefs",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "sub-category",
-                  "model": "sub-category",
-                  "filter": "sub-category"
+                  "name": "values-and-beliefs",
+                  "model": "values-and-beliefs",
+                  "filter": "values-and-beliefs"
                 }
               }
             }
           }
         },
         {
-          "title": "Sub Category Item",
-          "id": "sub-category-item",
+          "title": "Value Card",
+          "id": "value-cards",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "sub-category-item",
-                  "model": "sub-category-item"
+                  "name": "value-cards",
+                  "model": "value-cards"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Years",
+          "id": "years",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "years",
+                  "model": "years",
+                  "filter": "years"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Year Item",
+          "id": "year-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "year-item",
+                  "model": "year-item"
                 }
               }
             }
