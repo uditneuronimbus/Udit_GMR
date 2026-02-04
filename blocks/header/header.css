@@ -282,9 +282,10 @@ header.header-wrapper {
     height: 2px;
     background: var(--white);
     position: absolute;
-    top: 28px;
+    top: 50%;
     left: 12px;
     border-radius: 10px;
+    transform: translateY(-50%);
     transition-duration: 0.3s;
 }
 .nav-hamburger-icon:before,
