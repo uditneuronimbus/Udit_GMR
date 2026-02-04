@@ -1,7 +1,6 @@
-import { getLatestPress } from "../../scripts/news-api.js";
+import { getApiHost } from "../../scripts/api.js";
 
-const PUBLISH_DOMAIN =
-  "https://publish-p168597-e1803019.adobeaemcloud.com";
+
 
 /* ================================
    Date formatter
@@ -22,6 +21,7 @@ function formatDate(dateString) {
 export default async function decorate(block) {
   const labelText = block.textContent.trim() || "LATEST PRESS UPDATE";
   block.innerHTML = "";
+  
 
   const container = document.createElement("section");
   container.className = "latest-press-update";
@@ -40,8 +40,26 @@ export default async function decorate(block) {
      Fetch latest press
   ================================ */
   try {
-    const item = await getLatestPress();
-    console.log("___________________________", item);
+      const limit = 3;
+      const offset = 0;
+      const category = "press-release";
+
+     const apiUrl =
+          `${getApiHost()}/api/v1/web/gmr-api/recent-posts` +
+          `?limit=${encodeURIComponent(limit)}` +
+          `&soffset=${encodeURIComponent(offset)}` +
+          `&category=${encodeURIComponent(category)}`;
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(`API error ${res.status}`);
+
+    const json = await res.json();
+    const items = json?.data?.data?.newsList?.items || [];
+    if (!items.length) {
+      block.innerHTML = "<p>No news available.</p>";
+      return;
+    }
+
+    const item = items[0];
     
     if (!item) {
       wrapper.innerHTML = "<p>No press updates found.</p>";
