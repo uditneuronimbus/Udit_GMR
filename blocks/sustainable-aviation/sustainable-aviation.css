@@ -3,6 +3,23 @@
   background: #f7f8f5;
 }
 
+
+.alignment-center.sustainable-aviation-container .sustainable-aviation-runtime .sa-container .sa-header{
+display: block;
+}
+
+.alignment-center.sustainable-aviation-container .sustainable-aviation-runtime .sa-container .sa-header h2 {
+  width: 100%;
+  text-align: center;
+  font-size: 44px;
+}
+
+.alignment-center.sustainable-aviation-container .sustainable-aviation-runtime .sa-container .sa-header .sa-description {
+  margin-left: 300px;
+  width: 50%;
+  text-align: center;
+}
+
 .sa-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -37,13 +54,13 @@
 .sa-card {
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  /* box-shadow: 0 10px 30px rgba(0,0,0,0.08); */
   transition: transform .3s ease, box-shadow .3s ease;
 }
 
 .sa-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+  /* box-shadow: 0 18px 40px rgba(0,0,0,0.12); */
 }
 
 .sa-card-image img {
@@ -54,9 +71,20 @@
 }
 
 .sa-card-content {
-  padding: 24px 26px 30px;
+  padding: 20px 37px 30px;
   background-color: var(--white );
+}
+
+.page-gal .sa-card-content {
   min-height: 230px;
+    padding: 20px 34px 30px;
+
+}
+
+.page-gpuil .sa-card-content {
+  min-height: 230px;
+      padding: 20px 34px 30px;
+
 }
 
 .sa-card-content h3 {
