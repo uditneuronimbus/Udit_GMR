@@ -3552,5 +3552,16 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "years",
+    "fields": [
+      {
+        "name": "items",
+        "label": "Years",
+        "component": "multifield",
+        "valueType": "string"
+      }
+    ]
   }
 ]

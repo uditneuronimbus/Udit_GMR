@@ -62,7 +62,8 @@
       "contact-cards",
       "press-nav",
       "recent-posts",
-      "latest-press-update"
+      "latest-press-update",
+      "years"
     ]
   },
   {
@@ -433,5 +434,11 @@
   {
     "id": "latest-press-update",
     "components": []
+  },
+  {
+    "id": "years",
+    "components": [
+      "years"
+    ]
   }
 ]
