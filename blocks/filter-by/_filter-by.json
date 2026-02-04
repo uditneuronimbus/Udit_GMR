@@ -45,8 +45,8 @@
         },
         {
           "component": "text",
-          "name": "subCategories",
-          "label": "Sub Categories",
+          "name": "filter-categories",
+          "label": "Filter Categories",
           "valueType": "string",
           "multi": true
         }
