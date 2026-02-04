@@ -78,14 +78,14 @@
 /* Target the ACTUAL table */
 .news-contact-cards > table {
   width: 85% !important;
-  table-layout: fixed;
+  table-layout: fixed; border: none !important;
 
   /* OVERRIDE inline styles */
   border-collapse: separate !important;
   border-spacing: 1.25rem 0;
 }
 
-.news-contact-cards td{background:var(--white);border-radius:8px;padding:1.5rem 1.5rem 1.75rem;vertical-align:top;}
+.news-contact-cards td{background:var(--white);border-radius:8px;padding:1.5rem 1.5rem 1.75rem;vertical-align:top;border: none !important;}
 .news-contact-cards h4{font-size:var(--fs-large);font-weight:600;margin:0 0 .35rem;color:#111827}
 .news-contact-cards p{margin:0;font-size:.875rem;color:#6b7280;line-height:1.5}
 .news-contact-cards a{display:inline-flex;align-items:center;gap:.4rem;margin-top:.75rem;font-size:var(--fs-normal);color:var(--charcoal);text-decoration:none;font-weight:500}
