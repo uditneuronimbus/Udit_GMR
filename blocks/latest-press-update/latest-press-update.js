@@ -41,7 +41,8 @@ export default async function decorate(block) {
   ================================ */
   try {
     const item = await getLatestPress();
-
+    console.log("___________________________", item);
+    
     if (!item) {
       wrapper.innerHTML = "<p>No press updates found.</p>";
       return;
