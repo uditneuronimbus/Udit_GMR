@@ -61,8 +61,12 @@
       "press-hero",
       "contact-cards",
       "press-nav",
-      "recent-posts"
-      "image-scroll-card"
+      "recent-posts",
+      "latest-press-update",
+      "years",
+      "months",
+      "tags",
+      "sub-category"
     ]
   },
   {
@@ -427,8 +431,29 @@
     "components": []
   },
   {
-      "id": "recent-posts",
-      "components": [ ]
+    "id": "recent-posts",
+    "components": []
+  },
+  {
+    "id": "latest-press-update",
+    "components": []
+  },
+  {
+    "id": "years",
+    "components": [
+      "year-item"
+    ]
+  },
+  {
+      "id": "months",
+      "components": ["month-item"]
+    },
+    {
+      "id": "tags",
+      "components": ["tag-item"]
+    },
+    {
+      "id": "sub-category",
+      "components": ["sub-category-item"]
     }
-  }
 ]
