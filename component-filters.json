@@ -304,7 +304,7 @@
   {
     "id": "key-highlight-button",
     "components": [
-      "key-highlight-item"
+      "key-highlight-items"
     ]
   },
   {

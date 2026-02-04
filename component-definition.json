@@ -1353,14 +1353,14 @@
         },
         {
           "title": "Key Highlight Card",
-          "id": "key-highlight-item",
+          "id": "key-highlight-items",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "key-highlight-item",
-                  "model": "key-highlight-item"
+                  "name": "key-highlight-items",
+                  "model": "key-highlight-items"
                 }
               }
             }
