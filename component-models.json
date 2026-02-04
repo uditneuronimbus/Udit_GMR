@@ -3568,5 +3568,53 @@
         "valueType": "string"
       }
     ]
-  }
+  },
+  {
+      "id": "months",
+      "fields": []
+    },
+    {
+      "id": "month-item",
+      "itemLabel": "month",
+      "fields": [
+        {
+          "component": "text",
+          "name": "month",
+          "label": "Month",
+          "valueType": "string"
+        }
+      ]
+    },
+    {
+      "id": "tags",
+      "fields": []
+    },
+    {
+      "id": "tag-item",
+      "itemLabel": "tag",
+      "fields": [
+        {
+          "component": "text",
+          "name": "tag",
+          "label": "Tag",
+          "valueType": "string"
+        }
+      ]
+    },
+    {
+      "id": "sub-category",
+      "fields": []
+    },
+    {
+      "id": "sub-category-item",
+      "itemLabel": "subCategory",
+      "fields": [
+        {
+          "component": "text",
+          "name": "subCategory",
+          "label": "Sub Category",
+          "valueType": "string"
+        }
+      ]
+    }
 ]

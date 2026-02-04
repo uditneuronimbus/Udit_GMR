@@ -63,7 +63,10 @@
       "press-nav",
       "recent-posts",
       "latest-press-update",
-      "years"
+      "years",
+      "months",
+      "tags",
+      "sub-category"
     ]
   },
   {
@@ -440,5 +443,17 @@
     "components": [
       "year-item"
     ]
-  }
+  },
+  {
+      "id": "months",
+      "components": ["month-item"]
+    },
+    {
+      "id": "tags",
+      "components": ["tag-item"]
+    },
+    {
+      "id": "sub-category",
+      "components": ["sub-category-item"]
+    }
 ]

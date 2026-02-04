@@ -1,0 +1,61 @@
+{
+  "definitions": [
+    {
+      "title": "Tags",
+      "id": "tags",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "tags",
+              "model": "tags",
+              "filter": "tags"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Tag Item",
+      "id": "tag-item",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "tag-item",
+              "model": "tag-item"
+            }
+          }
+        }
+      }
+    }
+  ],
+
+  "models": [
+    {
+      "id": "tags",
+      "fields": []
+    },
+    {
+      "id": "tag-item",
+      "itemLabel": "tag",
+      "fields": [
+        {
+          "component": "text",
+          "name": "tag",
+          "label": "Tag",
+          "valueType": "string"
+        }
+      ]
+    }
+  ],
+
+  "filters": [
+    {
+      "id": "tags",
+      "components": ["tag-item"]
+    }
+  ]
+}
