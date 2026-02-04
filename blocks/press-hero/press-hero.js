@@ -122,9 +122,9 @@ function buildPressHero(item) {
 
         
 
-        <h1 class="press-hero-title">
+        <div class="press-hero-title">
           ${item.title || ""}
-        </h1>
+        </div>
 
         <div class="press-hero-meta">
           ${item.subCategory || item.category ? `
