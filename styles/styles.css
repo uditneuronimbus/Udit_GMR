@@ -18,8 +18,8 @@
 } */
 :root {
     /* colors */
-    --blue: #003366;
-    --red: #ff0000;
+    --blue: #004c99;
+    --red: #ff4040;
     --yellow: #faa519;
     --turquoise: #00abc5;
     --royal-blue: #305fab;
@@ -260,6 +260,12 @@ hr {
 .w-20 {
     max-width: 20% !important;
 }
+.badge.corporate { background-color: var(--charcoal);}
+.badge.airport-aero-services { background-color: var(--blue);}
+.badge.energy { background-color: var(--red);}
+.badge.sports { background-color: var(--turquoise);}
+.badge.transportation-urban-infra { background-color: var(--orange);}
+.badge.foundation { background-color: var(--green);}
 .btn-link {
     color: var(--lorange);
     text-transform: uppercase;
