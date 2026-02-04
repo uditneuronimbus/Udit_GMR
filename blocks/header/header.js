@@ -1,7 +1,7 @@
 import { getMetadata } from "../../scripts/aem.js";
 import { loadFragment } from "../fragment/fragment.js";
 
-const isDesktop = window.matchMedia("(min-width: 900px)");
+const isDesktop = window.matchMedia("(min-width: 1199px)");
 
 // --- Helper Functions ---
 function closeOnEscape(e) {
@@ -112,66 +112,68 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
 
   // Reset mobile panels when closing menu
   if (!willBeExpanded && !isDesktop.matches) {
-    const mobileNav = document.querySelector('.mobile-nav-container');
+    const mobileNav = document.querySelector(".mobile-nav-container");
     if (mobileNav) {
-      mobileNav.querySelectorAll('.mobile-nav-panel').forEach(panel => {
-        panel.classList.remove('active');
+      mobileNav.querySelectorAll(".mobile-nav-panel").forEach((panel) => {
+        panel.classList.remove("active");
       });
-      const mainPanel = mobileNav.querySelector('.mobile-nav-panel.main');
-      if (mainPanel) mainPanel.classList.add('active');
+      const mainPanel = mobileNav.querySelector(".mobile-nav-panel.main");
+      if (mainPanel) mainPanel.classList.add("active");
     }
   }
 }
 
 // Mobile Drilling Navigation - Build from cloned menu structure
 function buildMobileNav(originalMenu) {
-  const mobileContainer = document.createElement('div');
-  mobileContainer.className = 'mobile-nav-container';
+  const mobileContainer = document.createElement("div");
+  mobileContainer.className = "mobile-nav-container";
 
   // Create main panel
-  const mainPanel = document.createElement('div');
-  mainPanel.className = 'mobile-nav-panel main active';
+  const mainPanel = document.createElement("div");
+  mainPanel.className = "mobile-nav-panel main active";
 
-  const mainList = document.createElement('ul');
-  mainList.className = 'mobile-nav-list';
+  const mainList = document.createElement("ul");
+  mainList.className = "mobile-nav-list";
 
   // Create a function to recursively traverse and build menu items
   function buildMenuItems(ulElement, targetList, level = 0) {
-    const items = Array.from(ulElement.children).filter(child => child.tagName === 'LI');
+    const items = Array.from(ulElement.children).filter(
+      (child) => child.tagName === "LI",
+    );
 
-    items.forEach(li => {
+    items.forEach((li) => {
       // Get the link - could be direct child or in a <p>
-      const link = li.querySelector('a');
+      const link = li.querySelector("a");
       if (!link) return;
 
       const text = link.textContent.trim();
       const href = link.href;
 
       // Check if this LI has any UL children
-      const submenu = li.querySelector('ul');
+      const submenu = li.querySelector("ul");
 
-      const mobileItem = document.createElement('li');
-      mobileItem.className = 'mobile-nav-item';
+      const mobileItem = document.createElement("li");
+      mobileItem.className = "mobile-nav-item";
 
-      const mobileLink = document.createElement('a');
-      mobileLink.href = submenu ? '#' : href;
-      mobileLink.className = 'mobile-nav-link';
+      const mobileLink = document.createElement("a");
+      mobileLink.href = submenu ? "#" : href;
+      mobileLink.className = "mobile-nav-link";
       mobileLink.innerHTML = `<span>${text}</span>`;
 
       if (submenu) {
-        const arrow = document.createElement('span');
-        arrow.className = 'mobile-nav-arrow';
-        arrow.innerHTML = '›';
+        const arrow = document.createElement("span");
+        arrow.className = "mobile-nav-arrow";
+        arrow.innerHTML = "›";
         mobileLink.appendChild(arrow);
 
-        mobileLink.addEventListener('click', (e) => {
+        mobileLink.addEventListener("click", (e) => {
           e.preventDefault();
           showSubmenuPanel(text, href, li, mobileContainer, level + 1);
         });
       } else {
         // Add direct link behavior
-        mobileLink.addEventListener('click', (e) => {
-          if (href && href !== '#') {
+        mobileLink.addEventListener("click", (e) => {
+          if (href && href !== "#") {
             window.location.href = href;
           }
         });
@@ -193,40 +195,43 @@ function buildMobileNav(originalMenu) {
 
 function showSubmenuPanel(title, titleHref, menuItem, container, level) {
   // Check if panel already exists
-  let panel = container.querySelector(`.mobile-nav-panel[data-title="${CSS.escape(title)}"]`);
+  let panel = container.querySelector(
+    `.mobile-nav-panel[data-title="${CSS.escape(title)}"]`,
+  );
 
   if (panel) {
-    panel.classList.add('active');
+    panel.classList.add("active");
     return;
   }
 
   // Create new panel
-  panel = document.createElement('div');
-  panel.className = 'mobile-nav-panel';
-  panel.setAttribute('data-title', title);
-  panel.setAttribute('data-level', level);
+  panel = document.createElement("div");
+  panel.className = "mobile-nav-panel";
+  panel.setAttribute("data-title", title);
+  panel.setAttribute("data-level", level);
 
   // Header with back button AND clickable title
-  const header = document.createElement('div');
-  header.className = 'mobile-nav-header';
+  const header = document.createElement("div");
+  header.className = "mobile-nav-header";
 
-  const backBtn = document.createElement('button');
-  backBtn.className = 'mobile-nav-back';
-  backBtn.innerHTML = '‹';
-  backBtn.setAttribute('aria-label', 'Go back');
-  backBtn.addEventListener('click', () => {
-    panel.classList.remove('active');
+  const backBtn = document.createElement("button");
+  backBtn.className = "mobile-nav-back";
+  backBtn.innerHTML = "‹";
+  backBtn.setAttribute("aria-label", "Go back");
+  backBtn.addEventListener("click", () => {
+    panel.classList.remove("active");
   });
 
-  const headerTitle = document.createElement('h3');
+  const headerTitle = document.createElement("h3");
 
   // Make the title clickable if it has a valid href
-  if (titleHref && titleHref !== '#' && titleHref !== window.location.href) {
-    const titleLink = document.createElement('a');
+  if (titleHref && titleHref !== "#" && titleHref !== window.location.href) {
+    const titleLink = document.createElement("a");
     titleLink.href = titleHref;
     titleLink.textContent = title;
-    titleLink.style.cssText = 'color: inherit; text-decoration: none; display: block;';
-    titleLink.addEventListener('click', (e) => {
+    titleLink.style.cssText =
+      "color: inherit; text-decoration: none; display: block;";
+    titleLink.addEventListener("click", (e) => {
       e.stopPropagation();
       window.location.href = titleHref;
     });
@@ -240,50 +245,59 @@ function showSubmenuPanel(title, titleHref, menuItem, container, level) {
   panel.appendChild(header);
 
   // Content list - FIRST ITEM: Link to the category page itself
-  const list = document.createElement('ul');
-  list.className = 'mobile-nav-list';
+  const list = document.createElement("ul");
+  list.className = "mobile-nav-list";
 
   // Add the main category page link as first item (for all levels except too deep)
-  if (titleHref && titleHref !== '#' && titleHref !== window.location.href && level <= 3) {
-    const mainCategoryItem = document.createElement('li');
-    mainCategoryItem.className = 'mobile-nav-item main-category-link';
+  if (
+    titleHref &&
+    titleHref !== "#" &&
+    titleHref !== window.location.href &&
+    level <= 3
+  ) {
+    const mainCategoryItem = document.createElement("li");
+    mainCategoryItem.className = "mobile-nav-item main-category-link";
 
-    const mainCategoryLink = document.createElement('a');
+    const mainCategoryLink = document.createElement("a");
     mainCategoryLink.href = titleHref;
-    mainCategoryLink.className = 'mobile-nav-link';
+    mainCategoryLink.className = "mobile-nav-link";
     mainCategoryLink.innerHTML = `<span style="font-weight: bold; color: #0066cc;">Go to ${title} Page</span>`;
 
     mainCategoryItem.appendChild(mainCategoryLink);
     list.appendChild(mainCategoryItem);
 
     // Add separator
-    const separator = document.createElement('li');
-    separator.className = 'mobile-nav-separator';
-    separator.innerHTML = '<hr style="margin: 10px 20px; border: none; border-top: 1px solid #ddd;">';
+    const separator = document.createElement("li");
+    separator.className = "mobile-nav-separator";
+    separator.innerHTML =
+      '<hr style="margin: 10px 20px; border: none; border-top: 1px solid #ddd;">';
     list.appendChild(separator);
   }
 
   // Find ALL direct UL children in the menuItem
-  const submenus = menuItem.querySelectorAll(':scope > ul');
+  const submenus = menuItem.querySelectorAll(":scope > ul");
 
   // Process each direct UL
-  submenus.forEach(submenu => {
+  submenus.forEach((submenu) => {
     // Get all direct LI children of this submenu
-    const items = Array.from(submenu.children).filter(child => child.tagName === 'LI');
+    const items = Array.from(submenu.children).filter(
+      (child) => child.tagName === "LI",
+    );
 
-    items.forEach(li => {
-      const link = li.querySelector('a');
+    items.forEach((li) => {
+      const link = li.querySelector("a");
       if (!link) {
         // Check if this LI has other content
         const textContent = li.textContent.trim();
         if (textContent) {
-          const mobileItem = document.createElement('li');
-          mobileItem.className = 'mobile-nav-item';
+          const mobileItem = document.createElement("li");
+          mobileItem.className = "mobile-nav-item";
 
-          const contentSpan = document.createElement('span');
-          contentSpan.className = 'mobile-nav-content';
+          const contentSpan = document.createElement("span");
+          contentSpan.className = "mobile-nav-content";
           contentSpan.textContent = textContent;
-          contentSpan.style.cssText = 'display: block; padding: 1rem 1.25rem; color: #333;';
+          contentSpan.style.cssText =
+            "display: block; padding: 1rem 1.25rem; color: #333;";
 
           mobileItem.appendChild(contentSpan);
           list.appendChild(mobileItem);
@@ -295,31 +309,31 @@ function showSubmenuPanel(title, titleHref, menuItem, container, level) {
       const href = link.href;
 
       // Check if this LI has any UL children
-      const hasNestedUl = li.querySelector(':scope > ul');
+      const hasNestedUl = li.querySelector(":scope > ul");
 
-      const mobileItem = document.createElement('li');
-      mobileItem.className = 'mobile-nav-item';
+      const mobileItem = document.createElement("li");
+      mobileItem.className = "mobile-nav-item";
 
-      const mobileLink = document.createElement('a');
-      mobileLink.href = hasNestedUl ? '#' : href;
-      mobileLink.className = 'mobile-nav-link';
+      const mobileLink = document.createElement("a");
+      mobileLink.href = hasNestedUl ? "#" : href;
+      mobileLink.className = "mobile-nav-link";
       mobileLink.innerHTML = `<span>${text}</span>`;
 
       if (hasNestedUl) {
-        const arrow = document.createElement('span');
-        arrow.className = 'mobile-nav-arrow';
-        arrow.innerHTML = '›';
+        const arrow = document.createElement("span");
+        arrow.className = "mobile-nav-arrow";
+        arrow.innerHTML = "›";
         mobileLink.appendChild(arrow);
 
-        mobileLink.addEventListener('click', (e) => {
+        mobileLink.addEventListener("click", (e) => {
           e.preventDefault();
           // Pass the entire LI to preserve deeper nested structure
           showSubmenuPanel(text, href, li, container, level + 1);
         });
       } else {
         // Add direct link behavior
-        mobileLink.addEventListener('click', (e) => {
-          if (href && href !== '#') {
+        mobileLink.addEventListener("click", (e) => {
+          if (href && href !== "#") {
             window.location.href = href;
           }
         });
@@ -334,7 +348,7 @@ function showSubmenuPanel(title, titleHref, menuItem, container, level) {
   container.appendChild(panel);
 
   // Trigger animation
-  setTimeout(() => panel.classList.add('active'), 10);
+  setTimeout(() => panel.classList.add("active"), 10);
 }
 
 // --- Main Decorate Function ---
@@ -387,7 +401,8 @@ export default async function decorate(block) {
     console.log("Nav innerHTML:", nav.innerHTML);
 
     // Check if we have a proper UL structure or just text
-    const hasProperStructure = nav.querySelector('ul') || nav.querySelector('.default-content-wrapper');
+    const hasProperStructure =
+      nav.querySelector("ul") || nav.querySelector(".default-content-wrapper");
 
     if (!hasProperStructure) {
       // We need to create the structure from the text content
@@ -402,9 +417,9 @@ export default async function decorate(block) {
         section.classList.add(`nav-${c}`);
 
         // Ensure each section has proper structure
-        if (!section.querySelector('.default-content-wrapper')) {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'default-content-wrapper';
+        if (!section.querySelector(".default-content-wrapper")) {
+          const wrapper = document.createElement("div");
+          wrapper.className = "default-content-wrapper";
           while (section.firstChild) {
             wrapper.appendChild(section.firstChild);
           }
@@ -414,6 +429,8 @@ export default async function decorate(block) {
     });
 
     const navBrand = nav.querySelector(".nav-brand");
+    let clonedMenu = null; // Declare clonedMenu variable here so it's accessible in media query listener
+
     if (navBrand) {
       const brandLink = navBrand.querySelector(".button");
       if (brandLink) {
@@ -422,27 +439,17 @@ export default async function decorate(block) {
         if (btnContainer) btnContainer.className = "";
       }
 
-      // FIX: Create only one logo and remove duplicates
+      // FIXED: Create a logo link for each picture (not just the first one)
       const logoPictures = navBrand.querySelectorAll("picture");
-      if (logoPictures.length > 0) {
-        // Create only the first logo
-        const firstPicture = logoPictures[0];
+      logoPictures.forEach((picture) => {
         const logoLink = document.createElement("a");
         logoLink.href = "/en/";
         logoLink.setAttribute("aria-label", "GMR Home");
         logoLink.className = "navbar-logo";
 
-        if (firstPicture.parentNode) {
-          firstPicture.parentNode.insertBefore(logoLink, firstPicture);
-          logoLink.appendChild(firstPicture);
-        }
-
-        // Remove any other logo pictures to prevent duplicates
-        for (let i = 1; i < logoPictures.length; i++) {
-          const picture = logoPictures[i];
-          if (picture.parentNode) {
-            picture.parentNode.removeChild(picture);
-          }
+        if (picture.parentNode) {
+          picture.parentNode.insertBefore(logoLink, picture);
+          logoLink.appendChild(picture);
         }
 
         let current = logoLink.parentElement;
@@ -460,10 +467,10 @@ export default async function decorate(block) {
             break;
           }
         }
-      }
+      });
 
       // Clean up nav-brand content
-      const brandWrapper = navBrand.querySelector('.default-content-wrapper');
+      const brandWrapper = navBrand.querySelector(".default-content-wrapper");
       if (brandWrapper) {
         // Remove any stray paragraphs that are just URLs
         brandWrapper.querySelectorAll("p").forEach((p) => {
@@ -488,16 +495,16 @@ export default async function decorate(block) {
         });
 
         // Ensure we have a proper UL structure
-        let mainUl = brandWrapper.querySelector('ul');
+        let mainUl = brandWrapper.querySelector("ul");
         if (!mainUl) {
           // Create UL from the remaining content
-          mainUl = document.createElement('ul');
+          mainUl = document.createElement("ul");
 
           // Check if there are any remaining links or content
-          const links = brandWrapper.querySelectorAll('a');
+          const links = brandWrapper.querySelectorAll("a");
           if (links.length > 0) {
-            links.forEach(link => {
-              const li = document.createElement('li');
+            links.forEach((link) => {
+              const li = document.createElement("li");
               li.appendChild(link.cloneNode(true));
               mainUl.appendChild(li);
               link.remove();
@@ -505,18 +512,18 @@ export default async function decorate(block) {
           } else {
             // Create navigation items based on typical GMR structure
             const navItems = [
-              { text: 'ABOUT US', href: '/en/about-us' },
-              { text: 'BUSINESSES', href: '/en/businesses' },
-              { text: 'INVESTORS', href: '/en/investors' },
-              { text: 'NEWS & INSIGHTS', href: '/en/news' },
-              { text: 'CAREERS', href: '/en/careers' },
-              { text: 'SUSTAINABILITY', href: '/en/sustainability' },
-              { text: 'FOUNDATION', href: '/en/foundation' }
+              { text: "ABOUT US", href: "/en/about-us" },
+              { text: "BUSINESSES", href: "/en/businesses" },
+              { text: "INVESTORS", href: "/en/investors" },
+              { text: "NEWS & INSIGHTS", href: "/en/news" },
+              { text: "CAREERS", href: "/en/careers" },
+              { text: "SUSTAINABILITY", href: "/en/sustainability" },
+              { text: "FOUNDATION", href: "/en/foundation" },
             ];
 
-            navItems.forEach(item => {
-              const li = document.createElement('li');
-              const a = document.createElement('a');
+            navItems.forEach((item) => {
+              const li = document.createElement("li");
+              const a = document.createElement("a");
               a.href = item.href;
               a.textContent = item.text;
               li.appendChild(a);
@@ -549,10 +556,9 @@ export default async function decorate(block) {
         }
 
         // Get the main UL for navigation
-        mainUl = brandWrapper.querySelector('ul');
+        mainUl = brandWrapper.querySelector("ul");
 
         // IMPORTANT: Clone the menu BEFORE building mobile nav
-        let clonedMenu = null;
         if (mainUl) {
           clonedMenu = mainUl.cloneNode(true);
         }
@@ -560,16 +566,16 @@ export default async function decorate(block) {
         if (mainUl) {
           // Add desktop/mobile mode classes
           if (isDesktop.matches) {
-            document.body.classList.add('desktop-mode');
-            document.body.classList.remove('mobile-mode');
+            document.body.classList.add("desktop-mode");
+            document.body.classList.remove("mobile-mode");
 
             // Ensure desktop nav is visible
-            mainUl.style.display = 'flex';
-            mainUl.style.visibility = 'visible';
-            mainUl.style.opacity = '1';
+            mainUl.style.display = "flex";
+            mainUl.style.visibility = "visible";
+            mainUl.style.opacity = "1";
           } else {
-            document.body.classList.add('mobile-mode');
-            document.body.classList.remove('desktop-mode');
+            document.body.classList.add("mobile-mode");
+            document.body.classList.remove("desktop-mode");
           }
 
           // Process each LI for mega menu if it has submenus
@@ -770,16 +776,24 @@ export default async function decorate(block) {
                                 if (isDesktop.matches) {
                                   l3Ul
                                     .querySelectorAll("li")
-                                    .forEach((el) => el.classList.remove("active"));
+                                    .forEach((el) =>
+                                      el.classList.remove("active"),
+                                    );
                                   l3Li.classList.add("active");
 
                                   let l4List = null;
                                   if (level4Ul) {
                                     l4List = level4Ul.cloneNode(true);
-                                    l4List.className = "vertical-nav-list nested-list";
+                                    l4List.className =
+                                      "vertical-nav-list nested-list";
                                   }
 
-                                  updateDetailsPanel(l3Key, l2Key, l1Key, l4List);
+                                  updateDetailsPanel(
+                                    l3Key,
+                                    l2Key,
+                                    l1Key,
+                                    l4List,
+                                  );
                                 }
                               });
                             });
@@ -851,11 +865,13 @@ export default async function decorate(block) {
     // FIX: Ensure desktop navigation is properly initialized
     if (isDesktop.matches) {
       // Force show desktop navigation
-      const desktopNav = navBrand?.querySelector('.default-content-wrapper > ul');
+      const desktopNav = navBrand?.querySelector(
+        ".default-content-wrapper > ul",
+      );
       if (desktopNav) {
-        desktopNav.style.display = 'flex';
-        desktopNav.style.visibility = 'visible';
-        desktopNav.style.opacity = '1';
+        desktopNav.style.display = "flex";
+        desktopNav.style.visibility = "visible";
+        desktopNav.style.opacity = "1";
       }
     }
 
@@ -864,32 +880,40 @@ export default async function decorate(block) {
     // Update media query listener
     isDesktop.addEventListener("change", (e) => {
       if (e.matches) {
-        document.body.classList.add('desktop-mode');
-        document.body.classList.remove('mobile-mode');
+        document.body.classList.add("desktop-mode");
+        document.body.classList.remove("mobile-mode");
 
         // Remove mobile nav if it exists
-        const mobileNav = navBrand?.querySelector('.mobile-nav-container');
+        const mobileNav = navBrand?.querySelector(".mobile-nav-container");
         if (mobileNav) mobileNav.remove();
 
         // Show desktop nav
-        const desktopNav = navBrand?.querySelector('.default-content-wrapper > ul');
+        const desktopNav = navBrand?.querySelector(
+          ".default-content-wrapper > ul",
+        );
         if (desktopNav) {
-          desktopNav.style.display = 'flex';
-          desktopNav.style.visibility = 'visible';
-          desktopNav.style.opacity = '1';
+          desktopNav.style.display = "flex";
+          desktopNav.style.visibility = "visible";
+          desktopNav.style.opacity = "1";
         }
       } else {
-        document.body.classList.add('mobile-mode');
-        document.body.classList.remove('desktop-mode');
+        document.body.classList.add("mobile-mode");
+        document.body.classList.remove("desktop-mode");
 
         // Hide desktop nav
-        const desktopNav = navBrand?.querySelector('.default-content-wrapper > ul');
+        const desktopNav = navBrand?.querySelector(
+          ".default-content-wrapper > ul",
+        );
         if (desktopNav) {
-          desktopNav.style.display = 'none';
+          desktopNav.style.display = "none";
         }
 
         // Build mobile nav if needed
-        if (clonedMenu && navBrand && !navBrand.querySelector('.mobile-nav-container')) {
+        if (
+          clonedMenu &&
+          navBrand &&
+          !navBrand.querySelector(".mobile-nav-container")
+        ) {
           const mobileNav = buildMobileNav(clonedMenu);
           navBrand.appendChild(mobileNav);
         }
@@ -897,7 +921,6 @@ export default async function decorate(block) {
 
       toggleMenu(nav, navSections, e.matches);
     });
-
   } catch (e) {
     console.error("Navigation Decorate Failed:", e);
   }
@@ -908,29 +931,29 @@ function createNavStructureFromText(nav) {
   const navText = nav.textContent;
 
   // Create the standard structure
-  const navBrand = document.createElement('div');
-  navBrand.className = 'nav-brand';
+  const navBrand = document.createElement("div");
+  navBrand.className = "nav-brand";
 
-  const brandWrapper = document.createElement('div');
-  brandWrapper.className = 'default-content-wrapper';
+  const brandWrapper = document.createElement("div");
+  brandWrapper.className = "default-content-wrapper";
 
   // Create UL with navigation items based on the image you shared
-  const ul = document.createElement('ul');
+  const ul = document.createElement("ul");
 
   // Based on your screenshot, these are the navigation items
   const navItems = [
-    { text: 'ABOUT US', href: '/en/about-us' },
-    { text: 'BUSINESSES', href: '/en/businesses' },
-    { text: 'INVESTORS', href: '/en/investors' },
-    { text: 'NEWS & INSIGHTS', href: '/en/news' },
-    { text: 'CAREERS', href: '/en/careers' },
-    { text: 'SUSTAINABILITY', href: '/en/sustainability' },
-    { text: 'FOUNDATION', href: '/en/foundation' }
+    { text: "ABOUT US", href: "/en/about-us" },
+    { text: "BUSINESSES", href: "/en/businesses" },
+    { text: "INVESTORS", href: "/en/investors" },
+    { text: "NEWS & INSIGHTS", href: "/en/news" },
+    { text: "CAREERS", href: "/en/careers" },
+    { text: "SUSTAINABILITY", href: "/en/sustainability" },
+    { text: "FOUNDATION", href: "/en/foundation" },
   ];
 
-  navItems.forEach(item => {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
+  navItems.forEach((item) => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
     a.href = item.href;
     a.textContent = item.text;
     li.appendChild(a);
@@ -941,6 +964,6 @@ function createNavStructureFromText(nav) {
   navBrand.appendChild(brandWrapper);
 
   // Clear nav and add structured content
-  nav.innerHTML = '';
+  nav.innerHTML = "";
   nav.appendChild(navBrand);
 }
