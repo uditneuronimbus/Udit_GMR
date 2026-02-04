@@ -3554,78 +3554,59 @@
     ]
   },
   {
-    "id": "years",
-    "fields": []
-  },
-  {
-    "id": "year-item",
-    "itemLabel": "year",
+    "id": "filter-by",
     "fields": [
       {
-        "component": "text",
-        "name": "year",
-        "label": "Year",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "months",
-    "fields": []
-  },
-  {
-    "id": "month-item",
-    "itemLabel": "month",
-    "fields": [
+        "component": "multifield",
+        "name": "years",
+        "label": "Years",
+        "fields": [
+          {
+            "component": "text",
+            "name": "year",
+            "label": "Year",
+            "valueType": "string"
+          }
+        ]
+      },
       {
-        "component": "text",
-        "name": "month",
-        "label": "Month",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "tags",
-    "fields": []
-  },
-  {
-    "id": "tag-item",
-    "itemLabel": "tag",
-    "fields": [
+        "component": "multifield",
+        "name": "months",
+        "label": "Months",
+        "fields": [
+          {
+            "component": "text",
+            "name": "month",
+            "label": "Month",
+            "valueType": "string"
+          }
+        ]
+      },
       {
-        "component": "text",
-        "name": "tag",
-        "label": "Tag",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "sub-category",
-    "fields": []
-  },
-  {
-    "id": "sub-category-item",
-    "itemLabel": "subCategory",
-    "fields": [
+        "component": "multifield",
+        "name": "tags",
+        "label": "Business Categories",
+        "fields": [
+          {
+            "component": "text",
+            "name": "tag",
+            "label": "Tag",
+            "valueType": "string"
+          }
+        ]
+      },
       {
-        "component": "text",
-        "name": "subCategory",
-        "label": "Sub Category",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "filter-panel",
-    "fields": [
-      {
-        "component": "text",
-        "name": "heading",
-        "label": "Panel Heading",
-        "valueType": "string",
-        "defaultValue": "Filter By"
+        "component": "multifield",
+        "name": "subCategories",
+        "label": "Sub Categories",
+        "fields": [
+          {
+            "component": "text",
+            "name": "subCategory",
+            "label": "Sub Category",
+            "valueType": "string"
+          }
+        ]
       }
     ]
   }

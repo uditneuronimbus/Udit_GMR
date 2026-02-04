@@ -63,11 +63,7 @@
       "press-nav",
       "recent-posts",
       "latest-press-update",
-      "years",
-      "months",
-      "tags",
-      "sub-category",
-      "filter-panel"
+      "filter-by"
     ]
   },
   {
@@ -440,36 +436,7 @@
     "components": []
   },
   {
-    "id": "years",
-    "components": [
-      "year-item"
-    ]
-  },
-  {
-    "id": "months",
-    "components": [
-      "month-item"
-    ]
-  },
-  {
-    "id": "tags",
-    "components": [
-      "tag-item"
-    ]
-  },
-  {
-    "id": "sub-category",
-    "components": [
-      "sub-category-item"
-    ]
-  },
-  {
-    "id": "filter-panel",
-    "components": [
-      "years",
-      "months",
-      "tags",
-      "sub-category"
-    ]
+    "id": "filter-by",
+    "components": []
   }
 ]
