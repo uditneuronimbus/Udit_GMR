@@ -66,28 +66,53 @@ export default function decorate(block) {
     descCell?.classList.add("comm-card-desc");
 
     // ---- CTA handling ----
-    let ctaWrapper;
-    let ctaLink;
+    // let ctaWrapper;
+    // let ctaLink;
 
-    if (buttonLinkCell) {
-      ctaWrapper = buttonLinkCell;
-      ctaWrapper.classList.add("button-container");
+    // if (buttonLinkCell ) {
+    //   ctaWrapper = buttonLinkCell;
+    //   ctaWrapper.classList.add("button-container");
 
-      ctaLink = ctaWrapper.querySelector("a");
-      if (!ctaLink) {
-        ctaLink = document.createElement("a");
-        ctaWrapper.append(ctaLink);
-      }
+    //   ctaLink = ctaWrapper.querySelector("a");
+    //   if (!ctaLink) {
+    //     ctaLink = document.createElement("a");
+    //     ctaWrapper.append(ctaLink);
+    //   }
 
-      const linkHref =
-        buttonLinkCell.querySelector("a")?.getAttribute("href") || "";
-      const buttonText = buttonTextCell?.textContent?.trim() || "";
+    //   const linkHref =
+    //     buttonLinkCell.querySelector("a")?.getAttribute("href") || "";
+    //   const buttonText = buttonTextCell?.textContent?.trim() || "";
 
-      if (linkHref) ctaLink.href = linkHref;
-      if (buttonText) ctaLink.textContent = buttonText;
+    //   if (linkHref) ctaLink.href = linkHref;
+    //   if (buttonText) ctaLink.textContent = buttonText;
 
-      ctaLink.classList.add("btn", "btn-primary");
-    }
+    //   ctaLink.classList.add("btn", "btn-primary");
+    // }
+
+
+let ctaWrapper;
+let ctaLink;
+
+const buttonText = buttonTextCell?.textContent?.trim() || "";
+
+if (buttonLinkCell && buttonText) {
+  ctaWrapper = buttonLinkCell;
+  ctaWrapper.classList.add("button-container");
+
+  ctaLink = ctaWrapper.querySelector("a");
+  if (!ctaLink) {
+    ctaLink = document.createElement("a");
+    ctaWrapper.append(ctaLink);
+  }
+
+  const linkHref =
+    buttonLinkCell.querySelector("a")?.getAttribute("href") || "";
+
+  if (linkHref) ctaLink.href = linkHref;
+  ctaLink.textContent = buttonText;
+
+  ctaLink.classList.add("btn", "btn-primary");
+}
 
     // remove plain button text row
     buttonTextCell?.remove();
@@ -113,3 +138,4 @@ export default function decorate(block) {
   outerContainer.append(container);
   block.append(outerContainer);
 }
+
