@@ -105,6 +105,11 @@
         },
         {
           "component": "text",
+          "name": "imageAlt",
+          "label": "Alt Text"
+        },
+        {
+          "component": "text",
           "name": "statusBadge",
           "label": "Image Badge (e.g. Operating Asset)",
           "valueType": "string",
