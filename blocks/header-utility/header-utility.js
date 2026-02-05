@@ -10,8 +10,8 @@ export default async function decorate(block) {
      =============================== */
   // Mapped to Company Codes (Stable IDs) from your API
   const STOCK_CODES = {
-    "GAL": "15210029",    // GMR Airports Ltd.
-    "GPUIL": "15131133"   // GMR Power and Urban Infra Ltd.
+    GAL: "15210029", // GMR Airports Ltd.
+    GPUIL: "15131133", // GMR Power and Urban Infra Ltd.
   };
 
   const rows = [...block.children];
@@ -41,7 +41,7 @@ export default async function decorate(block) {
 
   /* ---------- STOCK TICKER ---------- */
   const stockTicker = document.createElement("div");
-  stockTicker.className = "stock-ticker";
+  stockTicker.className = "stock-ticker d-xl-block d-none";
 
   const stockTrack = document.createElement("div");
   stockTrack.className = "stock-track";
@@ -55,7 +55,7 @@ export default async function decorate(block) {
 
   /* CONTACT */
   const contactGroup = document.createElement("div");
-  contactGroup.className = "nav-group";
+  contactGroup.className = "nav-group contact-group";
   contactGroup.innerHTML = `
     <a href="${contactUrl}" class="nav-label">
       ${contactLabel}
@@ -150,7 +150,7 @@ function initAccessibilityModal() {
   console.log("Initializing accessibility modal...");
 
   // Check if modal already exists
-  if (document.getElementById('accessibility-modal')) {
+  if (document.getElementById("accessibility-modal")) {
     console.log("Accessibility modal already exists");
     return;
   }
@@ -249,9 +249,8 @@ function initAccessibilityModal() {
 </div>
 `;
 
-
   // Add modal to body
-  document.body.insertAdjacentHTML('beforeend', modalHTML);
+  document.body.insertAdjacentHTML("beforeend", modalHTML);
 
   console.log("Modal HTML added to body");
 
@@ -265,8 +264,8 @@ function setupAccessibilityModalEvents() {
   console.log("Setting up accessibility modal events...");
 
   // Get elements
-  const accessibilityBtn = document.getElementById('accessibility-button');
-  const modal = document.getElementById('accessibility-modal');
+  const accessibilityBtn = document.getElementById("accessibility-button");
+  const modal = document.getElementById("accessibility-modal");
 
   if (!accessibilityBtn) {
     console.error("Accessibility button not found!");
@@ -280,10 +279,10 @@ function setupAccessibilityModalEvents() {
 
   console.log("Found accessibility button and modal:", accessibilityBtn, modal);
 
-  const closeBtn = modal.querySelector('.accessibility-modal-close');
-  const resetBtn = document.getElementById('accessibility-reset');
-  const optionButtons = modal.querySelectorAll('.accessibility-option-btn');
-  const fontButtons = modal.querySelectorAll('.accessibility-font-btn');
+  const closeBtn = modal.querySelector(".accessibility-modal-close");
+  const resetBtn = document.getElementById("accessibility-reset");
+  const optionButtons = modal.querySelectorAll(".accessibility-option-btn");
+  const fontButtons = modal.querySelectorAll(".accessibility-font-btn");
 
   // Load saved preferences
   loadAccessibilityPreferences();
@@ -292,57 +291,59 @@ function setupAccessibilityModalEvents() {
   }, 500);
 
   // Toggle modal visibility
-  accessibilityBtn.addEventListener('click', function (e) {
+  accessibilityBtn.addEventListener("click", function (e) {
     e.preventDefault();
     e.stopPropagation();
     console.log("Accessibility button clicked!");
-    modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    modal.style.display = modal.style.display === "block" ? "none" : "block";
   });
 
   // Close modal when clicking close button
-  closeBtn.addEventListener('click', function () {
-    modal.style.display = 'none';
+  closeBtn.addEventListener("click", function () {
+    modal.style.display = "none";
   });
 
   // Close modal when clicking outside
-  document.addEventListener('click', function (e) {
-    if (modal.style.display === 'block' &&
+  document.addEventListener("click", function (e) {
+    if (
+      modal.style.display === "block" &&
       !modal.contains(e.target) &&
-      e.target !== accessibilityBtn) {
-      modal.style.display = 'none';
+      e.target !== accessibilityBtn
+    ) {
+      modal.style.display = "none";
     }
   });
 
   // Close modal with Escape key
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && modal.style.display === 'block') {
-      modal.style.display = 'none';
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && modal.style.display === "block") {
+      modal.style.display = "none";
     }
   });
 
   // Handle font button clicks
-  fontButtons.forEach(button => {
-    button.addEventListener('click', function () {
-      const action = this.getAttribute('data-action');
+  fontButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const action = this.getAttribute("data-action");
       console.log("Font button clicked:", action);
       toggleFontSize(action, this);
     });
   });
 
   // Handle option button clicks
-  optionButtons.forEach(button => {
-    button.addEventListener('click', function () {
-      const option = this.getAttribute('data-option');
+  optionButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const option = this.getAttribute("data-option");
       console.log("Option clicked:", option);
       toggleAccessibilityOption(option, this);
     });
   });
 
   // Handle reset button
-  resetBtn.addEventListener('click', function () {
+  resetBtn.addEventListener("click", function () {
     console.log("Reset button clicked - starting reset process");
     resetAccessibilityOptions();
-    modal.style.display = 'none';
+    modal.style.display = "none";
   });
 
   console.log("Accessibility modal events setup complete");
@@ -357,56 +358,58 @@ function getAccessibilityProfile() {
     "profile.accessibility.darkMode":
       localStorage.getItem("accessibility-dark-mode") === "true",
     "profile.accessibility.highlightLinks":
-      localStorage.getItem("accessibility-highlight-links") === "true"
+      localStorage.getItem("accessibility-highlight-links") === "true",
   };
 }
-
 
 function toggleFontSize(action, button) {
   const html = document.documentElement;
   const body = document.body;
-  const modal = document.getElementById('accessibility-modal');
+  const modal = document.getElementById("accessibility-modal");
 
   if (!modal) return;
 
   // Remove all existing font size classes
   html.classList.remove(
-    'font-size--1',
-    'font-size--2',
-    'font-size-1',
-    'font-size-2'
+    "font-size--1",
+    "font-size--2",
+    "font-size-1",
+    "font-size-2",
   );
   body.classList.remove(
-    'font-size--1',
-    'font-size--2',
-    'font-size-1',
-    'font-size-2'
+    "font-size--1",
+    "font-size--2",
+    "font-size-1",
+    "font-size-2",
   );
 
   // Update level based on action
-  if (action === 'text-small') {
+  if (action === "text-small") {
     // For small text, decrease the level (goes from 0 to -1 to -2)
     fontSizeLevel = Math.max(-2, fontSizeLevel - 1);
-  } else if (action === 'text-big') {
+  } else if (action === "text-big") {
     // For big text, increase the level (goes from 0 to 1 to 2)
     fontSizeLevel = Math.min(2, fontSizeLevel + 1);
   }
 
   // Apply the appropriate class
   if (fontSizeLevel !== 0) {
-    const cls = fontSizeLevel < 0 ? `font-size--${Math.abs(fontSizeLevel)}` : `font-size-${fontSizeLevel}`;
+    const cls =
+      fontSizeLevel < 0
+        ? `font-size--${Math.abs(fontSizeLevel)}`
+        : `font-size-${fontSizeLevel}`;
     html.classList.add(cls);
     body.classList.add(cls);
-    localStorage.setItem('accessibility-font-level', fontSizeLevel);
+    localStorage.setItem("accessibility-font-level", fontSizeLevel);
   } else {
-    localStorage.removeItem('accessibility-font-level');
+    localStorage.removeItem("accessibility-font-level");
   }
 
   // Reset button UI
-  modal.querySelectorAll('.accessibility-font-btn').forEach(btn => {
-    btn.classList.remove('active');
-    const mark = btn.querySelector('.option-checkmark');
-    if (mark) mark.style.display = 'none';
+  modal.querySelectorAll(".accessibility-font-btn").forEach((btn) => {
+    btn.classList.remove("active");
+    const mark = btn.querySelector(".option-checkmark");
+    if (mark) mark.style.display = "none";
   });
 
   // Activate correct button based on current level
@@ -414,24 +417,23 @@ function toggleFontSize(action, button) {
     // If font is smaller than normal, activate the "Smaller Text" button
     const smallBtn = modal.querySelector('[data-action="text-small"]');
     if (smallBtn) {
-      smallBtn.classList.add('active');
-      const checkmark = smallBtn.querySelector('.option-checkmark');
-      if (checkmark) checkmark.style.display = 'block';
+      smallBtn.classList.add("active");
+      const checkmark = smallBtn.querySelector(".option-checkmark");
+      if (checkmark) checkmark.style.display = "block";
     }
   } else if (fontSizeLevel > 0) {
     // If font is larger than normal, activate the "Bigger Text" button
     const bigBtn = modal.querySelector('[data-action="text-big"]');
     if (bigBtn) {
-      bigBtn.classList.add('active');
-      const checkmark = bigBtn.querySelector('.option-checkmark');
-      if (checkmark) checkmark.style.display = 'block';
+      bigBtn.classList.add("active");
+      const checkmark = bigBtn.querySelector(".option-checkmark");
+      if (checkmark) checkmark.style.display = "block";
     }
   }
 
   console.log("Font size level:", fontSizeLevel);
   sendAccessibilityToTarget(getAccessibilityProfile());
 }
-
 
 // function toggleAccessibilityOption(option, button) {
 //   const html = document.documentElement;
@@ -488,51 +490,53 @@ function toggleAccessibilityOption(option, button) {
   const body = document.body;
 
   // If already active, do nothing
-  if (button.classList.contains('active')) {
+  if (button.classList.contains("active")) {
     return;
   }
 
   switch (option) {
-    case 'highlight-links':
-      body.classList.add('highlight-links-active');
-      html.classList.add('highlight-links-active');
-      button.classList.add('active');
-      localStorage.setItem('accessibility-highlight-links', 'true');
+    case "highlight-links":
+      body.classList.add("highlight-links-active");
+      html.classList.add("highlight-links-active");
+      button.classList.add("active");
+      localStorage.setItem("accessibility-highlight-links", "true");
       break;
 
-    case 'dark-mode':
-      body.classList.add('dark-mode-active');
-      html.classList.add('dark-mode-active');
-      button.classList.add('active');
-      localStorage.setItem('accessibility-dark-mode', 'true');
+    case "dark-mode":
+      body.classList.add("dark-mode-active");
+      html.classList.add("dark-mode-active");
+      button.classList.add("active");
+      localStorage.setItem("accessibility-dark-mode", "true");
       break;
   }
 
   // Show checkmark
-  const checkmark = button.querySelector('.option-checkmark');
-  if (checkmark) checkmark.style.display = 'block';
+  const checkmark = button.querySelector(".option-checkmark");
+  if (checkmark) checkmark.style.display = "block";
 
   sendAccessibilityToTarget(getAccessibilityProfile());
 }
 
-
 function loadAccessibilityPreferences() {
   const html = document.documentElement;
   const body = document.body;
-  const modal = document.getElementById('accessibility-modal');
+  const modal = document.getElementById("accessibility-modal");
 
   if (!modal) return;
 
   console.log("Loading accessibility preferences...");
 
   // Font Size
-  const savedLevel = localStorage.getItem('accessibility-font-level');
+  const savedLevel = localStorage.getItem("accessibility-font-level");
   if (savedLevel !== null) {
     fontSizeLevel = parseInt(savedLevel, 10);
-    
+
     // Apply appropriate class
     if (fontSizeLevel !== 0) {
-      const cls = fontSizeLevel < 0 ? `font-size--${Math.abs(fontSizeLevel)}` : `font-size-${fontSizeLevel}`;
+      const cls =
+        fontSizeLevel < 0
+          ? `font-size--${Math.abs(fontSizeLevel)}`
+          : `font-size-${fontSizeLevel}`;
       html.classList.add(cls);
       body.classList.add(cls);
     }
@@ -541,45 +545,44 @@ function loadAccessibilityPreferences() {
     if (fontSizeLevel < 0) {
       const smallBtn = modal.querySelector('[data-action="text-small"]');
       if (smallBtn) {
-        smallBtn.classList.add('active');
-        const checkmark = smallBtn.querySelector('.option-checkmark');
-        if (checkmark) checkmark.style.display = 'block';
+        smallBtn.classList.add("active");
+        const checkmark = smallBtn.querySelector(".option-checkmark");
+        if (checkmark) checkmark.style.display = "block";
       }
     } else if (fontSizeLevel > 0) {
       const bigBtn = modal.querySelector('[data-action="text-big"]');
       if (bigBtn) {
-        bigBtn.classList.add('active');
-        const checkmark = bigBtn.querySelector('.option-checkmark');
-        if (checkmark) checkmark.style.display = 'block';
+        bigBtn.classList.add("active");
+        const checkmark = bigBtn.querySelector(".option-checkmark");
+        if (checkmark) checkmark.style.display = "block";
       }
     }
 
     console.log("Loaded font size level:", fontSizeLevel);
   }
 
-
   // Highlight Links
-  if (localStorage.getItem('accessibility-highlight-links') === 'true') {
-    body.classList.add('highlight-links-active');
-    html.classList.add('highlight-links-active');
+  if (localStorage.getItem("accessibility-highlight-links") === "true") {
+    body.classList.add("highlight-links-active");
+    html.classList.add("highlight-links-active");
     const highlightBtn = modal.querySelector('[data-option="highlight-links"]');
     if (highlightBtn) {
-      highlightBtn.classList.add('active');
-      const checkmark = highlightBtn.querySelector('.option-checkmark');
-      if (checkmark) checkmark.style.display = 'block';
+      highlightBtn.classList.add("active");
+      const checkmark = highlightBtn.querySelector(".option-checkmark");
+      if (checkmark) checkmark.style.display = "block";
     }
     console.log("Loaded: Highlight Links enabled");
   }
 
   // Dark Mode
-  if (localStorage.getItem('accessibility-dark-mode') === 'true') {
-    body.classList.add('dark-mode-active');
-    html.classList.add('dark-mode-active');
+  if (localStorage.getItem("accessibility-dark-mode") === "true") {
+    body.classList.add("dark-mode-active");
+    html.classList.add("dark-mode-active");
     const darkModeBtn = modal.querySelector('[data-option="dark-mode"]');
     if (darkModeBtn) {
-      darkModeBtn.classList.add('active');
-      const checkmark = darkModeBtn.querySelector('.option-checkmark');
-      if (checkmark) checkmark.style.display = 'block';
+      darkModeBtn.classList.add("active");
+      const checkmark = darkModeBtn.querySelector(".option-checkmark");
+      if (checkmark) checkmark.style.display = "block";
     }
     console.log("Loaded: Dark Mode enabled");
   }
@@ -593,7 +596,6 @@ function loadAccessibilityPreferences() {
 //   if (!modal) return;
 
 //   console.log("Resetting accessibility options...");
-
 
 //   // Reset Highlight Links
 //   html.classList.remove('highlight-links-active');
@@ -636,34 +638,44 @@ function loadAccessibilityPreferences() {
 function resetAccessibilityOptions() {
   const html = document.documentElement;
   const body = document.body;
-  const modal = document.getElementById('accessibility-modal');
+  const modal = document.getElementById("accessibility-modal");
 
   if (!modal) return;
 
   // Remove feature classes
-  html.classList.remove('highlight-links-active', 'dark-mode-active');
-  body.classList.remove('highlight-links-active', 'dark-mode-active');
+  html.classList.remove("highlight-links-active", "dark-mode-active");
+  body.classList.remove("highlight-links-active", "dark-mode-active");
 
   // Reset font size
   fontSizeLevel = 0;
-  html.classList.remove('font-size--1','font-size--2','font-size-1','font-size-2');
-  body.classList.remove('font-size--1','font-size--2','font-size-1','font-size-2');
+  html.classList.remove(
+    "font-size--1",
+    "font-size--2",
+    "font-size-1",
+    "font-size-2",
+  );
+  body.classList.remove(
+    "font-size--1",
+    "font-size--2",
+    "font-size-1",
+    "font-size-2",
+  );
 
   // Reset UI state
-  modal.querySelectorAll('.accessibility-font-btn, .accessibility-option-btn').forEach(btn => {
-    btn.classList.remove('active');
-    const mark = btn.querySelector('.option-checkmark');
-    if (mark) mark.style.display = 'none';
-  });
+  modal
+    .querySelectorAll(".accessibility-font-btn, .accessibility-option-btn")
+    .forEach((btn) => {
+      btn.classList.remove("active");
+      const mark = btn.querySelector(".option-checkmark");
+      if (mark) mark.style.display = "none";
+    });
 
   // Clear storage
-  localStorage.removeItem('accessibility-font-level');
-  localStorage.removeItem('accessibility-highlight-links');
-  localStorage.removeItem('accessibility-dark-mode');
+  localStorage.removeItem("accessibility-font-level");
+  localStorage.removeItem("accessibility-highlight-links");
+  localStorage.removeItem("accessibility-dark-mode");
   sendAccessibilityToTarget(getAccessibilityProfile());
-
 }
-
 
 /* ======================================================
    BHASHINI - ACTIVE
@@ -678,7 +690,8 @@ function initBhashini(container) {
   if (!document.getElementById("bhashini-script")) {
     const script = document.createElement("script");
     script.id = "bhashini-script";
-    script.src = "https://translation-plugin.bhashini.co.in/v3/website_translation_utility.js";
+    script.src =
+      "https://translation-plugin.bhashini.co.in/v3/website_translation_utility.js";
     script.defer = true;
     script.onload = function () {
       console.log("Bhashini script loaded");
@@ -686,7 +699,8 @@ function initBhashini(container) {
     };
     script.onerror = () => {
       console.error("Failed to load Bhashini script");
-      container.innerHTML = '<span class="bhashini-error">Translation unavailable</span>';
+      container.innerHTML =
+        '<span class="bhashini-error">Translation unavailable</span>';
     };
     document.body.appendChild(script);
   }
@@ -701,13 +715,13 @@ function setupBhashiniLanguageMonitoring() {
   const originalSetItem = localStorage.setItem;
   localStorage.setItem = function (key, value) {
     originalSetItem.apply(this, arguments);
-    if (key === 'preferredLanguage') {
+    if (key === "preferredLanguage") {
       updateLanguageIndicator(value);
     }
   };
 
-  window.addEventListener('storage', function (e) {
-    if (e.key === 'preferredLanguage') {
+  window.addEventListener("storage", function (e) {
+    if (e.key === "preferredLanguage") {
       updateLanguageIndicator(e.newValue);
     }
   });
@@ -720,20 +734,38 @@ function setupBhashiniLanguageMonitoring() {
 }
 
 function updateLanguageIndicator(langCode) {
-  const langGroup = document.querySelector('.language-group .nav-label');
+  const langGroup = document.querySelector(".language-group .nav-label");
   if (!langGroup) return;
 
   const langNames = {
-    'en': 'ENG', 'hi': 'हिन्दी', 'ta': 'தமிழ்', 'te': 'తెలుగు',
-    'kn': 'ಕನ್ನಡ', 'ml': 'മലയാളം', 'mr': 'मराठी', 'gu': 'ગુજરાતી',
-    'pa': 'ਪੰਜਾਬੀ', 'bn': 'বাংলা', 'ur': 'اردو', 'as': 'অসমীয়া',
-    'brx': 'बर', 'doi': 'डोगरी', 'gom': 'कोंकणी', 'ks': 'कॉशुर',
-    'mai': 'मैथिली', 'mni': 'मैतैलोन्', 'ne': 'नेपाली', 'or': 'ଓଡ଼ିଆ',
-    'sa': 'संस्कृतम्', 'sat': 'ᱥᱟᱱᱛᱟᱲी', 'sd': 'سنڌي'
+    en: "ENG",
+    hi: "हिन्दी",
+    ta: "தமிழ்",
+    te: "తెలుగు",
+    kn: "ಕನ್ನಡ",
+    ml: "മലയാളം",
+    mr: "मराठी",
+    gu: "ગુજરાતી",
+    pa: "ਪੰਜਾਬੀ",
+    bn: "বাংলা",
+    ur: "اردو",
+    as: "অসমীয়া",
+    brx: "बर",
+    doi: "डोगरी",
+    gom: "कोंकणी",
+    ks: "कॉशुर",
+    mai: "मैथिली",
+    mni: "मैतैलोन्",
+    ne: "नेपाली",
+    or: "ଓଡ଼ିଆ",
+    sa: "संस्कृतम्",
+    sat: "ᱥᱟᱱᱛᱟᱲी",
+    sd: "سنڌي",
   };
 
   const displayName = langNames[langCode] || langCode.toUpperCase();
-  const arrowSvg = '<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/></svg>';
+  const arrowSvg =
+    '<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/></svg>';
 
   langGroup.innerHTML = `${displayName} <span class="arrow">${arrowSvg}</span>`;
 }
@@ -742,8 +774,10 @@ function updateLanguageIndicator(langCode) {
    STOCK HELPERS (CACHING + CODE LOOKUP)
    ====================================================== */
 async function fetchStockData() {
-  const API_URL = "https://gmr.itsneobot.com:4000/api/share/get-latest-share-price";
-  const AUTH_TOKEN = "U2FsdGVkX1+IAunex0zJueoZQpRBfpUm/DSQSMufK69HpTEh4abfdnhz0fQ+jbSmPrqojCZOhYZ6/mvA28aQxw";
+  const API_URL =
+    "https://gmr.itsneobot.com:4000/api/share/get-latest-share-price";
+  const AUTH_TOKEN =
+    "U2FsdGVkX1+IAunex0zJueoZQpRBfpUm/DSQSMufK69HpTEh4abfdnhz0fQ+jbSmPrqojCZOhYZ6/mvA28aQxw";
 
   const CACHE_KEY = "header-stock-data";
   const CACHE_TIME_KEY = "header-stock-data-time";
@@ -781,7 +815,6 @@ async function fetchStockData() {
     localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
 
     return data;
-
   } catch (error) {
     console.error("Stock fetch failed:", error);
     // Fallback to whatever is in cache (even if old)
@@ -795,7 +828,7 @@ function renderStocks(container, symbols, apiData, stockCodes) {
 
   // 1. Index the API data by Company Code for O(1) Lookup
   const apiDataMap = {};
-  apiData.forEach(item => {
+  apiData.forEach((item) => {
     if (item.companyCode) {
       apiDataMap[String(item.companyCode)] = item;
     }
@@ -863,18 +896,20 @@ function sendAccessibilityToTarget(payload) {
   const targetPayload = {
     "profile.fontLevel": payload["profile.accessibility.fontLevel"],
     "profile.darkMode": payload["profile.accessibility.darkMode"],
-    "profile.highlightLinks": payload["profile.accessibility.highlightLinks"]
+    "profile.highlightLinks": payload["profile.accessibility.highlightLinks"],
   };
   console.log("🎯 Sending accessibility profile to Target:", payload);
 
-  window.alloy("sendEvent", {
-    renderDecisions: true,
-    data: {
-      "__adobe": {
-        "target": targetPayload
-      }
-    }
-  }).catch(err => {
-    console.error("Target send failed:", err);
-  });
+  window
+    .alloy("sendEvent", {
+      renderDecisions: true,
+      data: {
+        __adobe: {
+          target: targetPayload,
+        },
+      },
+    })
+    .catch((err) => {
+      console.error("Target send failed:", err);
+    });
 }

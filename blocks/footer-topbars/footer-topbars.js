@@ -25,14 +25,14 @@ export default function decorate(block) {
   blueContainer.classList.add("container");
 
   const item = document.createElement("div");
-  item.classList.add("d-flex", "gap-2");
+  item.classList.add("d-flex", "flex-wrap", "align-items-center", "gap-2");
 
   item.innerHTML = `
       <div class="footertopbar-image">
         ${image ? `<img src="${image}" alt="">` : ""}
       </div>
 
-      <div class="ms-auto social-links d-flex gap-2">
+      <div class="ms-md-auto social-links d-flex gap-2">
         ${
           linkedin
             ? `<a href="${linkedin}"><img src="/icons/linkedin-icon.svg" alt="Linkedin" /></a>`
@@ -50,7 +50,7 @@ export default function decorate(block) {
         }
       </div>
 
-      <div class="group-btn">
+      <div class="group-btn ms-md-0 ms-auto">
         ${
           buttonLabel
             ? `<button class="btn btn-primary" type="button" data-bs-toggle="collapse"
@@ -73,7 +73,7 @@ export default function decorate(block) {
     "footer-collapse",
     "bg-royal-blue",
     "text-white",
-    "collapse"
+    "collapse",
   );
   collapseSection.id = "groupWebsiteCollapse";
 
@@ -102,5 +102,3 @@ export default function decorate(block) {
   block.appendChild(blueStrip);
   block.appendChild(collapseSection);
 }
-
-

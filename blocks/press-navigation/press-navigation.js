@@ -26,9 +26,13 @@ export default async function decorate(block) {
   block.classList.add("press-nav");
   const nextcat =slugToTitle(item.category);
   block.innerHTML = `
+  <div class="container">
     <div class="press-nav-actions">
       <div class="press-nav-side prev">
-        <a class="nav-btn disabled" >← Previous</a>
+        <a class="nav-btn disabled" ><svg width="23" height="18" viewBox="0 0 23 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.0833 8.75L0.749919 8.75M0.749919 8.75L8.74992 16.75M0.749919 8.75L8.74992 0.749998" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M22.0833 8.75L0.749919 8.75M0.749919 8.75L8.74992 16.75M0.749919 8.75L8.74992 0.749998" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg> Previous</a>
         <div class="nav-hover-card">
           <div class="label">Previous ${nextcat}</div>
           <div class="title">No previous article</div>
@@ -40,8 +44,12 @@ export default async function decorate(block) {
           <div class="label">Next ${nextcat}</div>
           <div class="title">No next article</div>
         </div>
-        <a class="nav-btn primary disabled">Next →</a>
+        <a class="nav-btn primary disabled">Next <svg width="23" height="18" viewBox="0 0 23 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0.75 8.75H22.0833M22.0833 8.75L14.0833 0.75M22.0833 8.75L14.0833 16.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M0.75 8.75H22.0833M22.0833 8.75L14.0833 0.75M22.0833 8.75L14.0833 16.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></a>
       </div>
+    </div>
     </div>
   `;
 
@@ -68,11 +76,15 @@ export default async function decorate(block) {
   );
   block.innerHTML += `
     <div class="news-tags">
-      <span class="news-tags-label">Tags:</span>
-      <span class="news-tags-list">
-        ${formattedTags.map((t) => `<span>${t}</span>`).join("<span class='sep'>|</span>")}
-      </span>
-    </div>
+        <div class="container d-flex gap-3">
+          <span class="news-tags-label">Tags:</span>
+          <span class="news-tags-list">
+            ${formattedTags
+              .map((t) => `<span>${t}</span>`)
+              .join("<span class='sep'>|</span>")}
+          </span>
+        </div>
+      </div>
   `;
 
   const category = item.category;

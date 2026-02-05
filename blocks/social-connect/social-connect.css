@@ -13,6 +13,11 @@
     border-color: var(--lorange);
 }
 
+.social-connect-title h4{
+    font-size: 30px;
+    color: black;
+}
+
 .icon-instagram {
     background-image: url(../../icons/instagram-icon.svg);
 }

@@ -18,8 +18,8 @@
 } */
 :root {
     /* colors */
-    --blue: #003366;
-    --red: #ff0000;
+    --blue: #004c99;
+    --red: #ff4040;
     --yellow: #faa519;
     --turquoise: #00abc5;
     --royal-blue: #305fab;
@@ -260,6 +260,12 @@ hr {
 .w-20 {
     max-width: 20% !important;
 }
+.badge.corporate { background-color: var(--charcoal);}
+.badge.airport-aero-services { background-color: var(--blue);}
+.badge.energy { background-color: var(--red);}
+.badge.sports { background-color: var(--turquoise);}
+.badge.transport-urban-infrastructure { background-color: var(--orange);}
+.badge.foundation { background-color: var(--green);}
 .btn-link {
     color: var(--lorange);
     text-transform: uppercase;
@@ -315,6 +321,11 @@ hr {
     gap: 0.5rem;
     justify-content: center;
     text-decoration: none;
+}
+.btn-sm {
+    font-size: var(--fs-regular);
+    height: 38px;
+    padding: 0 .8rem;
 }
 .btn-lg {
     font-size: var(--fs-normal);
@@ -955,6 +966,7 @@ hr {
 .bg-gray.all-business-cards-container .spacer {
     padding-bottom: 160px;
 }
+
 
 @media (max-width: 1300px) {
     .businesses-section.block,
