@@ -3592,38 +3592,14 @@
         {
           "component": "text",
           "valueType": "string",
-          "name": "title",
-          "label": "Title"
+          "name": "heading",
+          "label": "Heading"
         },
         {
-          "component": "text",
+          "component": "richtext",
           "valueType": "string",
-          "name": "description",
-          "label": "Description"       
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "leftTitle",
-          "label": "Left Card Title"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "leftContent",
-          "label": "Left Card Content"        
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "rightTitle",
-          "label": "Right Card Title"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "rightContent",
-          "label": "Right Card Content"
+          "name": "content",
+          "label": "Content"
         }
       ]
     }
