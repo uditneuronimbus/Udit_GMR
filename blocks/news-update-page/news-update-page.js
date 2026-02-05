@@ -1,4 +1,6 @@
 import { getNewsDetail } from "../../scripts/news-api.js";
+import { formatDate } from "../../scripts/common.js";
+import { getSlugFromURL } from "../../scripts/common.js";
 
 const PUBLISH_DOMAIN =
   "https://publish-p168597-e1803019.adobeaemcloud.com";
@@ -13,30 +15,6 @@ function fixImageSrc(html) {
     /<img([^>]+)src="(\/content\/dam[^"]+)"/g,
     `<img$1src="${PUBLISH_DOMAIN}$2"`
   );
-}
-
-/* ================================
-   Date formatter
-================================ */
-function formatDate(dateString) {
-  if (!dateString) return "";
-
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return "";
-
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
-
-/* ================================
-   Read slug from URL
-================================ */
-function getSlugFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("post");
 }
 
 export default async function decorate(block) {
