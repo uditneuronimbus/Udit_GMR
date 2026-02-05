@@ -25,43 +25,37 @@
           "component": "text",
           "valueType": "string",
           "name": "title",
-          "label": "Title",
-          "value": "Media Contact"
+          "label": "Title"
         },
         {
           "component": "text",
           "valueType": "string",
           "name": "description",
-          "label": "Description",
-          "value": "For all media-related enquiries and information, reach out to our Corporate Communications team."
+          "label": "Description"       
         },
         {
           "component": "text",
           "valueType": "string",
           "name": "leftTitle",
-          "label": "Left Card Title",
-          "value": "Corporate Communications"
+          "label": "Left Card Title"
         },
         {
           "component": "text",
           "valueType": "string",
           "name": "leftContent",
-          "label": "Left Card Content",
-          "value": "New Udaan Bhawan, Opp. Terminal 3, IGI Airport, New Delhi, India 110037"
+          "label": "Left Card Content"        
         },
         {
           "component": "text",
           "valueType": "string",
           "name": "rightTitle",
-          "label": "Right Card Title",
-          "value": "Media Email ID"
+          "label": "Right Card Title"
         },
         {
           "component": "text",
           "valueType": "string",
           "name": "rightContent",
-          "label": "Right Card Content",
-          "value": "mediaqueries@gmrgroup.in"
+          "label": "Right Card Content"
         }
       ]
     }
