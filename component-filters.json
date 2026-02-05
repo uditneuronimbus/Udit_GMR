@@ -1,7 +1,9 @@
 [
   {
     "id": "main",
-    "components": ["section"]
+    "components": [
+      "section"
+    ]
   },
   {
     "id": "section",
@@ -61,16 +63,21 @@
       "press-nav",
       "recent-posts",
       "latest-press-update",
-      "filter-by"
+      "filter-by",
+      "listing-press"
     ]
   },
   {
     "id": "airport-overview",
-    "components": ["airport-overview-item"]
+    "components": [
+      "airport-overview-item"
+    ]
   },
   {
     "id": "all-business-cards",
-    "components": ["all-business-cards-item"]
+    "components": [
+      "all-business-cards-item"
+    ]
   },
   {
     "id": "aviation-infrastructure",
@@ -78,51 +85,81 @@
   },
   {
     "id": "aviation-services-header",
-    "components": ["aviation-service-item", "dropdown-link-item"]
+    "components": [
+      "aviation-service-item",
+      "dropdown-link-item"
+    ]
   },
   {
     "id": "aviation-services",
-    "components": ["image", "text", "richtext"]
+    "components": [
+      "image",
+      "text",
+      "richtext"
+    ]
   },
   {
     "id": "only-awards-items",
-    "components": ["award-listing-item"]
+    "components": [
+      "award-listing-item"
+    ]
   },
   {
     "id": "awards-recognitions",
-    "components": ["award-item"]
+    "components": [
+      "award-item"
+    ]
   },
   {
     "id": "businesses-section",
-    "components": ["business-item"]
+    "components": [
+      "business-item"
+    ]
   },
   {
     "id": "cards",
-    "components": ["card"]
+    "components": [
+      "card"
+    ]
   },
   {
     "id": "carousel",
-    "components": ["slide"]
+    "components": [
+      "slide"
+    ]
   },
   {
     "id": "columns",
-    "components": ["column"]
+    "components": [
+      "column"
+    ]
   },
   {
     "id": "column",
-    "components": ["text", "image", "button", "title"]
+    "components": [
+      "text",
+      "image",
+      "button",
+      "title"
+    ]
   },
   {
     "id": "commitment-cards",
-    "components": ["commitment-card"]
+    "components": [
+      "commitment-card"
+    ]
   },
   {
     "id": "only-common-items",
-    "components": ["common-card-item"]
+    "components": [
+      "common-card-item"
+    ]
   },
   {
     "id": "corporate-governance",
-    "components": ["governance-section"]
+    "components": [
+      "governance-section"
+    ]
   },
   {
     "id": "document-preview",
@@ -130,27 +167,39 @@
   },
   {
     "id": "factsheet",
-    "components": ["factsheet-item"]
+    "components": [
+      "factsheet-item"
+    ]
   },
   {
     "id": "financial-reports",
-    "components": ["financial-report-item"]
+    "components": [
+      "financial-report-item"
+    ]
   },
   {
     "id": "footerbottoms",
-    "components": ["footerbottom"]
+    "components": [
+      "footerbottom"
+    ]
   },
   {
     "id": "footerlinks",
-    "components": ["footerlinks"]
+    "components": [
+      "footerlinks"
+    ]
   },
   {
     "id": "footertopbars",
-    "components": ["footertopbar"]
+    "components": [
+      "footertopbar"
+    ]
   },
   {
     "id": "gal-awards",
-    "components": ["gal-award-item"]
+    "components": [
+      "gal-award-item"
+    ]
   },
   {
     "id": "gal-investor-overview",
@@ -158,47 +207,69 @@
   },
   {
     "id": "global-airport-network",
-    "components": ["network-location-item"]
+    "components": [
+      "network-location-item"
+    ]
   },
   {
     "id": "global-leaders-aviation",
-    "components": ["global-item"]
+    "components": [
+      "global-item"
+    ]
   },
   {
     "id": "gmr-buisness-brand",
-    "components": ["gmr-buisness-item"]
+    "components": [
+      "gmr-buisness-item"
+    ]
   },
   {
     "id": "gmr-buisness-expertise",
-    "components": ["gmr-buisness-item"]
+    "components": [
+      "gmr-buisness-item"
+    ]
   },
   {
     "id": "gmr-tabs",
-    "components": ["gmr-tabs-item"]
+    "components": [
+      "gmr-tabs-item"
+    ]
   },
   {
     "id": "header-img",
-    "components": ["menu-img"]
+    "components": [
+      "menu-img"
+    ]
   },
   {
     "id": "header",
-    "components": ["nav-item"]
+    "components": [
+      "nav-item"
+    ]
   },
   {
     "id": "nav-item",
-    "components": ["nav-child"]
+    "components": [
+      "nav-child"
+    ]
   },
   {
     "id": "hero-banner",
-    "components": ["hero-banner-items"]
+    "components": [
+      "hero-banner-items"
+    ]
   },
   {
     "id": "image-scroll-card",
-    "components": ["image-scroll-card-item"]
+    "components": [
+      "image-scroll-card-item"
+    ]
   },
   {
     "id": "image-slider",
-    "components": ["image-slider-item"]
+    "components": [
+      "image-slider-item"
+    ]
   },
   {
     "id": "infra-hero-banner",
@@ -210,19 +281,27 @@
   },
   {
     "id": "inner-slider-horizontal",
-    "components": ["inner-slider-horizontal-item"]
+    "components": [
+      "inner-slider-horizontal-item"
+    ]
   },
   {
     "id": "innovation-cards",
-    "components": ["innovation-card-item"]
+    "components": [
+      "innovation-card-item"
+    ]
   },
   {
     "id": "integrity-decision",
-    "components": ["integrity-decision-item"]
+    "components": [
+      "integrity-decision-item"
+    ]
   },
   {
     "id": "internal-slider",
-    "components": ["internal-slider-item"]
+    "components": [
+      "internal-slider-item"
+    ]
   },
   {
     "id": "investors-trust",
@@ -230,15 +309,21 @@
   },
   {
     "id": "key-highlightss",
-    "components": ["key-highlight-item"]
+    "components": [
+      "key-highlight-item"
+    ]
   },
   {
     "id": "listed-companies",
-    "components": ["listed-company-item"]
+    "components": [
+      "listed-company-item"
+    ]
   },
   {
     "id": "message-from-leadership",
-    "components": ["message-from-leadership-item"]
+    "components": [
+      "message-from-leadership-item"
+    ]
   },
   {
     "id": "news-update-page",
@@ -250,11 +335,15 @@
   },
   {
     "id": "news",
-    "components": ["news"]
+    "components": [
+      "news"
+    ]
   },
   {
     "id": "our-airports",
-    "components": ["our-airports-item"]
+    "components": [
+      "our-airports-item"
+    ]
   },
   {
     "id": "our-approach",
@@ -262,15 +351,22 @@
   },
   {
     "id": "our-presence-filter",
-    "components": ["presence-group", "presence-location"]
+    "components": [
+      "presence-group",
+      "presence-location"
+    ]
   },
   {
     "id": "page-tabs",
-    "components": ["page-tab-item"]
+    "components": [
+      "page-tab-item"
+    ]
   },
   {
     "id": "only-partners-items",
-    "components": ["partner-listing-item"]
+    "components": [
+      "partner-listing-item"
+    ]
   },
   {
     "id": "press-release-detail",
@@ -282,11 +378,15 @@
   },
   {
     "id": "only-press-release-items",
-    "components": ["press-release-item"]
+    "components": [
+      "press-release-item"
+    ]
   },
   {
     "id": "sdg-themes",
-    "components": ["sdg-themes-item"]
+    "components": [
+      "sdg-themes-item"
+    ]
   },
   {
     "id": "search-results",
@@ -298,11 +398,15 @@
   },
   {
     "id": "sustainable-aviation",
-    "components": ["sustainable-aviation-item"]
+    "components": [
+      "sustainable-aviation-item"
+    ]
   },
   {
     "id": "values-and-beliefs",
-    "components": ["value-cards"]
+    "components": [
+      "value-cards"
+    ]
   },
   {
     "id": "news-update-page",
@@ -310,11 +414,15 @@
   },
   {
     "id": "press-hero",
-    "components": ["press-hero"]
+    "components": [
+      "press-hero"
+    ]
   },
   {
     "id": "contact-cards",
-    "components": ["contact-cards-item"]
+    "components": [
+      "contact-cards-item"
+    ]
   },
   {
     "id": "press-nav",
@@ -330,6 +438,10 @@
   },
   {
     "id": "filter-by",
+    "components": []
+  },
+  {
+    "id": "listing-press",
     "components": []
   }
 ]
