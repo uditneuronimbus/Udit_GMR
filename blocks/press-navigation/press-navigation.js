@@ -76,7 +76,7 @@ export default async function decorate(block) {
   );
   block.innerHTML += `
     <div class="news-tags">
-        <div class="container d-flex align-items-center gap-3">
+        <div class="container d-flex gap-3">
           <span class="news-tags-label">Tags:</span>
           <span class="news-tags-list">
             ${formattedTags
