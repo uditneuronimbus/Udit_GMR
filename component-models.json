@@ -3587,19 +3587,24 @@
     ]
   },
   {
+      "id": "media-contact-header",
+      "fields": []
+    },
+    {
       "id": "media-contact",
+      "itemLabel": "heading",
       "fields": [
         {
           "component": "text",
-          "valueType": "string",
           "name": "heading",
-          "label": "Heading"
+          "label": "Heading",
+          "valueType": "string"
         },
         {
           "component": "richtext",
-          "valueType": "string",
           "name": "content",
-          "label": "Content"
+          "label": "Content",
+          "valueType": "string"
         }
       ]
     }

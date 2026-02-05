@@ -334,7 +334,7 @@
     "components": []
   },
   {
-    "id": "media-contact",
+    "id": "media-contact-header",
     "components": ["media-contact"]
   }
 ]
