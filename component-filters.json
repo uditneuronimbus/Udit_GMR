@@ -63,7 +63,8 @@
       "press-nav",
       "recent-posts",
       "latest-press-update",
-      "filter-by"
+      "filter-by",
+      "listing-press"
     ]
   },
   {
@@ -437,6 +438,10 @@
   },
   {
     "id": "filter-by",
+    "components": []
+  },
+  {
+    "id": "listing-press",
     "components": []
   }
 ]
