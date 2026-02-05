@@ -46,7 +46,7 @@ export default function decorate(block) {
   accordion.className = "accordion";
   accordion.id = "businessAccordion";
 
-  const businessItems = children.slice(3); // skip header + intro
+  const businessItems = children.slice(3);
 
   businessItems.forEach((item, index) => {
     item.classList.add("accordion-item");
@@ -73,10 +73,12 @@ export default function decorate(block) {
       itemChildren[1] ||
       itemChildren[0];
 
+    const businessTitle =
+      titleEl?.textContent?.trim() || `Business ${index + 1}`;
+
     const titleSpan = document.createElement("span");
     titleSpan.className = "business-title";
-    titleSpan.textContent =
-      titleEl?.textContent?.trim() || `Business ${index + 1}`;
+    titleSpan.textContent = businessTitle;
     button.appendChild(titleSpan);
 
     /* ---------- Icons ---------- */
@@ -146,21 +148,31 @@ export default function decorate(block) {
     }
     accordionBody.appendChild(ctaDiv);
 
-    /* ---------- Image (shared logic) ---------- */
+    /* ---------- Image (ONLY ALT ADDED) ---------- */
 
     const imgEl = item.querySelector('[name="image"]') || itemChildren[0];
 
-    let imageClone = null;
+let imageClone = null;
 
-    if (imgEl) {
-      imageClone = imgEl.cloneNode(true);
+if (imgEl) {
+  imageClone = imgEl.cloneNode(true);
 
-      // Image inside accordion
-      const imgDiv = document.createElement("div");
-      imgDiv.className = "business-image";
-      imgDiv.appendChild(imageClone.cloneNode(true));
-      accordionBody.appendChild(imgDiv);
+  const img = imageClone.querySelector("img");
+  if (img) {
+    const currentAlt = img.getAttribute("alt")?.trim();
+
+    // ✅ If alt is blank → fallback to business title
+    if (!currentAlt) {
+      img.alt = businessTitle;
     }
+  }
+
+  const imgDiv = document.createElement("div");
+  imgDiv.className = "business-image";
+  imgDiv.appendChild(imageClone.cloneNode(true));
+  accordionBody.appendChild(imgDiv);
+}
+
 
     /* ---------- Default preview image ---------- */
 
