@@ -30,7 +30,7 @@
 .press-nav{flex-direction:column;gap:24px}
 .nav-hover-card{display:none}
 }
-.news-tags{margin-top:32px;padding:16px 0; background-color: var(--lgrey); border-top:1px solid var(--lgrey);font-size:var(--fs-regular);color:var(--charcoal);display:flex;align-items:center;gap:16px}
+.news-tags{padding:16px 0; background-color: var(--lgrey); border-top:1px solid var(--lgrey);font-size:var(--fs-regular);color:var(--charcoal);display:flex;align-items:center;gap:16px}
 .news-tags-label{font-weight:600; color:var(--charcoal) }
 .news-tags-list{display:flex;align-items:center;gap:16px;flex-wrap: wrap;}
 .news-tags-list span{white-space:nowrap}
