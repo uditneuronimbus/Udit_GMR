@@ -128,7 +128,7 @@ function buildPressHero(item) {
 
         <div class="press-hero-meta">
           ${item.subCategory || item.category ? `
-            <span class="press-hero-tag">
+            <span class="press-hero-tag badge ${item.subCategory || ""}">
                 ${slugToTitle(item.subCategory || item.category)}
             </span> <span class='sep'>|</span>
             ` : ""}
