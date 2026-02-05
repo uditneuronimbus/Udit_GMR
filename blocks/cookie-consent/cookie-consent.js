@@ -215,6 +215,54 @@ async function sendConsent(type, prefs, block) {
   showPostConsentView(block);
 }
 
+function showCookieBanner(block) {
+  // Remove any existing banner
+  document.querySelectorAll('.policyCookiesInner').forEach(e => e.remove());
+
+  const banner = document.createElement('div');
+  banner.className = 'policyCookiesInner';
+
+  banner.innerHTML = `
+    <div class="container">
+    <div class="policyCookiesInner1">
+    <div class="leftBlock">
+      <p><strong>Your Privacy Matters</strong></p>
+      <p>
+        You can choose which optional cookies you allow and change your preferences at any time.
+        <a href="/en/privacy-policy">Privacy Policy</a>
+        or
+        <a href="/en/cookie-policy">Cookie Policy</a>
+      </p>
+    </div>
+    <div class="rightBlock">
+      <a href="javascript:void(0)" class="editPreferences btn btn-outline-primary">Edit Preferences</a>
+      <button class="btn btn-primary" id="acceptAllBanner">Accept All</button>
+    </div>
+    </div>
+    </div>
+  `;
+
+  document.body.appendChild(banner);
+
+  // Edit Preferences → open modal
+  banner.querySelectorAll('.editPreferences').forEach(btn => {
+    btn.addEventListener('click', () => {
+      openConsentModal(block);
+    });
+  });
+
+  // Accept All → save + close banner
+  banner.querySelector('#acceptAllBanner').onclick = () => {
+    sendConsent(
+      'accepted',
+      { essential: true, analytics: true, preference: true },
+      block
+    );
+    banner.remove();
+  };
+}
+
+
 async function deleteRecord(block) {
   // 1. Deny Tags
   applyConsents({ analytics: false, preference: false });
@@ -256,7 +304,9 @@ async function deleteRecord(block) {
   localStorage.removeItem('gmr-privacy-id');
 
   // 4. Reset UI
-  openConsentModal(block);
+  document.querySelectorAll('.cookie-consent-modal').forEach(m => m.remove());
+  // Show cookie banner again
+  showCookieBanner(block);
 }
 
 /* ===============================
@@ -265,6 +315,7 @@ async function deleteRecord(block) {
 
 function showPostConsentView(block) {
   // Only remove the modal, not the data container
+  document.querySelectorAll('.policyCookiesInner').forEach(e => e.remove());
   document.querySelectorAll('.cookie-consent-modal').forEach(e => e.remove());
 
   const wrapper = document.createElement('div');
@@ -315,6 +366,10 @@ function initAccordions(wrapper) {
 
 
 function openConsentModal(block) {
+  // Hide cookie banner when modal opens
+  document.querySelectorAll('.policyCookiesInner').forEach(b => {
+    b.style.display = 'none';
+  });
   // Only remove the modal, not the data container
   document.querySelectorAll('.cookie-consent-modal').forEach(e => e.remove());
 
@@ -580,7 +635,8 @@ export default function decorate(block) {
     }
   } else {
     // First time visitor or no saved consent
-    openConsentModal(block);
+    //openConsentModal(block);
+    showCookieBanner(block);
   }
   
   // Setup cookie policy links
