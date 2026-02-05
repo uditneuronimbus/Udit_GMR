@@ -29,3 +29,4 @@ export default function decorate(block) {
     new CustomEvent('press-filters-ready', { detail: data })
   );
 }
+
