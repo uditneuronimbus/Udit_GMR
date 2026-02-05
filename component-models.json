@@ -2423,6 +2423,11 @@
       },
       {
         "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
+      },
+      {
+        "component": "text",
         "name": "title",
         "label": "Highlight Title",
         "valueType": "string"
