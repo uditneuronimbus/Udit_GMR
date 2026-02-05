@@ -118,3 +118,6 @@
   font-size: 18px;
   cursor: pointer;
 }
+@media (max-width:767px){
+  .news-tags-list { gap: 8px; }
+}
