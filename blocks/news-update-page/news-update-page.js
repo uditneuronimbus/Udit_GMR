@@ -1,4 +1,6 @@
 import { getNewsDetail } from "../../scripts/news-api.js";
+import { formatDate } from "../../scripts/common.js";
+import { getSlugFromURL } from "../../scripts/common.js";
 
 const PUBLISH_DOMAIN =
   "https://publish-p168597-e1803019.adobeaemcloud.com";
@@ -13,30 +15,6 @@ function fixImageSrc(html) {
     /<img([^>]+)src="(\/content\/dam[^"]+)"/g,
     `<img$1src="${PUBLISH_DOMAIN}$2"`
   );
-}
-
-/* ================================
-   Date formatter
-================================ */
-function formatDate(dateString) {
-  if (!dateString) return "";
-
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return "";
-
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
-
-/* ================================
-   Read slug from URL
-================================ */
-function getSlugFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("post");
 }
 
 export default async function decorate(block) {
@@ -140,6 +118,14 @@ export default async function decorate(block) {
 
     const publishDateFormatted = formatDate(publishDateRaw);
 
+    const hasTitle = !!item.title;
+const hasImage = !!item.cardImage?._publishUrl;
+const hasContent = !!item.description?.html;
+const hasContacts = !!item.contacts?.html;
+
+// KEY HIGHLIGHT should appear only if something exists
+const hasAnyContent = hasTitle || hasImage || hasContent || hasContacts;
+
     /* ================================
        Render page
     ================================ */
@@ -163,27 +149,45 @@ export default async function decorate(block) {
       </div>
 
       <article class="news-article">
-        <h2 class="news-key-highlight">KEY HIGHLIGHT</h2>
 
-        <div class="news-title">
-          <h1>${item.title || ""}</h1>
-        </div>
+    ${hasAnyContent ? `<h2 class="news-key-highlight">KEY HIGHLIGHT</h2>` : ""}
 
-        <div class="news-card">
-          <img
-            src="${item.cardImage?._publishUrl || ""}"
-            alt="${item.title || ""}"
-          />
-        </div>
+    ${
+      hasTitle
+        ? `<div class="news-title">
+             <h1>${item.title}</h1>
+           </div>`
+        : ""
+    }
 
-        <div class="news-content">
-          ${fixImageSrc(item.description?.html) || ""}
-        </div>
+    ${
+      hasImage
+        ? `<div class="news-card">
+             <img
+               src="${item.cardImage._publishUrl}"
+               alt="${item.title || "News image"}"
+             />
+           </div>`
+        : ""
+    }
 
-        <div class="news-contact-cards">
-          ${item.contacts?.html || ""}
-        </div>
-      </article>
+    ${
+      hasContent
+        ? `<div class="news-content">
+             ${fixImageSrc(item.description.html)}
+           </div>`
+        : ""
+    }
+
+    ${
+      hasContacts
+        ? `<div class="news-contact-cards">
+             ${item.contacts.html}
+           </div>`
+        : ""
+    }
+
+  </article>
 
       <!-- BOTTOM ACTIONS -->
       <div class="copySection">

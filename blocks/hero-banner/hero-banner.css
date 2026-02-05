@@ -143,3 +143,14 @@
         width: 45px;
     }
 }
+
+@media screen and (max-width: 1199px) {
+    .hero-swiper {
+        margin-top: 0;
+    }
+}
+@media screen and (max-width: 767.5px) {
+    .hero-slide {
+        padding: 0 0 130%;
+    }
+}

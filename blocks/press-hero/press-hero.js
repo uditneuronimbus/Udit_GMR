@@ -99,7 +99,7 @@ function buildPressHero(item) {
   hero.className = "press-banner";
 
   hero.innerHTML = `
-    ${bgUrl ? `
+    
       <div class="press-hero-media">
         <picture class="d-none d-md-block">
           <img loading="eager" alt="" src="../../img/press-desk.jpg" width="1920" height="550">
@@ -108,7 +108,7 @@ function buildPressHero(item) {
             <img loading="lazy" alt="" src="../../img/press-mob.jpg" width="640" height="965">
           </picture>
       </div>
-    ` : ""}
+    
 
     <div class="press-hero-content">
       <div class="container">
@@ -128,7 +128,7 @@ function buildPressHero(item) {
 
         <div class="press-hero-meta">
           ${item.subCategory || item.category ? `
-            <span class="press-hero-tag">
+            <span class="press-hero-tag badge ${item.subCategory || ""}">
                 ${slugToTitle(item.subCategory || item.category)}
             </span> <span class='sep'>|</span>
             ` : ""}

@@ -2423,6 +2423,11 @@
       },
       {
         "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
+      },
+      {
+        "component": "text",
         "name": "title",
         "label": "Highlight Title",
         "valueType": "string"
@@ -3473,6 +3478,12 @@
         "component": "text",
         "name": "youtubeUrl",
         "label": "YouTube URL",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "whatsappUrl",
+        "label": "WhatsApp URL",
         "valueType": "string"
       },
       {

@@ -26,10 +26,9 @@ export default function decorate(block) {
     const contentDiv = cells[1];
 
     const value = contentDiv.textContent.trim();
-    const safeClass = '';
+    const safeClass = "";
     // Prepare class name
-   if(value!='' && value!='undefined')
-    {
+    if (value != "" && value != "undefined") {
       const safeClass = value.toLowerCase().replace(/\s+/g, "-");
     }
 
@@ -43,11 +42,50 @@ export default function decorate(block) {
       row.removeChild(row.firstChild);
     }
 
-    row.className = ""; 
-    row.classList.add("col", "w-20");
+    row.className = "";
+    row.classList.add("w-20");
     if (safeClass) row.classList.add(safeClass);
 
     // Append the new wrapper(s)
     row.appendChild(titleWrapper);
+  });
+
+  // Select ALL <h4> inside footer-nav
+  const titles = block.querySelectorAll(".footer-nav h4");
+
+  titles.forEach((title) => {
+    const list = title.nextElementSibling; // must be the next UL
+
+    if (!list || list.tagName !== "UL") return;
+
+    // Smooth accordion preparation
+    list.style.overflow = "hidden";
+    if (!list.classList.contains("active")) {
+      list.style.maxHeight = "0px";
+    }
+
+    title.addEventListener("click", () => {
+      const isOpen = list.classList.contains("active");
+
+      // Close *all* ULs and remove active from *all* H4
+      block.querySelectorAll(".footer-nav ul").forEach((ul) => {
+        ul.classList.remove("active");
+        ul.style.maxHeight = "0px";
+      });
+
+      block.querySelectorAll(".footer-nav h4").forEach((h) => {
+        h.classList.remove("active");
+      });
+
+      // Toggle only the clicked element
+      if (!isOpen) {
+        list.classList.add("active");
+        list.style.maxHeight = list.scrollHeight + "px";
+
+        title.classList.add("active"); // ⭐ Add active to clicked H4
+      }
+    });
+
+    title.style.cursor = "pointer";
   });
 }

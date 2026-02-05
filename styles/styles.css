@@ -264,7 +264,7 @@ hr {
 .badge.airport-aero-services { background-color: var(--blue);}
 .badge.energy { background-color: var(--red);}
 .badge.sports { background-color: var(--turquoise);}
-.badge.transportation-urban-infra { background-color: var(--orange);}
+.badge.transport-urban-infrastructure { background-color: var(--orange);}
 .badge.foundation { background-color: var(--green);}
 .btn-link {
     color: var(--lorange);
@@ -966,6 +966,7 @@ hr {
 .bg-gray.all-business-cards-container .spacer {
     padding-bottom: 160px;
 }
+
 
 @media (max-width: 1300px) {
     .businesses-section.block,

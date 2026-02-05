@@ -1,25 +1,10 @@
 import { getApiHost } from "../../scripts/api.js";
+import { slugToTitle } from "../../scripts/common.js";
+import { formatDate } from "../../scripts/common.js";
 
-/* ================================
-   Date formatter
-   ================================ */
-function formatDate(dateString) {
-  if (!dateString) return "";
-
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return "";
-
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
 
 export default async function decorate(block) {
-  /* ================================
-     1️⃣ Read dialog fields (UE)
-     ================================ */
+
   const [titleEl, descEl, ctaTextEl, ctaLinkEl, categoryEl, limitEl] = [
     ...block.children,
   ];
@@ -31,14 +16,8 @@ export default async function decorate(block) {
   const category = categoryEl?.textContent?.trim() || "";
   const limit = limitEl?.textContent?.trim() || "3";
 
-  /* ================================
-     2️⃣ Clear author HTML
-     ================================ */
   block.innerHTML = "";
 
-  /* ================================
-     3️⃣ Build section header
-     ================================ */
   const section = document.createElement("section");
   section.className = "sec-news bg-sky-blue spacer";
 
@@ -67,8 +46,8 @@ export default async function decorate(block) {
   const cardsWrapper = wrapper.querySelector(".row");
 
   /* ================================
-     4️⃣ Fetch news from serverless
-     ================================ */
+    Fetch news from serverless
+  ================================ */
   try {
     const apiUrl =
       `${getApiHost()}/api/v1/web/gmr-api/news-update` +
@@ -87,8 +66,8 @@ export default async function decorate(block) {
     }
 
     /* ================================
-       5️⃣ Render news cards
-       ================================ */
+      Render news cards
+    ================================ */
     items.forEach((item) => {
       const publishDateRaw =
         item.publishDate?.iso ||
@@ -112,7 +91,7 @@ export default async function decorate(block) {
           <div class="card-body">
             <div class="card-meta d-flex gap-4 align-items-center mb-3">
               <span class="badge ${item.category || ""}">
-                ${item.category || ""}
+                ${slugToTitle(item.category) || ""}
               </span>
               <span class="meta-date">
                 ${publishDateFormatted}

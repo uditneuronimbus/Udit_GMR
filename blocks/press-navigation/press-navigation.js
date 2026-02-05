@@ -22,11 +22,15 @@ function slugToTitle(str) {
 
 export default async function decorate(block) {
   const item = await getNewsDetail();
+  if (!item) {
+  console.warn("press-nav: news item missing");
+  return;
+}
 
   block.classList.add("press-nav");
   const nextcat =slugToTitle(item.category);
   block.innerHTML = `
-  <div class="container">
+  <div class="container mb-5">
     <div class="press-nav-actions">
       <div class="press-nav-side prev">
         <a class="nav-btn disabled" ><svg width="23" height="18" viewBox="0 0 23 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -65,27 +69,32 @@ export default async function decorate(block) {
     item.publishDate?.value ||
     item.publishDate;
 
-    const tags = item.tags || [];
+    const tags = Array.isArray(item.tags) ? item.tags : [];
 
-  const formattedTags = tags.map((tag) =>
+const formattedTags = tags
+  .map((tag) =>
     tag
       .replace(/^news:/, "")
       .replace(/--/g, " & ")
       .replace(/-/g, " ")
       .replace(/\b\w/g, (c) => c.toUpperCase())
-  );
+  )
+  .filter(Boolean);
+
+if (formattedTags.length) {
   block.innerHTML += `
     <div class="news-tags">
-        <div class="container d-flex align-items-center gap-3">
-          <span class="news-tags-label">Tags:</span>
-          <span class="news-tags-list">
-            ${formattedTags
-              .map((t) => `<span>${t}</span>`)
-              .join("<span class='sep'>|</span>")}
-          </span>
-        </div>
+      <div class="container d-flex gap-3">
+        <span class="news-tags-label">Tags:</span>
+        <span class="news-tags-list">
+          ${formattedTags
+            .map((t) => `<span>${t}</span>`)
+            .join("<span class='sep'>|</span>")}
+        </span>
       </div>
+    </div>
   `;
+}
 
   const category = item.category;
   const prevUrl =

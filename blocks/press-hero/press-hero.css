@@ -55,3 +55,19 @@
 .press-hero-meta svg {
     max-width: 15px;
 }
+@media (max-width: 767px) {
+    .press-hero {
+        margin-top: 0;
+        padding: 0 0 150%;
+    }
+    .press-hero-content {
+        align-items: flex-start;
+    }
+    .section.press-hero-container {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    .press-hero-media:before {
+        background: linear-gradient(180deg, rgba(0, 0, 0, .7) 0, rgba(0, 0, 0, 0) 80%);
+    }
+}
