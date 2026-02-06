@@ -996,6 +996,11 @@
         "component": "reference",
         "name": "desktopImage",
         "label": "Desktop Image"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       }
     ]
   },
@@ -1026,6 +1031,11 @@
         "component": "reference",
         "name": "imagePrimary",
         "label": "Primary Image / Cube Icon"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       },
       {
         "component": "text",
@@ -2981,6 +2991,11 @@
         "name": "image",
         "label": "Background Desktop Image",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       },
       {
         "component": "text",
