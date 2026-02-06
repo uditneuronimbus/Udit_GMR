@@ -121,7 +121,7 @@ export default function decorate(block) {
   const closeModalBtn = runtime.querySelector('.close-modal');
 
   /* ================================
-     6️⃣ Data Collection & Card Building
+     6️⃣ Data Collection & Card Building - FIXED LOGIC
   ================================ */
   
   // Define category mapping from your JSON configuration
@@ -153,15 +153,91 @@ export default function decorate(block) {
     const cols = [...item.children];
     if (!cols.length) return;
 
+    // Based on your current output, it seems like:
+    // Column 0: category
+    // Column 1: image
+    // Column 2: imageAlt (contains "Groupe" for alt, "Groupe ADP1" for title?)
+    // Column 3: title (contains description text)
+    // Column 4: description (contains link)
+    // Column 5: link (might be empty or duplicate)
+    
     const categorySlug = cols[0]?.textContent?.trim().toLowerCase() || "";
+    const image = cols[1]?.querySelector("img, picture");
+    
+    // Extract text content from columns
+    const getTextFromColumn = (col) => {
+      if (!col) return "";
+      // Try to get text from p tag first
+      const p = col.querySelector('p');
+      return p ? p.textContent.trim() : col.textContent.trim();
+    };
+
+    let imageAltText = "";
+    let titleText = "";
+    let descHTML = "";
+    let link = "";
+    
+    if (cols.length >= 6) {
+      // NEW STRUCTURE with imageAlt field
+      // Column 2: imageAlt (contains both alt and maybe title?)
+      const col2Text = getTextFromColumn(cols[2]);
+      imageAltText = col2Text; // For alt attribute
+      titleText = col2Text; // Also use for h3 if title field is empty
+      
+      // Column 3: title field (might contain description)
+      const col3Text = getTextFromColumn(cols[3]);
+      if (col3Text && col3Text.length > 50) {
+        // This looks like a description, not a title
+        descHTML = col3Text;
+      } else if (col3Text) {
+        // This could be a real title
+        titleText = col3Text;
+      }
+      
+      // Column 4: description field
+      descHTML = cols[4]?.innerHTML?.trim() || descHTML;
+      
+      // Column 5: link field
+      link = cols[5]?.textContent?.trim() || "";
+    } else if (cols.length === 5) {
+      // OLD STRUCTURE
+      // Column 2: title (but might be description)
+      const col2Text = getTextFromColumn(cols[2]);
+      if (col2Text && col2Text.length > 50) {
+        descHTML = col2Text;
+      } else {
+        titleText = col2Text;
+      }
+      
+      // Column 3: description (but might be link)
+      descHTML = cols[3]?.innerHTML?.trim() || descHTML;
+      
+      // Column 4: link
+      link = cols[4]?.textContent?.trim() || "";
+    }
+
+    // If descHTML contains a link, extract it and clean the description
+    let extractedLink = "";
+    if (descHTML.includes('<a href="')) {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = descHTML;
+      const linkElement = tempDiv.querySelector('a');
+      if (linkElement && linkElement.href) {
+        extractedLink = linkElement.href;
+        // Remove the link from description
+        linkElement.remove();
+        descHTML = tempDiv.innerHTML.trim();
+      }
+    }
+    
+    // Use extracted link if no link in link field
+    if (!link && extractedLink) {
+      link = extractedLink;
+    }
+
     const categoryName = categorySlugToName[categorySlug] || 
                         categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1);
     
-    const image = cols[1]?.querySelector("img, picture");
-    const titleText = cols[2]?.textContent?.trim();
-    const descHTML = cols[3]?.innerHTML?.trim() || "";
-    const link = cols[4]?.textContent?.trim();
-
     // Store slug->name mapping for categories found in content
     if (categorySlug) {
       categories.set(categorySlug, categoryName);
@@ -173,48 +249,57 @@ export default function decorate(block) {
       card.className = "partner-card";
       card.dataset.category = categorySlug;
 
-      // Image handling
+      // Image handling - Create simple img tag, not picture
       if (image) {
         const imgWrap = document.createElement("div");
         imgWrap.className = "partner-img";
 
-        // Function to extract image URL from various elements
-        const extractImageUrl = (imgElement) => {
-          if (imgElement.tagName === 'IMG') {
-            return imgElement.src;
-          } else if (imgElement.tagName === 'PICTURE') {
-            // Try to get image from picture element
-            const img = imgElement.querySelector('img');
-            return img ? img.src : '';
-          } else if (imgElement.tagName === 'DIV' && imgElement.style.backgroundImage) {
-            // Handle background images if needed
-            const bg = imgElement.style.backgroundImage;
-            const urlMatch = bg.match(/url\(['"]?(.*?)['"]?\)/);
-            return urlMatch ? urlMatch[1] : '';
-          }
-          return '';
-        };
-
-        const imageUrl = extractImageUrl(image);
+        // Extract the main image URL from the picture/img element
+        let imageUrl = "";
+        if (image.tagName === 'IMG') {
+          imageUrl = image.src;
+        } else if (image.tagName === 'PICTURE') {
+          const img = image.querySelector('img');
+          imageUrl = img ? img.src : '';
+        }
 
         if (imageUrl) {
-          // Create a clean img tag with just the URL
+          // Create a simple img tag (like your desired HTML)
           const newImg = document.createElement('img');
           newImg.src = imageUrl;
-
-          // Copy important attributes if they exist
-          if (image.alt) newImg.alt = image.alt;
-          if (image.title) newImg.title = image.title;
+          
+          // Set alt text: use imageAltText or fallback
+          if (imageAltText && imageAltText.trim() !== "") {
+            newImg.alt = imageAltText.trim();
+          } else if (titleText && titleText.trim() !== "") {
+            newImg.alt = titleText.trim();
+          } else {
+            newImg.alt = sectionTitle;
+          }
+          
+          newImg.loading = "lazy";
+          
+          // Copy width/height if they exist
           if (image.width) newImg.width = image.width;
           if (image.height) newImg.height = image.height;
-
-          // Add lazy loading
-          newImg.loading = "lazy";
-
+          
           imgWrap.appendChild(newImg);
         } else {
-          // Fallback: clone the original if no URL found
+          // If no URL found, use original but fix alt
           const clonedImage = image.cloneNode(true);
+          
+          // Fix alt in cloned image
+          if (clonedImage.tagName === 'IMG') {
+            if (imageAltText && imageAltText.trim() !== "") {
+              clonedImage.alt = imageAltText.trim();
+            }
+          } else if (clonedImage.tagName === 'PICTURE') {
+            const img = clonedImage.querySelector('img');
+            if (img && imageAltText && imageAltText.trim() !== "") {
+              img.alt = imageAltText.trim();
+            }
+          }
+          
           imgWrap.appendChild(clonedImage);
         }
 
@@ -225,26 +310,28 @@ export default function decorate(block) {
       const content = document.createElement("div");
       content.className = "partner-content";
 
+      // Title (h3) - Use titleText from imageAlt field
       if (titleText) {
         const h3 = document.createElement("h3");
         h3.textContent = titleText;
         content.appendChild(h3);
       }
 
+      // Description - Clean text only
       if (descHTML) {
-        const temp = document.createElement("div");
-        temp.innerHTML = descHTML;
-
-        let p = temp.querySelector("p");
-        if (!p) {
-          p = document.createElement("p");
-          p.textContent = descHTML.replace(/<[^>]*>/g, ''); // Strip HTML tags if present
-        }
-
-        p.classList.add("partner-description");
+        const p = document.createElement("p");
+        p.className = "partner-description";
+        
+        // Clean HTML tags, keep only text
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = descHTML;
+        const cleanText = tempDiv.textContent || tempDiv.innerText || '';
+        
+        p.textContent = cleanText.trim();
         content.appendChild(p);
       }
 
+      // Link
       if (link) {
         const linkWrap = document.createElement("div");
         linkWrap.className = "partner-link";
