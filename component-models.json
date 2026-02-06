@@ -1639,8 +1639,8 @@
       },
       {
         "component": "text",
-        "name": "imageAlt",
-        "label": "Alt Text"
+        "name": "imageAlt1",
+        "label": "Alt-Text"
       },
       {
         "component": "text",
@@ -1696,8 +1696,8 @@
       },
       {
         "component": "text",
-        "name": "imageAlt",
-        "label": "Alt Text"
+        "name": "imageAlt1",
+        "label": "Alt-Text"
       },
       {
         "component": "text",
@@ -2551,8 +2551,8 @@
       },
       {
         "component": "text",
-        "name": "imageAlt",
-        "label": "Alt Text"
+        "name": "imageAlt1",
+        "label": "Alt-Text"
       },
       {
         "component": "text",
