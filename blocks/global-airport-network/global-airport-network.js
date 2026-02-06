@@ -6,18 +6,49 @@ export default function decorate(block) {
 
   /* ================================
      1️⃣ Read authored content
-     ================================ */
+  ================================ */
 
-  let titleEl = rows[0];
-  let descEl = rows[1];
-  const itemRows = rows.slice(2);
+  const titleEl = rows[0];
+  const descEl = rows[1];
+
+  // Authored fields (order matters)
+  const mapImageRow = rows[2];
+  const imageAltRow = rows[3];
+  const lottiePathRow = rows[4];
+
+  const itemRows = rows.slice(5);
 
   const titleText = titleEl.textContent.trim();
   const hasTitle = titleText.length > 0;
 
+  const mapImage = mapImageRow?.querySelector("img");
+  const imageAltText = imageAltRow?.textContent?.trim() || "";
+
+  // ✅ Read reference field correctly
+  const lottieLink = lottiePathRow?.querySelector("a");
+  const authoredLottiePath = lottieLink?.getAttribute("href") || "";
+
   /* ================================
-     2️⃣ Create wrapper
-     ================================ */
+     2️⃣ Normalize lottie path (FINAL)
+  ================================ */
+
+  let finalLottiePath = "";
+
+  if (authoredLottiePath) {
+    // Remove query params added by media handler
+    const cleanPath = authoredLottiePath.split("?")[0];
+
+    // Lottie MUST be raw JSON
+    if (cleanPath.endsWith(".json")) {
+      finalLottiePath = cleanPath; // ✅ USE AS-IS
+    } else {
+      console.warn("❌ Invalid Lottie asset (not JSON):", authoredLottiePath);
+    }
+  }
+
+  /* ================================
+     3️⃣ Create wrapper
+  ================================ */
 
   const wrapper = document.createElement("div");
   wrapper.className = "gan-wrapper spacer";
@@ -31,7 +62,6 @@ export default function decorate(block) {
   const leftCol = document.createElement("div");
   leftCol.className = "col-lg-4 col-md-5";
 
-  // Section Title (H2 only)
   if (hasTitle) {
     titleEl.remove();
     const h2 = document.createElement("h2");
@@ -40,7 +70,6 @@ export default function decorate(block) {
     leftCol.appendChild(h2);
   }
 
-  // Description
   descEl.remove();
   descEl.classList.add("sec-desc");
   descEl.removeAttribute("data-aue-label");
@@ -52,13 +81,33 @@ export default function decorate(block) {
   const mapWrap = document.createElement("div");
   mapWrap.className = "gan-map-wrap";
 
-  // Lottie Animation (desktop)
+  /* ================================
+     4️⃣ Background Map Image
+  ================================ */
+
+  if (mapImage) {
+    mapImage.removeAttribute("width");
+    mapImage.removeAttribute("height");
+    mapImage.setAttribute("alt", imageAltText || "");
+    mapImage.classList.add("gan-map-image");
+    mapWrap.appendChild(mapImage);
+  }
+
+  /* ================================
+     5️⃣ Lottie container
+  ================================ */
+
   const lottieWrap = document.createElement("div");
   lottieWrap.className = "gan-lottie";
-  lottieWrap.dataset.lottie =
-    "https://cdn.prod.website-files.com/6853ad13a6c94e060a70ac45/6953c9f3aafa31dfbbb24b96_mapanimation5.json";
 
-  // Locations (mobile)
+  if (finalLottiePath) {
+    lottieWrap.dataset.lottie = finalLottiePath;
+  }
+
+  /* ================================
+     6️⃣ Locations (mobile)
+  ================================ */
+
   const locationsWrap = document.createElement("div");
   locationsWrap.className = "gan-locations";
   locationsWrap.setAttribute("data-aue-label", "Airport Locations");
@@ -73,8 +122,8 @@ export default function decorate(block) {
   wrapper.appendChild(container);
 
   /* ================================
-     4️⃣ Process location items
-     ================================ */
+     7️⃣ Process location items
+  ================================ */
 
   itemRows.forEach((itemRow) => {
     if (!itemRow || itemRow.children.length < 3) return;
@@ -85,20 +134,15 @@ export default function decorate(block) {
     const countryEl = cells[1];
     const flagEl = cells[2];
     const altCell = cells[3];
+
     const authoredAlt = altCell?.textContent?.trim() || "";
     const countryName = countryEl.textContent.trim();
     const finalAlt = authoredAlt || countryName;
 
     const img = flagEl.querySelector("img");
-    if (img) {
-      img.setAttribute("alt", finalAlt);
-    }
+    if (img) img.setAttribute("alt", finalAlt);
 
-    // 🔥 remove alt field from HTML output
-    if (altCell) {
-      altCell.remove();
-    }
-
+    if (altCell) altCell.remove();
 
     itemRow.remove();
     itemRow.className = "gan-location";
@@ -117,23 +161,31 @@ export default function decorate(block) {
   });
 
   /* ================================
-     5️⃣ Replace block content
-     ================================ */
+     8️⃣ Cleanup authored rows
+  ================================ */
+
+  mapImageRow?.remove();
+  imageAltRow?.remove();
+  lottiePathRow?.remove();
+
+  /* ================================
+     9️⃣ Replace block content
+  ================================ */
 
   block.innerHTML = "";
   block.appendChild(wrapper);
 
   /* ================================
-     6️⃣ Initialize Lottie
-     ================================ */
+     🔟 Initialize Lottie
+  ================================ */
 
-  if (window.lottie && window.innerWidth >= 768) {
+  if (window.lottie && window.innerWidth >= 768 && finalLottiePath) {
     lottie.loadAnimation({
       container: lottieWrap,
       renderer: "svg",
       loop: true,
       autoplay: true,
-      path: lottieWrap.dataset.lottie,
+      path: finalLottiePath,
     });
   }
 }
