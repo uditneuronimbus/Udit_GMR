@@ -61,7 +61,7 @@
           "label": "Alt Text"
         },
         {
-          "component": "text",
+          "component": "reference",
           "name": "lottiePath",
           "label": "Lottie Path",
           "valueType": "string"
