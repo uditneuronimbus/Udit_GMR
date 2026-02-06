@@ -3132,7 +3132,7 @@
       {
         "component": "text",
         "name": "imageAlt1",
-        "label": "Alt Text"
+        "label": "Alt-Text"
       },
       {
         "component": "text",
