@@ -181,7 +181,8 @@ export default function decorate(block) {
       // NEW STRUCTURE with imageAlt field
       // Column 2: imageAlt (contains both alt and maybe title?)
       const col2Text = getTextFromColumn(cols[2]);
-      imageAltText = col2Text; // Also use for h3 if title field is empty
+      imageAltText = col2Text; // For alt attribute
+      titleText = col2Text; // Also use for h3 if title field is empty
       
       // Column 3: title field (might contain description)
       const col3Text = getTextFromColumn(cols[3]);
@@ -267,14 +268,16 @@ export default function decorate(block) {
           const newImg = document.createElement('img');
           newImg.src = imageUrl;
           
-          const finalAlt =
-  imageAltText && imageAltText.trim() !== ""
-    ? imageAltText.trim()           // ✅ alt field FIRST
-    : titleText && titleText.trim() !== ""
-    ? titleText.trim()              // ✅ title ONLY if alt empty
-    : sectionTitle;                 // ✅ last fallback
-
-newImg.alt = finalAlt;
+          // Set alt text: use imageAltText or fallback
+          if (imageAltText && imageAltText.trim() !== "") {
+            newImg.alt = imageAltText.trim();
+          } else if (titleText && titleText.trim() !== "") {
+            newImg.alt = titleText.trim();
+          } else {
+            newImg.alt = sectionTitle;
+          }
+          
+          newImg.loading = "lazy";
           
           // Copy width/height if they exist
           if (image.width) newImg.width = image.width;
@@ -287,18 +290,14 @@ newImg.alt = finalAlt;
           
           // Fix alt in cloned image
           if (clonedImage.tagName === 'IMG') {
-  clonedImage.alt =
-    (imageAltText && imageAltText.trim()) ||
-    (titleText && titleText.trim()) ||
-    sectionTitle;
-} else if (clonedImage.tagName === 'PICTURE') {
+            if (imageAltText && imageAltText.trim() !== "") {
+              clonedImage.alt = imageAltText.trim();
+            }
+          } else if (clonedImage.tagName === 'PICTURE') {
             const img = clonedImage.querySelector('img');
-            if (img) {
-  img.alt =
-    (imageAltText && imageAltText.trim()) ||
-    (titleText && titleText.trim()) ||
-    sectionTitle;
-}
+            if (img && imageAltText && imageAltText.trim() !== "") {
+              img.alt = imageAltText.trim();
+            }
           }
           
           imgWrap.appendChild(clonedImage);
