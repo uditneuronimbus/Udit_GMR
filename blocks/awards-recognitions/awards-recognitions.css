@@ -2,6 +2,7 @@
     padding: 80px 0 160px;
     background: rgba(224, 224, 224, 0.3);
 }
+.awards-recognitions-container.pb-0 { padding: 80px 0 80px; }
 .awards-recognitions-wrapper {
     max-width: 100%;
     padding-left: 90px;

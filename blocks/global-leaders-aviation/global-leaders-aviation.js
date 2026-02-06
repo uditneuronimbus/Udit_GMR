@@ -64,7 +64,7 @@ export default function decorate(block) {
     container.className = "container";
 
     const row = document.createElement("div");
-    row.className = "row";
+    row.className = "row align-items-center";
 
     /* LEFT COLUMN → IMAGE + TITLE */
     if (imageRow || titleEl) {
