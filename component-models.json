@@ -3131,8 +3131,8 @@
       },
       {
         "component": "text",
-        "name": "imageAlt",
-        "label": "Alt Text"
+        "name": "imageAlt1",
+        "label": "Alt Text1"
       },
       {
         "component": "text",
