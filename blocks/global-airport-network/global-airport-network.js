@@ -1,6 +1,8 @@
 export default function decorate(block) {
   const rows = [...block.children];
-  if (rows.length < 2) return;
+
+  // We use rows[0] → rows[4], so minimum 5 rows are required
+  if (rows.length < 5) return;
 
   block.classList.add("global-airport-network");
 
@@ -11,43 +13,37 @@ export default function decorate(block) {
   const titleEl = rows[0];
   const descEl = rows[1];
 
-  // Authored fields (order matters)
   const mapImageRow = rows[2];
   const imageAltRow = rows[3];
   const lottiePathRow = rows[4];
 
   const itemRows = rows.slice(5);
 
-  const titleText = titleEl.textContent.trim();
+  const titleText = titleEl?.textContent?.trim() || "";
   const hasTitle = titleText.length > 0;
 
   const mapImage = mapImageRow?.querySelector("img");
   const imageAltText = imageAltRow?.textContent?.trim() || "";
 
-  // ✅ Read reference field correctly
-  const lottieLink = lottiePathRow?.querySelector("a");
-  const authoredLottiePath = lottieLink?.getAttribute("href") || "";
-
   /* ================================
-     2️⃣ Normalize lottie path (FINAL)
+     2️⃣ Resolve Lottie path (CORRECT)
   ================================ */
 
   let finalLottiePath = "";
 
-  if (authoredLottiePath) {
-    // Remove query params added by media handler
-    const cleanPath = authoredLottiePath.split("?")[0];
+  // AEM asset reference (author selected JSON)
+  const lottieLink = lottiePathRow?.querySelector("a");
+  if (lottieLink) {
+    const href = lottieLink.getAttribute("href") || "";
+    const cleanPath = href.split("?")[0];
 
-    // Lottie MUST be raw JSON
     if (cleanPath.endsWith(".json")) {
-      finalLottiePath = cleanPath; // ✅ USE AS-IS
-    } else {
-      console.warn("❌ Invalid Lottie asset (not JSON):", authoredLottiePath);
+      finalLottiePath = cleanPath;
     }
   }
 
   /* ================================
-     3️⃣ Create wrapper
+     3️⃣ Create layout
   ================================ */
 
   const wrapper = document.createElement("div");
@@ -58,6 +54,8 @@ export default function decorate(block) {
 
   const row = document.createElement("div");
   row.className = "row align-items-center";
+
+  /* ---------- Left column ---------- */
 
   const leftCol = document.createElement("div");
   leftCol.className = "col-lg-4 col-md-5";
@@ -75,6 +73,8 @@ export default function decorate(block) {
   descEl.removeAttribute("data-aue-label");
   leftCol.appendChild(descEl);
 
+  /* ---------- Right column ---------- */
+
   const rightCol = document.createElement("div");
   rightCol.className = "col-lg-8 col-md-7";
 
@@ -82,7 +82,7 @@ export default function decorate(block) {
   mapWrap.className = "gan-map-wrap";
 
   /* ================================
-     4️⃣ Background Map Image
+     4️⃣ Background map image
   ================================ */
 
   if (mapImage) {
@@ -100,6 +100,7 @@ export default function decorate(block) {
   const lottieWrap = document.createElement("div");
   lottieWrap.className = "gan-lottie";
 
+  // ✅ Use resolved JSON path
   if (finalLottiePath) {
     lottieWrap.dataset.lottie = finalLottiePath;
   }
@@ -114,10 +115,12 @@ export default function decorate(block) {
 
   mapWrap.appendChild(lottieWrap);
   mapWrap.appendChild(locationsWrap);
+
   rightCol.appendChild(mapWrap);
 
   row.appendChild(leftCol);
   row.appendChild(rightCol);
+
   container.appendChild(row);
   wrapper.appendChild(container);
 
@@ -142,9 +145,9 @@ export default function decorate(block) {
     const img = flagEl.querySelector("img");
     if (img) img.setAttribute("alt", finalAlt);
 
-    if (altCell) altCell.remove();
-
+    altCell?.remove();
     itemRow.remove();
+
     itemRow.className = "gan-location";
     itemRow.setAttribute("data-aue-behavior", "component");
 
@@ -169,7 +172,7 @@ export default function decorate(block) {
   lottiePathRow?.remove();
 
   /* ================================
-     9️⃣ Replace block content
+     9️⃣ Replace block
   ================================ */
 
   block.innerHTML = "";
@@ -179,8 +182,12 @@ export default function decorate(block) {
      🔟 Initialize Lottie
   ================================ */
 
-  if (window.lottie && window.innerWidth >= 768 && finalLottiePath) {
-    lottie.loadAnimation({
+  if (
+    window.lottie &&
+    window.innerWidth >= 768 &&
+    finalLottiePath
+  ) {
+    window.lottie.loadAnimation({
       container: lottieWrap,
       renderer: "svg",
       loop: true,
