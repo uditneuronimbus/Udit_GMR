@@ -1063,6 +1063,11 @@ hr {
         padding-left: 0;
         padding-right: 0;
     }
+    .entry-container .title,
+.entry-container h2,
+.entry-container h2 p {
+    font-size: var(--fs-large);
+}
     .h1,
     h1 {
         font-size: var(--fs-xxlarge);
