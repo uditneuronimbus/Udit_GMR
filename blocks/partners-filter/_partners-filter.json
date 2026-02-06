@@ -76,8 +76,8 @@
         },
         {
           "component": "text",
-          "name": "imageAlt1",
-          "label": "Alt Text1"
+          "name": "imageAlt",
+          "label": "Alt Text"
         },
         {
           "component": "text",
