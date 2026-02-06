@@ -1639,6 +1639,11 @@
       },
       {
         "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
+      },
+      {
+        "component": "text",
         "valueType": "string",
         "name": "title",
         "label": "Title"
@@ -1688,6 +1693,11 @@
         "valueType": "string",
         "name": "image",
         "label": "Card Image"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       },
       {
         "component": "text",
@@ -2538,6 +2548,11 @@
         "name": "image",
         "label": "Highlight Image",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       },
       {
         "component": "text",
