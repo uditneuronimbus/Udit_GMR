@@ -30,7 +30,7 @@ export default function decorate(block) {
      4️⃣ Build tabs map
      ================================ */
   const tabsMap = {};
-  const tabsMeta = {}; // value → name
+  const tabsMeta = {};
 
   itemRows.forEach((row) => {
     const cells = [...row.children];
@@ -41,19 +41,28 @@ export default function decorate(block) {
 
     if (!tabsMap[value]) {
       tabsMap[value] = [];
-      tabsMeta[value] = formatLabel(value); // 👈 NAME
+      tabsMeta[value] = formatLabel(value);
     }
 
     const img = cells[1]?.querySelector("img");
 
-    tabsMap[value].push({
-      image: img ? img.src : "",
-      badge: cells[2]?.textContent?.trim(),
-      name: cells[3]?.textContent?.trim(),
-      desc: cells[4]?.textContent?.trim(),
-      ctaLabel: cells[5]?.textContent?.trim() || "READ MORE",
-      link: cells[6]?.querySelector("a")?.href || "",
-    });
+    // ✅ ONLY image alt, nothing else
+    const imageAlt = img?.getAttribute("alt") || "";
+
+    const getText = (cell) => {
+  if (!cell) return "";
+  return cell.innerText?.trim() || cell.textContent?.trim() || "";
+};
+
+tabsMap[value].push({
+  image: img ? img.src : "",
+  imageAlt,
+  badge: getText(cells[2]),
+  name: getText(cells[3]),   // ✅ FIX
+  desc: getText(cells[4]),   // ✅ FIX
+  ctaLabel: getText(cells[5]) || "READ MORE",
+  link: cells[6]?.querySelector("a")?.href || "",
+});
   });
 
   const tabValues = Object.keys(tabsMap);
@@ -73,20 +82,21 @@ export default function decorate(block) {
   runtime.innerHTML = `
     <div class="container">
       <div class="airport-overview-header text-center mb-4">
-      <div class="airport-overview-headerHead">
-        ${title ? `<h2 class="sec-title">${title}</h2>` : ""}
-        ${description ? `<p class="sec-desc mb-0">${description}</p>` : ""}
-</div>
+        <div class="airport-overview-headerHead">
+          ${title ? `<h2 class="sec-title">${title}</h2>` : ""}
+          ${description ? `<p class="sec-desc mb-0">${description}</p>` : ""}
+        </div>
+
         <div class="airport-tabs">
           ${tabValues
             .map(
               (value, i) => `
-              <button
-                class="tab-btn ${i === 0 ? "active" : ""}"
-                data-filter="${value}">
-                ${tabsMeta[value]}
-              </button>
-            `
+                <button
+                  class="tab-btn ${i === 0 ? "active" : ""}"
+                  data-filter="${value}">
+                  ${tabsMeta[value]}
+                </button>
+              `
             )
             .join("")}
         </div>
@@ -122,22 +132,28 @@ export default function decorate(block) {
           ${
             card.image
               ? `
-            <div class="card-img">
-              ${card.badge ? `<span class="badge">${card.badge}</span>` : ""}
-              <img src="${card.image}" alt="${card.name}" loading="lazy" />
-            </div>`
+                <div class="card-img">
+                  ${card.badge ? `<span class="badge">${card.badge}</span>` : ""}
+                  <img
+                    src="${card.image}"
+                    alt="${card.imageAlt}"
+                    loading="lazy"
+                  />
+                </div>
+              `
               : ""
           }
 
           <div class="card-body">
-            <h3 class="card-title">${card.name}</h3>
+            ${card.name ? `<h3 class="card-title">${card.name}</h3>` : ""}
             ${card.desc ? `<p class="card-desc">${card.desc}</p>` : ""}
             ${
               card.link
                 ? `
-              <div class="card-cta">
-                <a href="${card.link}" class="btn-link">${card.ctaLabel}</a>
-              </div>`
+                  <div class="card-cta">
+                    <a href="${card.link}" class="btn-link">${card.ctaLabel}</a>
+                  </div>
+                `
                 : ""
             }
           </div>
@@ -149,7 +165,7 @@ export default function decorate(block) {
   }
 
   /* ================================
-     8️⃣ Load More (unchanged)
+     8️⃣ Load More
      ================================ */
   const MOBILE_LIMIT = 3;
   let visibleCount = MOBILE_LIMIT;
@@ -180,7 +196,7 @@ export default function decorate(block) {
   loadMoreBtn.addEventListener("click", () => {
     visibleCount += MOBILE_LIMIT;
     const active =
-      runtime.querySelector(".tab-btn.active").dataset.filter;
+      runtime.querySelector(".tab-btn.active")?.dataset.filter;
     applyLoadMore(active);
   });
 

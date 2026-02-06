@@ -52,11 +52,11 @@ export default function decorate(block) {
   const mapWrap = document.createElement("div");
   mapWrap.className = "gan-map-wrap";
 
-  // ✅ Lottie Animation (desktop) - working JSON
+  // Lottie Animation (desktop)
   const lottieWrap = document.createElement("div");
   lottieWrap.className = "gan-lottie";
   lottieWrap.dataset.lottie =
-    "https://cdn.prod.website-files.com/6853ad13a6c94e060a70ac45/6953c9f3aafa31dfbbb24b96_mapanimation5.json"; // public working JSON
+    "https://cdn.prod.website-files.com/6853ad13a6c94e060a70ac45/6953c9f3aafa31dfbbb24b96_mapanimation5.json";
 
   // Locations (mobile)
   const locationsWrap = document.createElement("div");
@@ -77,9 +77,28 @@ export default function decorate(block) {
      ================================ */
 
   itemRows.forEach((itemRow) => {
-    if (!itemRow || itemRow.children.length !== 3) return;
+    if (!itemRow || itemRow.children.length < 3) return;
 
-    const [airportEl, countryEl, flagEl] = [...itemRow.children];
+    const cells = [...itemRow.children];
+
+    const airportEl = cells[0];
+    const countryEl = cells[1];
+    const flagEl = cells[2];
+    const altCell = cells[3];
+    const authoredAlt = altCell?.textContent?.trim() || "";
+    const countryName = countryEl.textContent.trim();
+    const finalAlt = authoredAlt || countryName;
+
+    const img = flagEl.querySelector("img");
+    if (img) {
+      img.setAttribute("alt", finalAlt);
+    }
+
+    // 🔥 remove alt field from HTML output
+    if (altCell) {
+      altCell.remove();
+    }
+
 
     itemRow.remove();
     itemRow.className = "gan-location";
@@ -117,4 +136,4 @@ export default function decorate(block) {
       path: lottieWrap.dataset.lottie,
     });
   }
-};
+}

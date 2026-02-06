@@ -367,6 +367,11 @@
       },
       {
         "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
+      },
+      {
+        "component": "text",
         "name": "cardTitle",
         "label": "Card Title",
         "valueType": "string"
@@ -641,6 +646,11 @@
         "name": "image",
         "label": "Business Image",
         "comment": "The large image displayed on the left when this item is active"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       },
       {
         "component": "text-input",
@@ -1507,6 +1517,11 @@
         "name": "flagIcon",
         "label": "Country Flag Icon",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       }
     ]
   },
@@ -1518,6 +1533,11 @@
         "name": "image",
         "label": "Background Image",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       },
       {
         "component": "richtext",
@@ -2157,6 +2177,11 @@
         "label": "Mobile Banner Image",
         "valueType": "string",
         "comment": "Recommended size: 768px width"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       }
     ]
   },
@@ -2776,6 +2801,11 @@
         "name": "image",
         "label": "Airport Image",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       },
       {
         "component": "text",

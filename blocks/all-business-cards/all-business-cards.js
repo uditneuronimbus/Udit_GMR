@@ -53,9 +53,11 @@ export default async function decorate(block) {
      ================================ */
   cardRows.forEach((row) => {
     const cells = [...row.children];
+
     const img = cells[0]?.querySelector("img");
-    const title = cells[1]?.textContent?.trim() || "";
-    const desc = cells[2]?.textContent?.trim() || "";
+    const altText = cells[1]?.textContent?.trim() || "";
+    const title = cells[2]?.textContent?.trim() || "";
+    const desc = cells[3]?.textContent?.trim() || "";
 
     const col = document.createElement("div");
     col.className = "col-md-6 col-lg-4 mt-4";
@@ -65,8 +67,8 @@ export default async function decorate(block) {
         ${
           img
             ? `<div class="card-img">
-                <img src="${img.src}" alt="${img.alt || ""}">
-              </div>`
+                 <img src="${img.src}" alt="${altText || title}">
+               </div>`
             : ""
         }
         <div class="card-body">
@@ -112,9 +114,11 @@ export default async function decorate(block) {
      ================================ */
   cardRows.forEach((row) => {
     const cells = [...row.children];
+
     const img = cells[0]?.querySelector("img");
-    const title = cells[1]?.textContent?.trim() || "";
-    const desc = cells[2]?.textContent?.trim() || "";
+    const altText = cells[1]?.textContent?.trim() || "";
+    const title = cells[2]?.textContent?.trim() || "";
+    const desc = cells[3]?.textContent?.trim() || "";
 
     const slide = document.createElement("div");
     slide.className = "swiper-slide";
@@ -124,8 +128,8 @@ export default async function decorate(block) {
         ${
           img
             ? `<div class="card-img">
-                <img src="${img.src}" alt="${img.alt || ""}">
-              </div>`
+                 <img src="${img.src}" alt="${altText || title}">
+               </div>`
             : ""
         }
         <div class="card-body">
@@ -139,7 +143,7 @@ export default async function decorate(block) {
   });
 
   /* ================================
-     6️⃣ Init Swiper (mobile only shown)
+     6️⃣ Init Swiper
      ================================ */
   await loadCSS(SWIPER_CSS);
   await loadScript(SWIPER_JS);

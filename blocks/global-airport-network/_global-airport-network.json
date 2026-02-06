@@ -72,6 +72,11 @@
           "name": "flagIcon",
           "label": "Country Flag Icon",
           "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "imageAlt",
+          "label": "Alt Text"
         }
       ]
     }
