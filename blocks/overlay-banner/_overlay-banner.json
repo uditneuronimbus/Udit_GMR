@@ -28,11 +28,6 @@
         },
         {
           "component": "text",
-          "name": "imageAlt",
-          "label": "Alt Text"
-        },
-        {
-          "component": "text",
           "name": "title",
           "label": "Title",
           "valueType": "string",
@@ -61,6 +56,11 @@
           "name": "image1",
           "label": "Background Mobile Image",
           "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "imageAlt",
+          "label": "Alt Text"
         }
       ]
     }
