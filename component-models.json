@@ -1503,6 +1503,23 @@
         "name": "sectionDescription",
         "label": "Description Text",
         "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "mapImage",
+        "label": "Background Map Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
+      },
+      {
+        "component": "text",
+        "name": "lottiePath",
+        "label": "Lottie Path",
+        "valueType": "string"
       }
     ]
   },
