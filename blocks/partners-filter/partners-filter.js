@@ -181,8 +181,7 @@ export default function decorate(block) {
       // NEW STRUCTURE with imageAlt field
       // Column 2: imageAlt (contains both alt and maybe title?)
       const col2Text = getTextFromColumn(cols[2]);
-      imageAltText = col2Text; // For alt attribute
-      titleText = col2Text; // Also use for h3 if title field is empty
+      imageAltText = col2Text; // Also use for h3 if title field is empty
       
       // Column 3: title field (might contain description)
       const col3Text = getTextFromColumn(cols[3]);
@@ -269,9 +268,11 @@ export default function decorate(block) {
           newImg.src = imageUrl;
           
           const finalAlt =
-  (imageAltText && imageAltText.trim()) ||
-  (titleText && titleText.trim()) ||
-  sectionTitle;
+  imageAltText && imageAltText.trim() !== ""
+    ? imageAltText.trim()           // ✅ alt field FIRST
+    : titleText && titleText.trim() !== ""
+    ? titleText.trim()              // ✅ title ONLY if alt empty
+    : sectionTitle;                 // ✅ last fallback
 
 newImg.alt = finalAlt;
           
