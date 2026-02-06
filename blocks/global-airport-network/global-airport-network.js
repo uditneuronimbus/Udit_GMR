@@ -1,7 +1,5 @@
 export default function decorate(block) {
   const rows = [...block.children];
-
-  // We use rows[0] → rows[4], so minimum 5 rows are required
   if (rows.length < 5) return;
 
   block.classList.add("global-airport-network");
@@ -26,12 +24,11 @@ export default function decorate(block) {
   const imageAltText = imageAltRow?.textContent?.trim() || "";
 
   /* ================================
-     2️⃣ Resolve Lottie path (CORRECT)
+     2️⃣ Resolve Lottie JSON path
   ================================ */
 
   let finalLottiePath = "";
 
-  // AEM asset reference (author selected JSON)
   const lottieLink = lottiePathRow?.querySelector("a");
   if (lottieLink) {
     const href = lottieLink.getAttribute("href") || "";
@@ -39,11 +36,13 @@ export default function decorate(block) {
 
     if (cleanPath.endsWith(".json")) {
       finalLottiePath = cleanPath;
+    } else {
+      console.warn("❌ Invalid Lottie file (not JSON):", href);
     }
   }
 
   /* ================================
-     3️⃣ Create layout
+     3️⃣ Layout
   ================================ */
 
   const wrapper = document.createElement("div");
@@ -82,7 +81,7 @@ export default function decorate(block) {
   mapWrap.className = "gan-map-wrap";
 
   /* ================================
-     4️⃣ Background map image
+     4️⃣ Background image
   ================================ */
 
   if (mapImage) {
@@ -100,22 +99,17 @@ export default function decorate(block) {
   const lottieWrap = document.createElement("div");
   lottieWrap.className = "gan-lottie";
 
-  // ✅ Use resolved JSON path
-  if (finalLottiePath) {
-    lottieWrap.dataset.lottie = finalLottiePath;
-  }
+  mapWrap.appendChild(lottieWrap);
 
   /* ================================
-     6️⃣ Locations (mobile)
+     6️⃣ Locations
   ================================ */
 
   const locationsWrap = document.createElement("div");
   locationsWrap.className = "gan-locations";
   locationsWrap.setAttribute("data-aue-label", "Airport Locations");
 
-  mapWrap.appendChild(lottieWrap);
   mapWrap.appendChild(locationsWrap);
-
   rightCol.appendChild(mapWrap);
 
   row.appendChild(leftCol);
@@ -125,7 +119,7 @@ export default function decorate(block) {
   wrapper.appendChild(container);
 
   /* ================================
-     7️⃣ Process location items
+     7️⃣ Process items
   ================================ */
 
   itemRows.forEach((itemRow) => {
@@ -179,20 +173,22 @@ export default function decorate(block) {
   block.appendChild(wrapper);
 
   /* ================================
-     🔟 Initialize Lottie
+     🔟 Initialize Lottie (bodymovin)
   ================================ */
 
   if (
-    window.lottie &&
+    window.bodymovin &&
     window.innerWidth >= 768 &&
     finalLottiePath
   ) {
-    window.lottie.loadAnimation({
+    window.bodymovin.loadAnimation({
       container: lottieWrap,
       renderer: "svg",
       loop: true,
       autoplay: true,
-      path: finalLottiePath,
+      path: 'finalLottiePath',
     });
+  } else if (!window.bodymovin) {
+    console.warn("❌ bodymovin library not loaded");
   }
 }

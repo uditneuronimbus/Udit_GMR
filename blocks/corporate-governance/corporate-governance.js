@@ -26,11 +26,9 @@ export default function decorate(block) {
   }
 
   const subtitleRow = rows.shift();
-  let headerTitleText = "";
   if (subtitleRow) {
     const p = subtitleRow.querySelector("p");
     if (p) {
-      headerTitleText = p.textContent.trim();
       const h3 = document.createElement("h3");
       h3.className = "cg-subtitle";
       h3.innerHTML = p.innerHTML;
@@ -40,18 +38,11 @@ export default function decorate(block) {
   }
 
   const imageRow = rows.shift();
-  const headerAltRow = rows.shift(); // 🔹 Alt Text field
-
   if (imageRow && imageRow.querySelector("img")) {
-    const img = imageRow.querySelector("img");
-    const altText = headerAltRow?.textContent?.trim() || headerTitleText;
-    if (altText) img.alt = altText;
-
     imageRow.classList.add("cg-hero-image");
     header.append(imageRow);
   }
 
-  headerAltRow?.remove(); // remove alt text row
   container.append(header);
 
   /* ===============================
@@ -68,17 +59,14 @@ export default function decorate(block) {
 
     /* ---- Color Theme ---- */
     const themeCell = cells.shift();
-    const theme = themeCell?.textContent?.trim().toLowerCase() || "red";
+    const theme =
+      themeCell?.textContent?.trim().toLowerCase() || "red";
     row.classList.add(`theme-${theme}`);
     themeCell?.remove();
 
-    /* ---- Image ---- */
+    /* ---- Image / Cube ---- */
     const imageCell = cells.shift();
-    const imageAltCell = cells.shift(); // 🔹 Alt Text field
-
-    let sectionImage;
     if (imageCell && imageCell.querySelector("img")) {
-      sectionImage = imageCell.querySelector("img");
       imageCell.classList.add("cg-cube");
       row.append(imageCell);
     }
@@ -88,12 +76,10 @@ export default function decorate(block) {
     content.className = "cg-content";
 
     /* ---- Title ---- */
-    let sectionTitleText = "";
     const titleCell = cells.shift();
     if (titleCell) {
       const p = titleCell.querySelector("p");
       if (p) {
-        sectionTitleText = p.textContent.trim();
         const h4 = document.createElement("h4");
         h4.className = "cg-title";
         h4.innerHTML = p.innerHTML;
@@ -102,15 +88,7 @@ export default function decorate(block) {
       content.append(titleCell);
     }
 
-    /* ---- Apply image alt ---- */
-    if (sectionImage) {
-      const altText =
-        imageAltCell?.textContent?.trim() || sectionTitleText;
-      if (altText) sectionImage.alt = altText;
-    }
-    imageAltCell?.remove();
-
-    /* ---- Bullet Points ---- */
+    /* ---- Bullet Points (Optional, 1–6) ---- */
     const list = document.createElement("ul");
     list.className = "cg-points";
 
@@ -124,7 +102,9 @@ export default function decorate(block) {
       cell.remove();
     });
 
-    if (list.children.length) content.append(list);
+    if (list.children.length) {
+      content.append(list);
+    }
 
     row.append(content);
     sectionsWrap.append(row);
