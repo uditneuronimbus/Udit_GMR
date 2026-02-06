@@ -4,24 +4,24 @@ export default function decorate(block) {
 
   /* ================================
      1️⃣ Read authored content
-     ================================ */
+  ================================ */
   const sectionTitleRow = rows[0];
-  const sectionDescRow = rows[1];
-  const cardRows = rows.slice(2);
+  const sectionDescRow  = rows[1];
+  const cardRows        = rows.slice(2);
 
   const sectionTitle = sectionTitleRow.textContent.trim();
-  const sectionDesc = sectionDescRow.innerHTML;
+  const sectionDesc  = sectionDescRow.innerHTML;
 
   /* ================================
      2️⃣ Hide authored rows (DO NOT REMOVE)
-     ================================ */
+  ================================ */
   rows.forEach((row) => {
     row.style.display = "none";
   });
 
   /* ================================
      3️⃣ Runtime wrapper (OUTSIDE UE structure)
-     ================================ */
+  ================================ */
   const runtime = document.createElement("div");
   runtime.className = "expertise-runtime";
 
@@ -48,29 +48,39 @@ export default function decorate(block) {
   const cardsRow = runtime.querySelector(".row");
 
   /* ================================
-     4️⃣ Build cards (TEXT ONLY)
-     ================================ */
+     4️⃣ Build cards
+  ================================ */
   cardRows.forEach((row, index) => {
     const cells = [...row.children];
+    if (cells.length < 3) return;
 
-    const picture = cells[0]?.querySelector("img");
-    const title = cells[1]?.textContent?.trim() || "";
-    const desc = cells[2]?.textContent?.trim() || "";
-    const ctaCell = cells[3];
-    let ctaText = "";
-    let ctaHref = "";
+    // ───────────────────────────────────────
+    //  Extract fields (adjust indices if order differs)
+    // ───────────────────────────────────────
+    const imgCell     = cells[0];
+    const altCell     = cells[1];
+    const titleCell   = cells[2];
+    const descCell    = cells[3];
+    const ctaCell     = cells[4];
+
+    const authoredAlt = altCell?.textContent?.trim() || "";
+    const title       = titleCell?.textContent?.trim() || "";
+    const desc        = descCell?.textContent?.trim() || "";
+
+    // Final alt logic: authored > title > ""
+    const finalAlt = authoredAlt || title || "";
+
+    let ctaText   = "";
+    let ctaHref   = "";
     let ctaTarget = "_self";
 
     if (ctaCell) {
       const link = ctaCell.querySelector("a");
-
       if (link) {
-        // Case: author added a real link
-        ctaText = link.textContent.trim();
-        ctaHref = link.getAttribute("href");
+        ctaText   = link.textContent.trim();
+        ctaHref   = link.getAttribute("href");
         ctaTarget = link.getAttribute("target") || "_self";
       } else {
-        // Case: text-only CTA
         const text = ctaCell.textContent.trim();
         if (text && text.toLowerCase() !== "na" && text.toLowerCase() !== "false") {
           ctaText = text;
@@ -85,17 +95,45 @@ export default function decorate(block) {
     const card = document.createElement("div");
     card.className = index === 0 ? "card card-ui-one" : "card card-ui-one";
 
-    /* Image recreated safely */
-    if (picture?.src) {
+    /* ───────────────────────────────────────
+       Handle image + alt override
+    ──────────────────────────────────────── */
+    const picture = imgCell?.querySelector("picture");
+    if (picture) {
       const imgWrap = document.createElement("div");
       imgWrap.className = "card-img";
 
-      const img = document.createElement("img");
-      img.src = picture.src;
-      img.alt = picture.alt || "";
+      // Use original picture HTML
+      let pictureHtml = picture.outerHTML;
 
-      imgWrap.append(img);
+      // Override alt if we have a value to set
+      if (finalAlt) {
+        const temp = document.createElement("div");
+        temp.innerHTML = pictureHtml;
+
+        const img = temp.querySelector("img");
+        if (img) {
+          img.setAttribute("alt", finalAlt);
+          pictureHtml = temp.innerHTML;
+        }
+      }
+
+      imgWrap.innerHTML = pictureHtml;
       card.append(imgWrap);
+    } else {
+      // Optional: fallback if no picture — but keeping your original img logic
+      const img = imgCell?.querySelector("img");
+      if (img?.src) {
+        const imgWrap = document.createElement("div");
+        imgWrap.className = "card-img";
+
+        const newImg = document.createElement("img");
+        newImg.src = img.src;
+        newImg.alt = finalAlt;           // ← apply final alt here too
+
+        imgWrap.append(newImg);
+        card.append(imgWrap);
+      }
     }
 
     /* Content */
@@ -103,18 +141,17 @@ export default function decorate(block) {
     content.className = "card-body";
 
     content.innerHTML = `
-  <h3 class="card-title">${title}</h3>
-  <p class="card-desc">${desc}</p>
-  ${ctaText
+      <h3 class="card-title">${title}</h3>
+      <p class="card-desc">${desc}</p>
+      ${ctaText
         ? `<div class="card-cta">
-           <a href="${ctaHref}" target="${ctaTarget}" class="btn-link">
-             ${ctaText}
-           </a>
-         </div>`
+             <a href="${ctaHref}" target="${ctaTarget}" class="btn-link">
+               ${ctaText}
+             </a>
+           </div>`
         : ""
       }
-`;
-
+    `;
 
     card.append(content);
     col.append(card);
