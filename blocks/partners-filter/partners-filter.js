@@ -268,16 +268,12 @@ export default function decorate(block) {
           const newImg = document.createElement('img');
           newImg.src = imageUrl;
           
-          // Set alt text: use imageAltText or fallback
-          if (imageAltText && imageAltText.trim() !== "") {
-            newImg.alt = imageAltText.trim();
-          } else if (titleText && titleText.trim() !== "") {
-            newImg.alt = titleText.trim();
-          } else {
-            newImg.alt = sectionTitle;
-          }
-          
-          newImg.loading = "lazy";
+          const finalAlt =
+  (imageAltText && imageAltText.trim()) ||
+  (titleText && titleText.trim()) ||
+  sectionTitle;
+
+newImg.alt = finalAlt;
           
           // Copy width/height if they exist
           if (image.width) newImg.width = image.width;
@@ -290,14 +286,18 @@ export default function decorate(block) {
           
           // Fix alt in cloned image
           if (clonedImage.tagName === 'IMG') {
-            if (imageAltText && imageAltText.trim() !== "") {
-              clonedImage.alt = imageAltText.trim();
-            }
-          } else if (clonedImage.tagName === 'PICTURE') {
+  clonedImage.alt =
+    (imageAltText && imageAltText.trim()) ||
+    (titleText && titleText.trim()) ||
+    sectionTitle;
+} else if (clonedImage.tagName === 'PICTURE') {
             const img = clonedImage.querySelector('img');
-            if (img && imageAltText && imageAltText.trim() !== "") {
-              img.alt = imageAltText.trim();
-            }
+            if (img) {
+  img.alt =
+    (imageAltText && imageAltText.trim()) ||
+    (titleText && titleText.trim()) ||
+    sectionTitle;
+}
           }
           
           imgWrap.appendChild(clonedImage);
