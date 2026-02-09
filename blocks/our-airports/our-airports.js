@@ -106,7 +106,7 @@ export default function decorate(block) {
         }
       </div>
 
-      <div class="airport-cards row"></div>
+      <div class="airport-cards row justify-content-center"></div>
 
       <div class="load-more-wrap text-center">
         <button class="load-more-btn btn btn-primary">Load More</button>
