@@ -75,3 +75,13 @@
         height: 350px;
     }
 }
+@media (max-width: 767.5px) {
+    .card-overlay {
+        height: auto;
+        padding-bottom: 100%;
+    }
+    .card-overlay .card-desc {
+        opacity: 1;
+        height: auto;
+    }
+}
