@@ -569,7 +569,10 @@ header.header-wrapper {
 }
 
 @media screen and (max-width: 767.5px) {
-    body {
+    .nav-brand img {
+        height: 2rem;
+    }
+    /* body {
         padding-top: 100px;
     }
     .nav-hamburger {
@@ -583,11 +586,9 @@ header.header-wrapper {
     .nav-brand .default-content-wrapper {
         height: 60px;
     }
-    .nav-brand img {
-        height: 1.5rem;
-    }
+    
     .affix {
-        transform: translateY(-40px);
+        transform: translateY(0);
     }
     .mobile-nav-container {
         top: 100px;
@@ -595,5 +596,5 @@ header.header-wrapper {
     }
     .affix .mobile-nav-container {
         height: calc(100vh - 50px);
-    }
+    } */
 }
