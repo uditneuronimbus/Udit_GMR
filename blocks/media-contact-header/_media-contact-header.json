@@ -41,6 +41,12 @@
                     "name": "heading",
                     "label": "Heading",
                     "valueType": "string"
+                },
+                {
+                    "component": "richtext",
+                    "name": "description",
+                    "label": "Description",
+                    "valueType": "string"
                 }
             ]
         },
