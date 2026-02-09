@@ -219,6 +219,14 @@
           {
             "name": "Margin Bottom 0",
             "value": "mb-0"
+          },
+          {
+            "name": "Background Pink",
+            "value": "background-pink"
+          },
+          {
+            "name": "Minus Margin Top",
+            "value": "minus-margin-top"
           }
         ]
       }
@@ -905,6 +913,73 @@
         "component": "text",
         "name": "actionLink",
         "label": "Action Link (URL)",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "contact-us",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "valueType": "string",
+        "defaultValue": "Corporate Office"
+      },
+      {
+        "component": "text",
+        "name": "companyName",
+        "label": "Company Name",
+        "valueType": "string",
+        "defaultValue": "GMR Group"
+      },
+      {
+        "component": "richtext",
+        "name": "address",
+        "label": "Address",
+        "valueType": "string",
+        "defaultValue": "New Udaan Bhawan, Opp. Terminal 3, IGI Airport, New Delhi, India - 110037."
+      },
+      {
+        "component": "text",
+        "name": "phone",
+        "label": "Phone",
+        "valueType": "string",
+        "defaultValue": "+9111 4253 2600"
+      },
+      {
+        "component": "text",
+        "name": "email",
+        "label": "Email",
+        "valueType": "string",
+        "defaultValue": "info@gmrgroup.in"
+      },
+      {
+        "component": "text",
+        "name": "formTitle",
+        "label": "Form Title",
+        "valueType": "string",
+        "defaultValue": "Contact Us"
+      },
+      {
+        "component": "text",
+        "name": "submitLabel",
+        "label": "Submit Button Label",
+        "valueType": "string",
+        "defaultValue": "Submit"
+      },
+      {
+        "component": "text",
+        "name": "successMessage",
+        "label": "Success Message",
+        "valueType": "string",
+        "defaultValue": "Success!"
+      },
+      {
+        "component": "text",
+        "name": "mapEmbedUrl",
+        "label": "Google Maps Embed URL",
         "valueType": "string"
       }
     ]
