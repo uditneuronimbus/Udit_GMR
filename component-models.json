@@ -957,10 +957,215 @@
       },
       {
         "component": "text",
+        "name": "socialMediaHeading",
+        "label": "Social Media Heading",
+        "valueType": "string",
+        "defaultValue": "Connect on our official social channels"
+      },
+      {
+        "component": "aem-content",
+        "name": "socialMediaLinks",
+        "label": "Social Media Links",
+        "valueType": "string",
+        "multi": true,
+        "fields": [
+          {
+            "component": "select",
+            "name": "platform",
+            "label": "Platform",
+            "valueType": "string",
+            "options": [
+              {
+                "name": "LinkedIn",
+                "value": "linkedin"
+              },
+              {
+                "name": "Facebook",
+                "value": "facebook"
+              },
+              {
+                "name": "YouTube",
+                "value": "youtube"
+              },
+              {
+                "name": "Twitter",
+                "value": "twitter"
+              },
+              {
+                "name": "Instagram",
+                "value": "instagram"
+              }
+            ]
+          },
+          {
+            "component": "text",
+            "name": "url",
+            "label": "URL",
+            "valueType": "string"
+          }
+        ],
+        "defaultValue": [
+          {
+            "platform": "linkedin",
+            "url": "#"
+          },
+          {
+            "platform": "facebook",
+            "url": "#"
+          },
+          {
+            "platform": "youtube",
+            "url": "#"
+          }
+        ]
+      },
+      {
+        "component": "text",
         "name": "formTitle",
         "label": "Form Title",
         "valueType": "string",
         "defaultValue": "Contact Us"
+      },
+      {
+        "component": "aem-content",
+        "name": "enquiryTypes",
+        "label": "Enquiry Types",
+        "valueType": "string",
+        "multi": true,
+        "fields": [
+          {
+            "component": "text",
+            "name": "label",
+            "label": "Label",
+            "valueType": "string"
+          },
+          {
+            "component": "text",
+            "name": "value",
+            "label": "Value",
+            "valueType": "string"
+          }
+        ],
+        "defaultValue": [
+          {
+            "label": "General Inquiry",
+            "value": "general"
+          },
+          {
+            "label": "Business Partnership",
+            "value": "business"
+          },
+          {
+            "label": "Career Opportunities",
+            "value": "career"
+          },
+          {
+            "label": "Media & Press",
+            "value": "media"
+          },
+          {
+            "label": "Other",
+            "value": "other"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "enquiryLabel",
+        "label": "Enquiry Field Label",
+        "valueType": "string",
+        "defaultValue": "Enquiry*"
+      },
+      {
+        "component": "text",
+        "name": "enquiryPlaceholder",
+        "label": "Enquiry Placeholder",
+        "valueType": "string",
+        "defaultValue": "Select enquiry type"
+      },
+      {
+        "component": "text",
+        "name": "countryLabel",
+        "label": "Country Field Label",
+        "valueType": "string",
+        "defaultValue": "Country*"
+      },
+      {
+        "component": "text",
+        "name": "countryPlaceholder",
+        "label": "Country Placeholder",
+        "valueType": "string",
+        "defaultValue": "Select country"
+      },
+      {
+        "component": "text",
+        "name": "firstNameLabel",
+        "label": "First Name Label",
+        "valueType": "string",
+        "defaultValue": "First Name*"
+      },
+      {
+        "component": "text",
+        "name": "firstNamePlaceholder",
+        "label": "First Name Placeholder",
+        "valueType": "string",
+        "defaultValue": "Enter your first name..."
+      },
+      {
+        "component": "text",
+        "name": "lastNameLabel",
+        "label": "Last Name Label",
+        "valueType": "string",
+        "defaultValue": "Last Name"
+      },
+      {
+        "component": "text",
+        "name": "lastNamePlaceholder",
+        "label": "Last Name Placeholder",
+        "valueType": "string",
+        "defaultValue": "Enter your last name..."
+      },
+      {
+        "component": "text",
+        "name": "mobileLabel",
+        "label": "Mobile Number Label",
+        "valueType": "string",
+        "defaultValue": "Mobile No.*"
+      },
+      {
+        "component": "text",
+        "name": "mobilePlaceholder",
+        "label": "Mobile Placeholder",
+        "valueType": "string",
+        "defaultValue": "Enter your mobile no..."
+      },
+      {
+        "component": "text",
+        "name": "emailLabel",
+        "label": "Email Field Label",
+        "valueType": "string",
+        "defaultValue": "Email ID*"
+      },
+      {
+        "component": "text",
+        "name": "emailPlaceholder",
+        "label": "Email Placeholder",
+        "valueType": "string",
+        "defaultValue": "Enter your email ID..."
+      },
+      {
+        "component": "text",
+        "name": "messageLabel",
+        "label": "Message Label",
+        "valueType": "string",
+        "defaultValue": "Message*"
+      },
+      {
+        "component": "text",
+        "name": "messagePlaceholder",
+        "label": "Message Placeholder",
+        "valueType": "string",
+        "defaultValue": "Enter your message..."
       },
       {
         "component": "text",
@@ -977,10 +1182,52 @@
         "defaultValue": "Success!"
       },
       {
+        "component": "boolean",
+        "name": "enableCaptcha",
+        "label": "Enable Captcha",
+        "valueType": "boolean",
+        "defaultValue": true
+      },
+      {
+        "component": "text",
+        "name": "captchaSiteKey",
+        "label": "Captcha Site Key (Cloudflare Turnstile)",
+        "valueType": "string"
+      },
+      {
         "component": "text",
         "name": "mapEmbedUrl",
         "label": "Google Maps Embed URL",
-        "valueType": "string"
+        "valueType": "string",
+        "defaultValue": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.5!2d77.0875!3d28.5562!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDMzJzIyLjMiTiA3N8KwMDUnMTUuMCJF!5e0!3m2!1sen!2sin!4v1234567890"
+      },
+      {
+        "component": "text",
+        "name": "mapTitle",
+        "label": "Map Location Title",
+        "valueType": "string",
+        "defaultValue": "New Udaan Bhawan"
+      },
+      {
+        "component": "text",
+        "name": "mapAddress",
+        "label": "Map Address Display",
+        "valueType": "string",
+        "defaultValue": "New Udaan Bhawan, opp. Terminal 3, New Delhi, Delhi 110037"
+      },
+      {
+        "component": "text",
+        "name": "mapRating",
+        "label": "Map Rating",
+        "valueType": "string",
+        "defaultValue": "4.6"
+      },
+      {
+        "component": "text",
+        "name": "mapReviews",
+        "label": "Map Reviews Count",
+        "valueType": "string",
+        "defaultValue": "491 reviews"
       }
     ]
   },
