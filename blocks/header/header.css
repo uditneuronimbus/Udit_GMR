@@ -270,6 +270,9 @@ header.header-wrapper {
     z-index: 9999;
     display: none;
 }
+.affix .nav-hamburger {
+    top: 10px;
+}
 .nav-hamburger button {
     padding: 0;
     border: none;
@@ -300,6 +303,7 @@ header.header-wrapper {
     border-radius: 10px;
     transition-duration: 0.3s;
 }
+
 .nav-hamburger-icon:before {
     top: -8px;
 }
@@ -308,9 +312,15 @@ header.header-wrapper {
 }
 .nav-hamburger-icon,
 .nav-hamburger-icon:before,
-.nav-hamburger-icon:after {
+.nav-hamburger-icon:after, .page-en .affix .nav-hamburger-icon, .page-en .affix .nav-hamburger-icon:before, .page-en .affix .nav-hamburger-icon:after {
     background: var(--charcoal);
 }
+
+.page-en .nav-hamburger-icon, .page-en .nav-hamburger-icon:before, .page-en .nav-hamburger-icon:after{
+    background: var(--white);
+}
+
+
 .nav-hamburger button[aria-label="Close navigation"] span {
     background: none;
 }
@@ -409,8 +419,8 @@ header.header-wrapper {
         box-shadow: -2px 0 20px rgba(0, 0, 0, 0.3);
     }
     .affix .mobile-nav-container {
-        height: calc(100vh - 100px);
-        top: 100px;
+        height: calc(100vh - 80px);
+        top: 80px;
     }
 
     nav[aria-expanded="true"] .mobile-nav-container {
