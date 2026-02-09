@@ -1336,37 +1336,6 @@
           }
         },
         {
-          "title": "Key Highlights Button",
-          "id": "key-highlight-button",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "key-highlight-button",
-                  "model": "key-highlight-button",
-                  "filter": "key-highlight-button"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Key Highlight Card",
-          "id": "key-highlight-items",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "key-highlight-items",
-                  "model": "key-highlight-items"
-                }
-              }
-            }
-          }
-        },
-        {
           "title": "Key Highlights",
           "id": "key-highlightss",
           "plugins": {
@@ -1392,22 +1361,6 @@
                 "template": {
                   "name": "key-highlight-item",
                   "model": "key-highlight-item"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Latest Press Update",
-          "id": "latest-press-update",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Latest Press Update",
-                  "model": "latest-press-update",
-                  "filter": "latest-press-update"
                 }
               }
             }
@@ -1473,37 +1426,6 @@
                 "template": {
                   "name": "Leadership Message Item",
                   "model": "message-from-leadership-item"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Months",
-          "id": "months",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "months",
-                  "model": "months",
-                  "filter": "months"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Month Item",
-          "id": "month-item",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "month-item",
-                  "model": "month-item"
                 }
               }
             }
@@ -1728,38 +1650,6 @@
           }
         },
         {
-          "title": "Press Hero",
-          "id": "press-hero",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "press-hero",
-                  "model": "press-hero",
-                  "filter": "press-hero"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Press Nav",
-          "id": "press-nav",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Press Nav",
-                  "model": "press-nav",
-                  "filter": "press-nav"
-                }
-              }
-            }
-          }
-        },
-        {
           "title": "Press Release Detail",
           "id": "press-release-detail",
           "plugins": {
@@ -1841,22 +1731,6 @@
           }
         },
         {
-          "title": "Recent Posts",
-          "id": "recent-posts",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Recent Posts",
-                  "model": "recent-posts",
-                  "filter": "recent-posts"
-                }
-              }
-            }
-          }
-        },
-        {
           "title": "SDG Themes",
           "id": "sdg-themes",
           "plugins": {
@@ -1920,37 +1794,6 @@
           }
         },
         {
-          "title": "Sub Category",
-          "id": "sub-category",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "sub-category",
-                  "model": "sub-category",
-                  "filter": "sub-category"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Sub Category Item",
-          "id": "sub-category-item",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "sub-category-item",
-                  "model": "sub-category-item"
-                }
-              }
-            }
-          }
-        },
-        {
           "title": "Success Stories",
           "id": "success-stories",
           "plugins": {
@@ -1998,37 +1841,6 @@
           }
         },
         {
-          "title": "Tags",
-          "id": "tags",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "tags",
-                  "model": "tags",
-                  "filter": "tags"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Tag Item",
-          "id": "tag-item",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "tag-item",
-                  "model": "tag-item"
-                }
-              }
-            }
-          }
-        },
-        {
           "title": "Values and Beliefs",
           "id": "values-and-beliefs",
           "plugins": {
@@ -2060,31 +1872,143 @@
           }
         },
         {
-          "title": "Years",
-          "id": "years",
+          "title": "News Update Page",
+          "id": "news-update-page",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "years",
-                  "model": "years",
-                  "filter": "years"
+                  "name": "News Update Page",
+                  "model": "news-update-page",
+                  "filter": "news-update-page"
                 }
               }
             }
           }
         },
         {
-          "title": "Year Item",
-          "id": "year-item",
+          "title": "Press Hero",
+          "id": "press-hero",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "press-hero",
+                  "model": "press-hero",
+                  "filter": "press-hero"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Contact Cards",
+          "id": "contact-cards",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "contact-cards",
+                  "model": "contact-cards",
+                  "filter": "contact-cards"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Contact Card",
+          "id": "contact-cards-item",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "year-item",
-                  "model": "year-item"
+                  "name": "contact-cards-item",
+                  "model": "contact-cards-item"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Press Navigation",
+          "id": "press-nav",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Press Navigation",
+                  "model": "press-nav",
+                  "filter": "press-nav"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Recent Posts",
+          "id": "recent-posts",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Recent Posts",
+                  "model": "recent-posts",
+                  "filter": "recent-posts"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Latest Press Update",
+          "id": "latest-press-update",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Latest Press Update",
+                  "model": "latest-press-update",
+                  "filter": "latest-press-update"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Filter By",
+          "id": "filter-by",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "filter-by",
+                  "model": "filter-by",
+                  "filter": "filter-by"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Listing Press",
+          "id": "listing-press",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "listing-press",
+                  "model": "listing-press",
+                  "filter": "listing-press"
                 }
               }
             }
