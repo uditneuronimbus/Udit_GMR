@@ -133,15 +133,15 @@
     }
 }
 @media screen and (max-width: 767.5px) {
-    .btn-search {
-        height: 60px;
-    }
     .search-box {
-        top: 100px;
+        top: 130px;
         width: 100%;
         position: fixed;
     }
     .mobile-nav-container {
         max-width: 100%;
+    }
+    .affix .search-box {
+        top: 80px;
     }
 }
