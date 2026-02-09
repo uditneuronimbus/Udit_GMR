@@ -1148,7 +1148,8 @@ hr {
         width: 24px !important;
     }
 
-    .sec-desc {
+    .sec-desc,
+    .sec-desc p {
         font-size: var(--fs-normal);
     }
     .card-ui-one .card-body p.card-desc {
