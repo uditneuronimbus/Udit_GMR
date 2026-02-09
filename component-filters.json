@@ -152,6 +152,10 @@
     ]
   },
   {
+    "id": "contact-us",
+    "components": []
+  },
+  {
     "id": "corporate-governance",
     "components": [
       "governance-section"
