@@ -3,7 +3,7 @@
     position: sticky;
     top: 80px;
     background: var(--white);
-    z-index: 9999;
+    z-index: 999;
 }
 
 .aviation-tabs-section {
@@ -154,4 +154,5 @@
     .aviation-dropdown .aviation-dropdown-btn {
         margin-bottom: 1rem;
     }
+    .aviation-services-header-container { top: 59px; }
 }

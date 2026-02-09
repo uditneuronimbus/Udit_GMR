@@ -118,6 +118,14 @@ export default async function decorate(block) {
 
     const publishDateFormatted = formatDate(publishDateRaw);
 
+    const hasTitle = !!item.title;
+const hasImage = !!item.cardImage?._publishUrl;
+const hasContent = !!item.description?.html;
+const hasContacts = !!item.contacts?.html;
+
+// KEY HIGHLIGHT should appear only if something exists
+const hasAnyContent = hasTitle || hasImage || hasContent || hasContacts;
+
     /* ================================
        Render page
     ================================ */
@@ -141,27 +149,45 @@ export default async function decorate(block) {
       </div>
 
       <article class="news-article">
-        <h2 class="news-key-highlight">KEY HIGHLIGHT</h2>
 
-        <div class="news-title">
-          <h1>${item.title || ""}</h1>
-        </div>
+    ${hasAnyContent ? `<h2 class="news-key-highlight">KEY HIGHLIGHT</h2>` : ""}
 
-        <div class="news-card">
-          <img
-            src="${item.cardImage?._publishUrl || ""}"
-            alt="${item.title || ""}"
-          />
-        </div>
+    ${
+      hasTitle
+        ? `<div class="news-title">
+             <h1>${item.title}</h1>
+           </div>`
+        : ""
+    }
 
-        <div class="news-content">
-          ${fixImageSrc(item.description?.html) || ""}
-        </div>
+    ${
+      hasImage
+        ? `<div class="news-card">
+             <img
+               src="${item.cardImage._publishUrl}"
+               alt="${item.title || "News image"}"
+             />
+           </div>`
+        : ""
+    }
 
-        <div class="news-contact-cards">
-          ${item.contacts?.html || ""}
-        </div>
-      </article>
+    ${
+      hasContent
+        ? `<div class="news-content">
+             ${fixImageSrc(item.description.html)}
+           </div>`
+        : ""
+    }
+
+    ${
+      hasContacts
+        ? `<div class="news-contact-cards">
+             ${item.contacts.html}
+           </div>`
+        : ""
+    }
+
+  </article>
 
       <!-- BOTTOM ACTIONS -->
       <div class="copySection">

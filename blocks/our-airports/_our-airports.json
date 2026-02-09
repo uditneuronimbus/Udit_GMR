@@ -76,6 +76,10 @@
           "valueType": "string",
           "options": [
             {
+              "name": "None",
+              "value": "none"
+            },
+            {
               "name": "Domestic Network",
               "value": "domesticNetwork"
             },
@@ -102,6 +106,11 @@
           "name": "image",
           "label": "Airport Image",
           "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "imageAlt",
+          "label": "Alt Text"
         },
         {
           "component": "text",

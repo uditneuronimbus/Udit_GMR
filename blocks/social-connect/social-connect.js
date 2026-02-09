@@ -6,15 +6,24 @@ export default function decorate(block) {
 
   /* ================================
      1️⃣ Extract authored elements
+     Order must match model fields
      ================================ */
-  const [titleRow, instagramRow, xRow, linkedinRow, youtubeRow, facebookRow] =
-    rows;
+  const [
+    titleRow,
+    instagramRow,
+    xRow,
+    linkedinRow,
+    youtubeRow,
+    whatsappRow,
+    facebookRow,
+  ] = rows;
 
   const socialItems = [
     { name: "instagram", row: instagramRow },
     { name: "x", row: xRow },
     { name: "linkedin", row: linkedinRow },
     { name: "youtube", row: youtubeRow },
+    { name: "whatsapp", row: whatsappRow }, // ✅ added here
     { name: "facebook", row: facebookRow },
   ].filter(({ row }) => row?.textContent?.trim());
 
@@ -28,7 +37,7 @@ export default function decorate(block) {
   layout.className =
     "d-flex flex-column flex-md-row align-items-center justify-content-between gap-3";
 
-  /* ---- Title (MOVE node, don't clone) ---- */
+  /* ---- Title ---- */
   const titleWrap = document.createElement("div");
   titleWrap.className = "social-connect-title";
 
@@ -37,9 +46,8 @@ export default function decorate(block) {
 
     if (p) {
       const h4 = document.createElement("h4");
-      h4.innerHTML = p.innerHTML; // preserve formatting
+      h4.innerHTML = p.innerHTML;
       h4.className = "social-connect-heading m-0 fw-normal";
-
       p.replaceWith(h4);
     }
 
@@ -66,7 +74,7 @@ export default function decorate(block) {
     a.append(icon);
     iconsWrap.append(a);
 
-    // remove original row after moving data
+    // remove original authored row
     row.remove();
   });
 

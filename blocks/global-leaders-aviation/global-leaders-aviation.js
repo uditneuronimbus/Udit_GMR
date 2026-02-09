@@ -1,6 +1,5 @@
 export default function decorate(block) {
   const rows = [...block.children];
-
   if (rows.length < 2) return;
 
   block.classList.add("global-leaders-aviation");
@@ -8,15 +7,21 @@ export default function decorate(block) {
   /* ================================
      1️⃣ Identify fields safely
      ================================ */
-  let logoEl = null;
+  let imageRow = null;
+  let imageAltRow = null;
   let titleEl = null;
   let descEl = null;
   let footerEl = null;
   const itemRows = [];
 
   rows.forEach((row) => {
-    if (!logoEl && row.querySelector("img, picture, svg")) {
-      logoEl = row;
+    if (!imageRow && row.querySelector("img, picture, svg")) {
+      imageRow = row;
+      return;
+    }
+
+    if (!imageAltRow && row.dataset?.aueLabel === "Alt Text") {
+      imageAltRow = row;
       return;
     }
 
@@ -38,10 +43,12 @@ export default function decorate(block) {
     itemRows.push(row);
   });
 
-  const hasLogo = logoEl?.querySelector("img, picture, svg");
-  const hasTitle = titleEl?.textContent.trim();
-  const hasDesc = descEl?.textContent.trim();
-  const hasFooter = footerEl?.textContent.trim();
+  const sectionTitle =
+    titleEl?.textContent?.trim() ||
+    "Global Leaders in Aviation Infrastructure";
+
+  const imageAlt =
+    imageAltRow?.textContent?.trim() || sectionTitle;
 
   /* ================================
      2️⃣ Wrapper
@@ -52,26 +59,28 @@ export default function decorate(block) {
   /* ================================
      3️⃣ Main content layout
      ================================ */
-  if (hasLogo || hasTitle || hasDesc) {
+  if (imageRow || titleEl || descEl) {
     const container = document.createElement("div");
     container.className = "container";
 
     const row = document.createElement("div");
-    row.className = "row";
+    row.className = "row align-items-center";
 
-    /* LEFT COLUMN → LOGO + TITLE */
-    if (hasLogo || hasTitle) {
+    /* LEFT COLUMN → IMAGE + TITLE */
+    if (imageRow || titleEl) {
       const leftCol = document.createElement("div");
       leftCol.className = "col-lg-5 col-md-5";
 
-      if (hasLogo) {
-        logoEl.remove();
-        logoEl.classList.add("service-logo", "mb-4");
-        logoEl.removeAttribute("data-aue-label");
-        leftCol.appendChild(logoEl);
+      if (imageRow) {
+        imageRow.remove();
+        imageRow.classList.add("service-logo", "mb-4");
+        imageRow.removeAttribute("data-aue-label");
+
+        applyAltText(imageRow, imageAlt);
+        leftCol.appendChild(imageRow);
       }
 
-      if (hasTitle) {
+      if (titleEl) {
         titleEl.remove();
         titleEl.classList.add("sec-title");
         titleEl.removeAttribute("data-aue-label");
@@ -81,8 +90,8 @@ export default function decorate(block) {
       row.appendChild(leftCol);
     }
 
-    /* RIGHT COLUMN → DESCRIPTION ONLY */
-    if (hasDesc) {
+    /* RIGHT COLUMN → DESCRIPTION */
+    if (descEl) {
       const rightCol = document.createElement("div");
       rightCol.className = "col-md-7 col-lg-6 fs-md";
 
@@ -133,7 +142,7 @@ export default function decorate(block) {
   /* ================================
      5️⃣ Footer
      ================================ */
-  if (hasFooter) {
+  if (footerEl?.textContent?.trim()) {
     const footerDiv = document.createElement("div");
     footerDiv.className = "gla-footer";
     footerDiv.innerHTML = footerEl.innerHTML;
@@ -146,4 +155,18 @@ export default function decorate(block) {
      ================================ */
   block.innerHTML = "";
   block.appendChild(wrapper);
+
+  /* ================================
+     7️⃣ Alt helper (condition-based)
+     ================================ */
+  function applyAltText(containerEl, altText) {
+    if (!containerEl) return;
+
+    containerEl.querySelectorAll("img").forEach((img) => {
+      // ✅ Do NOT overwrite DAM-authored alt
+      if (!img.hasAttribute("alt") || img.alt.trim() === "") {
+        img.alt = altText;
+      }
+    });
+  }
 }

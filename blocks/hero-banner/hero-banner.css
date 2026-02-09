@@ -92,6 +92,7 @@
     background: none;
     border-radius: 0.75rem;
     margin: 0;
+    min-width: inherit !important;
 }
 .hero-nav .swiper-button-next:before,
 .hero-nav .swiper-button-prev:before {

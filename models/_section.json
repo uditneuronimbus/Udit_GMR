@@ -97,6 +97,14 @@
             {
               "name": "Margin Bottom 0",
               "value": "mb-0"
+            },
+            {
+              "name": "Background Pink",
+              "value": "background-pink"
+            },
+            {
+              "name": "Minus Margin Top",
+              "value": "minus-margin-top"
             }
           ]
         }
@@ -156,6 +164,7 @@
         "integrity-decision",
         "press-release-featured",
         "press-release-listing",
+        "career-faqs-list",
         "image-scroll-card",
         "key-highlight-button"
       ]

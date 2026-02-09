@@ -25,7 +25,13 @@ export default function decorate(block) {
   blueContainer.classList.add("container");
 
   const item = document.createElement("div");
-  item.classList.add("d-flex", "flex-wrap", "align-items-center", "gap-2");
+  item.classList.add(
+    "d-flex",
+    "flex-wrap",
+    "align-items-md-start",
+    "align-items-center",
+    "gap-2",
+  );
 
   item.innerHTML = `
       <div class="footertopbar-image">

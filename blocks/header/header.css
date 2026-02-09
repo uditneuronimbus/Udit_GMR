@@ -40,7 +40,7 @@ header.header-wrapper {
     transition-duration: 0.3s;
 }
 .affix {
-    transform: translateY(-50px);
+    margin-top: -50px;
     background: var(--white);
 }
 
@@ -165,7 +165,7 @@ header.header-wrapper {
     user-select: none;
 }
 .primary-header.affix .mega-wrapper {
-    top: 130px;
+    top: 80px;
 }
 
 /********************************************
@@ -270,6 +270,9 @@ header.header-wrapper {
     z-index: 9999;
     display: none;
 }
+.affix .nav-hamburger {
+    top: 10px;
+}
 .nav-hamburger button {
     padding: 0;
     border: none;
@@ -300,17 +303,24 @@ header.header-wrapper {
     border-radius: 10px;
     transition-duration: 0.3s;
 }
+
 .nav-hamburger-icon:before {
     top: -8px;
 }
 .nav-hamburger-icon:after {
     top: 8px;
 }
-.affix .nav-hamburger-icon,
-.affix .nav-hamburger-icon:before,
-.affix .nav-hamburger-icon:after {
+.nav-hamburger-icon,
+.nav-hamburger-icon:before,
+.nav-hamburger-icon:after, .page-en .affix .nav-hamburger-icon, .page-en .affix .nav-hamburger-icon:before, .page-en .affix .nav-hamburger-icon:after {
     background: var(--charcoal);
 }
+
+.page-en .nav-hamburger-icon, .page-en .nav-hamburger-icon:before, .page-en .nav-hamburger-icon:after{
+    background: var(--white);
+}
+
+
 .nav-hamburger button[aria-label="Close navigation"] span {
     background: none;
 }
@@ -410,6 +420,7 @@ header.header-wrapper {
     }
     .affix .mobile-nav-container {
         height: calc(100vh - 80px);
+        top: 80px;
     }
 
     nav[aria-expanded="true"] .mobile-nav-container {
@@ -565,7 +576,10 @@ header.header-wrapper {
 }
 
 @media screen and (max-width: 767.5px) {
-    body {
+    .nav-brand img {
+        height: 2rem;
+    }
+    /* body {
         padding-top: 100px;
     }
     .nav-hamburger {
@@ -579,9 +593,7 @@ header.header-wrapper {
     .nav-brand .default-content-wrapper {
         height: 60px;
     }
-    .nav-brand img {
-        height: 1.5rem;
-    }
+    
     .affix {
         transform: translateY(-40px);
     }

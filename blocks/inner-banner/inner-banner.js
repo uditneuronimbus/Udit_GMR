@@ -1,9 +1,9 @@
 export default function decorate(block) {
   const rows = [...block.children];
-  if (rows.length < 6) return;
+  if (rows.length < 6) return; // ✅ Alt text is OPTIONAL
 
   /* ==============================
-     1️⃣ Read UE fields
+     1️⃣ Read UE fields (Alt optional)
      ============================== */
   const [
     textRow,
@@ -12,9 +12,17 @@ export default function decorate(block) {
     videoRow,
     desktopImageRow,
     mobileImageRow,
+    imageAltRow, // may be undefined
   ] = rows;
 
   const heroHTML = textRow?.innerHTML || "";
+
+  const bannerTextFallback =
+    textRow?.textContent?.trim() || "Banner image";
+
+  const imageAlt =
+    imageAltRow?.textContent?.trim() || bannerTextFallback;
+
   const buttonLabel = buttonLabelRow?.textContent?.trim();
   const buttonLink = buttonLinkRow?.textContent?.trim() || "#";
   const videoURL = videoRow?.querySelector("a")?.href || "";
@@ -42,12 +50,14 @@ export default function decorate(block) {
 
     if (desktopPicture) {
       const desktopClone = desktopPicture.cloneNode(true);
+      applyAltText(desktopClone, imageAlt);
       desktopClone.classList.add("d-none", "d-md-block");
       imgWrap.append(desktopClone);
     }
 
     if (mobilePicture) {
       const mobileClone = mobilePicture.cloneNode(true);
+      applyAltText(mobileClone, imageAlt);
       mobileClone.classList.add("d-block", "d-md-none");
       imgWrap.append(mobileClone);
     }
@@ -93,10 +103,9 @@ export default function decorate(block) {
     const playBtn = document.createElement("button");
     playBtn.className = "inner-hero-play";
     playBtn.setAttribute("aria-label", "Play video");
-    playBtn.innerHTML = "Play Video";
+    playBtn.textContent = "Play Video";
 
     playBtn.addEventListener("click", () => openVideoModal(videoURL));
-
     rightCol.append(playBtn);
   }
 
@@ -112,7 +121,7 @@ export default function decorate(block) {
   block.classList.add("inner-hero-initialized");
 
   /* ==============================
-     7️⃣ Bootstrap Video Modal
+     7️⃣ Video Modal
      ============================== */
   function openVideoModal(url) {
     let modal = document.getElementById("videoModal");
@@ -142,24 +151,33 @@ export default function decorate(block) {
 
       document.body.append(modal);
 
-      // Stop video on close
       modal.addEventListener("hidden.bs.modal", () => {
         modal.querySelector("#videoIframe").src = "";
       });
     }
 
-    const iframe = modal.querySelector("#videoIframe");
-    iframe.src = `${convertToEmbed(url)}?autoplay=1&rel=0`;
+    modal.querySelector("#videoIframe").src =
+      `${convertToEmbed(url)}?autoplay=1&rel=0`;
 
-    const bsModal = new bootstrap.Modal(modal);
-    bsModal.show();
+    new bootstrap.Modal(modal).show();
   }
 
   /* ==============================
-     8️⃣ YouTube URL Helper
+     8️⃣ Helpers
      ============================== */
   function convertToEmbed(url) {
     const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/);
     return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+  }
+
+  function applyAltText(pictureEl, altText) {
+    if (!pictureEl) return;
+
+    pictureEl.querySelectorAll("img").forEach((img) => {
+      // ✅ Condition-based, DAM-safe
+      if (!img.hasAttribute("alt") || img.alt.trim() === "") {
+        img.alt = altText;
+      }
+    });
   }
 }

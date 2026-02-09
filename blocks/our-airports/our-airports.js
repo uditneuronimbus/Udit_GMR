@@ -30,7 +30,7 @@ export default function decorate(block) {
      4️⃣ Build tabs map
      ================================ */
   const tabsMap = {};
-  const tabsMeta = {}; // value → name
+  const tabsMeta = {};
 
   itemRows.forEach((row) => {
     const cells = [...row.children];
@@ -41,23 +41,30 @@ export default function decorate(block) {
 
     if (!tabsMap[value]) {
       tabsMap[value] = [];
-      tabsMeta[value] = formatLabel(value); // 👈 NAME
+      tabsMeta[value] = formatLabel(value);
     }
 
     const img = cells[1]?.querySelector("img");
+    const imageAlt = img?.getAttribute("alt") || "";
+
+    const getText = (cell) =>
+      cell?.innerText?.trim() || cell?.textContent?.trim() || "";
 
     tabsMap[value].push({
       image: img ? img.src : "",
-      badge: cells[2]?.textContent?.trim(),
-      name: cells[3]?.textContent?.trim(),
-      desc: cells[4]?.textContent?.trim(),
-      ctaLabel: cells[5]?.textContent?.trim() || "READ MORE",
+      imageAlt,
+      badge: getText(cells[2]),
+      name: getText(cells[3]),
+      desc: getText(cells[4]),
+      ctaLabel: getText(cells[5]) || "READ MORE",
       link: cells[6]?.querySelector("a")?.href || "",
     });
   });
 
   const tabValues = Object.keys(tabsMap);
   if (!tabValues.length) return;
+
+  const hasOnlyNoneTab = tabValues.length === 1 && tabValues[0] === "none";
 
   /* ================================
      5️⃣ Hide authored HTML
@@ -73,26 +80,33 @@ export default function decorate(block) {
   runtime.innerHTML = `
     <div class="container">
       <div class="airport-overview-header text-center mb-4">
-      <div class="airport-overview-headerHead">
-        ${title ? `<h2 class="sec-title">${title}</h2>` : ""}
-        ${description ? `<p class="sec-desc mb-0">${description}</p>` : ""}
-</div>
-        <div class="airport-tabs">
-          ${tabValues
-            .map(
-              (value, i) => `
-              <button
-                class="tab-btn ${i === 0 ? "active" : ""}"
-                data-filter="${value}">
-                ${tabsMeta[value]}
-              </button>
-            `
-            )
-            .join("")}
+        <div class="airport-overview-headerHead">
+          ${title ? `<h2 class="sec-title">${title}</h2>` : ""}
+          ${description ? `<p class="sec-desc mb-0">${description}</p>` : ""}
         </div>
+
+        ${
+          !hasOnlyNoneTab
+            ? `
+          <div class="airport-tabs">
+            ${tabValues
+              .map(
+                (value, i) => `
+                  <button
+                    class="tab-btn ${i === 0 ? "active" : ""}"
+                    data-filter="${value}">
+                    ${tabsMeta[value]}
+                  </button>
+                `
+              )
+              .join("")}
+          </div>
+        `
+            : ""
+        }
       </div>
 
-      <div class="airport-cards row"></div>
+      <div class="airport-cards row justify-content-center"></div>
 
       <div class="load-more-wrap text-center">
         <button class="load-more-btn btn btn-primary">Load More</button>
@@ -103,6 +117,7 @@ export default function decorate(block) {
   block.after(runtime);
 
   const cardList = runtime.querySelector(".airport-cards");
+  const tabsContainer = runtime.querySelector(".airport-tabs");
   const tabButtons = runtime.querySelectorAll(".tab-btn");
   const loadMoreBtn = runtime.querySelector(".load-more-btn");
 
@@ -112,32 +127,32 @@ export default function decorate(block) {
   function renderCards(type) {
     cardList.innerHTML = "";
 
-    tabsMap[type].forEach((card) => {
+    tabsMap[type]?.forEach((card) => {
       const div = document.createElement("div");
       div.className = "airport-card col-md-6 mt-4";
-      div.dataset.type = type;
 
       div.innerHTML = `
         <div class="card card-ui-one">
           ${
             card.image
               ? `
-            <div class="card-img">
-              ${card.badge ? `<span class="badge">${card.badge}</span>` : ""}
-              <img src="${card.image}" alt="${card.name}" loading="lazy" />
-            </div>`
+              <div class="card-img">
+                ${card.badge ? `<span class="badge">${card.badge}</span>` : ""}
+                <img src="${card.image}" alt="${card.imageAlt}" loading="lazy" />
+              </div>
+            `
               : ""
           }
-
           <div class="card-body">
-            <h3 class="card-title">${card.name}</h3>
+            ${card.name ? `<h3 class="card-title">${card.name}</h3>` : ""}
             ${card.desc ? `<p class="card-desc">${card.desc}</p>` : ""}
             ${
               card.link
                 ? `
               <div class="card-cta">
                 <a href="${card.link}" class="btn-link">${card.ctaLabel}</a>
-              </div>`
+              </div>
+            `
                 : ""
             }
           </div>
@@ -149,7 +164,7 @@ export default function decorate(block) {
   }
 
   /* ================================
-     8️⃣ Load More (unchanged)
+     8️⃣ Load More
      ================================ */
   const MOBILE_LIMIT = 3;
   let visibleCount = MOBILE_LIMIT;
@@ -180,14 +195,20 @@ export default function decorate(block) {
   loadMoreBtn.addEventListener("click", () => {
     visibleCount += MOBILE_LIMIT;
     const active =
-      runtime.querySelector(".tab-btn.active").dataset.filter;
-    applyLoadMore(active);
+      runtime.querySelector(".tab-btn.active")?.dataset.filter;
+    if (active) applyLoadMore(active);
   });
 
   /* ================================
-     9️⃣ Tabs
+     9️⃣ Tabs logic
      ================================ */
+  function toggleTabsVisibility(type) {
+    if (!tabsContainer) return;
+    tabsContainer.style.display = type === "none" ? "none" : "";
+  }
+
   function activateTab(type) {
+    toggleTabsVisibility(type);
     renderCards(type);
     applyLoadMore(type, true);
   }
@@ -200,6 +221,9 @@ export default function decorate(block) {
     });
   });
 
+  /* ================================
+     🔁 Initial load
+     ================================ */
   activateTab(tabValues[0]);
 
   window.addEventListener("resize", () => {

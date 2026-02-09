@@ -219,6 +219,14 @@
           {
             "name": "Margin Bottom 0",
             "value": "mb-0"
+          },
+          {
+            "name": "Background Pink",
+            "value": "background-pink"
+          },
+          {
+            "name": "Minus Margin Top",
+            "value": "minus-margin-top"
           }
         ]
       }
@@ -364,6 +372,11 @@
         "name": "cardImage",
         "label": "Card Image",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       },
       {
         "component": "text",
@@ -534,6 +547,11 @@
       },
       {
         "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
+      },
+      {
+        "component": "text",
         "name": "title",
         "label": "Title / Heading",
         "valueType": "string"
@@ -641,6 +659,11 @@
         "name": "image",
         "label": "Business Image",
         "comment": "The large image displayed on the left when this item is active"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       },
       {
         "component": "text-input",
@@ -895,6 +918,73 @@
     ]
   },
   {
+    "id": "contact-us",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "valueType": "string",
+        "defaultValue": "Corporate Office"
+      },
+      {
+        "component": "text",
+        "name": "companyName",
+        "label": "Company Name",
+        "valueType": "string",
+        "defaultValue": "GMR Group"
+      },
+      {
+        "component": "richtext",
+        "name": "address",
+        "label": "Address",
+        "valueType": "string",
+        "defaultValue": "New Udaan Bhawan, Opp. Terminal 3, IGI Airport, New Delhi, India - 110037."
+      },
+      {
+        "component": "text",
+        "name": "phone",
+        "label": "Phone",
+        "valueType": "string",
+        "defaultValue": "+9111 4253 2600"
+      },
+      {
+        "component": "text",
+        "name": "email",
+        "label": "Email",
+        "valueType": "string",
+        "defaultValue": "info@gmrgroup.in"
+      },
+      {
+        "component": "text",
+        "name": "formTitle",
+        "label": "Form Title",
+        "valueType": "string",
+        "defaultValue": "Contact Us"
+      },
+      {
+        "component": "text",
+        "name": "submitLabel",
+        "label": "Submit Button Label",
+        "valueType": "string",
+        "defaultValue": "Submit"
+      },
+      {
+        "component": "text",
+        "name": "successMessage",
+        "label": "Success Message",
+        "valueType": "string",
+        "defaultValue": "Success!"
+      },
+      {
+        "component": "text",
+        "name": "mapEmbedUrl",
+        "label": "Google Maps Embed URL",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "cookie-consent",
     "fields": [
       {
@@ -986,6 +1076,11 @@
         "component": "reference",
         "name": "desktopImage",
         "label": "Desktop Image"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       }
     ]
   },
@@ -1016,6 +1111,11 @@
         "component": "reference",
         "name": "imagePrimary",
         "label": "Primary Image / Cube Icon"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       },
       {
         "component": "text",
@@ -1116,6 +1216,87 @@
             "value": "governance"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "career-faqs-list",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title (Main Heading)",
+        "valueType": "string",
+        "defaultValue": "Everything you Need to Know"
+      },
+      {
+        "component": "richtext",
+        "name": "sectionDescription",
+        "label": "Section Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "career-faqs-item",
+    "itemLabel": "title",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Faqs Question",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "answer",
+        "label": "Answer",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "filter-by",
+    "fields": [
+      {
+        "component": "text",
+        "name": "years",
+        "label": "Years",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "months",
+        "label": "Months",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "tags",
+        "label": "Tags",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "filter-categories",
+        "label": "Filter Categories",
+        "valueType": "string",
+        "multi": true
+      }
+    ]
+  },
+  {
+    "id": "filter-panel",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Panel Heading",
+        "valueType": "string",
+        "defaultValue": "Filter By"
       }
     ]
   },
@@ -1483,6 +1664,23 @@
         "name": "sectionDescription",
         "label": "Description Text",
         "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "mapImage",
+        "label": "Background Map Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
+      },
+      {
+        "component": "reference",
+        "name": "lottiePath",
+        "label": "Lottie Path",
+        "valueType": "string"
       }
     ]
   },
@@ -1507,6 +1705,11 @@
         "name": "flagIcon",
         "label": "Country Flag Icon",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       }
     ]
   },
@@ -1518,6 +1721,11 @@
         "name": "image",
         "label": "Background Image",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       },
       {
         "component": "richtext",
@@ -1587,6 +1795,11 @@
       },
       {
         "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
+      },
+      {
+        "component": "text",
         "valueType": "string",
         "name": "title",
         "label": "Title"
@@ -1636,6 +1849,11 @@
         "valueType": "string",
         "name": "image",
         "label": "Card Image"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
       },
       {
         "component": "text",
@@ -2017,6 +2235,11 @@
         "valueType": "string"
       },
       {
+        "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
+      },
+      {
         "component": "richtext",
         "name": "title",
         "label": "Main Title",
@@ -2157,6 +2380,11 @@
         "label": "Mobile Banner Image",
         "valueType": "string",
         "comment": "Recommended size: 768px width"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       }
     ]
   },
@@ -2380,6 +2608,80 @@
     ]
   },
   {
+    "id": "key-highlight-button",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "valueType": "string",
+        "defaultValue": "Key Highlights"
+      },
+      {
+        "component": "richtext",
+        "name": "sectionDescription",
+        "label": "Section Description",
+        "valueType": "string",
+        "defaultValue": "Operating airports in Delhi, Hyderabad, Goa, Nagpur, Bidar, and Medan (Indonesia), and providing technical support at Mactan–Cebu Airport (Philippines)."
+      },
+      {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "Button Text",
+        "valueType": "string",
+        "defaultValue": "Visit Delhi Airport Website"
+      },
+      {
+        "component": "text",
+        "name": "buttonUrl",
+        "label": "Button Link (URL)",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "key-highlight-items",
+    "itemLabel": "title",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Highlight Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Highlight Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Highlight Description",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "Button Text",
+        "valueType": "string",
+        "defaultValue": "Visit Delhi Airport Website"
+      },
+      {
+        "component": "text",
+        "name": "buttonUrl",
+        "label": "Button Link (URL)",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "key-highlightss",
     "fields": [
       {
@@ -2410,6 +2712,11 @@
       },
       {
         "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
+      },
+      {
+        "component": "text",
         "name": "title",
         "label": "Highlight Title",
         "valueType": "string"
@@ -2418,6 +2725,17 @@
         "component": "richtext",
         "name": "description",
         "label": "Highlight Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "latest-press-update",
+    "fields": [
+      {
+        "name": "label",
+        "label": "Section Label",
+        "component": "text",
         "valueType": "string"
       }
     ]
@@ -2499,6 +2817,32 @@
         "component": "text",
         "name": "exploreHighlightsUrl",
         "label": "Explore Highlights URL",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "listing-press",
+    "fields": []
+  },
+  {
+    "id": "media-contact-header",
+    "fields": []
+  },
+  {
+    "id": "media-contact",
+    "itemLabel": "heading",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "content",
+        "label": "Content",
         "valueType": "string"
       }
     ]
@@ -2649,6 +2993,10 @@
         "valueType": "string",
         "options": [
           {
+            "name": "None",
+            "value": "none"
+          },
+          {
             "name": "Domestic Network",
             "value": "domesticNetwork"
           },
@@ -2675,6 +3023,11 @@
         "name": "image",
         "label": "Airport Image",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       },
       {
         "component": "text",
@@ -2881,6 +3234,11 @@
         "name": "image1",
         "label": "Background Mobile Image",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       }
     ]
   },
@@ -2963,6 +3321,11 @@
       },
       {
         "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
+      },
+      {
+        "component": "text",
         "name": "title",
         "label": "Title / Heading",
         "valueType": "string"
@@ -2980,6 +3343,14 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "press-hero",
+    "fields": []
+  },
+  {
+    "id": "press-nav",
+    "fields": []
   },
   {
     "id": "press-release-detail",
@@ -3253,6 +3624,47 @@
     ]
   },
   {
+    "id": "recent-posts",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionTitle",
+        "label": "Section Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "sectionDescription",
+        "label": "Section Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaText",
+        "label": "CTA Button Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaLink",
+        "label": "CTA Button Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "category",
+        "label": "Section Category"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "limit",
+        "label": "Section Limit"
+      }
+    ]
+  },
+  {
     "id": "sdg-themes",
     "fields": [
       {
@@ -3328,6 +3740,12 @@
         "component": "text",
         "name": "youtubeUrl",
         "label": "YouTube URL",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "whatsappUrl",
+        "label": "WhatsApp URL",
         "valueType": "string"
       },
       {

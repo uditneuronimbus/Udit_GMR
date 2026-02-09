@@ -33,6 +33,11 @@
           "valueType": "string"
         },
         {
+          "component": "text",
+          "name": "imageAlt1",
+          "label": "Alt-Text"
+        },
+        {
           "component": "richtext",
           "name": "title",
           "label": "Main Title",
