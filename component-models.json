@@ -1526,6 +1526,13 @@
       },
       {
         "component": "text",
+        "name": "tabinsideTitle",
+        "label": "Tab Inside Title",
+        "valueType": "string",
+        "placeholder": "e.g. Tab Inside Title"
+      },
+      {
+        "component": "text",
         "name": "tabId",
         "label": "Tab ID (optional - for JS/anchors)",
         "valueType": "string",
