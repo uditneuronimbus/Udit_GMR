@@ -1,15 +1,16 @@
 // listed-companies.js
 // Combined version – WORKING + FIXED + localStorage CACHED (60s)
 
-const STOCK_API_URL = 'https://gmr.itsneobot.com:4000/api/share/get-latest-share-price';
+const STOCK_API_URL =
+  "https://gmr.itsneobot.com:4000/api/share/get-latest-share-price";
 const AUTH_TOKEN =
-  'U2FsdGVkX1+IAunex0zJueoZQpRBfpUm/DSQSMufK69HpTEh4abfdnhz0fQ+jbSmPrqojCZOhYZ6/mvA28aQxw';
+  "U2FsdGVkX1+IAunex0zJueoZQpRBfpUm/DSQSMufK69HpTEh4abfdnhz0fQ+jbSmPrqojCZOhYZ6/mvA28aQxw";
 
 // ────────────────────────────────────────────────
 // Cache Configuration
 // ────────────────────────────────────────────────
-const CACHE_KEY = 'listed-companies-stock-data';
-const CACHE_TIME_KEY = 'listed-companies-stock-data-time';
+const CACHE_KEY = "listed-companies-stock-data";
+const CACHE_TIME_KEY = "listed-companies-stock-data-time";
 const CACHE_TTL = 60 * 1000; // 60 seconds
 
 // ────────────────────────────────────────────────
@@ -23,7 +24,7 @@ async function fetchStockPrices() {
     if (cached && cachedTime) {
       const age = Date.now() - Number(cachedTime);
       if (age < CACHE_TTL) {
-        console.log('[Stock Cache] Using cached data');
+        console.log("[Stock Cache] Using cached data");
         return JSON.parse(cached);
       }
     }
@@ -33,14 +34,14 @@ async function fetchStockPrices() {
 
     const response = await fetch(STOCK_API_URL, {
       signal: controller.signal,
-      method: 'GET',
+      method: "GET",
       headers: {
         Authorization: AUTH_TOKEN,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
-      mode: 'cors',
-      cache: 'no-store',
+      mode: "cors",
+      cache: "no-store",
     });
     clearTimeout(timeoutId);
 
@@ -48,7 +49,7 @@ async function fetchStockPrices() {
 
     const json = await response.json();
     if (!json.success || !Array.isArray(json.data)) {
-      throw new Error('Invalid response format');
+      throw new Error("Invalid response format");
     }
 
     localStorage.setItem(CACHE_KEY, JSON.stringify(json.data));
@@ -56,11 +57,11 @@ async function fetchStockPrices() {
 
     return json.data;
   } catch (err) {
-    console.error('[Stock API] Fetch failed:', err);
+    console.error("[Stock API] Fetch failed:", err);
 
     const fallback = localStorage.getItem(CACHE_KEY);
     if (fallback) {
-      console.warn('[Stock Cache] Using stale cached data');
+      console.warn("[Stock Cache] Using stale cached data");
       return JSON.parse(fallback);
     }
 
@@ -76,42 +77,42 @@ function renderStockOverview(companyData, displayName) {
     return `<div class="error">No market data available for ${displayName}</div>`;
   }
 
-  let displayTime = 'Latest';
+  let displayTime = "Latest";
   if (companyData.fetchedAt) {
     try {
       const dt = new Date(companyData.fetchedAt);
-      displayTime = dt.toLocaleString('en-IN', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
+      displayTime = dt.toLocaleString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
         hour12: true,
       });
     } catch {}
   }
 
   let html = `
-    <div class="d-flex align-items-center">
+    <div class="d-sm-flex align-items-center">
       <div class="market-title">${displayName} - MARKET OVERVIEW</div>
-      <div class="as-on">As on ${displayTime}</div>
+      <div class="as-on mt-sm-0 mt-2">As on ${displayTime}</div>
     </div>
     <div class="exchanges">
   `;
 
   companyData.exchanges.slice(0, 2).forEach((ex) => {
     const isNegative = ex.change < 0;
-    const arrow = isNegative ? '↓' : '↑';
+    const arrow = isNegative ? "↓" : "↑";
 
     html += `
       <div class="exchange-row">
         <div class="exchange">${ex.exchange}</div>
         <div class="exchange_price">
           <div class="price">
-            <span class="arrow ${isNegative ? 'negative' : 'positive'}">${arrow}</span>
+            <span class="arrow ${isNegative ? "negative" : "positive"}">${arrow}</span>
             ₹${ex.lastTradedPrice.toFixed(2)}
           </div>
-          <div class="change ${isNegative ? 'negative' : 'positive'}">
+          <div class="change ${isNegative ? "negative" : "positive"}">
             ${Math.abs(ex.change).toFixed(2)} (${Math.abs(ex.changePercent).toFixed(2)}%)
           </div>
         </div>
@@ -120,7 +121,7 @@ function renderStockOverview(companyData, displayName) {
   });
 
   const mainVolume =
-    companyData.exchanges[0]?.volume?.toLocaleString('en-IN') || '—';
+    companyData.exchanges[0]?.volume?.toLocaleString("en-IN") || "—";
 
   html += `
     </div>
@@ -140,14 +141,14 @@ export default async function decorate(block) {
      HEADER
   =============================== */
 
-  const header = document.createElement('header');
-  header.className = 'd-md-flex align-items-center gap-3';
+  const header = document.createElement("header");
+  header.className = "d-md-flex align-items-center gap-3";
 
-  const entryContainer = document.createElement('div');
-  entryContainer.className = 'entry-container fullCont mb-5';
+  const entryContainer = document.createElement("div");
+  entryContainer.className = "entry-container fullCont mb-md-5";
 
   if (children[0]) {
-    const h2 = document.createElement('h2');
+    const h2 = document.createElement("h2");
     while (children[0].firstChild) {
       h2.appendChild(children[0].firstChild);
     }
@@ -158,9 +159,9 @@ export default async function decorate(block) {
   header.appendChild(entryContainer);
 
   if (children[2] && children[3]) {
-    const btn = document.createElement('a');
-    btn.href = children[3].textContent.trim() || '#';
-    btn.className = 'btn btn-primary';
+    const btn = document.createElement("a");
+    btn.href = children[3].textContent.trim() || "#";
+    btn.className = "btn btn-primary";
     btn.textContent = children[2].textContent.trim();
     header.appendChild(btn);
   }
@@ -169,11 +170,11 @@ export default async function decorate(block) {
      COMPANIES GRID
   =============================== */
 
-  const companiesCol = document.createElement('div');
-  companiesCol.className = 'companiesCol';
+  const companiesCol = document.createElement("div");
+  companiesCol.className = "companiesCol";
 
-  const row = document.createElement('div');
-  row.className = 'row';
+  const row = document.createElement("div");
+  row.className = "row";
 
   const stockDivsMap = new Map();
 
@@ -181,16 +182,16 @@ export default async function decorate(block) {
     const companyItem = children[i];
     if (!companyItem || companyItem.children.length < 3) continue;
 
-    companyItem.classList.add('listed-company-item');
+    companyItem.classList.add("listed-company-item");
 
-    const col = document.createElement('div');
-    col.className = 'col-lg-6 mt-4';
+    const col = document.createElement("div");
+    col.className = "col-lg-6 mt-4";
 
-    const companiesGrid = document.createElement('div');
-    companiesGrid.className = 'companiesGrid';
+    const companiesGrid = document.createElement("div");
+    companiesGrid.className = "companiesGrid";
 
-    const h3 = document.createElement('h3');
-    const p = companyItem.children[0].querySelector('p');
+    const h3 = document.createElement("h3");
+    const p = companyItem.children[0].querySelector("p");
     h3.textContent = p
       ? p.textContent.trim()
       : companyItem.children[0].textContent.trim();
@@ -199,31 +200,31 @@ export default async function decorate(block) {
     const symbol = companyItem.children[2]?.textContent.trim();
 
     [...companyItem.children].forEach((child, index) => {
-      if (index > 1) child.style.display = 'none';
+      if (index > 1) child.style.display = "none";
     });
 
-    const companiesStock = document.createElement('div');
-    companiesStock.className = 'companiesStock';
+    const companiesStock = document.createElement("div");
+    companiesStock.className = "companiesStock";
     companiesStock.innerHTML =
       '<div class="loading">Loading market data...</div>';
 
     if (symbol) stockDivsMap.set(symbol, companiesStock);
 
-    const btnContainer = document.createElement('div');
-    btnContainer.className = 'companies-links mt-5 mb-4';
+    const btnContainer = document.createElement("div");
+    btnContainer.className = "companies-links mt-5 mb-4";
 
     if (companyItem.children[3] && companyItem.children[4]) {
-      const a = document.createElement('a');
-      a.href = companyItem.children[4].textContent.trim() || '#';
-      a.className = 'btn btn-circle';
+      const a = document.createElement("a");
+      a.href = companyItem.children[4].textContent.trim() || "#";
+      a.className = "btn btn-circle";
       a.textContent = companyItem.children[3].textContent.trim();
       btnContainer.appendChild(a);
     }
 
     if (companyItem.children[5] && companyItem.children[6]) {
-      const a = document.createElement('a');
-      a.href = companyItem.children[6].textContent.trim() || '#';
-      a.className = 'btn btn-circle';
+      const a = document.createElement("a");
+      a.href = companyItem.children[6].textContent.trim() || "#";
+      a.className = "btn btn-circle";
       a.textContent = companyItem.children[5].textContent.trim();
       btnContainer.appendChild(a);
     }
@@ -257,8 +258,8 @@ export default async function decorate(block) {
       });
 
       const symbolToCompanyCode = {
-        GAL: '15210029',
-        GPUIL: '15131133',
+        GAL: "15210029",
+        GPUIL: "15131133",
       };
 
       for (const [symbol, stockDiv] of stockDivsMap.entries()) {
@@ -270,10 +271,9 @@ export default async function decorate(block) {
           : `<div class="error">No data found for ${symbol}</div>`;
       }
     } catch (err) {
-      console.error('[Stock API] Failed to load data:', err);
+      console.error("[Stock API] Failed to load data:", err);
       for (const stockDiv of stockDivsMap.values()) {
-        stockDiv.innerHTML =
-          '<div class="error">Market data unavailable</div>';
+        stockDiv.innerHTML = '<div class="error">Market data unavailable</div>';
       }
     }
   }, 0);
