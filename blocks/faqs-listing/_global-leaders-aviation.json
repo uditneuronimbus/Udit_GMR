@@ -62,11 +62,10 @@
           "valueType": "string"
         },
         {
-          "component": "textarea",
-          "name": "sort_description",
-          "label": "Sort Description",
-          "valueType": "string",
-          "rows": 8
+          "component": "richtext",
+          "name": "answer",
+          "label": "Answer",
+          "valueType": "string"
         }
       ]
     }
