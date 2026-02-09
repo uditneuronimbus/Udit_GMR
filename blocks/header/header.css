@@ -312,14 +312,18 @@ header.header-wrapper {
 }
 .nav-hamburger-icon,
 .nav-hamburger-icon:before,
-.nav-hamburger-icon:after, .page-en .affix .nav-hamburger-icon, .page-en .affix .nav-hamburger-icon:before, .page-en .affix .nav-hamburger-icon:after {
+.nav-hamburger-icon:after,
+.page-en .affix .nav-hamburger-icon,
+.page-en .affix .nav-hamburger-icon:before,
+.page-en .affix .nav-hamburger-icon:after {
     background: var(--charcoal);
 }
 
-.page-en .nav-hamburger-icon, .page-en .nav-hamburger-icon:before, .page-en .nav-hamburger-icon:after{
+.page-en .nav-hamburger-icon,
+.page-en .nav-hamburger-icon:before,
+.page-en .nav-hamburger-icon:after {
     background: var(--white);
 }
-
 
 .nav-hamburger button[aria-label="Close navigation"] span {
     background: none;
@@ -603,5 +607,5 @@ header.header-wrapper {
     }
     .affix .mobile-nav-container {
         height: calc(100vh - 50px);
-    }
+    }*/
 }
