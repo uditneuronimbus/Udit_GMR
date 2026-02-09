@@ -1181,6 +1181,51 @@
     ]
   },
   {
+    "id": "filter-by",
+    "fields": [
+      {
+        "component": "text",
+        "name": "years",
+        "label": "Years",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "months",
+        "label": "Months",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "tags",
+        "label": "Tags",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "filter-categories",
+        "label": "Filter Categories",
+        "valueType": "string",
+        "multi": true
+      }
+    ]
+  },
+  {
+    "id": "filter-panel",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Panel Heading",
+        "valueType": "string",
+        "defaultValue": "Filter By"
+      }
+    ]
+  },
+  {
     "id": "financial-reports",
     "fields": [
       {
@@ -2702,6 +2747,32 @@
     ]
   },
   {
+    "id": "listing-press",
+    "fields": []
+  },
+  {
+    "id": "media-contact-header",
+    "fields": []
+  },
+  {
+    "id": "media-contact",
+    "itemLabel": "heading",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "content",
+        "label": "Content",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "message-from-leadership",
     "fields": [
       {
@@ -2738,22 +2809,6 @@
         "valueType": "string",
         "name": "titleName",
         "label": "Title Name"
-      }
-    ]
-  },
-  {
-    "id": "months",
-    "fields": []
-  },
-  {
-    "id": "month-item",
-    "itemLabel": "month",
-    "fields": [
-      {
-        "component": "text",
-        "name": "month",
-        "label": "Month",
-        "valueType": "string"
       }
     ]
   },
@@ -3623,22 +3678,6 @@
     ]
   },
   {
-    "id": "sub-category",
-    "fields": []
-  },
-  {
-    "id": "sub-category-item",
-    "itemLabel": "subCategory",
-    "fields": [
-      {
-        "component": "text",
-        "name": "subCategory",
-        "label": "Sub Category",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
     "id": "success-stories",
     "fields": [
       {
@@ -3714,22 +3753,6 @@
     ]
   },
   {
-    "id": "tags",
-    "fields": []
-  },
-  {
-    "id": "tag-item",
-    "itemLabel": "tag",
-    "fields": [
-      {
-        "component": "text",
-        "name": "tag",
-        "label": "Tag",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
     "id": "values-and-beliefs",
     "fields": [
       {
@@ -3766,22 +3789,6 @@
         "component": "text",
         "name": "quoteAuthor",
         "label": "Quote Author",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "years",
-    "fields": []
-  },
-  {
-    "id": "year-item",
-    "itemLabel": "year",
-    "fields": [
-      {
-        "component": "text",
-        "name": "year",
-        "label": "Year",
         "valueType": "string"
       }
     ]

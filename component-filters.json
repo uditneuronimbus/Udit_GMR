@@ -173,6 +173,19 @@
     ]
   },
   {
+    "id": "filter-by",
+    "components": []
+  },
+  {
+    "id": "filter-panel",
+    "components": [
+      "years",
+      "months",
+      "tags",
+      "sub-category"
+    ]
+  },
+  {
     "id": "financial-reports",
     "components": [
       "financial-report-item"
@@ -331,15 +344,19 @@
     ]
   },
   {
-    "id": "message-from-leadership",
+    "id": "listing-press",
+    "components": []
+  },
+  {
+    "id": "media-contact-header",
     "components": [
-      "message-from-leadership-item"
+      "media-contact"
     ]
   },
   {
-    "id": "months",
+    "id": "message-from-leadership",
     "components": [
-      "month-item"
+      "message-from-leadership-item"
     ]
   },
   {
@@ -424,12 +441,6 @@
     "components": []
   },
   {
-    "id": "sub-category",
-    "components": [
-      "sub-category-item"
-    ]
-  },
-  {
     "id": "success-stories",
     "components": []
   },
@@ -440,21 +451,9 @@
     ]
   },
   {
-    "id": "tags",
-    "components": [
-      "tag-item"
-    ]
-  },
-  {
     "id": "values-and-beliefs",
     "components": [
       "value-cards"
-    ]
-  },
-  {
-    "id": "years",
-    "components": [
-      "year-item"
     ]
   }
 ]
