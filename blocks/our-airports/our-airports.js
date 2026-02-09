@@ -45,28 +45,26 @@ export default function decorate(block) {
     }
 
     const img = cells[1]?.querySelector("img");
-
-    // ✅ ONLY image alt, nothing else
     const imageAlt = img?.getAttribute("alt") || "";
 
-    const getText = (cell) => {
-  if (!cell) return "";
-  return cell.innerText?.trim() || cell.textContent?.trim() || "";
-};
+    const getText = (cell) =>
+      cell?.innerText?.trim() || cell?.textContent?.trim() || "";
 
-tabsMap[value].push({
-  image: img ? img.src : "",
-  imageAlt,
-  badge: getText(cells[2]),
-  name: getText(cells[3]),   // ✅ FIX
-  desc: getText(cells[4]),   // ✅ FIX
-  ctaLabel: getText(cells[5]) || "READ MORE",
-  link: cells[6]?.querySelector("a")?.href || "",
-});
+    tabsMap[value].push({
+      image: img ? img.src : "",
+      imageAlt,
+      badge: getText(cells[2]),
+      name: getText(cells[3]),
+      desc: getText(cells[4]),
+      ctaLabel: getText(cells[5]) || "READ MORE",
+      link: cells[6]?.querySelector("a")?.href || "",
+    });
   });
 
   const tabValues = Object.keys(tabsMap);
   if (!tabValues.length) return;
+
+  const hasOnlyNoneTab = tabValues.length === 1 && tabValues[0] === "none";
 
   /* ================================
      5️⃣ Hide authored HTML
@@ -87,19 +85,25 @@ tabsMap[value].push({
           ${description ? `<p class="sec-desc mb-0">${description}</p>` : ""}
         </div>
 
-        <div class="airport-tabs">
-          ${tabValues
-            .map(
-              (value, i) => `
-                <button
-                  class="tab-btn ${i === 0 ? "active" : ""}"
-                  data-filter="${value}">
-                  ${tabsMeta[value]}
-                </button>
-              `
-            )
-            .join("")}
-        </div>
+        ${
+          !hasOnlyNoneTab
+            ? `
+          <div class="airport-tabs">
+            ${tabValues
+              .map(
+                (value, i) => `
+                  <button
+                    class="tab-btn ${i === 0 ? "active" : ""}"
+                    data-filter="${value}">
+                    ${tabsMeta[value]}
+                  </button>
+                `
+              )
+              .join("")}
+          </div>
+        `
+            : ""
+        }
       </div>
 
       <div class="airport-cards row"></div>
@@ -113,6 +117,7 @@ tabsMap[value].push({
   block.after(runtime);
 
   const cardList = runtime.querySelector(".airport-cards");
+  const tabsContainer = runtime.querySelector(".airport-tabs");
   const tabButtons = runtime.querySelectorAll(".tab-btn");
   const loadMoreBtn = runtime.querySelector(".load-more-btn");
 
@@ -122,38 +127,32 @@ tabsMap[value].push({
   function renderCards(type) {
     cardList.innerHTML = "";
 
-    tabsMap[type].forEach((card) => {
+    tabsMap[type]?.forEach((card) => {
       const div = document.createElement("div");
       div.className = "airport-card col-md-6 mt-4";
-      div.dataset.type = type;
 
       div.innerHTML = `
         <div class="card card-ui-one">
           ${
             card.image
               ? `
-                <div class="card-img">
-                  ${card.badge ? `<span class="badge">${card.badge}</span>` : ""}
-                  <img
-                    src="${card.image}"
-                    alt="${card.imageAlt}"
-                    loading="lazy"
-                  />
-                </div>
-              `
+              <div class="card-img">
+                ${card.badge ? `<span class="badge">${card.badge}</span>` : ""}
+                <img src="${card.image}" alt="${card.imageAlt}" loading="lazy" />
+              </div>
+            `
               : ""
           }
-
           <div class="card-body">
             ${card.name ? `<h3 class="card-title">${card.name}</h3>` : ""}
             ${card.desc ? `<p class="card-desc">${card.desc}</p>` : ""}
             ${
               card.link
                 ? `
-                  <div class="card-cta">
-                    <a href="${card.link}" class="btn-link">${card.ctaLabel}</a>
-                  </div>
-                `
+              <div class="card-cta">
+                <a href="${card.link}" class="btn-link">${card.ctaLabel}</a>
+              </div>
+            `
                 : ""
             }
           </div>
@@ -197,13 +196,19 @@ tabsMap[value].push({
     visibleCount += MOBILE_LIMIT;
     const active =
       runtime.querySelector(".tab-btn.active")?.dataset.filter;
-    applyLoadMore(active);
+    if (active) applyLoadMore(active);
   });
 
   /* ================================
-     9️⃣ Tabs
+     9️⃣ Tabs logic
      ================================ */
+  function toggleTabsVisibility(type) {
+    if (!tabsContainer) return;
+    tabsContainer.style.display = type === "none" ? "none" : "";
+  }
+
   function activateTab(type) {
+    toggleTabsVisibility(type);
     renderCards(type);
     applyLoadMore(type, true);
   }
@@ -216,6 +221,9 @@ tabsMap[value].push({
     });
   });
 
+  /* ================================
+     🔁 Initial load
+     ================================ */
   activateTab(tabValues[0]);
 
   window.addEventListener("resize", () => {
