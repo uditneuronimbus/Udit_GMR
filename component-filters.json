@@ -54,6 +54,7 @@
       "breadcrumbs",
       "message-from-leadership",
       "gmr-tabs",
+      "fraud-alert-tabs",
       "image-slider",
       "integrity-decision",
       "press-release-featured",
@@ -221,6 +222,12 @@
     "id": "footertopbars",
     "components": [
       "footertopbar"
+    ]
+  },
+  {
+    "id": "fraud-alert-tabs",
+    "components": [
+      "fraud-alert-item"
     ]
   },
   {
