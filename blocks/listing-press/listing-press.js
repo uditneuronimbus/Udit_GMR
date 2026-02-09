@@ -1,5 +1,7 @@
 import { getSharedData } from '../../scripts/shared-filter.js';
 import { getApiHost } from "../../scripts/api.js";
+import { slugToTitle } from '../../scripts/common.js';
+import { formatDate } from '../../scripts/common.js';
 
 export default async function decorate(block) {
 
@@ -11,7 +13,7 @@ export default async function decorate(block) {
   const dynamicTags = data.tags || [];
   const dynamicSubCats = data.subCategories || [];
 
-  const defaultYear = dynamicYears[0] || "All";
+  const defaultYear = "All";
   const limit = 10;
   
   /* ================= State Management ================= */
@@ -145,24 +147,6 @@ export default async function decorate(block) {
   const sortMenu = block.querySelector("#sortMenu");
 
   /* ================= Helper Functions ================= */
-  
-  function formatDate(dateString) {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    if (Number.isNaN(date.getTime())) return "";
-    return date.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  }
-
-  function slugToTitle(str) {
-    return str
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  }
 
   function updateHeader() {
     const parts = [];

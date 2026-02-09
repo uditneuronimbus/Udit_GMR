@@ -1,4 +1,5 @@
 import { getApiHost } from "../../scripts/api.js";
+import { slugToTitle } from "../../scripts/common.js";
 
 
 
@@ -88,7 +89,7 @@ export default async function decorate(block) {
 
         <div class="lpu-meta">
           <span class="lpu-category">
-            ${item.category || "Press"}
+            ${slugToTitle(item.category || "Press")}
           </span>
           <span class="lpu-date">
             ${publishDateFormatted}
@@ -96,7 +97,7 @@ export default async function decorate(block) {
         </div>
 
         <a
-          href="/press?post=${item.slug}"
+          href="/en/news-update?post=${item.slugUrl}"
           class="lpu-cta"
         >
           Read More
