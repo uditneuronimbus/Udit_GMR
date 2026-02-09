@@ -1590,6 +1590,37 @@
           }
         },
         {
+          "title": "Media Contact Item",
+          "id": "media-contact-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "media-contact-item",
+                  "model": "media-contact-item"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Media Contact Header",
+          "id": "media-contact-header",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "media-contact-header",
+                  "model": "media-contact-header",
+                  "filter": "media-contact-header"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Media Contact",
           "id": "media-contact",
           "plugins": {
@@ -2118,180 +2149,6 @@
                 "template": {
                   "name": "value-cards",
                   "model": "value-cards"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "News Update Page",
-          "id": "news-update-page",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "News Update Page",
-                  "model": "news-update-page",
-                  "filter": "news-update-page"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Press Hero",
-          "id": "press-hero",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "press-hero",
-                  "model": "press-hero",
-                  "filter": "press-hero"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Contact Cards",
-          "id": "contact-cards",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "contact-cards",
-                  "model": "contact-cards",
-                  "filter": "contact-cards"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Contact Card",
-          "id": "contact-cards-item",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "contact-cards-item",
-                  "model": "contact-cards-item"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Press Navigation",
-          "id": "press-nav",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Press Navigation",
-                  "model": "press-nav",
-                  "filter": "press-nav"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Recent Posts",
-          "id": "recent-posts",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Recent Posts",
-                  "model": "recent-posts",
-                  "filter": "recent-posts"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Latest Press Update",
-          "id": "latest-press-update",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Latest Press Update",
-                  "model": "latest-press-update",
-                  "filter": "latest-press-update"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Filter By",
-          "id": "filter-by",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "filter-by",
-                  "model": "filter-by",
-                  "filter": "filter-by"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Listing Press",
-          "id": "listing-press",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "listing-press",
-                  "model": "listing-press",
-                  "filter": "listing-press"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Media Contact Header",
-          "id": "media-contact-header",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "media-contact-header",
-                  "model": "media-contact-header",
-                  "filter": "media-contact-header"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Media Contact Item",
-          "id": "media-contact-item",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "media-contact-item",
-                  "model": "media-contact-item"
                 }
               }
             }
