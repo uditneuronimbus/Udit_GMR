@@ -260,12 +260,24 @@ hr {
 .w-20 {
     max-width: 20% !important;
 }
-.badge.corporate { background-color: var(--charcoal);}
-.badge.airport-aero-services { background-color: var(--blue);}
-.badge.energy { background-color: var(--red);}
-.badge.sports { background-color: var(--turquoise);}
-.badge.transport-urban-infrastructure { background-color: var(--orange);}
-.badge.foundation { background-color: var(--green);}
+.badge.corporate {
+    background-color: var(--charcoal);
+}
+.badge.airport-aero-services {
+    background-color: var(--blue);
+}
+.badge.energy {
+    background-color: var(--red);
+}
+.badge.sports {
+    background-color: var(--turquoise);
+}
+.badge.transport-urban-infrastructure {
+    background-color: var(--orange);
+}
+.badge.foundation {
+    background-color: var(--green);
+}
 .btn-link {
     color: var(--lorange);
     text-transform: uppercase;
@@ -325,7 +337,7 @@ hr {
 .btn-sm {
     font-size: var(--fs-regular);
     height: 38px;
-    padding: 0 .8rem;
+    padding: 0 0.8rem;
 }
 .btn-lg {
     font-size: var(--fs-normal);
@@ -438,12 +450,19 @@ hr {
 .swiper-button {
     display: inline-flex;
     gap: 1.5rem;
+    align-items: center;
+}
+.swiper-pagination-fraction {
+    font-weight: 500;
+}
+.swiper-pagination-fraction .current-slide {
+    font-weight: var(--fw-bold);
 }
 .swiper-button-next,
 .swiper-button-prev {
     position: static !important;
     background: var(--lorange);
-    width: 3.5rem !important;
+    min-width: 3.5rem !important;
     height: 3.5rem !important;
     border-radius: 1rem;
     border: solid 2px var(--lorange);
@@ -967,7 +986,6 @@ hr {
     padding-bottom: 160px;
 }
 
-
 @media (max-width: 1300px) {
     .businesses-section.block,
     .container,
@@ -1064,10 +1082,10 @@ hr {
         padding-right: 0;
     }
     .entry-container .title,
-.entry-container h2,
-.entry-container h2 p {
-    font-size: var(--fs-large);
-}
+    .entry-container h2,
+    .entry-container h2 p {
+        font-size: var(--fs-xlarge);
+    }
     .h1,
     h1 {
         font-size: var(--fs-xxlarge);
@@ -1129,11 +1147,10 @@ hr {
         background: var(--blue) !important;
         width: 24px !important;
     }
+
+    .sec-desc,
     .sec-desc p {
-        font-weight: 300;
-    }
-    .sec-desc {
-        font-size: var(--fs-regular);
+        font-size: var(--fs-normal);
     }
     .card-ui-one .card-body p.card-desc {
         min-height: inherit;

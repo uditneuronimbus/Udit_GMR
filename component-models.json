@@ -219,6 +219,14 @@
           {
             "name": "Margin Bottom 0",
             "value": "mb-0"
+          },
+          {
+            "name": "Background Pink",
+            "value": "background-pink"
+          },
+          {
+            "name": "Minus Margin Top",
+            "value": "minus-margin-top"
           }
         ]
       }
@@ -910,6 +918,73 @@
     ]
   },
   {
+    "id": "contact-us",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "valueType": "string",
+        "defaultValue": "Corporate Office"
+      },
+      {
+        "component": "text",
+        "name": "companyName",
+        "label": "Company Name",
+        "valueType": "string",
+        "defaultValue": "GMR Group"
+      },
+      {
+        "component": "richtext",
+        "name": "address",
+        "label": "Address",
+        "valueType": "string",
+        "defaultValue": "New Udaan Bhawan, Opp. Terminal 3, IGI Airport, New Delhi, India - 110037."
+      },
+      {
+        "component": "text",
+        "name": "phone",
+        "label": "Phone",
+        "valueType": "string",
+        "defaultValue": "+9111 4253 2600"
+      },
+      {
+        "component": "text",
+        "name": "email",
+        "label": "Email",
+        "valueType": "string",
+        "defaultValue": "info@gmrgroup.in"
+      },
+      {
+        "component": "text",
+        "name": "formTitle",
+        "label": "Form Title",
+        "valueType": "string",
+        "defaultValue": "Contact Us"
+      },
+      {
+        "component": "text",
+        "name": "submitLabel",
+        "label": "Submit Button Label",
+        "valueType": "string",
+        "defaultValue": "Submit"
+      },
+      {
+        "component": "text",
+        "name": "successMessage",
+        "label": "Success Message",
+        "valueType": "string",
+        "defaultValue": "Success!"
+      },
+      {
+        "component": "text",
+        "name": "mapEmbedUrl",
+        "label": "Google Maps Embed URL",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "cookie-consent",
     "fields": [
       {
@@ -1423,6 +1498,53 @@
         "component": "aem-content",
         "name": "reference",
         "label": "Reference"
+      }
+    ]
+  },
+  {
+    "id": "fraud-alert-tabs",
+    "fields": [
+      {
+        "component": "text",
+        "name": "mainTitle",
+        "label": "Section Title",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "id": "fraud-alert-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "tabTitle",
+        "label": "Tab Title",
+        "valueType": "string",
+        "placeholder": "e.g. Public Froud Alert",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "tabinsideTitle",
+        "label": "Tab Inside Title",
+        "valueType": "string",
+        "placeholder": "e.g. Tab Inside Title"
+      },
+      {
+        "component": "text",
+        "name": "tabId",
+        "label": "Tab ID (optional - for JS/anchors)",
+        "valueType": "string",
+        "placeholder": "e.g. work, life-beyond-job",
+        "description": "Lowercase kebab-case recommended"
+      },
+      {
+        "component": "richtext",
+        "name": "tabDesc",
+        "label": "Tab Description",
+        "valueType": "string",
+        "description": "Tab Description"
       }
     ]
   },
@@ -3793,6 +3915,177 @@
         "component": "text",
         "name": "quoteAuthor",
         "label": "Quote Author",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "news-update-page",
+    "fields": []
+  },
+  {
+    "id": "press-hero",
+    "fields": []
+  },
+  {
+    "id": "contact-cards",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Section Heading",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "contact-cards-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Designation",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "email",
+        "label": "Email Address",
+        "valueType": "string",
+        "format": "email"
+      }
+    ]
+  },
+  {
+    "id": "press-nav",
+    "fields": []
+  },
+  {
+    "id": "recent-posts",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionTitle",
+        "label": "Section Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "sectionDescription",
+        "label": "Section Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaText",
+        "label": "CTA Button Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaLink",
+        "label": "CTA Button Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "category",
+        "label": "Section Category"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "limit",
+        "label": "Section Limit"
+      }
+    ]
+  },
+  {
+    "id": "latest-press-update",
+    "fields": [
+      {
+        "name": "label",
+        "label": "Section Label",
+        "component": "text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "filter-by",
+    "fields": [
+      {
+        "component": "text",
+        "name": "years",
+        "label": "Years",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "months",
+        "label": "Months",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "tags",
+        "label": "Tags",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "filter-categories",
+        "label": "Filter Categories",
+        "valueType": "string",
+        "multi": true
+      }
+    ]
+  },
+  {
+    "id": "listing-press",
+    "fields": []
+  },
+  {
+    "id": "media-contact-header",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "media-contact-item",
+    "itemLabel": "heading",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "content",
+        "label": "Content",
         "valueType": "string"
       }
     ]
