@@ -450,12 +450,19 @@ hr {
 .swiper-button {
     display: inline-flex;
     gap: 1.5rem;
+    align-items: center;
+}
+.swiper-pagination-fraction {
+    font-weight: 500;
+}
+.swiper-pagination-fraction .current-slide {
+    font-weight: var(--fw-bold);
 }
 .swiper-button-next,
 .swiper-button-prev {
     position: static !important;
     background: var(--lorange);
-    width: 3.5rem !important;
+    min-width: 3.5rem !important;
     height: 3.5rem !important;
     border-radius: 1rem;
     border: solid 2px var(--lorange);
