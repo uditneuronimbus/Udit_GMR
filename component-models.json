@@ -1145,6 +1145,43 @@
     ]
   },
   {
+    "id": "career-faqs-list",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title (Main Heading)",
+        "valueType": "string",
+        "defaultValue": "Everything you Need to Know"
+      },
+      {
+        "component": "richtext",
+        "name": "sectionDescription",
+        "label": "Section Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "career-faqs-item",
+    "itemLabel": "title",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Faqs Question",
+        "valueType": "string"
+      },
+      {
+        "component": "textarea",
+        "name": "sort_description",
+        "label": "Sort Description",
+        "valueType": "string",
+        "rows": 8
+      }
+    ]
+  },
+  {
     "id": "financial-reports",
     "fields": [
       {

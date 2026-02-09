@@ -57,6 +57,7 @@
       "integrity-decision",
       "press-release-featured",
       "press-release-listing",
+      "career-faqs-list",
       "image-scroll-card",
       "key-highlight-button"
     ]
@@ -163,6 +164,12 @@
     "id": "factsheet",
     "components": [
       "factsheet-item"
+    ]
+  },
+  {
+    "id": "only-career-faqs-items",
+    "components": [
+      "career-faqs-item"
     ]
   },
   {
