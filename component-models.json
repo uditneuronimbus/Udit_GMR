@@ -1427,6 +1427,46 @@
     ]
   },
   {
+    "id": "fraud-alert-tabs",
+    "fields": [
+      {
+        "component": "text",
+        "name": "mainTitle",
+        "label": "Section Title",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "id": "fraud-alert-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "tabTitle",
+        "label": "Tab Title",
+        "valueType": "string",
+        "placeholder": "e.g. Public Froud Alert",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "tabId",
+        "label": "Tab ID (optional - for JS/anchors)",
+        "valueType": "string",
+        "placeholder": "e.g. work, life-beyond-job",
+        "description": "Lowercase kebab-case recommended"
+      },
+      {
+        "component": "richtext",
+        "name": "tabDesc",
+        "label": "Tab Description",
+        "valueType": "string",
+        "description": "Tab Description"
+      }
+    ]
+  },
+  {
     "id": "gal-awards",
     "fields": [
       {

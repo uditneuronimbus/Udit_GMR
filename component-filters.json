@@ -53,19 +53,14 @@
       "breadcrumbs",
       "message-from-leadership",
       "gmr-tabs",
+      "fraud-alert-tabs",
       "image-slider",
       "integrity-decision",
       "press-release-featured",
       "press-release-listing",
       "career-faqs-list",
-      "news-update-page",
-      "press-hero",
-      "contact-cards",
-      "press-nav",
-      "recent-posts",
-      "latest-press-update",
-      "filter-by",
-      "listing-press"
+      "image-scroll-card",
+      "key-highlight-button"
     ]
   },
   {
@@ -173,6 +168,25 @@
     ]
   },
   {
+    "id": "only-career-faqs-items",
+    "components": [
+      "career-faqs-item"
+    ]
+  },
+  {
+    "id": "filter-by",
+    "components": []
+  },
+  {
+    "id": "filter-panel",
+    "components": [
+      "years",
+      "months",
+      "tags",
+      "sub-category"
+    ]
+  },
+  {
     "id": "financial-reports",
     "components": [
       "financial-report-item"
@@ -194,6 +208,12 @@
     "id": "footertopbars",
     "components": [
       "footertopbar"
+    ]
+  },
+  {
+    "id": "fraud-alert-tabs",
+    "components": [
+      "fraud-alert-item"
     ]
   },
   {
@@ -309,15 +329,35 @@
     "components": []
   },
   {
+    "id": "key-highlight-button",
+    "components": [
+      "key-highlight-items"
+    ]
+  },
+  {
     "id": "key-highlightss",
     "components": [
       "key-highlight-item"
     ]
   },
   {
+    "id": "latest-press-update",
+    "components": []
+  },
+  {
     "id": "listed-companies",
     "components": [
       "listed-company-item"
+    ]
+  },
+  {
+    "id": "listing-press",
+    "components": []
+  },
+  {
+    "id": "media-contact-header",
+    "components": [
+      "media-contact"
     ]
   },
   {
@@ -370,6 +410,16 @@
     ]
   },
   {
+    "id": "press-hero",
+    "components": [
+      "press-hero"
+    ]
+  },
+  {
+    "id": "press-nav",
+    "components": []
+  },
+  {
     "id": "press-release-detail",
     "components": []
   },
@@ -384,10 +434,8 @@
     ]
   },
   {
-    "id": "only-career-faqs-items",
-    "components": [
-      "career-faqs-item"
-    ]
+    "id": "recent-posts",
+    "components": []
   },
   {
     "id": "sdg-themes",
@@ -414,41 +462,5 @@
     "components": [
       "value-cards"
     ]
-  },
-  {
-    "id": "news-update-page",
-    "components": []
-  },
-  {
-    "id": "press-hero",
-    "components": [
-      "press-hero"
-    ]
-  },
-  {
-    "id": "contact-cards",
-    "components": [
-      "contact-cards-item"
-    ]
-  },
-  {
-    "id": "press-nav",
-    "components": []
-  },
-  {
-    "id": "recent-posts",
-    "components": []
-  },
-  {
-    "id": "latest-press-update",
-    "components": []
-  },
-  {
-    "id": "filter-by",
-    "components": []
-  },
-  {
-    "id": "listing-press",
-    "components": []
   }
 ]
