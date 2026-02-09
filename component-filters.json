@@ -57,6 +57,7 @@
       "integrity-decision",
       "press-release-featured",
       "press-release-listing",
+      "career-faqs-list",
       "news-update-page",
       "press-hero",
       "contact-cards",
@@ -380,6 +381,12 @@
     "id": "only-press-release-items",
     "components": [
       "press-release-item"
+    ]
+  },
+  {
+    "id": "only-career-faqs-items",
+    "components": [
+      "career-faqs-item"
     ]
   },
   {
