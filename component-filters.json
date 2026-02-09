@@ -65,7 +65,8 @@
       "recent-posts",
       "latest-press-update",
       "filter-by",
-      "listing-press"
+      "listing-press",
+      "media-contact-header"
     ]
   },
   {
@@ -444,5 +445,11 @@
   {
     "id": "listing-press",
     "components": []
+  },
+  {
+    "id": "media-contact-header",
+    "components": [
+      "media-contact-item"
+    ]
   }
 ]

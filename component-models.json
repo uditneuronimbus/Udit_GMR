@@ -3589,5 +3589,34 @@
   {
     "id": "listing-press",
     "fields": []
+  },
+  {
+    "id": "media-contact-header",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "media-contact-item",
+    "itemLabel": "heading",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "content",
+        "label": "Content",
+        "valueType": "string"
+      }
+    ]
   }
 ]
