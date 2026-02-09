@@ -247,3 +247,86 @@
 .hidden {
   display: none;
 }
+/* ===== Pagination Container ===== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+  padding-top: 24px;
+}
+
+/* ===== Page Buttons ===== */
+.page-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* ===== Hover State ===== */
+.page-btn:hover:not(.disabled):not(.active) {
+  border-color: #f5a623;
+  color: #f5a623;
+  background: #fff9f0;
+}
+
+/* ===== Active (Current Page) ===== */
+.page-btn.active {
+  background: #f5a623;
+  border-color: #f5a623;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ===== Disabled State ===== */
+.page-btn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ===== Ellipsis ===== */
+.page-ellipsis {
+  padding: 0 4px;
+  color: #999;
+  font-size: 14px;
+  user-select: none;
+}
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 768px) {
+  .pagination {
+    gap: 6px;
+  }
+  
+  .page-btn {
+    min-width: 36px;
+    height: 36px;
+    font-size: 13px;
+  }
+  
+  .page-ellipsis {
+    padding: 0 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    font-size: 12px;
+  }
+}

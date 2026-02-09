@@ -2918,6 +2918,10 @@
         "valueType": "string",
         "options": [
           {
+            "name": "None",
+            "value": "none"
+          },
+          {
             "name": "Domestic Network",
             "value": "domesticNetwork"
           },
