@@ -27,6 +27,7 @@
       "news-updates",
       "success-stories",
       "careers-highlight",
+      "commitment-cards",
       "content-listing",
       "aviation-infrastructure",
       "key-highlightss",
@@ -57,6 +58,15 @@
       "integrity-decision",
       "press-release-featured",
       "press-release-listing",
+      "news-update-page",
+      "press-hero",
+      "contact-cards",
+      "press-nav",
+      "recent-posts",
+      "latest-press-update",
+      "filter-by",
+      "listing-press",
+      "media-contact-header"
       "career-faqs-list",
       "image-scroll-card",
       "key-highlight-button"
@@ -458,6 +468,48 @@
     "id": "values-and-beliefs",
     "components": [
       "value-cards"
+    ]
+  },
+  {
+    "id": "news-update-page",
+    "components": []
+  },
+  {
+    "id": "press-hero",
+    "components": [
+      "press-hero"
+    ]
+  },
+  {
+    "id": "contact-cards",
+    "components": [
+      "contact-cards-item"
+    ]
+  },
+  {
+    "id": "press-nav",
+    "components": []
+  },
+  {
+    "id": "recent-posts",
+    "components": []
+  },
+  {
+    "id": "latest-press-update",
+    "components": []
+  },
+  {
+    "id": "filter-by",
+    "components": []
+  },
+  {
+    "id": "listing-press",
+    "components": []
+  },
+  {
+    "id": "media-contact-header",
+    "components": [
+      "media-contact-item"
     ]
   }
 ]
