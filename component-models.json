@@ -1145,6 +1145,87 @@
     ]
   },
   {
+    "id": "career-faqs-list",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title (Main Heading)",
+        "valueType": "string",
+        "defaultValue": "Everything you Need to Know"
+      },
+      {
+        "component": "richtext",
+        "name": "sectionDescription",
+        "label": "Section Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "career-faqs-item",
+    "itemLabel": "title",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Faqs Question",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "answer",
+        "label": "Answer",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "filter-by",
+    "fields": [
+      {
+        "component": "text",
+        "name": "years",
+        "label": "Years",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "months",
+        "label": "Months",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "tags",
+        "label": "Tags",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "filter-categories",
+        "label": "Filter Categories",
+        "valueType": "string",
+        "multi": true
+      }
+    ]
+  },
+  {
+    "id": "filter-panel",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Panel Heading",
+        "valueType": "string",
+        "defaultValue": "Filter By"
+      }
+    ]
+  },
+  {
     "id": "financial-reports",
     "fields": [
       {
@@ -2452,6 +2533,80 @@
     ]
   },
   {
+    "id": "key-highlight-button",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "valueType": "string",
+        "defaultValue": "Key Highlights"
+      },
+      {
+        "component": "richtext",
+        "name": "sectionDescription",
+        "label": "Section Description",
+        "valueType": "string",
+        "defaultValue": "Operating airports in Delhi, Hyderabad, Goa, Nagpur, Bidar, and Medan (Indonesia), and providing technical support at Mactan–Cebu Airport (Philippines)."
+      },
+      {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "Button Text",
+        "valueType": "string",
+        "defaultValue": "Visit Delhi Airport Website"
+      },
+      {
+        "component": "text",
+        "name": "buttonUrl",
+        "label": "Button Link (URL)",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "key-highlight-items",
+    "itemLabel": "title",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Highlight Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Highlight Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Highlight Description",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "Button Text",
+        "valueType": "string",
+        "defaultValue": "Visit Delhi Airport Website"
+      },
+      {
+        "component": "text",
+        "name": "buttonUrl",
+        "label": "Button Link (URL)",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "key-highlightss",
     "fields": [
       {
@@ -2495,6 +2650,17 @@
         "component": "richtext",
         "name": "description",
         "label": "Highlight Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "latest-press-update",
+    "fields": [
+      {
+        "name": "label",
+        "label": "Section Label",
+        "component": "text",
         "valueType": "string"
       }
     ]
@@ -2576,6 +2742,32 @@
         "component": "text",
         "name": "exploreHighlightsUrl",
         "label": "Explore Highlights URL",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "listing-press",
+    "fields": []
+  },
+  {
+    "id": "media-contact-header",
+    "fields": []
+  },
+  {
+    "id": "media-contact",
+    "itemLabel": "heading",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "content",
+        "label": "Content",
         "valueType": "string"
       }
     ]
@@ -3078,6 +3270,14 @@
     ]
   },
   {
+    "id": "press-hero",
+    "fields": []
+  },
+  {
+    "id": "press-nav",
+    "fields": []
+  },
+  {
     "id": "press-release-detail",
     "fields": [
       {
@@ -3349,6 +3549,47 @@
     ]
   },
   {
+    "id": "recent-posts",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionTitle",
+        "label": "Section Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "sectionDescription",
+        "label": "Section Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaText",
+        "label": "CTA Button Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaLink",
+        "label": "CTA Button Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "category",
+        "label": "Section Category"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "limit",
+        "label": "Section Limit"
+      }
+    ]
+  },
+  {
     "id": "sdg-themes",
     "fields": [
       {
@@ -3424,6 +3665,12 @@
         "component": "text",
         "name": "youtubeUrl",
         "label": "YouTube URL",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "whatsappUrl",
+        "label": "WhatsApp URL",
         "valueType": "string"
       },
       {
@@ -3549,141 +3796,5 @@
         "valueType": "string"
       }
     ]
-  },
-  {
-    "id": "news-update-page",
-    "fields": []
-  },
-  {
-    "id": "press-hero",
-    "fields": []
-  },
-  {
-    "id": "contact-cards",
-    "fields": [
-      {
-        "component": "text",
-        "name": "heading",
-        "label": "Section Heading",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "contact-cards-item",
-    "fields": [
-      {
-        "component": "text",
-        "name": "sectionTitle",
-        "label": "Section Heading",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "title",
-        "label": "Designation",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "email",
-        "label": "Email Address",
-        "valueType": "string",
-        "format": "email"
-      }
-    ]
-  },
-  {
-    "id": "press-nav",
-    "fields": []
-  },
-  {
-    "id": "recent-posts",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "sectionTitle",
-        "label": "Section Title"
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "sectionDescription",
-        "label": "Section Description"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "ctaText",
-        "label": "CTA Button Text"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "ctaLink",
-        "label": "CTA Button Link"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "category",
-        "label": "Section Category"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "limit",
-        "label": "Section Limit"
-      }
-    ]
-  },
-  {
-    "id": "latest-press-update",
-    "fields": [
-      {
-        "name": "label",
-        "label": "Section Label",
-        "component": "text",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "filter-by",
-    "fields": [
-      {
-        "component": "text",
-        "name": "years",
-        "label": "Years",
-        "valueType": "string",
-        "multi": true
-      },
-      {
-        "component": "text",
-        "name": "months",
-        "label": "Months",
-        "valueType": "string",
-        "multi": true
-      },
-      {
-        "component": "text",
-        "name": "tags",
-        "label": "Tags",
-        "valueType": "string",
-        "multi": true
-      },
-      {
-        "component": "text",
-        "name": "filter-categories",
-        "label": "Filter Categories",
-        "valueType": "string",
-        "multi": true
-      }
-    ]
-  },
-  {
-    "id": "listing-press",
-    "fields": []
   }
 ]
