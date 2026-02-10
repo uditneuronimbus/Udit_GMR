@@ -27,7 +27,7 @@ export default async function decorate(block) {
     <section class="sec-expertise spacer">
       <div class="container">
         <div class="row">
-          <div class="col-12">
+          <div class="col-12"> 
 
             <div class="row">
               <div class="col-md-7 text-center mx-auto mb-3">
