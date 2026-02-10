@@ -164,35 +164,26 @@ export default async function decorate(block) {
   block.after(wrapper);
 
   /* ===============================
-     4️⃣ FETCH STOCK DATA (NON-BLOCKING)
+     4️⃣ INITIALIZE UTILITIES (NON-BLOCKING)
      =============================== */
-  fetchStockData()
-    .then((stockData) => {
+
+  // 1. Fetch stock data (Async, non-blocking)
+  (async () => {
+    try {
+      const stockData = await fetchStockData();
       renderStocks(stockTrack, stockSymbols, stockData, STOCK_CODES);
-    })
-    .catch((e) => {
+    } catch (e) {
       console.error("Stock API Error:", e);
       stockTrack.innerHTML = `<div class="stock-error">Market data unavailable</div>`;
-    });
+    }
+  })();
 
-  /* ===============================
-     5️⃣ INIT BHASHINI (LANGUAGE) - ACTIVE
-     =============================== */
-  initBhashini(bhashiniGroup);
-
-  /* ===============================
-     6️⃣ INIT ACCESSIBILITY MODAL
-     =============================== */
-  // Initialize accessibility modal
+  // 2. Initialize components in parallel
+  initBhashini(wrapper);
   initAccessibilityModal();
+  initLanguageDropdown(wrapper);
 
-  /* ===============================
-     7️⃣ INIT LANGUAGE DROPDOWN
-     =============================== */
-  // Initialize language dropdown immediately
-  initLanguageDropdown();
-
-  console.log("Header Utility initialized");
+  console.log("Header Utility initialized (optimized)");
 }
 
 /* ======================================================
@@ -732,16 +723,16 @@ function resetAccessibilityOptions() {
 /* ======================================================
    LANGUAGE DROPDOWN FUNCTIONALITY
    ====================================================== */
-function initLanguageDropdown() {
+function initLanguageDropdown(container) {
   console.log("Initializing language dropdown...");
 
-  const languageContainer = document.querySelector(".language-dropdown");
-  const languageTrigger = document.querySelector(".language-trigger");
-  const languageDropdown = document.querySelector(".language-dropdown-menu");
-  const languageOptions = document.querySelectorAll(".language-option");
+  const languageContainer = container.querySelector(".language-dropdown");
+  const languageTrigger = container.querySelector(".language-trigger");
+  const languageDropdown = container.querySelector(".language-dropdown-menu");
+  const languageOptions = container.querySelectorAll(".language-option");
 
   if (!languageTrigger || !languageDropdown || !languageContainer) {
-    console.error("Language dropdown elements not found");
+    console.error("Language dropdown elements not found in container");
     return;
   }
 
@@ -769,15 +760,15 @@ function initLanguageDropdown() {
   if (detectedLang) {
     // If URL has a language, sync storage and update UI (no redirect here)
     console.log(`Dropdown Init: Syncing UI to URL language "${detectedLang}".`);
-    updateSelectedLanguage(detectedLang, langMatchMap[detectedLang], true, false);
+    updateSelectedLanguage(detectedLang, langMatchMap[detectedLang], container, true, false);
   } else if (savedLang && langMatchMap[savedLang]) {
     // This case (root / or no-lang-path) is now handled by scripts.js early redirect.
     // If we reach here, scripts.js likely didn't redirect (e.g. root page en -> en),
     // so we just sync storage and UI.
-    updateSelectedLanguage(savedLang, langMatchMap[savedLang], true, false);
+    updateSelectedLanguage(savedLang, langMatchMap[savedLang], container, true, false);
   } else {
     // Default fallback to English (no reload)
-    updateSelectedLanguage("en", "ENG", true, false);
+    updateSelectedLanguage("en", "ENG", container, true, false);
   }
 
   // Toggle dropdown on click
@@ -805,7 +796,7 @@ function initLanguageDropdown() {
       this.classList.add("active");
 
       // Update display and save
-      updateSelectedLanguage(langCode, langName, true);
+      updateSelectedLanguage(langCode, langName, container, true);
 
       // Close dropdown
       languageDropdown.classList.remove("show");
@@ -832,8 +823,8 @@ function initLanguageDropdown() {
   console.log("Language dropdown initialized");
 }
 
-function updateSelectedLanguage(langCode, langName, saveToStorage = true, shouldReload = true) {
-  const currentLangDisplay = document.querySelector(".current-lang");
+function updateSelectedLanguage(langCode, langName, container, saveToStorage = true, shouldReload = true) {
+  const currentLangDisplay = container ? container.querySelector(".current-lang") : document.querySelector(".current-lang");
 
   if (currentLangDisplay) {
     // Update the displayed language
@@ -882,7 +873,7 @@ function updateSelectedLanguage(langCode, langName, saveToStorage = true, should
   }
 
   // Update active state in dropdown
-  const languageOptions = document.querySelectorAll(".language-option");
+  const languageOptions = container ? container.querySelectorAll(".language-option") : document.querySelectorAll(".language-option");
   languageOptions.forEach((option) => {
     if (option.getAttribute("data-lang") === langCode) {
       option.classList.add("active");
@@ -911,7 +902,7 @@ function initBhashini(container) {
     script.defer = true;
     script.onload = function () {
       console.log("Bhashini script loaded");
-      setTimeout(() => setupBhashiniLanguageMonitoring(), 1000);
+      setTimeout(() => setupBhashiniLanguageMonitoring(container), 1000);
     };
     script.onerror = () => {
       console.error("Failed to load Bhashini script");
@@ -925,33 +916,35 @@ function initBhashini(container) {
 /* ======================================================
    BHASHINI LANGUAGE MONITORING - ACTIVE
    ====================================================== */
-function setupBhashiniLanguageMonitoring() {
+function setupBhashiniLanguageMonitoring(container) {
   console.log("Setting up Bhashini language monitoring");
 
   const originalSetItem = localStorage.setItem;
   localStorage.setItem = function (key, value) {
     originalSetItem.apply(this, arguments);
     if (key === "preferredLanguage") {
-      updateLanguageIndicator(value);
+      updateLanguageIndicator(value, container);
     }
   };
 
   window.addEventListener("storage", function (e) {
     if (e.key === "preferredLanguage") {
-      updateLanguageIndicator(e.newValue);
+      updateLanguageIndicator(e.newValue, container);
     }
   });
 
   if (window.BhashiniTranslationUtility) {
     window.BhashiniTranslationUtility.onLanguageChange = function (lang) {
-      updateLanguageIndicator(lang);
+      updateLanguageIndicator(lang, container);
     };
   }
 }
 
-function updateLanguageIndicator(langCode) {
-  const langGroup = document.querySelector(".language-group .nav-label");
-  if (!langGroup) return;
+function updateLanguageIndicator(langCode, container) {
+  const langTrigger = container ? container.querySelector(".language-trigger") : document.querySelector(".language-trigger");
+  if (!langTrigger) return;
+
+  const currentLangDisplay = langTrigger.querySelector(".current-lang");
 
   const langNames = {
     en: "ENG",
@@ -980,10 +973,15 @@ function updateLanguageIndicator(langCode) {
   };
 
   const displayName = langNames[langCode] || langCode.toUpperCase();
-  const arrowSvg =
-    '<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/></svg>';
 
-  langGroup.innerHTML = `${displayName} <span class="arrow">${arrowSvg}</span>`;
+  if (currentLangDisplay) {
+    currentLangDisplay.textContent = displayName;
+  } else {
+    const arrowSvg =
+      '<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/></svg>';
+
+    langTrigger.innerHTML = `<span class="current-lang">${displayName}</span> <span class="arrow">${arrowSvg}</span>`;
+  }
 }
 
 /* ======================================================
