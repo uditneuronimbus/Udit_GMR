@@ -123,23 +123,28 @@ function parseBlockProps(block) {
 }
 
 function scanBlockForDamPath(block) {
-    // Deep search for anything containing /content/dam/ and ending in .json
-    // Check links
-    const link = block.querySelector('a[href*="/content/dam/"]');
+    // 1. Check for a direct link (fragment style)
+    const link = block.querySelector('a');
     if (link && link.getAttribute('href').endsWith('.json')) {
         return link.getAttribute('href');
     }
 
-    // Check text content
+    // 2. Check strict text content (fragment style)
+    const text = block.textContent.trim();
+    if (text.endsWith('.json')) {
+        return text;
+    }
+
+    // 3. Deep search for anything containing /content/dam/ and ending in .json
     const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
     let node;
     while (node = walker.nextNode()) {
-        const text = node.textContent.trim();
-        if (text.includes('/content/dam/') && text.endsWith('.json')) {
+        const nodeText = node.textContent.trim();
+        if (nodeText.includes('/content/dam/') && nodeText.endsWith('.json')) {
             // Extract the path if buried in other text
-            const match = text.match(/(\/content\/dam\/.*?\.json)/);
+            const match = nodeText.match(/(\/content\/dam\/.*?\.json)/);
             if (match) return match[1];
-            return text;
+            return nodeText;
         }
     }
 
