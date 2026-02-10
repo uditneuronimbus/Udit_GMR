@@ -22,18 +22,13 @@
             "id": "lottie-animation",
             "fields": [
                 {
-                    "component": "reference",
-                    "name": "animationJsonFile",
+                    "component": "aem-content",
+                    "name": "animation",
                     "label": "Animation JSON File",
                     "description": "Select the Lottie animation JSON file from DAM",
                     "valueType": "string",
                     "required": true,
-                    "rootPath": "/content/dam/gmr/animations",
-                    "filter": {
-                        "mimeTypes": [
-                            "application/json"
-                        ]
-                    }
+                    "rootPath": "/content/dam/gmr/animations"
                 },
                 {
                     "component": "text",

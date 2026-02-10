@@ -9,17 +9,47 @@ export default async function decorate(block) {
     // Parse block properties
     const props = parseBlockProps(block);
 
-    // The asset path can be in multiple possible property names
-    const assetPath = props.animationJsonFile || props.animationAsset || props.assetPath || props.animation;
+    // Debug log for authoring help
+    if (props.showcontrols) {
+        console.debug('[Lottie] Parsed properties:', props);
+    }
+
+    // Get asset path (case-insensitive search + deep search fallback)
+    const assetPath =
+        props.animation ||
+        props.animationjsonfile ||
+        props.animationasset ||
+        props.assetpath ||
+        Object.values(props).find(v => typeof v === 'string' && v.startsWith('/content/dam/')) ||
+        scanBlockForDamPath(block);
 
     if (!assetPath) {
         block.innerHTML = `
       <div class="animation-placeholder">
         <p>⚠️ No animation selected</p>
         <p>Please select a Lottie JSON file from DAM</p>
+        ${props.showcontrols ? `
+          <div class="debug-info" style="font-size:10px; opacity:0.5; margin-top:20px; line-height: 1.5;">
+            <strong>Debug info:</strong><br>
+            Available keys: ${Object.keys(props).join(', ') || 'none'}<br>
+            Classes: ${block.className}<br>
+            Table rows: ${block.querySelectorAll(':scope > div').length}
+          </div>
+        ` : ''}
       </div>
     `;
         return;
+    }
+
+    // Handle case where assetPath might be a JSON array string ["path"]
+    let finalPath = assetPath;
+    if (typeof assetPath === 'string' && assetPath.startsWith('[') && assetPath.endsWith(']')) {
+        try {
+            const arr = JSON.parse(assetPath);
+            if (Array.isArray(arr) && arr.length > 0) finalPath = arr[0];
+        } catch (e) {
+            console.warn('[Lottie] Failed to parse assetPath as array:', e);
+        }
     }
 
     // Show loading state
@@ -31,16 +61,16 @@ export default async function decorate(block) {
         await loadLottieLibrary();
 
         // Fetch animation data from DAM
-        console.log('Fetching animation from:', assetPath);
-        const animationData = await fetchDamJson(assetPath);
-        console.log('Animation data loaded:', animationData.nm || 'Unnamed');
+        console.log('[Lottie] Fetching animation from:', finalPath);
+        const animationData = await fetchDamJson(finalPath);
+        console.log('[Lottie] Animation data loaded:', animationData.nm || 'Unnamed');
 
         // Build the component UI
-        buildAnimationUI(block, animationData, props, assetPath);
+        buildAnimationUI(block, animationData, props, finalPath);
 
     } catch (error) {
-        console.error('Failed to load animation:', error);
-        showError(block, assetPath, error);
+        console.error('[Lottie] Failed to load animation:', error);
+        showError(block, finalPath, error);
     }
 }
 
@@ -48,47 +78,40 @@ function parseBlockProps(block) {
     const props = {
         loop: true,
         autoplay: true,
-        showControls: true,
+        showcontrols: true,
         renderer: 'svg',
         width: '100%',
         height: 'auto'
     };
 
-    // Get from data attributes (Universal Editor)
+    // 1. Get from data attributes (Universal Editor) - convert to lowercase
     const dataProps = block.dataset;
     Object.keys(dataProps).forEach(key => {
-        if (key.startsWith('aue')) return; // Skip AUE attributes
+        if (key.startsWith('aue')) return;
 
         let value = dataProps[key];
-
-        // Convert string booleans
         if (value === 'true') value = true;
         if (value === 'false') value = false;
 
-        props[key] = value;
+        props[key.toLowerCase()] = value;
     });
 
-    // Get from block content (table format)
+    // 2. Get from block content (table format) - convert labels to lowercase keys
     const rows = block.querySelectorAll(':scope > div');
     rows.forEach(row => {
         const cells = row.querySelectorAll(':scope > div');
         if (cells.length === 2) {
-            // Convert "Animation JSON File" -> "animationJsonFile"
-            const rawKey = cells[0].textContent.trim();
-            const key = rawKey
-                .toLowerCase()
-                .replace(/[^a-z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+            // Normalize "Animation JSON File" -> "animationjsonfile"
+            const key = cells[0].textContent.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
 
             const valueCell = cells[1];
             let value = valueCell.textContent.trim();
 
-            // If the value cell contains a link, prioritize the link URL
             const link = valueCell.querySelector('a');
             if (link && (link.href || link.textContent.startsWith('/content/'))) {
                 value = link.getAttribute('href') || link.textContent.trim();
             }
 
-            // Convert booleans
             if (value === 'true') value = true;
             if (value === 'false') value = false;
 
@@ -97,6 +120,27 @@ function parseBlockProps(block) {
     });
 
     return props;
+}
+
+function scanBlockForDamPath(block) {
+    // Deep search for anything starting with /content/dam/ and ending in .json
+    // Check links
+    const link = block.querySelector('a[href*="/content/dam/"]');
+    if (link && link.getAttribute('href').endsWith('.json')) {
+        return link.getAttribute('href');
+    }
+
+    // Check text content
+    const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+    let node;
+    while (node = walker.nextNode()) {
+        const text = node.textContent.trim();
+        if (text.startsWith('/content/dam/') && text.endsWith('.json')) {
+            return text;
+        }
+    }
+
+    return null;
 }
 
 async function loadLottieLibrary() {
