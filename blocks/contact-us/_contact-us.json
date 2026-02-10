@@ -64,111 +64,11 @@
           "defaultValue": "Connect on our official social channels"
         },
         {
-          "component": "aem-content",
-          "name": "socialMediaLinks",
-          "label": "Social Media Links",
-          "valueType": "string",
-          "multi": true,
-          "fields": [
-            {
-              "component": "select",
-              "name": "platform",
-              "label": "Platform",
-              "valueType": "string",
-              "options": [
-                {
-                  "name": "LinkedIn",
-                  "value": "linkedin"
-                },
-                {
-                  "name": "Facebook",
-                  "value": "facebook"
-                },
-                {
-                  "name": "YouTube",
-                  "value": "youtube"
-                },
-                {
-                  "name": "Twitter",
-                  "value": "twitter"
-                },
-                {
-                  "name": "Instagram",
-                  "value": "instagram"
-                }
-              ]
-            },
-            {
-              "component": "text",
-              "name": "url",
-              "label": "URL",
-              "valueType": "string"
-            }
-          ],
-          "defaultValue": [
-            {
-              "platform": "linkedin",
-              "url": "#"
-            },
-            {
-              "platform": "facebook",
-              "url": "#"
-            },
-            {
-              "platform": "youtube",
-              "url": "#"
-            }
-          ]
-        },
-        {
           "component": "text",
           "name": "formTitle",
           "label": "Form Title",
           "valueType": "string",
           "defaultValue": "Contact Us"
-        },
-        {
-          "component": "aem-content",
-          "name": "enquiryTypes",
-          "label": "Enquiry Types",
-          "valueType": "string",
-          "multi": true,
-          "fields": [
-            {
-              "component": "text",
-              "name": "label",
-              "label": "Label",
-              "valueType": "string"
-            },
-            {
-              "component": "text",
-              "name": "value",
-              "label": "Value",
-              "valueType": "string"
-            }
-          ],
-          "defaultValue": [
-            {
-              "label": "General Inquiry",
-              "value": "general"
-            },
-            {
-              "label": "Business Partnership",
-              "value": "business"
-            },
-            {
-              "label": "Career Opportunities",
-              "value": "career"
-            },
-            {
-              "label": "Media & Press",
-              "value": "media"
-            },
-            {
-              "label": "Other",
-              "value": "other"
-            }
-          ]
         },
         {
           "component": "text",
