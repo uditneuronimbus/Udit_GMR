@@ -532,6 +532,8 @@ hr {
     padding: 0 0 65%;
     margin-bottom: 0.5rem;
 }
+.sec-grid-2 .card-ui-one .card-img,
+.sec-grid-2 .card-ui-three .card-img,
 .sec-grid-2 .card-ui-two .card-img { padding: 0 0 45%; }
 .card-ui-one .card-body {
     padding: 1.25rem;
