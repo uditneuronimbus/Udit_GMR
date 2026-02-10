@@ -25,17 +25,18 @@ export default async function decorate(block) {
         scanBlockForDamPath(block);
 
     if (!assetPath) {
-        console.warn('[Lottie] No asset path found. Available props:', props);
         block.innerHTML = `
       <div class="animation-placeholder">
         <p>⚠️ No animation selected</p>
         <p>Please select a Lottie JSON file from DAM</p>
-        <div class="debug-info" style="font-size:10px; opacity:0.8; margin-top:20px; line-height: 1.5; color: #666; background: #eee; padding: 10px; border-radius: 4px;">
+        ${props.showcontrols ? `
+          <div class="debug-info" style="font-size:10px; opacity:0.5; margin-top:20px; line-height: 1.5;">
             <strong>Debug info:</strong><br>
             Available keys: ${Object.keys(props).join(', ') || 'none'}<br>
             Classes: ${block.className}<br>
             Table rows: ${block.querySelectorAll(':scope > div').length}
-        </div>
+          </div>
+        ` : ''}
       </div>
     `;
         return;
@@ -123,28 +124,23 @@ function parseBlockProps(block) {
 }
 
 function scanBlockForDamPath(block) {
-    // 1. Check for a direct link (fragment style)
-    const link = block.querySelector('a');
+    // Deep search for anything containing /content/dam/ and ending in .json
+    // Check links
+    const link = block.querySelector('a[href*="/content/dam/"]');
     if (link && link.getAttribute('href').endsWith('.json')) {
         return link.getAttribute('href');
     }
 
-    // 2. Check strict text content (fragment style)
-    const text = block.textContent.trim();
-    if (text.endsWith('.json')) {
-        return text;
-    }
-
-    // 3. Deep search for anything containing /content/dam/ and ending in .json
+    // Check text content
     const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
     let node;
     while (node = walker.nextNode()) {
-        const nodeText = node.textContent.trim();
-        if (nodeText.includes('/content/dam/') && nodeText.endsWith('.json')) {
+        const text = node.textContent.trim();
+        if (text.includes('/content/dam/') && text.endsWith('.json')) {
             // Extract the path if buried in other text
-            const match = nodeText.match(/(\/content\/dam\/.*?\.json)/);
+            const match = text.match(/(\/content\/dam\/.*?\.json)/);
             if (match) return match[1];
-            return nodeText;
+            return text;
         }
     }
 

@@ -368,6 +368,10 @@
     "components": []
   },
   {
+    "id": "lottie-animation",
+    "components": []
+  },
+  {
     "id": "media-contact-header",
     "components": [
       "media-contact-item"
