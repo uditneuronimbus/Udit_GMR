@@ -532,6 +532,7 @@ hr {
     padding: 0 0 65%;
     margin-bottom: 0.5rem;
 }
+.sec-grid-2 .card-ui-two .card-img { padding: 0 0 45%; }
 .card-ui-one .card-body {
     padding: 1.25rem;
     font-size: var(--fs-regular);
