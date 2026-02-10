@@ -73,7 +73,13 @@ export default async function decorate(block) {
         }
         <div class="card-body">
           <h3 class="card-title">${title}</h3>
+          ${
+          desc
+            ? `
           <p class="card-desc">${desc}</p>
+          `
+            : ""
+        }
         </div>
       </div>
     `;
