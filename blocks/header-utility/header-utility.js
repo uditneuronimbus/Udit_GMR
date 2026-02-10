@@ -167,14 +167,40 @@ export default async function decorate(block) {
      4️⃣ INITIALIZE UTILITIES (NON-BLOCKING)
      =============================== */
 
-  // 1. Fetch stock data (Async, non-blocking)
+  // 1. Fetch stock data (Async, non-blocking with SWR)
   (async () => {
-    try {
-      const stockData = await fetchStockData();
-      renderStocks(stockTrack, stockSymbols, stockData, STOCK_CODES);
-    } catch (e) {
-      console.error("Stock API Error:", e);
-      stockTrack.innerHTML = `<div class="stock-error">Market data unavailable</div>`;
+    const CACHE_KEY = "header-stock-data";
+    const CACHE_TIME_KEY = "header-stock-data-time";
+    const TTL = 60000; // 60 seconds
+
+    const cached = localStorage.getItem(CACHE_KEY);
+    const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+    let isStale = true;
+
+    if (cached && cachedTime) {
+      try {
+        const data = JSON.parse(cached);
+        renderStocks(stockTrack, stockSymbols, data, STOCK_CODES);
+        const age = Date.now() - Number(cachedTime);
+        if (age < TTL) isStale = false;
+        console.log(`Stocks SWR: Cache found (age: ${Math.round(age / 1000)}s), stale: ${isStale}`);
+      } catch (e) {
+        console.error("Cache Parse Error:", e);
+      }
+    }
+
+    // Always revalidate if stale or missing
+    if (isStale || !cached) {
+      try {
+        const freshData = await fetchStockData(true);
+        renderStocks(stockTrack, stockSymbols, freshData, STOCK_CODES);
+        console.log("Stocks SWR: UI refreshed with fresh data");
+      } catch (e) {
+        console.error("Stock Refresh Error:", e);
+        if (!cached) {
+          stockTrack.innerHTML = `<div class="stock-error">Market data unavailable</div>`;
+        }
+      }
     }
   })();
 
@@ -987,7 +1013,7 @@ function updateLanguageIndicator(langCode, container) {
 /* ======================================================
    STOCK HELPERS (CACHING + CODE LOOKUP)
    ====================================================== */
-async function fetchStockData() {
+async function fetchStockData(skipCache = false) {
   const API_URL =
     "https://gmr.itsneobot.com:4000/api/share/get-latest-share-price";
   const AUTH_TOKEN =
@@ -995,21 +1021,19 @@ async function fetchStockData() {
 
   const CACHE_KEY = "header-stock-data";
   const CACHE_TIME_KEY = "header-stock-data-time";
-  const CACHE_TTL = 60 * 1000; // 60 seconds
+  const CACHE_TTL = 60000;
 
   try {
-    // 1️⃣ Check localStorage cache first (survives page refresh)
-    const cached = localStorage.getItem(CACHE_KEY);
-    const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
-
-    if (cached && cachedTime) {
-      const age = Date.now() - Number(cachedTime);
-      if (age < CACHE_TTL) {
-        return JSON.parse(cached);
+    // Check internal cache logic if not skipping
+    if (!skipCache) {
+      const cached = localStorage.getItem(CACHE_KEY);
+      const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+      if (cached && cachedTime) {
+        const age = Date.now() - Number(cachedTime);
+        if (age < CACHE_TTL) return JSON.parse(cached);
       }
     }
 
-    // 2️⃣ Call API only if cache missing/expired
     const response = await fetch(API_URL, {
       headers: {
         Authorization: AUTH_TOKEN,
@@ -1017,21 +1041,20 @@ async function fetchStockData() {
       },
     });
 
-    if (!response.ok) {
-      throw new Error(`API Error ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`API Error ${response.status}`);
 
     const json = await response.json();
     const data = json.success && Array.isArray(json.data) ? json.data : [];
 
-    // 3️⃣ Save to localStorage cache
-    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-    localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+    // Save to cache
+    if (data.length > 0) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+      localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+    }
 
     return data;
   } catch (error) {
     console.error("Stock fetch failed:", error);
-    // Fallback to whatever is in cache (even if old)
     const fallback = localStorage.getItem(CACHE_KEY);
     return fallback ? JSON.parse(fallback) : [];
   }
