@@ -101,7 +101,6 @@
 }
 .business-accordion-header .title {
     position: relative;
-    text-transform: uppercase;
 }
 /* .business-accordion-header .title:after{content:'/';color:var(--blue)} */
 .intro-text {
