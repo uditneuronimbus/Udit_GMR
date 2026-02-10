@@ -164,15 +164,16 @@ export default async function decorate(block) {
   block.after(wrapper);
 
   /* ===============================
-     4️⃣ FETCH STOCK DATA (WITH CACHE – now using localStorage)
+     4️⃣ FETCH STOCK DATA (NON-BLOCKING)
      =============================== */
-  try {
-    const stockData = await fetchStockData();
-    renderStocks(stockTrack, stockSymbols, stockData, STOCK_CODES);
-  } catch (e) {
-    console.error("Stock API Error:", e);
-    stockTrack.innerHTML = `<div class="stock-error">Market data unavailable</div>`;
-  }
+  fetchStockData()
+    .then((stockData) => {
+      renderStocks(stockTrack, stockSymbols, stockData, STOCK_CODES);
+    })
+    .catch((e) => {
+      console.error("Stock API Error:", e);
+      stockTrack.innerHTML = `<div class="stock-error">Market data unavailable</div>`;
+    });
 
   /* ===============================
      5️⃣ INIT BHASHINI (LANGUAGE) - ACTIVE
@@ -188,10 +189,8 @@ export default async function decorate(block) {
   /* ===============================
      7️⃣ INIT LANGUAGE DROPDOWN
      =============================== */
-  // Wait for DOM to be ready before initializing language dropdown
-  setTimeout(() => {
-    initLanguageDropdown();
-  }, 100);
+  // Initialize language dropdown immediately
+  initLanguageDropdown();
 
   console.log("Header Utility initialized");
 }
