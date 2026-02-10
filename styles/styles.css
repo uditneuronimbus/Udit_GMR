@@ -529,7 +529,7 @@ hr {
     border-radius: 0.5rem;
     overflow: hidden;
     height: 100px;
-    padding: 0 0 65%;
+    padding: 0 0 45%;
     margin-bottom: 0.5rem;
 }
 .card-ui-one .card-body {
@@ -890,6 +890,9 @@ hr {
     text-overflow: ellipsis;
     min-height: 42px;
 }
+.page-transportation .key-highlightss-wrapper .spacer {
+    padding-bottom: 160px;
+}
 
 /* corporate-governance */
 .page-corporate-governance .default-section.bg-gray {
@@ -1041,7 +1044,7 @@ hr {
     .default-section,
     .page-corporate-governance .overlay-banner-container,
     .partners-filter-runtime,
-    .spacer,
+    .spacer, .page-transportation .key-highlightss-wrapper .spacer,
     .press-listing-runtime {
         padding: 60px 0;
     }

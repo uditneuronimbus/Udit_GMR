@@ -1,0 +1,19 @@
+.career-card-img img {
+    border-radius: 8px;
+}
+
+.career-card-overlay {
+    display: flex;
+    align-items: center;
+}
+
+.career-link {
+    text-decoration: none;
+    color: var(--yellow);
+}
+
+.mb-1 {
+    font-size: 22px;
+    font-weight: 500;
+    width: 60%;
+}
