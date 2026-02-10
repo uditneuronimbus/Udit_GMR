@@ -18,9 +18,10 @@ export default async function decorate(block) {
     const assetPath =
         props.animation ||
         props.animationjsonfile ||
+        props.animationjsonfiles || // Added support for plural label
         props.animationasset ||
         props.assetpath ||
-        Object.values(props).find(v => typeof v === 'string' && v.startsWith('/content/dam/')) ||
+        Object.values(props).find(v => typeof v === 'string' && v.includes('/content/dam/') && v.endsWith('.json')) ||
         scanBlockForDamPath(block);
 
     if (!assetPath) {
@@ -108,7 +109,7 @@ function parseBlockProps(block) {
             let value = valueCell.textContent.trim();
 
             const link = valueCell.querySelector('a');
-            if (link && (link.href || link.textContent.startsWith('/content/'))) {
+            if (link && (link.href || link.textContent.includes('/content/'))) {
                 value = link.getAttribute('href') || link.textContent.trim();
             }
 
@@ -123,7 +124,7 @@ function parseBlockProps(block) {
 }
 
 function scanBlockForDamPath(block) {
-    // Deep search for anything starting with /content/dam/ and ending in .json
+    // Deep search for anything containing /content/dam/ and ending in .json
     // Check links
     const link = block.querySelector('a[href*="/content/dam/"]');
     if (link && link.getAttribute('href').endsWith('.json')) {
@@ -135,7 +136,10 @@ function scanBlockForDamPath(block) {
     let node;
     while (node = walker.nextNode()) {
         const text = node.textContent.trim();
-        if (text.startsWith('/content/dam/') && text.endsWith('.json')) {
+        if (text.includes('/content/dam/') && text.endsWith('.json')) {
+            // Extract the path if buried in other text
+            const match = text.match(/(\/content\/dam\/.*?\.json)/);
+            if (match) return match[1];
             return text;
         }
     }
