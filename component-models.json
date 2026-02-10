@@ -2908,6 +2908,20 @@
     "fields": []
   },
   {
+    "id": "lottie-animation",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "animation",
+        "label": "Animation JSON File",
+        "description": "Select the Lottie animation JSON file from DAM",
+        "valueType": "string",
+        "required": true,
+        "rootPath": "/content/dam/gmr/animations"
+      }
+    ]
+  },
+  {
     "id": "media-contact-header",
     "fields": [
       {
