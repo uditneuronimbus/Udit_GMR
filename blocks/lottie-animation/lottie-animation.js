@@ -9,7 +9,10 @@ export default async function decorate(block) {
     // Parse block properties
     const props = parseBlockProps(block);
 
-    if (!props.animationAsset && !props.assetPath) {
+    // The asset path can be in multiple possible property names
+    const assetPath = props.animationJsonFile || props.animationAsset || props.assetPath || props.animation;
+
+    if (!assetPath) {
         block.innerHTML = `
       <div class="animation-placeholder">
         <p>⚠️ No animation selected</p>
@@ -18,8 +21,6 @@ export default async function decorate(block) {
     `;
         return;
     }
-
-    const assetPath = props.animationAsset || props.assetPath;
 
     // Show loading state
     block.innerHTML = '<div class="loading">Loading animation from DAM...</div>';
@@ -72,13 +73,20 @@ function parseBlockProps(block) {
     rows.forEach(row => {
         const cells = row.querySelectorAll(':scope > div');
         if (cells.length === 2) {
-            // Convert "Animation Asset" -> "animationAsset"
+            // Convert "Animation JSON File" -> "animationJsonFile"
             const rawKey = cells[0].textContent.trim();
             const key = rawKey
                 .toLowerCase()
                 .replace(/[^a-z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
 
-            let value = cells[1].textContent.trim();
+            const valueCell = cells[1];
+            let value = valueCell.textContent.trim();
+
+            // If the value cell contains a link, prioritize the link URL
+            const link = valueCell.querySelector('a');
+            if (link && (link.href || link.textContent.startsWith('/content/'))) {
+                value = link.getAttribute('href') || link.textContent.trim();
+            }
 
             // Convert booleans
             if (value === 'true') value = true;

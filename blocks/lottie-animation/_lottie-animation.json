@@ -23,7 +23,7 @@
             "fields": [
                 {
                     "component": "reference",
-                    "name": "animationAsset",
+                    "name": "animationJsonFile",
                     "label": "Animation JSON File",
                     "description": "Select the Lottie animation JSON file from DAM",
                     "valueType": "string",
