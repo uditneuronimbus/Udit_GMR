@@ -4,6 +4,16 @@
  * Universal Editor SAFE
  * Includes: Caching Strategy & ID-Based Lookup
  */
+
+// Language mapping for UI labels - TOP LEVEL SCOPE
+const langMatchMap = {
+  en: "ENG",
+  ja: "日本語",
+  id: "Bahasa Indonesia",
+  fr: "Français",
+  es: "Español",
+  el: "Ελληνικά",
+};
 export default async function decorate(block) {
   /* ===============================
      CONFIG (ID MAPPING)
@@ -62,16 +72,51 @@ export default async function decorate(block) {
     </a>
   `;
 
-  /* LANGUAGE (STATIC – will now swap with Bhashini) */
+  /* LANGUAGE */
   const langGroup = document.createElement("div");
   langGroup.className = "nav-group language-group";
+
+  // Determine initial label based on currentLang
+  const currentLangCode = window.location.pathname.split('/').find(s => s.length === 2 && /^[a-z]{2}$/.test(s)) || 'en';
+  const initialLabel = langMatchMap[currentLangCode] || 'ENG';
+
   langGroup.innerHTML = `
-    <span class="nav-label">
-      ENG <span class="arrow"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
-</svg></span>
-    </span>
+    <div class="language-dropdown">
+      <span class="nav-label language-trigger">
+        <span class="current-lang">${initialLabel}</span>
+        <span class="arrow"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+        </svg></span>
+      </span>
+      <div class="language-dropdown-menu">
+        <button class="language-option ${currentLangCode === 'en' ? 'active' : ''}" data-lang="en" data-name="ENG">
+          <span class="lang-native">English</span>
+          <span class="lang-code">en</span>
+        </button>
+        <button class="language-option ${currentLangCode === 'ja' ? 'active' : ''}" data-lang="ja" data-name="日本語">
+          <span class="lang-native">日本語</span>
+          <span class="lang-code">ja</span>
+        </button>
+        <button class="language-option ${currentLangCode === 'id' ? 'active' : ''}" data-lang="id" data-name="Bahasa Indonesia">
+          <span class="lang-native">Bahasa Indonesia</span>
+          <span class="lang-code">id</span>
+        </button>
+        <button class="language-option ${currentLangCode === 'fr' ? 'active' : ''}" data-lang="fr" data-name="Français">
+          <span class="lang-native">Français</span>
+          <span class="lang-code">fr</span>
+        </button>
+        <button class="language-option ${currentLangCode === 'es' ? 'active' : ''}" data-lang="es" data-name="Español">
+          <span class="lang-native">Español</span>
+          <span class="lang-code">es</span>
+        </button>
+        <button class="language-option ${currentLangCode === 'el' ? 'active' : ''}" data-lang="el" data-name="Ελληνικά">
+          <span class="lang-native">Ελληνικά</span>
+          <span class="lang-code">el</span>
+        </button>
+      </div>
+    </div>
   `;
+
 
   /* BHASHINI BUTTON – swapped with language */
   const bhashiniGroup = document.createElement("div");
@@ -139,6 +184,14 @@ export default async function decorate(block) {
      =============================== */
   // Initialize accessibility modal
   initAccessibilityModal();
+
+  /* ===============================
+     7️⃣ INIT LANGUAGE DROPDOWN
+     =============================== */
+  // Wait for DOM to be ready before initializing language dropdown
+  setTimeout(() => {
+    initLanguageDropdown();
+  }, 100);
 
   console.log("Header Utility initialized");
 }
@@ -678,10 +731,174 @@ function resetAccessibilityOptions() {
 }
 
 /* ======================================================
+   LANGUAGE DROPDOWN FUNCTIONALITY
+   ====================================================== */
+function initLanguageDropdown() {
+  console.log("Initializing language dropdown...");
+
+  const languageContainer = document.querySelector(".language-dropdown");
+  const languageTrigger = document.querySelector(".language-trigger");
+  const languageDropdown = document.querySelector(".language-dropdown-menu");
+  const languageOptions = document.querySelectorAll(".language-option");
+
+  if (!languageTrigger || !languageDropdown || !languageContainer) {
+    console.error("Language dropdown elements not found");
+    return;
+  }
+
+  // 1. Detect language from URL path (Source of Truth)
+  const currentPath = window.location.pathname;
+  const pathSegments = currentPath.split("/");
+  let detectedLang = "";
+
+  // Find the first segment that matches our known languages
+  for (const segment of pathSegments) {
+    const cleanSegment = segment.toLowerCase().trim();
+    if (langMatchMap[cleanSegment]) {
+      detectedLang = cleanSegment;
+      break;
+    }
+  }
+
+  // 2. Load saved preference as fallback
+  const savedLang = localStorage.getItem("selected-language");
+  const savedLangName = localStorage.getItem("selected-language-name");
+
+  console.log(`Language Sync - URL: "${detectedLang}", Saved: "${savedLang}"`);
+
+  // Determine behavior
+  if (detectedLang) {
+    // If URL has a language, sync storage and update UI (no redirect here)
+    console.log(`Dropdown Init: Syncing UI to URL language "${detectedLang}".`);
+    updateSelectedLanguage(detectedLang, langMatchMap[detectedLang], true, false);
+  } else if (savedLang && langMatchMap[savedLang]) {
+    // This case (root / or no-lang-path) is now handled by scripts.js early redirect.
+    // If we reach here, scripts.js likely didn't redirect (e.g. root page en -> en),
+    // so we just sync storage and UI.
+    updateSelectedLanguage(savedLang, langMatchMap[savedLang], true, false);
+  } else {
+    // Default fallback to English (no reload)
+    updateSelectedLanguage("en", "ENG", true, false);
+  }
+
+  // Toggle dropdown on click
+  languageTrigger.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    languageDropdown.classList.toggle("show");
+    languageContainer.classList.toggle("open");
+    console.log("Language dropdown toggled");
+  });
+
+  // Handle language selection
+  languageOptions.forEach(option => {
+    option.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const langCode = this.getAttribute("data-lang");
+      const langName = this.getAttribute("data-name");
+
+      console.log(`Language selected: ${langName} (${langCode})`);
+
+      // Update active state
+      languageOptions.forEach(opt => opt.classList.remove("active"));
+      this.classList.add("active");
+
+      // Update display and save
+      updateSelectedLanguage(langCode, langName, true);
+
+      // Close dropdown
+      languageDropdown.classList.remove("show");
+      languageContainer.classList.remove("open");
+    });
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".language-dropdown")) {
+      languageDropdown.classList.remove("show");
+      languageContainer.classList.remove("open");
+    }
+  });
+
+  // Close dropdown with Escape key
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && languageDropdown.classList.contains("show")) {
+      languageDropdown.classList.remove("show");
+      languageContainer.classList.remove("open");
+    }
+  });
+
+  console.log("Language dropdown initialized");
+}
+
+function updateSelectedLanguage(langCode, langName, saveToStorage = true, shouldReload = true) {
+  const currentLangDisplay = document.querySelector(".current-lang");
+
+  if (currentLangDisplay) {
+    // Update the displayed language
+    currentLangDisplay.textContent = langName;
+  }
+
+  // Save to localStorage
+  if (saveToStorage) {
+    localStorage.setItem("selected-language", langCode);
+    localStorage.setItem("selected-language-name", langName);
+    console.log(`Language preference saved: ${langName} (${langCode})`);
+  }
+
+  if (shouldReload) {
+    // Trigger Microsoft Translator (Adobe AEM default)
+    // Update the html lang attribute
+    document.documentElement.lang = langCode;
+
+    // Path-based routing for AEM (e.g., abc.com/en/ -> abc.com/ja/)
+    const currentUrl = new URL(window.location.href);
+    const pathSegments = currentUrl.pathname.split("/");
+
+    // AEM standard structure often has the language code as the first segment
+    let langSegmentIndex = -1;
+    for (let i = 0; i < pathSegments.length; i++) {
+      if (pathSegments[i].length === 2 && /^[a-z]{2}$/.test(pathSegments[i])) {
+        langSegmentIndex = i;
+        break;
+      }
+    }
+
+    if (langSegmentIndex !== -1) {
+      pathSegments[langSegmentIndex] = langCode;
+    } else {
+      pathSegments.splice(1, 0, langCode);
+    }
+
+    const newPath = pathSegments.join("/").replace(/\/+/g, "/");
+
+    // CRITICAL GUARD: Only redirect if the URL is actually changing
+    if (currentUrl.pathname !== newPath) {
+      console.log(`Redirecting to: ${newPath}`);
+      currentUrl.pathname = newPath;
+      window.location.href = currentUrl.toString();
+    }
+  }
+
+  // Update active state in dropdown
+  const languageOptions = document.querySelectorAll(".language-option");
+  languageOptions.forEach((option) => {
+    if (option.getAttribute("data-lang") === langCode) {
+      option.classList.add("active");
+    } else {
+      option.classList.remove("active");
+    }
+  });
+}
+
+/* ======================================================
    BHASHINI - ACTIVE
    ====================================================== */
 function initBhashini(container) {
   if (container.querySelector(".bhashini-plugin-container")) return;
+
 
   const wrap = document.createElement("div");
   wrap.className = "bhashini-plugin-container";

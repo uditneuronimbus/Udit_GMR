@@ -106,7 +106,7 @@ button.bhashini-dropdown-btn {
 }
 
 .nav-group .nav-label,
-.nav-group > a {
+.nav-group>a {
     text-transform: uppercase;
     color: var(--black);
     text-decoration: none;
@@ -120,7 +120,7 @@ button.bhashini-dropdown-btn {
 }
 
 .nav-group .nav-label:before,
-.nav-group > a:before {
+.nav-group>a:before {
     content: "";
     position: absolute;
     bottom: 0.2rem;
@@ -134,18 +134,18 @@ button.bhashini-dropdown-btn {
 }
 
 .nav-group .nav-label:hover,
-.nav-group > a:hover {
+.nav-group>a:hover {
     color: var(--yellow);
 }
 
 .nav-group .nav-label:hover:before,
-.nav-group > a:hover:before {
+.nav-group>a:hover:before {
     transform: scaleX(1);
     transform-origin: left;
 }
 
 .nav-group .nav-label .arrow,
-.nav-group > a .arrow {
+.nav-group>a .arrow {
     max-width: 12px;
     display: flex;
     align-items: center;
@@ -625,4 +625,101 @@ button.bhashini-dropdown-btn {
     .affix .header-utility-content {
         transform: translateY(0);
     } */
+}
+
+/* ======================================================
+   LANGUAGE DROPDOWN STYLES
+   ====================================================== */
+
+.language-dropdown {
+    position: relative;
+}
+
+.language-trigger {
+    cursor: pointer;
+    user-select: none;
+}
+
+.language-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: var(--white);
+    border: 1px solid var(--light-grey);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    z-index: 1000;
+    padding: 8px 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.language-dropdown-menu.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.language-option {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: left;
+    gap: 12px;
+}
+
+.language-option:hover {
+    background-color: #f5f5f5;
+}
+
+.language-option.active {
+    background-color: #f0f8ff;
+}
+
+.language-option.active::after {
+    content: "✓";
+    color: var(--blue);
+    font-weight: bold;
+    margin-left: auto;
+}
+
+.lang-native {
+    font-size: 14px;
+    color: var(--charcoal);
+    font-weight: 500;
+    flex: 1;
+}
+
+.lang-code {
+    font-size: 12px;
+    color: var(--light-grey);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.language-option:hover .lang-native {
+    color: var(--blue);
+}
+
+.language-option.active .lang-native {
+    color: var(--blue);
+    font-weight: 600;
+}
+
+/* Arrow rotation when dropdown is open */
+.language-dropdown.open .language-trigger .arrow svg {
+    transform: rotate(180deg);
+}
+
+.language-trigger .arrow svg {
+    transition: transform 0.2s ease;
 }
