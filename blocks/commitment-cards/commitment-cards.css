@@ -4,6 +4,7 @@
     color: var(--white);
     position: relative;
 }
+
 .sec-commitment:before {
     position: absolute;
     content: "";

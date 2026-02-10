@@ -65,9 +65,6 @@ export default function decorate(block) {
 
     descCell?.classList.add("comm-card-desc");
 
-    // ---- CTA handling ----
-    // let ctaWrapper;
-    // let ctaLink;
 
     // if (buttonLinkCell ) {
     //   ctaWrapper = buttonLinkCell;
@@ -112,6 +109,10 @@ export default function decorate(block) {
 
       ctaLink.classList.add("btn", "btn-primary");
     }
+
+// remove authored button rows always
+buttonTextCell?.remove();
+buttonLinkCell?.remove();
 
     // remove plain button text row
     buttonTextCell?.remove();
