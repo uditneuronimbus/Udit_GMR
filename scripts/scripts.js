@@ -12,6 +12,79 @@ import {
   loadCSS,
 } from "./aem.js";
 
+// --- EARLY LANGUAGE REDIRECT & BHASHINI JUMPSTART (Anti-Flash) ---
+(function handleLanguageInitialization() {
+  // 1. AGGRESSIVE HIDE: Prevent ANY flash of content
+  // We use opacity 0 and pointer-events none to make it invisible but still allow layout
+  const style = document.createElement('style');
+  style.id = 'anti-flash-style';
+  style.innerHTML = 'body { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; transition: none !important; }';
+  document.head.appendChild(style);
+
+  const savedLang = localStorage.getItem("selected-language");
+  const path = window.location.pathname;
+  const segments = path.split('/');
+
+  // Find current language in URL
+  let langIndex = -1;
+  let detectedLang = 'en'; // Default
+  for (let i = 0; i < segments.length; i++) {
+    if (segments[i].length === 2 && /^[a-z]{2}$/.test(segments[i])) {
+      langIndex = i;
+      detectedLang = segments[i];
+      break;
+    }
+  }
+
+  // 2. REDIRECT CHECK: If saved preference differs from URL
+  if (savedLang && savedLang !== 'en' && savedLang !== detectedLang) {
+    let newPath;
+    if (langIndex !== -1) {
+      segments[langIndex] = savedLang;
+      newPath = segments.join('/');
+    } else {
+      newPath = '/' + savedLang + (path === '/' ? '' : path);
+    }
+
+    const finalUrl = window.location.origin + newPath.replace(/\/+/g, '/') + window.location.search + window.location.hash;
+    if (finalUrl !== window.location.href) {
+      window.location.href = finalUrl;
+      return; // Stop execution, browser will redirect
+    }
+  }
+
+  // 3. BHASHINI JUMPSTART: If we are on a non-English path
+  if (detectedLang !== 'en' || (savedLang && savedLang !== 'en')) {
+    const activeLang = detectedLang !== 'en' ? detectedLang : savedLang;
+    document.documentElement.lang = activeLang;
+
+    if (!document.getElementById("bhashini-script")) {
+      const script = document.createElement("script");
+      script.id = "bhashini-script";
+      script.src = "https://translation-plugin.bhashini.co.in/v3/website_translation_utility.js";
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+  }
+
+  // Reveal function to be called when ready (usually by header.js)
+  window.revealPage = () => {
+    const af = document.getElementById('anti-flash-style');
+    if (af) {
+      af.remove();
+      console.log("Anti-flash guard removed (revealPage called)");
+    }
+  };
+
+  // Failsafe reveal: If everything else fails, show the page after 2 seconds
+  setTimeout(() => {
+    if (document.getElementById('anti-flash-style')) {
+      console.warn("Failsafe reveal triggered - revealPage was not called in time.");
+      window.revealPage();
+    }
+  }, 2000);
+})();
+
 /* ===============================
    METADATA HELPER
    =============================== */
@@ -163,7 +236,17 @@ export function decorateMain(main) {
    LOAD EAGER
    =============================== */
 async function loadEager(doc) {
-  document.documentElement.lang = "en";
+  // Dynamically set lang attribute based on URL path instead of hardcoding "en"
+  const pathParts = window.location.pathname.split('/');
+  let currentLang = 'en';
+  for (const part of pathParts) {
+    if (part.length === 2 && /^[a-z]{2}$/.test(part)) {
+      currentLang = part;
+      break;
+    }
+  }
+  document.documentElement.lang = currentLang;
+
   decorateTemplateAndTheme();
 
   const main = doc.querySelector("main");

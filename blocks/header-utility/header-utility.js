@@ -4,6 +4,16 @@
  * Universal Editor SAFE
  * Includes: Caching Strategy & ID-Based Lookup
  */
+
+// Language mapping for UI labels - TOP LEVEL SCOPE
+const langMatchMap = {
+  en: "ENG",
+  ja: "日本語",
+  id: "Bahasa Indonesia",
+  fr: "Français",
+  es: "Español",
+  el: "Ελληνικά",
+};
 export default async function decorate(block) {
   /* ===============================
      CONFIG (ID MAPPING)
@@ -62,16 +72,51 @@ export default async function decorate(block) {
     </a>
   `;
 
-  /* LANGUAGE (STATIC – will now swap with Bhashini) */
+  /* LANGUAGE */
   const langGroup = document.createElement("div");
   langGroup.className = "nav-group language-group";
+
+  // Determine initial label based on currentLang
+  const currentLangCode = window.location.pathname.split('/').find(s => s.length === 2 && /^[a-z]{2}$/.test(s)) || 'en';
+  const initialLabel = langMatchMap[currentLangCode] || 'ENG';
+
   langGroup.innerHTML = `
-    <span class="nav-label">
-      ENG <span class="arrow"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
-</svg></span>
-    </span>
+    <div class="language-dropdown">
+      <span class="nav-label language-trigger">
+        <span class="current-lang">${initialLabel}</span>
+        <span class="arrow"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+        </svg></span>
+      </span>
+      <div class="language-dropdown-menu">
+        <button class="language-option ${currentLangCode === 'en' ? 'active' : ''}" data-lang="en" data-name="ENG">
+          <span class="lang-native">English</span>
+          <span class="lang-code">en</span>
+        </button>
+        <button class="language-option ${currentLangCode === 'ja' ? 'active' : ''}" data-lang="ja" data-name="日本語">
+          <span class="lang-native">日本語</span>
+          <span class="lang-code">ja</span>
+        </button>
+        <button class="language-option ${currentLangCode === 'id' ? 'active' : ''}" data-lang="id" data-name="Bahasa Indonesia">
+          <span class="lang-native">Bahasa Indonesia</span>
+          <span class="lang-code">id</span>
+        </button>
+        <button class="language-option ${currentLangCode === 'fr' ? 'active' : ''}" data-lang="fr" data-name="Français">
+          <span class="lang-native">Français</span>
+          <span class="lang-code">fr</span>
+        </button>
+        <button class="language-option ${currentLangCode === 'es' ? 'active' : ''}" data-lang="es" data-name="Español">
+          <span class="lang-native">Español</span>
+          <span class="lang-code">es</span>
+        </button>
+        <button class="language-option ${currentLangCode === 'el' ? 'active' : ''}" data-lang="el" data-name="Ελληνικά">
+          <span class="lang-native">Ελληνικά</span>
+          <span class="lang-code">el</span>
+        </button>
+      </div>
+    </div>
   `;
+
 
   /* BHASHINI BUTTON – swapped with language */
   const bhashiniGroup = document.createElement("div");
@@ -119,28 +164,52 @@ export default async function decorate(block) {
   block.after(wrapper);
 
   /* ===============================
-     4️⃣ FETCH STOCK DATA (WITH CACHE – now using localStorage)
+     4️⃣ INITIALIZE UTILITIES (NON-BLOCKING)
      =============================== */
-  try {
-    const stockData = await fetchStockData();
-    renderStocks(stockTrack, stockSymbols, stockData, STOCK_CODES);
-  } catch (e) {
-    console.error("Stock API Error:", e);
-    stockTrack.innerHTML = `<div class="stock-error">Market data unavailable</div>`;
-  }
 
-  /* ===============================
-     5️⃣ INIT BHASHINI (LANGUAGE) - ACTIVE
-     =============================== */
-  initBhashini(bhashiniGroup);
+  // 1. Fetch stock data (Async, non-blocking with SWR)
+  (async () => {
+    const CACHE_KEY = "header-stock-data";
+    const CACHE_TIME_KEY = "header-stock-data-time";
+    const TTL = 60000; // 60 seconds
 
-  /* ===============================
-     6️⃣ INIT ACCESSIBILITY MODAL
-     =============================== */
-  // Initialize accessibility modal
+    const cached = localStorage.getItem(CACHE_KEY);
+    const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+    let isStale = true;
+
+    if (cached && cachedTime) {
+      try {
+        const data = JSON.parse(cached);
+        renderStocks(stockTrack, stockSymbols, data, STOCK_CODES);
+        const age = Date.now() - Number(cachedTime);
+        if (age < TTL) isStale = false;
+        console.log(`Stocks SWR: Cache found (age: ${Math.round(age / 1000)}s), stale: ${isStale}`);
+      } catch (e) {
+        console.error("Cache Parse Error:", e);
+      }
+    }
+
+    // Always revalidate if stale or missing
+    if (isStale || !cached) {
+      try {
+        const freshData = await fetchStockData(true);
+        renderStocks(stockTrack, stockSymbols, freshData, STOCK_CODES);
+        console.log("Stocks SWR: UI refreshed with fresh data");
+      } catch (e) {
+        console.error("Stock Refresh Error:", e);
+        if (!cached) {
+          stockTrack.innerHTML = `<div class="stock-error">Market data unavailable</div>`;
+        }
+      }
+    }
+  })();
+
+  // 2. Initialize components in parallel
+  initBhashini(wrapper);
   initAccessibilityModal();
+  initLanguageDropdown(wrapper);
 
-  console.log("Header Utility initialized");
+  console.log("Header Utility initialized (optimized)");
 }
 
 /* ======================================================
@@ -678,10 +747,174 @@ function resetAccessibilityOptions() {
 }
 
 /* ======================================================
+   LANGUAGE DROPDOWN FUNCTIONALITY
+   ====================================================== */
+function initLanguageDropdown(container) {
+  console.log("Initializing language dropdown...");
+
+  const languageContainer = container.querySelector(".language-dropdown");
+  const languageTrigger = container.querySelector(".language-trigger");
+  const languageDropdown = container.querySelector(".language-dropdown-menu");
+  const languageOptions = container.querySelectorAll(".language-option");
+
+  if (!languageTrigger || !languageDropdown || !languageContainer) {
+    console.error("Language dropdown elements not found in container");
+    return;
+  }
+
+  // 1. Detect language from URL path (Source of Truth)
+  const currentPath = window.location.pathname;
+  const pathSegments = currentPath.split("/");
+  let detectedLang = "";
+
+  // Find the first segment that matches our known languages
+  for (const segment of pathSegments) {
+    const cleanSegment = segment.toLowerCase().trim();
+    if (langMatchMap[cleanSegment]) {
+      detectedLang = cleanSegment;
+      break;
+    }
+  }
+
+  // 2. Load saved preference as fallback
+  const savedLang = localStorage.getItem("selected-language");
+  const savedLangName = localStorage.getItem("selected-language-name");
+
+  console.log(`Language Sync - URL: "${detectedLang}", Saved: "${savedLang}"`);
+
+  // Determine behavior
+  if (detectedLang) {
+    // If URL has a language, sync storage and update UI (no redirect here)
+    console.log(`Dropdown Init: Syncing UI to URL language "${detectedLang}".`);
+    updateSelectedLanguage(detectedLang, langMatchMap[detectedLang], container, true, false);
+  } else if (savedLang && langMatchMap[savedLang]) {
+    // This case (root / or no-lang-path) is now handled by scripts.js early redirect.
+    // If we reach here, scripts.js likely didn't redirect (e.g. root page en -> en),
+    // so we just sync storage and UI.
+    updateSelectedLanguage(savedLang, langMatchMap[savedLang], container, true, false);
+  } else {
+    // Default fallback to English (no reload)
+    updateSelectedLanguage("en", "ENG", container, true, false);
+  }
+
+  // Toggle dropdown on click
+  languageTrigger.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    languageDropdown.classList.toggle("show");
+    languageContainer.classList.toggle("open");
+    console.log("Language dropdown toggled");
+  });
+
+  // Handle language selection
+  languageOptions.forEach(option => {
+    option.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const langCode = this.getAttribute("data-lang");
+      const langName = this.getAttribute("data-name");
+
+      console.log(`Language selected: ${langName} (${langCode})`);
+
+      // Update active state
+      languageOptions.forEach(opt => opt.classList.remove("active"));
+      this.classList.add("active");
+
+      // Update display and save
+      updateSelectedLanguage(langCode, langName, container, true);
+
+      // Close dropdown
+      languageDropdown.classList.remove("show");
+      languageContainer.classList.remove("open");
+    });
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".language-dropdown")) {
+      languageDropdown.classList.remove("show");
+      languageContainer.classList.remove("open");
+    }
+  });
+
+  // Close dropdown with Escape key
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && languageDropdown.classList.contains("show")) {
+      languageDropdown.classList.remove("show");
+      languageContainer.classList.remove("open");
+    }
+  });
+
+  console.log("Language dropdown initialized");
+}
+
+function updateSelectedLanguage(langCode, langName, container, saveToStorage = true, shouldReload = true) {
+  const currentLangDisplay = container ? container.querySelector(".current-lang") : document.querySelector(".current-lang");
+
+  if (currentLangDisplay) {
+    // Update the displayed language
+    currentLangDisplay.textContent = langName;
+  }
+
+  // Save to localStorage
+  if (saveToStorage) {
+    localStorage.setItem("selected-language", langCode);
+    localStorage.setItem("selected-language-name", langName);
+    console.log(`Language preference saved: ${langName} (${langCode})`);
+  }
+
+  if (shouldReload) {
+    // Trigger Microsoft Translator (Adobe AEM default)
+    // Update the html lang attribute
+    document.documentElement.lang = langCode;
+
+    // Path-based routing for AEM (e.g., abc.com/en/ -> abc.com/ja/)
+    const currentUrl = new URL(window.location.href);
+    const pathSegments = currentUrl.pathname.split("/");
+
+    // AEM standard structure often has the language code as the first segment
+    let langSegmentIndex = -1;
+    for (let i = 0; i < pathSegments.length; i++) {
+      if (pathSegments[i].length === 2 && /^[a-z]{2}$/.test(pathSegments[i])) {
+        langSegmentIndex = i;
+        break;
+      }
+    }
+
+    if (langSegmentIndex !== -1) {
+      pathSegments[langSegmentIndex] = langCode;
+    } else {
+      pathSegments.splice(1, 0, langCode);
+    }
+
+    const newPath = pathSegments.join("/").replace(/\/+/g, "/");
+
+    // CRITICAL GUARD: Only redirect if the URL is actually changing
+    if (currentUrl.pathname !== newPath) {
+      console.log(`Redirecting to: ${newPath}`);
+      currentUrl.pathname = newPath;
+      window.location.href = currentUrl.toString();
+    }
+  }
+
+  // Update active state in dropdown
+  const languageOptions = container ? container.querySelectorAll(".language-option") : document.querySelectorAll(".language-option");
+  languageOptions.forEach((option) => {
+    if (option.getAttribute("data-lang") === langCode) {
+      option.classList.add("active");
+    } else {
+      option.classList.remove("active");
+    }
+  });
+}
+
+/* ======================================================
    BHASHINI - ACTIVE
    ====================================================== */
 function initBhashini(container) {
   if (container.querySelector(".bhashini-plugin-container")) return;
+
 
   const wrap = document.createElement("div");
   wrap.className = "bhashini-plugin-container";
@@ -695,7 +928,7 @@ function initBhashini(container) {
     script.defer = true;
     script.onload = function () {
       console.log("Bhashini script loaded");
-      setTimeout(() => setupBhashiniLanguageMonitoring(), 1000);
+      setTimeout(() => setupBhashiniLanguageMonitoring(container), 1000);
     };
     script.onerror = () => {
       console.error("Failed to load Bhashini script");
@@ -709,33 +942,35 @@ function initBhashini(container) {
 /* ======================================================
    BHASHINI LANGUAGE MONITORING - ACTIVE
    ====================================================== */
-function setupBhashiniLanguageMonitoring() {
+function setupBhashiniLanguageMonitoring(container) {
   console.log("Setting up Bhashini language monitoring");
 
   const originalSetItem = localStorage.setItem;
   localStorage.setItem = function (key, value) {
     originalSetItem.apply(this, arguments);
     if (key === "preferredLanguage") {
-      updateLanguageIndicator(value);
+      updateLanguageIndicator(value, container);
     }
   };
 
   window.addEventListener("storage", function (e) {
     if (e.key === "preferredLanguage") {
-      updateLanguageIndicator(e.newValue);
+      updateLanguageIndicator(e.newValue, container);
     }
   });
 
   if (window.BhashiniTranslationUtility) {
     window.BhashiniTranslationUtility.onLanguageChange = function (lang) {
-      updateLanguageIndicator(lang);
+      updateLanguageIndicator(lang, container);
     };
   }
 }
 
-function updateLanguageIndicator(langCode) {
-  const langGroup = document.querySelector(".language-group .nav-label");
-  if (!langGroup) return;
+function updateLanguageIndicator(langCode, container) {
+  const langTrigger = container ? container.querySelector(".language-trigger") : document.querySelector(".language-trigger");
+  if (!langTrigger) return;
+
+  const currentLangDisplay = langTrigger.querySelector(".current-lang");
 
   const langNames = {
     en: "ENG",
@@ -764,16 +999,21 @@ function updateLanguageIndicator(langCode) {
   };
 
   const displayName = langNames[langCode] || langCode.toUpperCase();
-  const arrowSvg =
-    '<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/></svg>';
 
-  langGroup.innerHTML = `${displayName} <span class="arrow">${arrowSvg}</span>`;
+  if (currentLangDisplay) {
+    currentLangDisplay.textContent = displayName;
+  } else {
+    const arrowSvg =
+      '<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/></svg>';
+
+    langTrigger.innerHTML = `<span class="current-lang">${displayName}</span> <span class="arrow">${arrowSvg}</span>`;
+  }
 }
 
 /* ======================================================
    STOCK HELPERS (CACHING + CODE LOOKUP)
    ====================================================== */
-async function fetchStockData() {
+async function fetchStockData(skipCache = false) {
   const API_URL =
     "https://gmr.itsneobot.com:4000/api/share/get-latest-share-price";
   const AUTH_TOKEN =
@@ -781,21 +1021,19 @@ async function fetchStockData() {
 
   const CACHE_KEY = "header-stock-data";
   const CACHE_TIME_KEY = "header-stock-data-time";
-  const CACHE_TTL = 60 * 1000; // 60 seconds
+  const CACHE_TTL = 60000;
 
   try {
-    // 1️⃣ Check localStorage cache first (survives page refresh)
-    const cached = localStorage.getItem(CACHE_KEY);
-    const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
-
-    if (cached && cachedTime) {
-      const age = Date.now() - Number(cachedTime);
-      if (age < CACHE_TTL) {
-        return JSON.parse(cached);
+    // Check internal cache logic if not skipping
+    if (!skipCache) {
+      const cached = localStorage.getItem(CACHE_KEY);
+      const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+      if (cached && cachedTime) {
+        const age = Date.now() - Number(cachedTime);
+        if (age < CACHE_TTL) return JSON.parse(cached);
       }
     }
 
-    // 2️⃣ Call API only if cache missing/expired
     const response = await fetch(API_URL, {
       headers: {
         Authorization: AUTH_TOKEN,
@@ -803,21 +1041,20 @@ async function fetchStockData() {
       },
     });
 
-    if (!response.ok) {
-      throw new Error(`API Error ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`API Error ${response.status}`);
 
     const json = await response.json();
     const data = json.success && Array.isArray(json.data) ? json.data : [];
 
-    // 3️⃣ Save to localStorage cache
-    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-    localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+    // Save to cache
+    if (data.length > 0) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+      localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+    }
 
     return data;
   } catch (error) {
     console.error("Stock fetch failed:", error);
-    // Fallback to whatever is in cache (even if old)
     const fallback = localStorage.getItem(CACHE_KEY);
     return fallback ? JSON.parse(fallback) : [];
   }

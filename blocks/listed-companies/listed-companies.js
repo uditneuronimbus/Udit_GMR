@@ -16,16 +16,16 @@ const CACHE_TTL = 60 * 1000; // 60 seconds
 // ────────────────────────────────────────────────
 // Utility: Fetch stock data with localStorage cache
 // ────────────────────────────────────────────────
-async function fetchStockPrices() {
+async function fetchStockPrices(skipCache = false) {
   try {
-    const cached = localStorage.getItem(CACHE_KEY);
-    const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
-
-    if (cached && cachedTime) {
-      const age = Date.now() - Number(cachedTime);
-      if (age < CACHE_TTL) {
-        console.log("[Stock Cache] Using cached data");
-        return JSON.parse(cached);
+    if (!skipCache) {
+      const cached = localStorage.getItem(CACHE_KEY);
+      const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+      if (cached && cachedTime) {
+        const age = Date.now() - Number(cachedTime);
+        if (age < CACHE_TTL) {
+          return JSON.parse(cached);
+        }
       }
     }
 
@@ -52,19 +52,16 @@ async function fetchStockPrices() {
       throw new Error("Invalid response format");
     }
 
-    localStorage.setItem(CACHE_KEY, JSON.stringify(json.data));
-    localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+    if (json.data.length > 0) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(json.data));
+      localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+    }
 
     return json.data;
   } catch (err) {
     console.error("[Stock API] Fetch failed:", err);
-
     const fallback = localStorage.getItem(CACHE_KEY);
-    if (fallback) {
-      console.warn("[Stock Cache] Using stale cached data");
-      return JSON.parse(fallback);
-    }
-
+    if (fallback) return JSON.parse(fallback);
     throw err;
   }
 }
@@ -89,7 +86,7 @@ function renderStockOverview(companyData, displayName) {
         minute: "2-digit",
         hour12: true,
       });
-    } catch {}
+    } catch { }
   }
 
   let html = `
@@ -243,24 +240,28 @@ export default async function decorate(block) {
      API CALL – CACHED + BY CODE
   =============================== */
 
-  if (stockDivsMap.size === 0) return;
+  // Defer execution to avoid blocking rendering with SWR
+  (async () => {
+    const CACHE_KEY = "listed-companies-stock-data";
+    const CACHE_TIME_KEY = "listed-companies-stock-data-time";
+    const TTL = 60000; // 60 seconds
 
-  // Defer execution to avoid blocking rendering
-  setTimeout(async () => {
-    try {
-      const rawData = await fetchStockPrices();
+    const cached = localStorage.getItem(CACHE_KEY);
+    const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+    let isStale = true;
 
+    const symbolToCompanyCode = {
+      GAL: "15210029",
+      GPUIL: "15131133",
+    };
+
+    const updateUI = (data) => {
       const apiDataByCode = {};
-      rawData.forEach((item) => {
+      data.forEach((item) => {
         if (item.companyCode) {
           apiDataByCode[String(item.companyCode)] = item;
         }
       });
-
-      const symbolToCompanyCode = {
-        GAL: "15210029",
-        GPUIL: "15131133",
-      };
 
       for (const [symbol, stockDiv] of stockDivsMap.entries()) {
         const code = symbolToCompanyCode[symbol];
@@ -270,11 +271,34 @@ export default async function decorate(block) {
           ? renderStockOverview(companyData, symbol)
           : `<div class="error">No data found for ${symbol}</div>`;
       }
-    } catch (err) {
-      console.error("[Stock API] Failed to load data:", err);
-      for (const stockDiv of stockDivsMap.values()) {
-        stockDiv.innerHTML = '<div class="error">Market data unavailable</div>';
+    };
+
+    if (cached && cachedTime) {
+      try {
+        const data = JSON.parse(cached);
+        updateUI(data);
+        const age = Date.now() - Number(cachedTime);
+        if (age < TTL) isStale = false;
+        console.log(`[Listed Companies] Cache found (age: ${Math.round(age / 1000)}s), stale: ${isStale}`);
+      } catch (e) {
+        console.error("Cache Parse Error:", e);
       }
     }
-  }, 0);
+
+    // Always revalidate if stale or missing
+    if (isStale || !cached) {
+      try {
+        const freshData = await fetchStockPrices(true);
+        updateUI(freshData);
+        console.log("[Listed Companies] UI refreshed with fresh data");
+      } catch (err) {
+        console.error("[Stock API] Failed to load fresh data:", err);
+        if (!cached) {
+          for (const stockDiv of stockDivsMap.values()) {
+            stockDiv.innerHTML = '<div class="error">Market data unavailable</div>';
+          }
+        }
+      }
+    }
+  })();
 }
