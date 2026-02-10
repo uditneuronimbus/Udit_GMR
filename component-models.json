@@ -2913,7 +2913,7 @@
       {
         "component": "aem-content",
         "name": "animation",
-        "label": "Animation JSON File",
+        "label": "Animation JSON Files",
         "description": "Select the Lottie animation JSON file from DAM",
         "valueType": "string",
         "required": true,
