@@ -266,6 +266,9 @@ hr {
 .badge.airport-aero-services {
     background-color: var(--blue);
 }
+.badge.other {
+    background-color: var(--black);
+}
 .badge.energy {
     background-color: var(--red);
 }
