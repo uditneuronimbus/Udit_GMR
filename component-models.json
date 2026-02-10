@@ -2918,68 +2918,6 @@
         "valueType": "string",
         "required": true,
         "rootPath": "/content/dam/gmr/animations"
-      },
-      {
-        "component": "text",
-        "name": "width",
-        "label": "Width",
-        "description": "Animation width (e.g., 1110px, 100%)",
-        "valueType": "string",
-        "defaultValue": "100%"
-      },
-      {
-        "component": "text",
-        "name": "height",
-        "label": "Height",
-        "description": "Animation height (e.g., 700px, auto)",
-        "valueType": "string",
-        "defaultValue": "auto"
-      },
-      {
-        "component": "boolean",
-        "name": "loop",
-        "label": "Loop Animation",
-        "description": "Repeat animation continuously",
-        "valueType": "boolean",
-        "defaultValue": true
-      },
-      {
-        "component": "boolean",
-        "name": "autoplay",
-        "label": "Autoplay",
-        "description": "Start animation automatically when page loads",
-        "valueType": "boolean",
-        "defaultValue": true
-      },
-      {
-        "component": "boolean",
-        "name": "showControls",
-        "label": "Show Controls in Authoring",
-        "description": "Display play/pause controls (authoring only)",
-        "valueType": "boolean",
-        "defaultValue": true
-      },
-      {
-        "component": "select",
-        "name": "renderer",
-        "label": "Rendering Method",
-        "description": "Choose how the animation is rendered",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "SVG (Best Quality)",
-            "value": "svg"
-          },
-          {
-            "name": "Canvas (Better Performance)",
-            "value": "canvas"
-          },
-          {
-            "name": "HTML",
-            "value": "html"
-          }
-        ],
-        "defaultValue": "svg"
       }
     ]
   },

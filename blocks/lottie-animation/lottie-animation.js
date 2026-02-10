@@ -78,7 +78,7 @@ function parseBlockProps(block) {
     const props = {
         loop: true,
         autoplay: true,
-        showcontrols: true,
+        showcontrols: false, // Hidden by default now
         renderer: 'svg',
         width: '100%',
         height: 'auto'
@@ -101,7 +101,7 @@ function parseBlockProps(block) {
     rows.forEach(row => {
         const cells = row.querySelectorAll(':scope > div');
         if (cells.length === 2) {
-            // Normalize "Animation JSON File" -> "animationjsonfile"
+            // Normalize labels to lowercase keys (e.g. "Animation" -> "animation")
             const key = cells[0].textContent.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
 
             const valueCell = cells[1];
