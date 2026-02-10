@@ -25,18 +25,17 @@ export default async function decorate(block) {
         scanBlockForDamPath(block);
 
     if (!assetPath) {
+        console.warn('[Lottie] No asset path found. Available props:', props);
         block.innerHTML = `
       <div class="animation-placeholder">
         <p>⚠️ No animation selected</p>
         <p>Please select a Lottie JSON file from DAM</p>
-        ${props.showcontrols ? `
-          <div class="debug-info" style="font-size:10px; opacity:0.5; margin-top:20px; line-height: 1.5;">
+        <div class="debug-info" style="font-size:10px; opacity:0.8; margin-top:20px; line-height: 1.5; color: #666; background: #eee; padding: 10px; border-radius: 4px;">
             <strong>Debug info:</strong><br>
             Available keys: ${Object.keys(props).join(', ') || 'none'}<br>
             Classes: ${block.className}<br>
             Table rows: ${block.querySelectorAll(':scope > div').length}
-          </div>
-        ` : ''}
+        </div>
       </div>
     `;
         return;
