@@ -163,7 +163,7 @@ function buildAnimationUI(block, animationData, props, assetPath) {
     block.innerHTML = '';
 
     // Info panel (shown during authoring)
-    if (props.showControls) {
+    if (props.showcontrols) {
         const infoPanel = createInfoPanel(animationData, assetPath);
         block.appendChild(infoPanel);
     }
@@ -191,7 +191,7 @@ function buildAnimationUI(block, animationData, props, assetPath) {
     block.lottieAnimation = animation;
 
     // Add controls if in authoring mode
-    if (props.showControls) {
+    if (props.showcontrols) {
         addControls(block, animation);
     }
 
