@@ -64,155 +64,55 @@
           "defaultValue": "Connect on our official social channels"
         },
         {
-          "component": "text",
-          "name": "formTitle",
-          "label": "Form Title",
-          "valueType": "string",
-          "defaultValue": "Contact Us"
-        },
-        {
-          "component": "text",
-          "name": "enquiryLabel",
-          "label": "Enquiry Field Label",
-          "valueType": "string",
-          "defaultValue": "Enquiry*"
-        },
-        {
-          "component": "text",
-          "name": "enquiryPlaceholder",
-          "label": "Enquiry Placeholder",
-          "valueType": "string",
-          "defaultValue": "Select enquiry type"
-        },
-        {
-          "component": "text",
-          "name": "countryLabel",
-          "label": "Country Field Label",
-          "valueType": "string",
-          "defaultValue": "Country*"
-        },
-        {
-          "component": "text",
-          "name": "countryPlaceholder",
-          "label": "Country Placeholder",
-          "valueType": "string",
-          "defaultValue": "Select country"
-        },
-        {
-          "component": "text",
-          "name": "firstNameLabel",
-          "label": "First Name Label",
-          "valueType": "string",
-          "defaultValue": "First Name*"
-        },
-        {
-          "component": "text",
-          "name": "firstNamePlaceholder",
-          "label": "First Name Placeholder",
-          "valueType": "string",
-          "defaultValue": "Enter your first name..."
-        },
-        {
-          "component": "text",
-          "name": "lastNameLabel",
-          "label": "Last Name Label",
-          "valueType": "string",
-          "defaultValue": "Last Name"
-        },
-        {
-          "component": "text",
-          "name": "lastNamePlaceholder",
-          "label": "Last Name Placeholder",
-          "valueType": "string",
-          "defaultValue": "Enter your last name..."
-        },
-        {
-          "component": "text",
-          "name": "mobileLabel",
-          "label": "Mobile Number Label",
-          "valueType": "string",
-          "defaultValue": "Mobile No.*"
-        },
-        {
-          "component": "text",
-          "name": "mobilePlaceholder",
-          "label": "Mobile Placeholder",
-          "valueType": "string",
-          "defaultValue": "Enter your mobile no..."
-        },
-        {
-          "component": "text",
-          "name": "emailLabel",
-          "label": "Email Field Label",
-          "valueType": "string",
-          "defaultValue": "Email ID*"
-        },
-        {
-          "component": "text",
-          "name": "emailPlaceholder",
-          "label": "Email Placeholder",
-          "valueType": "string",
-          "defaultValue": "Enter your email ID..."
-        },
-        {
-          "component": "text",
-          "name": "messageLabel",
-          "label": "Message Label",
-          "valueType": "string",
-          "defaultValue": "Message*"
-        },
-        {
-          "component": "text",
-          "name": "messagePlaceholder",
-          "label": "Message Placeholder",
-          "valueType": "string",
-          "defaultValue": "Enter your message..."
-        },
-        {
-          "component": "text",
-          "name": "submitLabel",
-          "label": "Submit Button Label",
-          "valueType": "string",
-          "defaultValue": "Submit"
-        },
-        {
-          "component": "text",
-          "name": "successMessage",
-          "label": "Success Message",
-          "valueType": "string",
-          "defaultValue": "Success!"
-        },
-        {
-          "component": "boolean",
-          "name": "enableCaptcha",
-          "label": "Enable Captcha",
-          "valueType": "boolean",
-          "defaultValue": true
-        },
-        {
-          "component": "text",
-          "name": "captchaSiteKey",
-          "label": "Captcha Site Key (Cloudflare Turnstile)",
+          "component": "reference",
+          "name": "linkedinIcon",
+          "label": "LinkedIn Icon",
           "valueType": "string"
         },
         {
           "component": "text",
-          "name": "mapEmbedUrl",
-          "label": "Google Maps Embed URL",
+          "name": "linkedinIconAlt",
+          "label": "LinkedIn Icon Alt Text",
           "valueType": "string",
-          "defaultValue": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.5!2d77.0875!3d28.5562!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDMzJzIyLjMiTiA3N8KwMDUnMTUuMCJF!5e0!3m2!1sen!2sin!4v1234567890"
+          "defaultValue": "LinkedIn"
+        },
+        {
+          "component": "reference",
+          "name": "facebookIcon",
+          "label": "Facebook Icon",
+          "valueType": "string"
         },
         {
           "component": "text",
-          "name": "mapTitle",
-          "label": "Map Location Title",
+          "name": "facebookIconAlt",
+          "label": "Facebook Icon Alt Text",
+          "valueType": "string",
+          "defaultValue": "Facebook"
+        },
+        {
+          "component": "reference",
+          "name": "youtubeIcon",
+          "label": "YouTube Icon",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "youtubeIconAlt",
+          "label": "YouTube Icon Alt Text",
+          "valueType": "string",
+          "defaultValue": "YouTube"
+        },
+        {
+          "component": "text",
+          "name": "mapLocationName",
+          "label": "Map Location Name",
           "valueType": "string",
           "defaultValue": "New Udaan Bhawan"
         },
         {
           "component": "text",
           "name": "mapAddress",
-          "label": "Map Address Display",
+          "label": "Map Address",
           "valueType": "string",
           "defaultValue": "New Udaan Bhawan, opp. Terminal 3, New Delhi, Delhi 110037"
         },
@@ -225,10 +125,24 @@
         },
         {
           "component": "text",
-          "name": "mapReviews",
+          "name": "mapReviewsCount",
           "label": "Map Reviews Count",
           "valueType": "string",
           "defaultValue": "491 reviews"
+        },
+        {
+          "component": "text",
+          "name": "mapEmbedUrl",
+          "label": "Google Maps Embed URL",
+          "valueType": "string",
+          "defaultValue": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.547!2d77.08755!3d28.55624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1b1b1b1b1b1b%3A0x1b1b1b1b1b1b1b1b!2sNew%20Udaan%20Bhawan!5e0!3m2!1sen!2sin!4v1234567890"
+        },
+        {
+          "component": "text",
+          "name": "mapDirectionsUrl",
+          "label": "Google Maps Directions URL",
+          "valueType": "string",
+          "defaultValue": "https://www.google.com/maps/dir/?api=1&destination=New+Udaan+Bhawan,New+Delhi"
         }
       ]
     }
