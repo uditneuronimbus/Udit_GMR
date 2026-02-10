@@ -60,6 +60,7 @@
       "press-release-featured",
       "press-release-listing",
       "career-faqs-list",
+      "contact-reachout-list",
       "image-scroll-card",
       "key-highlight-button"
     ]
@@ -150,6 +151,12 @@
     "id": "only-common-items",
     "components": [
       "common-card-item"
+    ]
+  },
+  {
+    "id": "only-press-release-items",
+    "components": [
+      "contact-reachout-item"
     ]
   },
   {
