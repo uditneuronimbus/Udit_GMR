@@ -320,11 +320,13 @@ export default async function decorate(block) {
     return `
       <article class="press-card">
         <div class="press-card-image">
-          <img
+        <a href="news-update?post=${link}">  
+        <img
             src="${item.cardImage?._publishUrl || ""}"
             alt="${item.title || ""}"
             loading="lazy"
           />
+          </a>
         </div>
 
         <div class="press-card-body">
