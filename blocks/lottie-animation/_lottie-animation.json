@@ -32,10 +32,5 @@
             ]
         }
     ],
-    "filters": [
-        {
-            "id": "lottie-animation",
-            "components": []
-        }
-    ]
+    "filters": []
 }
