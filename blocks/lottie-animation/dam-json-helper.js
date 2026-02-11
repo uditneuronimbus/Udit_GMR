@@ -5,44 +5,77 @@
 
 export async function fetchDamJson(assetPath) {
     try {
+        console.log('[DAM Helper] Original asset path:', assetPath);
+
+        // Convert AEM DAM paths to full URLs when not on AEM author
+        let fetchUrl = assetPath;
+
+        // Check if we're NOT on AEM author and the path is a DAM path
+        const isAemAuthor = window.location.hostname.includes('adobeaemcloud.com');
+
+        if (!isAemAuthor && assetPath.startsWith('/content/dam/')) {
+            // Use AEM publish URL for DAM assets (publish allows anonymous access)
+            const aemPublishUrl = 'https://publish-p168597-e1803019.adobeaemcloud.com';
+            fetchUrl = `${aemPublishUrl}${assetPath}`;
+            console.log('[DAM Helper] Edge Delivery detected, using AEM publish URL:', fetchUrl);
+        }
+
         // Try direct fetch first
-        let response = await fetch(assetPath, {
+        let response = await fetch(fetchUrl, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            credentials: 'same-origin'
+            credentials: isAemAuthor ? 'same-origin' : 'omit'
         });
 
-        // If still getting download headers, try with different approach
+        console.log('[DAM Helper] Response status:', response.status);
+        console.log('[DAM Helper] Response headers:', {
+            contentType: response.headers.get('content-type'),
+            contentDisposition: response.headers.get('content-disposition')
+        });
+
+        // If still getting download headers or 404, try with different approach
         if (!response.ok || response.headers.get('content-disposition')?.includes('attachment')) {
-            console.log('Trying alternative fetch method...');
+            console.log('[DAM Helper] Trying alternative fetch method...');
 
             // Add query parameter to force inline
-            const url = new URL(assetPath, window.location.origin);
+            const url = new URL(fetchUrl);
             url.searchParams.append('inline', 'true');
 
             response = await fetch(url.toString(), {
                 headers: {
                     'Accept': 'application/json'
-                }
+                },
+                credentials: isAemAuthor ? 'same-origin' : 'omit'
             });
+        }
+
+        // Check if response is OK
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: Failed to fetch DAM asset from ${fetchUrl}`);
         }
 
         // Get the response as text first
         const text = await response.text();
+        console.log('[DAM Helper] Response length:', text.length);
+        console.log('[DAM Helper] Response preview:', text.substring(0, 200));
 
         // Parse as JSON
         try {
-            return JSON.parse(text);
+            const jsonData = JSON.parse(text);
+            console.log('[DAM Helper] ✓ JSON parsed successfully');
+            return jsonData;
         } catch (parseError) {
-            console.error('Failed to parse JSON:', parseError);
+            console.error('[DAM Helper] ❌ Failed to parse JSON:', parseError);
+            console.error('[DAM Helper] Response text (first 500 chars):', text.substring(0, 500));
+            console.error('[DAM Helper] Full response text:', text);
             throw new Error('Invalid JSON format');
         }
 
     } catch (error) {
-        console.error('Error fetching DAM asset:', error);
+        console.error('[DAM Helper] Error fetching DAM asset:', error);
         throw error;
     }
 }
