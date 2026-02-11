@@ -67,7 +67,7 @@ export default function decorate(block) {
     /* LEFT COLUMN → IMAGE + TITLE */
     if (imageRow || titleEl) {
       const leftCol = document.createElement("div");
-      leftCol.className = "col-lg-5 col-md-5";
+      leftCol.className = "col-md-5";
 
       if (imageRow) {
         imageRow.remove();
@@ -91,7 +91,7 @@ export default function decorate(block) {
     /* RIGHT COLUMN → DESCRIPTION */
     if (descEl) {
       const rightCol = document.createElement("div");
-      rightCol.className = "col-md-7 col-lg-6 offset-lg-1 fs-md";
+      rightCol.className = "col-md-7 fs-md";
 
       descEl.remove();
       descEl.removeAttribute("data-aue-label");
