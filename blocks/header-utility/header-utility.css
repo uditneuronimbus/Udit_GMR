@@ -723,3 +723,7 @@ button.bhashini-dropdown-btn {
 .language-trigger .arrow svg {
     transition: transform 0.2s ease;
 }
+.bhashini-dropdown-content {
+    left: -70px !important;
+    top: 33px !important;
+}

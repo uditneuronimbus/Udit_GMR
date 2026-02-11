@@ -913,12 +913,15 @@ function updateSelectedLanguage(langCode, langName, container, saveToStorage = t
    BHASHINI - ACTIVE
    ====================================================== */
 function initBhashini(container) {
-  if (container.querySelector(".bhashini-plugin-container")) return;
+  // Look for bhashini-plugin-container inside the bhashini-group
+  const bhashiniGroup = container.querySelector(".bhashini-group");
+  if (!bhashiniGroup) return;
+  
+  if (bhashiniGroup.querySelector(".bhashini-plugin-container")) return;
 
-
-  const wrap = document.createElement("div");
-  wrap.className = "bhashini-plugin-container";
-  container.appendChild(wrap);
+  const bhashiniContainer = document.createElement("div");
+  bhashiniContainer.className = "bhashini-plugin-container";
+  bhashiniGroup.appendChild(bhashiniContainer);
 
   if (!document.getElementById("bhashini-script")) {
     const script = document.createElement("script");
@@ -932,7 +935,7 @@ function initBhashini(container) {
     };
     script.onerror = () => {
       console.error("Failed to load Bhashini script");
-      container.innerHTML =
+      bhashiniContainer.innerHTML =
         '<span class="bhashini-error">Translation unavailable</span>';
     };
     document.body.appendChild(script);
