@@ -198,25 +198,14 @@ export default function decorate(block) {
   const countrySelect = block.querySelector('#country');
   const mobileInput = block.querySelector('#mobile');
 
-  // Add phone code prefix display
-  const mobileGroup = mobileInput.closest('.form-group');
-  const phoneCodeSpan = document.createElement('span');
-  phoneCodeSpan.className = 'phone-code-prefix';
-  phoneCodeSpan.style.cssText = 'position: absolute; left: 12px; top: 38px; color: #666; pointer-events: none; font-size: 14px;';
-  phoneCodeSpan.textContent = '+';
-  mobileGroup.style.position = 'relative';
-  mobileGroup.appendChild(phoneCodeSpan);
-  mobileInput.style.paddingLeft = '45px';
-
-  // Update phone validation based on country selection
+  // Update phone validation based on country selection (no visual prefix)
   function updatePhoneValidation() {
     const selectedCountry = COUNTRIES.find(c => c.value === countrySelect.value);
     if (selectedCountry) {
-      phoneCodeSpan.textContent = selectedCountry.phoneCode;
       mobileInput.setAttribute('pattern', selectedCountry.pattern);
       mobileInput.setAttribute('maxlength', selectedCountry.maxLength);
       mobileInput.setAttribute('placeholder', selectedCountry.placeholder);
-      mobileInput.setAttribute('title', `Enter valid ${selectedCountry.label} phone number (${selectedCountry.phoneCode})`);
+      mobileInput.setAttribute('title', `Enter valid ${selectedCountry.label} phone number`);
     }
   }
 
@@ -236,11 +225,11 @@ export default function decorate(block) {
 
     const formData = new FormData(form);
 
-    // Get selected country to include phone code
+    // Get selected country and automatically add phone code to mobile number
     const selectedCountry = COUNTRIES.find(c => c.value === formData.get('country'));
     const phoneCode = selectedCountry ? selectedCountry.phoneCode : '+';
     const mobileNumber = formData.get('mobile');
-    const fullMobileNumber = `${phoneCode} ${mobileNumber}`;
+    const fullMobileNumber = `${phoneCode}${mobileNumber}`; // Phone code + number (no space)
 
     // Prepare payload for GMR backend API
     const payload = {
@@ -248,7 +237,7 @@ export default function decorate(block) {
       country: formData.get('country'),
       firstName: formData.get('firstName'),
       lastName: formData.get('lastName') || '',
-      mobileNo: fullMobileNumber, // Includes phone code
+      mobileNo: fullMobileNumber, // Includes phone code automatically
       email: formData.get('email'),
       message: formData.get('message')
     };
