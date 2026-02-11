@@ -140,12 +140,13 @@
 // }
 import { loadCSS, loadScript } from "../../scripts/aem.js";
 
-const SWIPER_JS = "../../scripts/swiper-bundle.min.js";
-const SWIPER_CSS = "../../styles/swiper-bundle.min.css";
-
 export default async function decorate(block) {
-  await loadCSS(SWIPER_CSS);
-  await loadScript(SWIPER_JS);
+  /* ----------------------------------
+     Load Swiper (UI Safe)
+  ---------------------------------- */
+  // await loadCSS('/libs/swiper/swiper-bundle.min.css');
+  await loadScript("../../scripts/swiper-bundle.min.js");
+
 
   const original = [...block.children];
   if (!original.length) return;
