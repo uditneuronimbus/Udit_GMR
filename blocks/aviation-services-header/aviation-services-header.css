@@ -20,7 +20,7 @@
 /* Tabs */
 .aviation-tabs-list {
     display: flex;
-    gap: 40px;
+    gap: 1.5rem;
     list-style: none;
     margin: 0;
     padding: 16px 0;
