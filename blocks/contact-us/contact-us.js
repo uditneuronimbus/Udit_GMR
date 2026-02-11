@@ -140,7 +140,8 @@ export default function decorate(block) {
 
           <div class="form-group full-width">
             <label for="message">${config.messageLabel}</label>
-            <textarea id="message" name="message" placeholder="${config.messagePlaceholder}" rows="5" required></textarea>
+            <textarea id="message" name="message" placeholder="${config.messagePlaceholder}" rows="5" minlength="4" required></textarea>
+            <small style="color: #666; font-size: 12px;">Minimum 4 characters required</small>
           </div>
 
           <div class="form-actions">
@@ -190,11 +191,42 @@ export default function decorate(block) {
     </div>
   `;
 
-  // Form submission handler
+  // Form elements
   const form = block.querySelector('#contactForm');
   const status = block.querySelector('.form-status');
   const submitBtn = block.querySelector('.submit-btn');
+  const countrySelect = block.querySelector('#country');
+  const mobileInput = block.querySelector('#mobile');
 
+  // Add phone code prefix display
+  const mobileGroup = mobileInput.closest('.form-group');
+  const phoneCodeSpan = document.createElement('span');
+  phoneCodeSpan.className = 'phone-code-prefix';
+  phoneCodeSpan.style.cssText = 'position: absolute; left: 12px; top: 38px; color: #666; pointer-events: none; font-size: 14px;';
+  phoneCodeSpan.textContent = '+';
+  mobileGroup.style.position = 'relative';
+  mobileGroup.appendChild(phoneCodeSpan);
+  mobileInput.style.paddingLeft = '45px';
+
+  // Update phone validation based on country selection
+  function updatePhoneValidation() {
+    const selectedCountry = COUNTRIES.find(c => c.value === countrySelect.value);
+    if (selectedCountry) {
+      phoneCodeSpan.textContent = selectedCountry.phoneCode;
+      mobileInput.setAttribute('pattern', selectedCountry.pattern);
+      mobileInput.setAttribute('maxlength', selectedCountry.maxLength);
+      mobileInput.setAttribute('placeholder', selectedCountry.placeholder);
+      mobileInput.setAttribute('title', `Enter valid ${selectedCountry.label} phone number (${selectedCountry.phoneCode})`);
+    }
+  }
+
+  // Set initial validation for India (default)
+  updatePhoneValidation();
+
+  // Update validation when country changes
+  countrySelect.addEventListener('change', updatePhoneValidation);
+
+  // Form submission handler
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -204,13 +236,19 @@ export default function decorate(block) {
 
     const formData = new FormData(form);
 
+    // Get selected country to include phone code
+    const selectedCountry = COUNTRIES.find(c => c.value === formData.get('country'));
+    const phoneCode = selectedCountry ? selectedCountry.phoneCode : '+';
+    const mobileNumber = formData.get('mobile');
+    const fullMobileNumber = `${phoneCode} ${mobileNumber}`;
+
     // Prepare payload for GMR backend API
     const payload = {
       enquiryType: formData.get('enquiry'),
       country: formData.get('country'),
       firstName: formData.get('firstName'),
       lastName: formData.get('lastName') || '',
-      mobileNo: formData.get('mobile'),
+      mobileNo: fullMobileNumber, // Includes phone code
       email: formData.get('email'),
       message: formData.get('message')
     };
@@ -226,7 +264,7 @@ export default function decorate(block) {
 👤 CONTACT DETAILS:
    Name: ${formData.get('firstName')} ${formData.get('lastName') || ''}
    Email: ${formData.get('email')}
-   Mobile: ${formData.get('mobile')}
+   Mobile: ${fullMobileNumber}
    Country: ${formData.get('country')}
 
 💬 MESSAGE:
