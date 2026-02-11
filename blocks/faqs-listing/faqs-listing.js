@@ -55,87 +55,77 @@
 
 
 
-export default async function decorate(block) {
-  // Read section data from block dataset
-  const sectionTitle = block.dataset.sectionTitle || 'Everything you Need to Know';
-  const sectionDescription = block.dataset.sectionDescription || '';
 
-  // Read FAQ items from child blocks (filtered)
-  const itemBlocks = [...block.querySelectorAll(':scope > div')];
-  if (!itemBlocks.length) return;
+export default function decorate(block) {
+  const jsonScript = block.querySelector('script[type="application/json"]');
+  if (!jsonScript) {
+    console.warn('FAQ Block: No JSON script found');
+    return; 
+  }
 
-  const items = itemBlocks.map((itemBlock) => {
-    return {
-      title: itemBlock.dataset.title || '',
-      answer: itemBlock.dataset.answer || ''
-    };
-  }).filter(item => item.title && item.answer);
+  let rawData;
+  try {
+    rawData = JSON.parse(jsonScript.textContent);
+  } catch (e) {
+    console.error('FAQ JSON parse error', e);
+    return;
+  }
 
-  if (!items.length) return;
+  // Handle cases where data might be nested inside .data or .model
+  const data = rawData.data || rawData;
+  
+  // Look for the array in common Franklin locations
+  const faqs = data.items || data['career-faqs-item'] || [];
 
-  // Clear original block
   block.innerHTML = '';
 
-  /* ===============================
-     MAIN WRAPPER
-  =============================== */
+  // Render Title
+  if (data.sectionTitle) {
+    const title = document.createElement('h2');
+    title.textContent = data.sectionTitle;
+    block.append(title);
+  }
+
   const wrapper = document.createElement('div');
   wrapper.className = 'faq-wrapper';
 
-  /* ===============================
-     HEADER (TITLE + DESCRIPTION)
-  =============================== */
-  const headerWrap = document.createElement('div');
-  headerWrap.className = 'faq-header';
+  faqs.forEach((faq) => {
+    // Ensure we have data before rendering
+    if (!faq.title) return;
 
-  if (sectionTitle) {
-    const h2 = document.createElement('h2');
-    h2.textContent = sectionTitle;
-    headerWrap.appendChild(h2);
-  }
-
-  if (sectionDescription) {
-    const p = document.createElement('p');
-    p.innerHTML = sectionDescription;
-    headerWrap.appendChild(p);
-  }
-
-  /* ===============================
-     ACCORDION
-  =============================== */
-  const accordion = document.createElement('div');
-  accordion.className = 'faq-accordion';
-
-  items.forEach((itemData) => {
     const item = document.createElement('div');
     item.className = 'faq-item';
 
-    const btn = document.createElement('button');
-    btn.className = 'faq-question';
-    btn.innerHTML = `
-      <span>${itemData.title}</span>
-      <span class="faq-icon">+</span>
+    item.innerHTML = `
+      <button class="faq-question" aria-expanded="false">
+        <span>${faq.title}</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-content">${faq.answer || ''}</div>
+      </div>
     `;
 
-    const body = document.createElement('div');
-    body.className = 'faq-answer';
-    body.innerHTML = itemData.answer;
+    const header = item.querySelector('.faq-question');
+    header.addEventListener('click', () => {
+      const isOpen = item.classList.contains('active');
+      
+      // Close others (Accordion effect)
+      block.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('active');
+        i.querySelector('button').setAttribute('aria-expanded', 'false');
+      });
 
-    btn.addEventListener('click', () => {
-      const open = item.classList.contains('active');
-
-      accordion.querySelectorAll('.faq-item')
-        .forEach(el => el.classList.remove('active'));
-
-      if (!open) item.classList.add('active');
+      if (!isOpen) {
+        item.classList.add('active');
+        header.setAttribute('aria-expanded', 'true');
+      }
     });
 
-    item.append(btn, body);
-    accordion.appendChild(item);
+    wrapper.append(item);
   });
 
-  wrapper.append(headerWrap, accordion);
-  block.appendChild(wrapper);
+  block.append(wrapper);
 }
 
 
