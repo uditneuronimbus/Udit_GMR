@@ -27,10 +27,10 @@ export default async function decorate(block) {
     <section class="sec-expertise spacer">
       <div class="container">
         <div class="row">
-          <div class="col-12">
+          <div class="col-12"> 
 
             <div class="row">
-              <div class="col-md-7 text-center mx-auto mb-5">
+              <div class="col-md-7 text-center mx-auto mb-3">
                 <h2 class="sec-title">${sectionTitle}</h2>
                 <div class="sec-desc">${sectionDesc}</div>
               </div>
@@ -73,7 +73,13 @@ export default async function decorate(block) {
         }
         <div class="card-body">
           <h3 class="card-title">${title}</h3>
+          ${
+          desc
+            ? `
           <p class="card-desc">${desc}</p>
+          `
+            : ""
+        }
         </div>
       </div>
     `;

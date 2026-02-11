@@ -17,3 +17,7 @@
     font-weight: 500;
     width: 60%;
 }
+
+.background-pink.key-highlight-button-container .sec-key{
+    background: var(--lpink);
+}

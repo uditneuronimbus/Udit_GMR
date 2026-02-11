@@ -1,4 +1,4 @@
-.global-airport-network{background-color:var(--royal-blue);color:var(--white);padding:2rem 0}
+.global-airport-network-container{background-color:var(--royal-blue);color:var(--white);padding:0}
 .global-airport-network .sec-desc{font-size:var(--fs-medium);line-height:1.5;color:var(--white)}
 .gan-map-wrap{position:relative;width:100%;min-height:300px}
 .gan-lottie{width:100%;height:100%}
@@ -17,7 +17,6 @@
 .gan-lottie{display:none}
 .gan-locations{display:flex; position: relative; z-index: 2;}
 .gan-map-image { display:block; position: absolute; z-index:1;}
-.global-airport-network { padding: 0; }
 .gan-wrapper.spacer .col-lg-4.col-md-5 { text-align: center;}
 .gan-wrapper.spacer .col-lg-4.col-md-5 .sec-title.mb-4 { margin-bottom: 1rem!important;}
 .gan-locations { padding: 6rem 0; }
