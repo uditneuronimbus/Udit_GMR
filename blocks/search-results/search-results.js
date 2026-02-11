@@ -2,7 +2,15 @@ import algoliasearch from "https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/alg
 
 const { ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY, ALGOLIA_INDEX } = window.APP_CONFIG;
 
-const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY);
+// ⚠️ Force stable hosts (fixes unreachable-host errors on corp networks)
+const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY, {
+  hosts: [
+    { url: `${ALGOLIA_APP_ID}-dsn.algolia.net`, accept: true },
+    { url: `${ALGOLIA_APP_ID}-1.algolianet.com`, accept: true },
+    { url: `${ALGOLIA_APP_ID}-2.algolianet.com`, accept: true }
+  ]
+});
+
 const index = client.initIndex(ALGOLIA_INDEX);
 
 function getBasePath() {
@@ -17,7 +25,6 @@ function getBasePath() {
   return `/${parts[0] || ""}`;
 }
 
-
 function getQuery() {
   const params = new URLSearchParams(window.location.search);
   return params.get("q") || "";
@@ -27,10 +34,212 @@ export default async function decorate(block) {
   const query = getQuery();
 
   block.innerHTML = `
-    <h2>Search results for "${query}"</h2>
+    <!-- Search Bar Section -->
+    <div class="search-results-header">
+      <div class="search-results-search-box">
+        <div class="search-box-inline" role="combobox" aria-expanded="false">
+          <input
+            type="text"
+            class="form-control search-input-results"
+            placeholder="Search..."
+            value="${query}"
+          />
+          <!-- 🔄 Loader -->
+          <div class="search-loader" hidden>
+            <span class="spinner"></span>
+            <span class="loader-text">Searching...</span>
+          </div>
+
+          <div
+            class="search-results-dropdown"
+            id="search-results-dropdown"
+            role="listbox"
+          ></div>
+        </div>
+      </div>
+      <h2>Search results for "${query}"</h2>
+    </div>
+    <!-- Results Section -->
+    
     <div class="search-results-list"></div>
   `;
 
+  const input = block.querySelector(".search-input-results");
+  const resultsDropdown = block.querySelector(".search-results-dropdown");
+  const loaderEl = block.querySelector(".search-loader");
+  const resultsList = block.querySelector(".search-results-list");
+
+  let dropdownResults = [];
+  let activeIndex = -1;
+  let debounceTimer;
+
+  /* ---------- Helpers ---------- */
+  function clearDropdown() {
+    resultsDropdown.innerHTML = "";
+    dropdownResults = [];
+    activeIndex = -1;
+    input.setAttribute("aria-activedescendant", "");
+  }
+
+  function clearAll() {
+    clearDropdown();
+    block.querySelector(".search-box-inline").setAttribute("aria-expanded", "false");
+  }
+
+  function showLoader() {
+    loaderEl.hidden = false;
+  }
+
+  function hideLoader() {
+    loaderEl.hidden = true;
+  }
+
+  function updateActiveResult() {
+    dropdownResults.forEach((el, i) => {
+      el.classList.toggle("active", i === activeIndex);
+    });
+
+    if (dropdownResults[activeIndex]) {
+      input.setAttribute("aria-activedescendant", dropdownResults[activeIndex].id);
+      dropdownResults[activeIndex].scrollIntoView({ block: "nearest" });
+    }
+  }
+
+  function highlight(text, query) {
+    if (!text) return "";
+    return text.replace(
+      new RegExp(`(${query})`, "ig"),
+      "<mark>$1</mark>"
+    );
+  }
+
+  function renderDropdown(hits, query) {
+    resultsDropdown.innerHTML = "";
+
+    hits.slice(0, 10).forEach((item, i) => {
+      const a = document.createElement("a");
+      const parts = window.location.pathname.split("/").filter(Boolean);
+      const lang = parts[0] || "en";
+
+      a.href = item.path || `/${lang}/`;
+      a.id = `search-dropdown-option-${i}`;
+      a.role = "option";
+
+      const title = item.title || item.metaTitle || "Untitled";
+      const snippet =
+        item._snippetResult?.content?.value ||
+        item._snippetResult?.description?.value ||
+        item.description ||
+        "";
+
+      const tags = Array.isArray(item.tags)
+        ? item.tags.join(", ")
+        : item.tags;
+
+      a.innerHTML = `
+        <div class="search-result">
+          <strong>${highlight(title, query)}</strong>
+          ${snippet ? `<p class="search-snippet">${snippet}</p>` : ""}
+          ${tags ? `<small>${tags}</small>` : ""}
+        </div>
+      `;
+
+      resultsDropdown.appendChild(a);
+    });
+
+    dropdownResults = Array.from(resultsDropdown.querySelectorAll("a"));
+    activeIndex = -1;
+
+    block.querySelector(".search-box-inline").setAttribute("aria-expanded", "true");
+  }
+
+  /* ---------- Dropdown Search ---------- */
+  async function runDropdownSearch() {
+    const q = input.value.trim();
+    clearDropdown();
+
+    if (q.length < 2) return;
+    showLoader();
+
+    try {
+      const parts = window.location.pathname.split("/").filter(Boolean);
+      const lang = parts[0] || "en";
+      const { hits } = await index.search(q, {
+        hitsPerPage: 10,
+        attributesToRetrieve: [
+          "title",
+          "metaTitle",
+          "description",
+          "metaDescription",
+          "content",
+          "tags",
+          "path"
+        ],
+        attributesToSnippet: [
+          "content:35",
+          "description:25"
+        ],
+        snippetEllipsisText: "..."
+      });
+
+      if (hits.length) {
+        renderDropdown(hits, q);
+      }
+    } catch (e) {
+      console.error("Algolia dropdown search failed", e);
+    } finally {
+      hideLoader();
+    }
+  }
+
+  /* ---------- Events for Search Input ---------- */
+  input.addEventListener("input", () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(runDropdownSearch, 250);
+  });
+
+  input.addEventListener("keydown", (e) => {
+    if (!dropdownResults.length && e.key !== "Enter" && e.key !== "Escape") return;
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        activeIndex = activeIndex < dropdownResults.length - 1 ? activeIndex + 1 : 0;
+        updateActiveResult();
+        break;
+
+      case "ArrowUp":
+        e.preventDefault();
+        activeIndex = activeIndex > 0 ? activeIndex - 1 : dropdownResults.length - 1;
+        updateActiveResult();
+        break;
+
+      case "Enter":
+        e.preventDefault();
+        const query = input.value.trim();
+        if (!query) return;
+        const parts = window.location.pathname.split("/").filter(Boolean);
+        const lang = parts[0] || "en";
+        window.location.href = `/${lang}/search?q=${encodeURIComponent(query)}`;
+        break;
+
+      case "Escape":
+        clearAll();
+        input.blur();
+        break;
+    }
+  });
+
+  document.addEventListener("mousedown", (e) => {
+    const searchBox = block.querySelector(".search-box-inline");
+    const clickedInsideSearch = searchBox && searchBox.contains(e.target);
+
+    if (!clickedInsideSearch) {
+      clearDropdown();
+    }
+  });
+
+  /* ---------- Load Main Search Results ---------- */
   if (!query) return;
 
   try {
@@ -42,10 +251,8 @@ export default async function decorate(block) {
       snippetEllipsisText: "..."
     });
 
-    const list = block.querySelector(".search-results-list");
-
     if (!hits.length) {
-      list.innerHTML = "<p>No results found.</p>";
+      resultsList.innerHTML = "<p>No results found.</p>";
       return;
     }
 
@@ -57,9 +264,8 @@ export default async function decorate(block) {
         item._snippetResult?.content?.value ||
         item.description ||
         "";
-      const parts = window.location.pathname.split("/").filter(Boolean);
-      const lang = parts[0] || "en";
       const safeHref = item.path ? item.path : `/${lang}/`;
+      
       el.innerHTML = `
         <a href="${safeHref}">
           <h3>${item.title || item.metaTitle}</h3>
@@ -67,7 +273,7 @@ export default async function decorate(block) {
         </a>
       `;
 
-      list.appendChild(el);
+      resultsList.appendChild(el);
     });
 
   } catch (e) {
