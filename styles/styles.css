@@ -1056,10 +1056,10 @@ hr {
     .partners-filter-runtime,
     .spacer,
     .page-transportation .key-highlightss-wrapper .spacer,
-    .press-listing-runtime {
+    .press-listing-runtime, .big-padding-bottom .spacer {
         padding: 60px 0;
     }
-    .big-padding-bottom .spacer {
+    .big-padding-bottom .sec-expertise.spacer {
         padding: 60px 0 100px 0;
     }
     .page-corporate-governance .default-section.bg-gray {
