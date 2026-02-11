@@ -225,19 +225,20 @@ export default function decorate(block) {
 
     const formData = new FormData(form);
 
-    // Get selected country for validation and email display
+    // Get selected country for phone code and validation
     const selectedCountry = COUNTRIES.find(c => c.value === formData.get('country'));
     const phoneCode = selectedCountry ? selectedCountry.phoneCode : '+';
     const mobileNumber = formData.get('mobile');
-    const fullMobileNumber = `${phoneCode} ${mobileNumber}`; // For email display only
+    const fullMobileNumber = `${phoneCode} ${mobileNumber}`; // For email display
 
     // Prepare payload for GMR backend API
     const payload = {
       enquiryType: formData.get('enquiry'),
       country: formData.get('country'),
+      country_code: phoneCode, // Separate field for phone code
       firstName: formData.get('firstName'),
       lastName: formData.get('lastName') || '',
-      mobileNo: mobileNumber, // Just the number, backend doesn't accept country code
+      mobileNo: mobileNumber, // Just the number
       email: formData.get('email'),
       message: formData.get('message')
     };
