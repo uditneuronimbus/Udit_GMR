@@ -198,22 +198,81 @@ export default function decorate(block) {
   const countrySelect = block.querySelector('#country');
   const mobileInput = block.querySelector('#mobile');
 
-  // Update phone validation based on country selection (no visual prefix)
-  function updatePhoneValidation() {
-    const selectedCountry = COUNTRIES.find(c => c.value === countrySelect.value);
-    if (selectedCountry) {
-      mobileInput.setAttribute('pattern', selectedCountry.pattern);
-      mobileInput.setAttribute('maxlength', selectedCountry.maxLength);
-      mobileInput.setAttribute('placeholder', selectedCountry.placeholder);
-      mobileInput.setAttribute('title', `Enter valid ${selectedCountry.label} phone number`);
+  // Load intl-tel-input library
+  async function loadIntlTelInput() {
+    // Load CSS
+    if (!document.querySelector('link[href*="intl-tel-input"]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css';
+      document.head.appendChild(link);
+    }
+
+    // Load JS
+    if (!window.intlTelInput) {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
     }
   }
 
-  // Set initial validation for India (default)
-  updatePhoneValidation();
+  // Initialize intl-tel-input
+  let iti;
+  loadIntlTelInput().then(() => {
+    iti = window.intlTelInput(mobileInput, {
+      initialCountry: 'auto',
+      separateDialCode: true,
+      nationalMode: false,
+      strictMode: true, // Enforce strict validation
+      preferredCountries: ['in', 'us', 'gb', 'ae'],
+      utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js',
+      geoIpLookup: function (callback) {
+        fetch('https://ipapi.co/json/')
+          .then(res => res.json())
+          .then(data => callback(data.country_code))
+          .catch(() => callback('in')); // Default to India
+      },
+      validationNumberType: 'MOBILE' // Only accept mobile numbers
+    });
 
-  // Update validation when country changes
-  countrySelect.addEventListener('change', updatePhoneValidation);
+    // Add real-time validation feedback
+    mobileInput.addEventListener('blur', () => {
+      if (mobileInput.value.trim() && iti && !iti.isValidNumber()) {
+        mobileInput.setCustomValidity('Invalid phone number for selected country');
+        mobileInput.reportValidity();
+      } else {
+        mobileInput.setCustomValidity('');
+      }
+    });
+
+    mobileInput.addEventListener('input', () => {
+      mobileInput.setCustomValidity(''); // Clear error on input
+    });
+
+    // Sync country dropdown with phone input
+    countrySelect.addEventListener('change', () => {
+      const selectedCountry = COUNTRIES.find(c => c.value === countrySelect.value);
+      if (selectedCountry && iti) {
+        const isoCode = selectedCountry.value.toLowerCase();
+        iti.setCountry(isoCode);
+      }
+    });
+
+    // Sync phone input country with dropdown
+    mobileInput.addEventListener('countrychange', () => {
+      const countryData = iti.getSelectedCountryData();
+      const matchingCountry = COUNTRIES.find(c => c.value.toLowerCase() === countryData.iso2);
+      if (matchingCountry) {
+        countrySelect.value = matchingCountry.value;
+      }
+    });
+  }).catch(err => {
+    console.error('Failed to load intl-tel-input:', err);
+  });
 
   // Form submission handler
   form.addEventListener('submit', async (e) => {
@@ -225,11 +284,18 @@ export default function decorate(block) {
 
     const formData = new FormData(form);
 
-    // Get selected country for phone code and validation
-    const selectedCountry = COUNTRIES.find(c => c.value === formData.get('country'));
-    const phoneCode = selectedCountry ? selectedCountry.phoneCode : '+';
-    const mobileNumber = formData.get('mobile');
-    const fullMobileNumber = `${phoneCode} ${mobileNumber}`; // For email display
+    // Validate phone number using intl-tel-input
+    if (iti && !iti.isValidNumber()) {
+      showError('Please enter a valid phone number for the selected country');
+      submitBtn.disabled = false;
+      submitBtn.textContent = config.submitLabel;
+      return;
+    }
+
+    // Get phone data from intl-tel-input
+    const phoneCode = iti ? `+${iti.getSelectedCountryData().dialCode}` : '+';
+    const mobileNumber = iti ? iti.getNumber(window.intlTelInputUtils.numberFormat.NATIONAL).replace(/\D/g, '') : formData.get('mobile');
+    const fullMobileNumber = iti ? iti.getNumber() : `${phoneCode} ${mobileNumber}`; // For email display
 
     // Prepare payload for GMR backend API
     const payload = {
