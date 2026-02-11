@@ -225,11 +225,11 @@ export default function decorate(block) {
 
     const formData = new FormData(form);
 
-    // Get selected country and automatically add phone code to mobile number
+    // Get selected country for validation and email display
     const selectedCountry = COUNTRIES.find(c => c.value === formData.get('country'));
     const phoneCode = selectedCountry ? selectedCountry.phoneCode : '+';
     const mobileNumber = formData.get('mobile');
-    const fullMobileNumber = `${phoneCode}${mobileNumber}`; // Phone code + number (no space)
+    const fullMobileNumber = `${phoneCode} ${mobileNumber}`; // For email display only
 
     // Prepare payload for GMR backend API
     const payload = {
@@ -237,7 +237,7 @@ export default function decorate(block) {
       country: formData.get('country'),
       firstName: formData.get('firstName'),
       lastName: formData.get('lastName') || '',
-      mobileNo: fullMobileNumber, // Includes phone code automatically
+      mobileNo: mobileNumber, // Just the number, backend doesn't accept country code
       email: formData.get('email'),
       message: formData.get('message')
     };
