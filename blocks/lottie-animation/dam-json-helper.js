@@ -14,10 +14,9 @@ export async function fetchDamJson(assetPath) {
         const isAemAuthor = window.location.hostname.includes('adobeaemcloud.com');
 
         if (!isAemAuthor && assetPath.startsWith('/content/dam/')) {
-            // Use AEM publish URL for DAM assets (publish allows anonymous access)
-            const aemPublishUrl = 'https://publish-p168597-e1803019.adobeaemcloud.com';
-            fetchUrl = `${aemPublishUrl}${assetPath}`;
-            console.log('[DAM Helper] Edge Delivery detected, using AEM publish URL:', fetchUrl);
+            // Use CORS proxy to fetch DAM assets (bypasses CORS restrictions)
+            fetchUrl = `/tools/dam-proxy/dam-proxy.js?path=${encodeURIComponent(assetPath)}`;
+            console.log('[DAM Helper] Edge Delivery detected, using CORS proxy:', fetchUrl);
         }
 
         // Try direct fetch first
