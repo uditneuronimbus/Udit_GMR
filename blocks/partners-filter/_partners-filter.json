@@ -76,6 +76,11 @@
         },
         {
           "component": "text",
+          "name": "imageAlt1",
+          "label": "Alt-Text"
+        },
+        {
+          "component": "text",
           "name": "title",
           "label": "Title / Heading",
           "valueType": "string"

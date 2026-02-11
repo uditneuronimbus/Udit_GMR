@@ -219,6 +219,14 @@
           {
             "name": "Margin Bottom 0",
             "value": "mb-0"
+          },
+          {
+            "name": "Background Pink",
+            "value": "background-pink"
+          },
+          {
+            "name": "Minus Margin Top",
+            "value": "minus-margin-top"
           }
         ]
       }
@@ -536,6 +544,11 @@
         "name": "image",
         "label": "Award/Partner Image",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       },
       {
         "component": "text",
@@ -905,6 +918,108 @@
     ]
   },
   {
+    "id": "contact-reachout-list",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "contact-reachout-item",
+    "itemLabel": "heading",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "content",
+        "label": "Content",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "contact-us",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "valueType": "string",
+        "defaultValue": "Corporate Office"
+      },
+      {
+        "component": "text",
+        "name": "companyName",
+        "label": "Company Name",
+        "valueType": "string",
+        "defaultValue": "GMR Group"
+      },
+      {
+        "component": "richtext",
+        "name": "address",
+        "label": "Address",
+        "valueType": "string",
+        "defaultValue": "New Udaan Bhawan, Opp. Terminal 3, IGI Airport, New Delhi, India - 110037."
+      },
+      {
+        "component": "text",
+        "name": "phone",
+        "label": "Phone",
+        "valueType": "string",
+        "defaultValue": "+9111 4253 2600"
+      },
+      {
+        "component": "text",
+        "name": "email",
+        "label": "Email",
+        "valueType": "string",
+        "defaultValue": "info@gmrgroup.in"
+      },
+      {
+        "component": "text",
+        "name": "formTitle",
+        "label": "Form Title",
+        "valueType": "string",
+        "defaultValue": "Contact Us"
+      },
+      {
+        "component": "text",
+        "name": "submitLabel",
+        "label": "Submit Button Label",
+        "valueType": "string",
+        "defaultValue": "Submit"
+      },
+      {
+        "component": "text",
+        "name": "successMessage",
+        "label": "Success Message",
+        "valueType": "string",
+        "defaultValue": "Success!"
+      },
+      {
+        "component": "text",
+        "name": "mapEmbedUrl",
+        "label": "Google Maps Embed URL",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "cookie-consent",
     "fields": [
       {
@@ -996,6 +1111,11 @@
         "component": "reference",
         "name": "desktopImage",
         "label": "Desktop Image"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       }
     ]
   },
@@ -1026,6 +1146,11 @@
         "component": "reference",
         "name": "imagePrimary",
         "label": "Primary Image / Cube Icon"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       },
       {
         "component": "text",
@@ -1126,6 +1251,87 @@
             "value": "governance"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "career-faqs-list",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title (Main Heading)",
+        "valueType": "string",
+        "defaultValue": "Everything you Need to Know"
+      },
+      {
+        "component": "richtext",
+        "name": "sectionDescription",
+        "label": "Section Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "career-faqs-item",
+    "itemLabel": "title",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Faqs Question",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "answer",
+        "label": "Answer",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "filter-by",
+    "fields": [
+      {
+        "component": "text",
+        "name": "years",
+        "label": "Years",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "months",
+        "label": "Months",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "tags",
+        "label": "Tags",
+        "valueType": "string",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "filter-categories",
+        "label": "Filter Categories",
+        "valueType": "string",
+        "multi": true
+      }
+    ]
+  },
+  {
+    "id": "filter-panel",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Panel Heading",
+        "valueType": "string",
+        "defaultValue": "Filter By"
       }
     ]
   },
@@ -1331,6 +1537,53 @@
     ]
   },
   {
+    "id": "fraud-alert-tabs",
+    "fields": [
+      {
+        "component": "text",
+        "name": "mainTitle",
+        "label": "Section Title",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "id": "fraud-alert-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "tabTitle",
+        "label": "Tab Title",
+        "valueType": "string",
+        "placeholder": "e.g. Public Froud Alert",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "tabinsideTitle",
+        "label": "Tab Inside Title",
+        "valueType": "string",
+        "placeholder": "e.g. Tab Inside Title"
+      },
+      {
+        "component": "text",
+        "name": "tabId",
+        "label": "Tab ID (optional - for JS/anchors)",
+        "valueType": "string",
+        "placeholder": "e.g. work, life-beyond-job",
+        "description": "Lowercase kebab-case recommended"
+      },
+      {
+        "component": "richtext",
+        "name": "tabDesc",
+        "label": "Tab Description",
+        "valueType": "string",
+        "description": "Tab Description"
+      }
+    ]
+  },
+  {
     "id": "gal-awards",
     "fields": [
       {
@@ -1493,6 +1746,23 @@
         "name": "sectionDescription",
         "label": "Description Text",
         "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "mapImage",
+        "label": "Background Map Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
+      },
+      {
+        "component": "reference",
+        "name": "lottiePath",
+        "label": "Lottie Path",
+        "valueType": "string"
       }
     ]
   },
@@ -1607,6 +1877,11 @@
       },
       {
         "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
+      },
+      {
+        "component": "text",
         "valueType": "string",
         "name": "title",
         "label": "Title"
@@ -1656,6 +1931,11 @@
         "valueType": "string",
         "name": "image",
         "label": "Card Image"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
       },
       {
         "component": "text",
@@ -2035,6 +2315,11 @@
         "name": "backgroundImageMobile",
         "label": "Background Image Mobile",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
       },
       {
         "component": "richtext",
@@ -2509,6 +2794,11 @@
       },
       {
         "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
+      },
+      {
+        "component": "text",
         "name": "title",
         "label": "Highlight Title",
         "valueType": "string"
@@ -2614,6 +2904,81 @@
     ]
   },
   {
+    "id": "listing-press",
+    "fields": []
+  },
+  {
+    "id": "lottie-animation",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "animation",
+        "label": "Animation JSON Files",
+        "description": "Select the Lottie animation JSON file from DAM",
+        "valueType": "string",
+        "required": true,
+        "rootPath": "/content/dam/gmr/animations"
+      }
+    ]
+  },
+  {
+    "id": "media-contact-header",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "media-contact-item",
+    "itemLabel": "heading",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "content",
+        "label": "Content",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "media-contact-header",
+    "fields": []
+  },
+  {
+    "id": "media-contact",
+    "itemLabel": "heading",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "content",
+        "label": "Content",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "message-from-leadership",
     "fields": [
       {
@@ -2650,22 +3015,6 @@
         "valueType": "string",
         "name": "titleName",
         "label": "Title Name"
-      }
-    ]
-  },
-  {
-    "id": "months",
-    "fields": []
-  },
-  {
-    "id": "month-item",
-    "itemLabel": "month",
-    "fields": [
-      {
-        "component": "text",
-        "name": "month",
-        "label": "Month",
-        "valueType": "string"
       }
     ]
   },
@@ -2774,6 +3123,10 @@
         "label": "Network Type (For Filtering)",
         "valueType": "string",
         "options": [
+          {
+            "name": "None",
+            "value": "none"
+          },
           {
             "name": "Domestic Network",
             "value": "domesticNetwork"
@@ -3012,6 +3365,11 @@
         "name": "image1",
         "label": "Background Mobile Image",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
       }
     ]
   },
@@ -3091,6 +3449,11 @@
         "name": "image",
         "label": "Award/Partner Image",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
       },
       {
         "component": "text",
@@ -3525,22 +3888,6 @@
     ]
   },
   {
-    "id": "sub-category",
-    "fields": []
-  },
-  {
-    "id": "sub-category-item",
-    "itemLabel": "subCategory",
-    "fields": [
-      {
-        "component": "text",
-        "name": "subCategory",
-        "label": "Sub Category",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
     "id": "success-stories",
     "fields": [
       {
@@ -3616,22 +3963,6 @@
     ]
   },
   {
-    "id": "tags",
-    "fields": []
-  },
-  {
-    "id": "tag-item",
-    "itemLabel": "tag",
-    "fields": [
-      {
-        "component": "text",
-        "name": "tag",
-        "label": "Tag",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
     "id": "values-and-beliefs",
     "fields": [
       {
@@ -3668,22 +3999,6 @@
         "component": "text",
         "name": "quoteAuthor",
         "label": "Quote Author",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "years",
-    "fields": []
-  },
-  {
-    "id": "year-item",
-    "itemLabel": "year",
-    "fields": [
-      {
-        "component": "text",
-        "name": "year",
-        "label": "Year",
         "valueType": "string"
       }
     ]

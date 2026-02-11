@@ -1,0 +1,42 @@
+{
+    "definitions": [
+        {
+            "title": "Lottie Animation",
+            "id": "lottie-animation",
+            "plugins": {
+                "xwalk": {
+                    "page": {
+                        "resourceType": "core/franklin/components/block/v1/block",
+                        "template": {
+                            "name": "Lottie Animation",
+                            "model": "lottie-animation",
+                            "filter": "lottie-animation"
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "models": [
+        {
+            "id": "lottie-animation",
+            "fields": [
+                {
+                    "component": "aem-content",
+                    "name": "animation",
+                    "label": "Animation JSON Files",
+                    "description": "Select the Lottie animation JSON file from DAM",
+                    "valueType": "string",
+                    "required": true,
+                    "rootPath": "/content/dam/gmr/animations"
+                }
+            ]
+        }
+    ],
+    "filters": [
+        {
+            "id": "lottie-animation",
+            "components": []
+        }
+    ]
+}

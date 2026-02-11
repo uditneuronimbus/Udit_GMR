@@ -4,7 +4,7 @@ export default async function decorate(block) {
   /* ----------------------------------
      Load Swiper (UI Safe)
   ---------------------------------- */
-  //   await loadCSS('/libs/swiper/swiper-bundle.min.css');
+  // await loadCSS('/libs/swiper/swiper-bundle.min.css');
   await loadScript("../../scripts/swiper-bundle.min.js");
 
   /* ----------------------------------
@@ -12,8 +12,8 @@ export default async function decorate(block) {
   ---------------------------------- */
   const rows = [...block.children];
 
-  const sectionTitle = rows[0]?.querySelector("p")?.textContent || "";
-  const sectionDesc = rows[1]?.querySelector("p")?.textContent || "";
+  const sectionTitle = rows[0]?.querySelector("p")?.textContent?.trim() || "";
+  const sectionDesc  = rows[1]?.querySelector("p")?.textContent?.trim() || "";
 
   const itemRows = rows.slice(2);
 
@@ -45,25 +45,56 @@ export default async function decorate(block) {
   const swiperWrapper = container.querySelector(".swiper-wrapper");
 
   /* ----------------------------------
-     Build Slides from UE content
+     Build Slides from authored content
   ---------------------------------- */
   itemRows.forEach((row) => {
-    const img = row.querySelector("picture");
-    const title = row.children[1]?.textContent || "";
-    const desc = row.children[2]?.innerHTML || "";
-    const ctaText = row.children[3]?.textContent || "Read More";
-    const ctaLink = row.children[3]?.querySelector("a")?.href || "#";
+    if (row.children.length < 3) return; // skip invalid rows
+
+    // Assuming order: image, alt-text, title, description, cta
+    const imgCell   = row.children[0];
+    const altCell   = row.children[1];
+    const titleCell = row.children[2];
+    const descCell  = row.children[3];
+    const ctaCell   = row.children[4];
+
+    const authoredAlt = altCell?.textContent?.trim() || "";
+    const cardTitle   = titleCell?.textContent?.trim() || "";
+    const desc        = descCell?.innerHTML?.trim() || "";
+    const ctaText     = ctaCell?.textContent?.trim() || "Read More";
+    const ctaLink     = ctaCell?.querySelector("a")?.href || "#";
+
+    // Final alt: authored > title > ""
+    const finalAlt = authoredAlt || cardTitle || "";
+
+    // Get the rendered <picture> from authoring
+    let pictureHtml = "";
+    const picture = imgCell?.querySelector("picture");
+    if (picture) {
+      pictureHtml = picture.outerHTML;
+
+      // Override alt if needed
+      if (finalAlt) {
+        const temp = document.createElement("div");
+        temp.innerHTML = pictureHtml;
+
+        const img = temp.querySelector("img");
+        if (img) {
+          img.setAttribute("alt", finalAlt);
+          pictureHtml = temp.innerHTML;
+        }
+      }
+    }
 
     const slide = document.createElement("div");
     slide.className = "swiper-slide";
 
     slide.innerHTML = `
       <div class="card card-ui-two h-100 p-4">
-        <div class="card-img">${img?.outerHTML || ""}</div>
+        <div class="card-img">${pictureHtml}</div>
 
         <div class="card-body">
-          <h5 class="card-title">${title}</h5>
-          <div class="card-text mb-3">${desc}</div>
+          ${cardTitle ? `<h5 class="card-title">${cardTitle}</h5>` : ""}
+          ${desc ? `<div class="card-text mb-3">${desc}</div>` : ""}
           <div class="card-cta mt-auto">
             <a href="${ctaLink}" class="btn-link">
                 ${ctaText}

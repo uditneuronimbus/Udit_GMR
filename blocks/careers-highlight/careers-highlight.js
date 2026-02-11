@@ -72,7 +72,8 @@ export default function decorate(block) {
   col2.className = "col-md-6 col-lg-4";
 
   const col3 = document.createElement("div");
-  col3.className = "col-md-12 col-lg-4 d-flex flex-column";
+  col3.className =
+    "col-md-12 col-lg-4 d-flex flex-md-column flex-column-reverse";
 
   /* -------------------------
      COLUMN 1 – TWO IMAGES
@@ -182,7 +183,7 @@ export default function decorate(block) {
   // Add header wrapper
   if (sectionTitleNode) {
     const header = document.createElement("header");
-    header.className = "mb-5 text-center";
+    header.className = "mb-md-5 mb-4 text-center";
 
     const p = sectionTitleNode.querySelector("p");
 

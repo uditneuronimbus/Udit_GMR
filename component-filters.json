@@ -53,12 +53,17 @@
       "breadcrumbs",
       "message-from-leadership",
       "gmr-tabs",
+      "fraud-alert-tabs",
       "image-slider",
+      "media-contact-header",
       "integrity-decision",
       "press-release-featured",
       "press-release-listing",
+      "career-faqs-list",
+      "contact-reachout-list",
       "image-scroll-card",
-      "key-highlight-button"
+      "key-highlight-button",
+      "lottie-animation"
     ]
   },
   {
@@ -150,6 +155,16 @@
     ]
   },
   {
+    "id": "only-press-release-items",
+    "components": [
+      "contact-reachout-item"
+    ]
+  },
+  {
+    "id": "contact-us",
+    "components": []
+  },
+  {
     "id": "corporate-governance",
     "components": [
       "governance-section"
@@ -163,6 +178,25 @@
     "id": "factsheet",
     "components": [
       "factsheet-item"
+    ]
+  },
+  {
+    "id": "only-career-faqs-items",
+    "components": [
+      "career-faqs-item"
+    ]
+  },
+  {
+    "id": "filter-by",
+    "components": []
+  },
+  {
+    "id": "filter-panel",
+    "components": [
+      "years",
+      "months",
+      "tags",
+      "sub-category"
     ]
   },
   {
@@ -187,6 +221,12 @@
     "id": "footertopbars",
     "components": [
       "footertopbar"
+    ]
+  },
+  {
+    "id": "fraud-alert-tabs",
+    "components": [
+      "fraud-alert-item"
     ]
   },
   {
@@ -324,15 +364,29 @@
     ]
   },
   {
-    "id": "message-from-leadership",
+    "id": "listing-press",
+    "components": []
+  },
+  {
+    "id": "lottie-animation",
+    "components": []
+  },
+  {
+    "id": "media-contact-header",
     "components": [
-      "message-from-leadership-item"
+      "media-contact-item"
     ]
   },
   {
-    "id": "months",
+    "id": "media-contact-header",
     "components": [
-      "month-item"
+      "media-contact"
+    ]
+  },
+  {
+    "id": "message-from-leadership",
+    "components": [
+      "message-from-leadership-item"
     ]
   },
   {
@@ -417,12 +471,6 @@
     "components": []
   },
   {
-    "id": "sub-category",
-    "components": [
-      "sub-category-item"
-    ]
-  },
-  {
     "id": "success-stories",
     "components": []
   },
@@ -433,21 +481,9 @@
     ]
   },
   {
-    "id": "tags",
-    "components": [
-      "tag-item"
-    ]
-  },
-  {
     "id": "values-and-beliefs",
     "components": [
       "value-cards"
-    ]
-  },
-  {
-    "id": "years",
-    "components": [
-      "year-item"
     ]
   }
 ]

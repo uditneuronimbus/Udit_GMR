@@ -44,11 +44,9 @@ export default function decorate(block) {
   });
 
   const sectionTitle =
-    titleEl?.textContent?.trim() ||
-    "Global Leaders in Aviation Infrastructure";
+    titleEl?.textContent?.trim() || "Global Leaders in Aviation Infrastructure";
 
-  const imageAlt =
-    imageAltRow?.textContent?.trim() || sectionTitle;
+  const imageAlt = imageAltRow?.textContent?.trim() || sectionTitle;
 
   /* ================================
      2️⃣ Wrapper
@@ -64,7 +62,7 @@ export default function decorate(block) {
     container.className = "container";
 
     const row = document.createElement("div");
-    row.className = "row";
+    row.className = "row align-items-center";
 
     /* LEFT COLUMN → IMAGE + TITLE */
     if (imageRow || titleEl) {
@@ -93,7 +91,7 @@ export default function decorate(block) {
     /* RIGHT COLUMN → DESCRIPTION */
     if (descEl) {
       const rightCol = document.createElement("div");
-      rightCol.className = "col-md-7 col-lg-6 fs-md";
+      rightCol.className = "col-md-7 col-lg-6 offset-lg-1 fs-md";
 
       descEl.remove();
       descEl.removeAttribute("data-aue-label");

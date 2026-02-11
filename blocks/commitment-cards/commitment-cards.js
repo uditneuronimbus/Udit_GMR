@@ -18,7 +18,7 @@ export default function decorate(block) {
     const h2 = document.createElement("h2");
     h2.className = "sec-title fw-normal";
     h2.innerHTML = p.innerHTML; // preserve authored content
-    
+
     // Check if header has actual content (not just whitespace/empty)
     const headerText = p.textContent.trim();
     if (headerText) {
@@ -35,7 +35,7 @@ export default function decorate(block) {
   grid.className = "row";
 
   rows.forEach((row) => {
-    row.classList.add("col-md-6", "comm-card", "mb-5");
+    row.classList.add("col-md-6", "comm-card", "mb-md-0", "mb-5");
 
     const cells = [...row.children];
 
@@ -65,11 +65,33 @@ export default function decorate(block) {
 
     descCell?.classList.add("comm-card-desc");
 
-    // ---- CTA handling ----
+
+    // if (buttonLinkCell ) {
+    //   ctaWrapper = buttonLinkCell;
+    //   ctaWrapper.classList.add("button-container");
+
+    //   ctaLink = ctaWrapper.querySelector("a");
+    //   if (!ctaLink) {
+    //     ctaLink = document.createElement("a");
+    //     ctaWrapper.append(ctaLink);
+    //   }
+
+    //   const linkHref =
+    //     buttonLinkCell.querySelector("a")?.getAttribute("href") || "";
+    //   const buttonText = buttonTextCell?.textContent?.trim() || "";
+
+    //   if (linkHref) ctaLink.href = linkHref;
+    //   if (buttonText) ctaLink.textContent = buttonText;
+
+    //   ctaLink.classList.add("btn", "btn-primary");
+    // }
+
     let ctaWrapper;
     let ctaLink;
 
-    if (buttonLinkCell) {
+    const buttonText = buttonTextCell?.textContent?.trim() || "";
+
+    if (buttonLinkCell && buttonText) {
       ctaWrapper = buttonLinkCell;
       ctaWrapper.classList.add("button-container");
 
@@ -81,13 +103,16 @@ export default function decorate(block) {
 
       const linkHref =
         buttonLinkCell.querySelector("a")?.getAttribute("href") || "";
-      const buttonText = buttonTextCell?.textContent?.trim() || "";
 
       if (linkHref) ctaLink.href = linkHref;
-      if (buttonText) ctaLink.textContent = buttonText;
+      ctaLink.textContent = buttonText;
 
       ctaLink.classList.add("btn", "btn-primary");
     }
+
+// remove authored button rows always
+buttonTextCell?.remove();
+buttonLinkCell?.remove();
 
     // remove plain button text row
     buttonTextCell?.remove();
@@ -108,7 +133,7 @@ export default function decorate(block) {
     // Remove headerRow entirely if empty
     headerRow.remove();
   }
-  
+
   container.append(grid);
   outerContainer.append(container);
   block.append(outerContainer);

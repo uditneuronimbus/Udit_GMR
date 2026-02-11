@@ -1,3 +1,9 @@
+/* Hide authored content only after JS runs */
+.image-scroll-card.image-scroll-card-initialized > :not(.image-scroll-card-runtime) {
+  display: none;
+}
+
+
 .image-scroll-card-runtime{
     margin-top: 50px;
 }

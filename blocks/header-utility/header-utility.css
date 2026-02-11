@@ -619,10 +619,10 @@ button.bhashini-dropdown-btn {
 }
 
 @media screen and (max-width: 767.5px) {
-    .header-utility-content {
+    /* .header-utility-content {
         height: 40px;
     }
     .affix .header-utility-content {
-        transform: translateY(-40px);
-    }
+        transform: translateY(0);
+    } */
 }

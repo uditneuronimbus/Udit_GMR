@@ -1,6 +1,15 @@
-export default function decorate(block) {
-  const rows = [...block.children];
 
+export default function decorate(block) {
+  const isAuthorMode =
+    document.body.classList.contains('aem-AuthorLayer-Edit') ||
+    window.location.search.includes('wcmmode=edit');
+
+  /* ==============================
+     INIT GUARD
+  ============================== */
+  if (block.classList.contains('image-scroll-card-initialized')) return;
+
+  const rows = [...block.children];
   if (!rows.length) return;
 
   /* ==============================
@@ -12,17 +21,26 @@ export default function decorate(block) {
   /* ==============================
      READ ITEM DATA
   ============================== */
-  const items = rows.slice(2).map((row) => {
-    const title = row.children[0]?.textContent?.trim();
-    const logo = row.querySelector('img, picture');
+  const items = rows.slice(2)
+    .map((row) => {
+      const title = row.children[0]?.textContent?.trim();
+      const logo = row.querySelector('img, picture');
 
-    if (!logo) return null;
+      if (!logo) return null;
 
-    return { title, logo };
-  }).filter(Boolean);
+      return { title, logo };
+    })
+    .filter(Boolean);
+
+  if (!items.length) return;
 
   /* ==============================
-     BUILD HTML
+     MARK BLOCK AS INITIALIZED
+  ============================== */
+  block.classList.add('image-scroll-card-initialized');
+
+  /* ==============================
+     BUILD RUNTIME MARKUP
   ============================== */
   const runtime = document.createElement('div');
   runtime.className = 'image-scroll-card-runtime';
@@ -65,9 +83,9 @@ export default function decorate(block) {
 
     imageWrapper.appendChild(logo);
 
-    if (title) {
-      logo.setAttribute('alt', title);
-      logo.setAttribute('title', title);
+    if (title && logo.tagName === 'IMG') {
+      logo.alt = title;
+      logo.title = title;
     }
 
     card.appendChild(imageWrapper);
@@ -78,9 +96,15 @@ export default function decorate(block) {
   runtime.appendChild(trackWrapper);
 
   /* ==============================
-     FINALIZE
+     APPEND (DO NOT REPLACE)
   ============================== */
-  block.innerHTML = '';
   block.appendChild(runtime);
-  block.classList.add('image-scroll-card-initialized');
+
+  /* ==============================
+     SKIP JS BEHAVIOR IN EDIT MODE
+  ============================== */
+  if (isAuthorMode) return;
+
+  // 👉 If later you add animation / scroll logic,
+  // initialize it here (publish only)
 }

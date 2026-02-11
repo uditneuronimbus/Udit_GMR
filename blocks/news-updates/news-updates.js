@@ -2,9 +2,7 @@ import { getApiHost } from "../../scripts/api.js";
 import { slugToTitle } from "../../scripts/common.js";
 import { formatDate } from "../../scripts/common.js";
 
-
 export default async function decorate(block) {
-
   const [titleEl, descEl, ctaTextEl, ctaLinkEl, categoryEl, limitEl] = [
     ...block.children,
   ];
@@ -25,14 +23,14 @@ export default async function decorate(block) {
   wrapper.className = "container";
 
   wrapper.innerHTML = `
-    <div class="news-header d-flex justify-content-between align-items-end gap-4 mb-5">
+    <div class="news-header d-md-flex justify-content-between align-items-end gap-4 mb-md-5 mb-4">
       <div class="news-header-left">
         <h2 class="text-primary sec-title">${sectionTitle}</h2>
         <div class="sec-desc">${sectionDescription}</div>
       </div>
       ${
         ctaText
-          ? `<a class="btn btn-primary mb-3" href="${ctaLink}">${ctaText}</a>`
+          ? `<a class="btn btn-primary mb-md-3 mt-4 mt-md-0" href="${ctaLink}">${ctaText}</a>`
           : ""
       }
     </div>
@@ -52,14 +50,14 @@ export default async function decorate(block) {
     const apiUrl =
       `${getApiHost()}/api/v1/web/gmr-api/news-update` +
       `?category=${encodeURIComponent(category)}` +
-      `&limit=${encodeURIComponent(limit)}`;    
+      `&limit=${encodeURIComponent(limit)}`;
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`API error ${res.status}`);
 
     const json = await res.json();
     const items = json?.data?.data?.newsList?.items || [];
     console.log("------------------------------------", items);
-    
+
     if (!items.length) {
       cardsWrapper.innerHTML = "<p>No news found.</p>";
       return;
@@ -76,7 +74,7 @@ export default async function decorate(block) {
         "";
 
       const publishDateFormatted = formatDate(publishDateRaw);
-      
+
       const card = document.createElement("div");
       card.className = "col-md-6 col-lg-4 mt-4";
 
@@ -84,8 +82,8 @@ export default async function decorate(block) {
         <div class="card card-news">
           <div class="card-img">
             <img src="${item.cardImage?._publishUrl || ""}" alt="${
-        item.title || ""
-      }">
+              item.title || ""
+            }">
           </div>
 
           <div class="card-body">
