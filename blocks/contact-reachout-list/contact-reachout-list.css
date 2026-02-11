@@ -1,9 +1,15 @@
+.contact-reachout-initialized
+  > div:not(.contact-reachout-runtime) {
+  display: none;
+}
+
 .contact-reachout {
   width: 100%;
   background: #FEF4E2; 
   padding: 25px 25px;
   border-radius: 8px;
   margin-bottom: 40px;
+  border: 1px solid var(--yellow);
 }
 
 .contact-reachout-list-wrapper {
@@ -11,16 +17,17 @@
   margin: auto;
 }
 
-.contact-reachout-container {
-  background-image: url(../../img/wLogo.png);
-  background-repeat: no-repeat;
-    background-position: right bottom;
-      background-size: 400px; 
+
+.contact-reachout-list {
+  width: 100%;background: url(../../img/table-frame.png) no-repeat right bottom var(--lpink);padding: 2.5rem 1rem;border-radius: 8px;background-size: 350px;
+
 }
+
 
 .contact-reachout-heading {
   font-weight: 500;
-  font-size: var(--fs-large);
+  font-size: 30px;
+  margin-left: 1.25rem;
 }
 
 .contact-reachout-items {
@@ -34,17 +41,18 @@
 .contact-reachout-item {
   background: var(--white);
   border-radius: 8px;
-  padding: 13px 13px 13px;
+  padding: 24px;
   box-sizing: border-box;
   min-width: 250px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  margin-left: 1.25rem;
 
 }
 
 .contact-reachout-item-heading {
-  font-size: var(--fs-large);
+  font-size: var(--fs-normal);
   font-weight: 600;
   margin: 0 0 0.35rem;
   color: #111827;
@@ -77,32 +85,6 @@
   background-size: contain;
 }
 
-
-.contact-reachout-item-content a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.75rem;
-  font-size: var(--fs-normal);
-  color: var(--charcoal);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.contact-reachout-item-content a:hover {
-  color: var(--yellow);
-}
-
-.contact-reachout-item-content a::before {
-  content: "";
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-}
-
 @media (max-width:767px){
   .contact-reachout h3 {
     margin-bottom: 2.5rem;
@@ -119,3 +101,10 @@
     flex: 1 1 100%;
   }
 }
+
+
+ 
+
+
+
+ 

@@ -25,10 +25,12 @@
 
 .fraud-tab-pane p {
     font-weight: 400;
+    font-size: 19px;
 }
 
 .fraud-tab-inside-title {
     font-weight: 400;
+    font-size: 40px;
 }
 
 
@@ -83,7 +85,6 @@
     max-width: 1000px;
     margin: 0 auto;
     font-weight: 300;
-    line-height: 1.7;
     color: black;
     margin-top: 30px;
 }

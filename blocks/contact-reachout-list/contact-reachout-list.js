@@ -1,8 +1,18 @@
 export default function decorate(block) {
+  const isAuthorMode =
+    document.body.classList.contains('aem-AuthorLayer-Edit') ||
+    window.location.search.includes('wcmmode=edit');
+
   const rows = [...block.children];
   if (!rows.length) return;
 
   block.classList.add('contact-reachout');
+
+  /* ===============================
+     PREVENT DOUBLE RENDER
+  =============================== */
+  const existingRuntime = block.querySelector('.contact-reachout-runtime');
+  if (existingRuntime) existingRuntime.remove();
 
   /* ===============================
      1️⃣ Heading & Description
@@ -15,11 +25,12 @@ export default function decorate(block) {
   const descHTML = descRow?.innerHTML || '';
 
   const container = document.createElement('div');
-  container.className = 'contact-reachout-container';
+  container.className =
+    'contact-reachout-container contact-reachout-runtime';
 
   if (headingText) {
     const h2 = document.createElement('h2');
-    h2.className = 'contact-reachout-heading';
+    h2.className = 'contact-reachout-heading mb-4';
     h2.textContent = headingText;
     container.appendChild(h2);
   }
@@ -45,7 +56,6 @@ export default function decorate(block) {
       const itemDiv = document.createElement('div');
       itemDiv.className = 'contact-reachout-item';
 
-      /* ---- Item Heading (first <p>) ---- */
       const headingEl = children.shift();
       const headingText = headingEl?.textContent?.trim();
 
@@ -56,12 +66,13 @@ export default function decorate(block) {
         itemDiv.appendChild(h3);
       }
 
-      /* ---- Item Content (rest of elements) ---- */
       if (children.length) {
         const contentDiv = document.createElement('div');
         contentDiv.className = 'contact-reachout-item-content';
 
-        children.forEach((el) => contentDiv.appendChild(el));
+        children.forEach((el) =>
+          contentDiv.appendChild(el.cloneNode(true))
+        );
 
         itemDiv.appendChild(contentDiv);
       }
@@ -72,6 +83,16 @@ export default function decorate(block) {
     container.appendChild(listWrapper);
   }
 
-  block.innerHTML = '';
+  /* =================================
+     HIDE AUTHORED CONTENT (NOT DELETE)
+  ================================= */
+  block.classList.add('contact-reachout-initialized');
+
   block.appendChild(container);
+
+  if (isAuthorMode) return;
 }
+
+
+
+
