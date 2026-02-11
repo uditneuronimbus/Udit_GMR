@@ -88,13 +88,14 @@
 
 /* Animation Container */
 .lottie-animation-container {
-    background: #f8f9fa;
-    padding: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 400px;
     position: relative;
+}
+
+.lottie-animation-container .gan-wrapper { min-height: 700px; display: flex; align-items: center; }
+.lottie-animation-wrapper {
+    position: absolute;
+    top: 60px;
+    right: 1rem;
 }
 
 .lottie-animation-container svg,
@@ -258,7 +259,8 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
+    .lottie-animation-wrapper { display: none;}
     .lottie-animation-block {
         margin: 1rem;
         border-radius: 4px;
