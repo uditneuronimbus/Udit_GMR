@@ -534,7 +534,9 @@ hr {
 }
 .sec-grid-2 .card-ui-one .card-img,
 .sec-grid-2 .card-ui-three .card-img,
-.sec-grid-2 .card-ui-two .card-img { padding: 0 0 45%; }
+.sec-grid-2 .card-ui-two .card-img {
+    padding: 0 0 45%;
+}
 .card-ui-one .card-body {
     padding: 1.25rem;
     font-size: var(--fs-regular);
@@ -586,13 +588,17 @@ hr {
 }
 .card-ui-three {
     border: none;
-    background: 0 0;
+    background: var(--charcoal);
     overflow: hidden;
     position: relative;
+    padding: 0 0 86%;
 }
 .card-ui-three .card-img {
-    padding: 0 0 86%;
-    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 .card-ui-three .card-body {
     position: absolute;
@@ -1047,7 +1053,8 @@ hr {
     .default-section,
     .page-corporate-governance .overlay-banner-container,
     .partners-filter-runtime,
-    .spacer, .page-transportation .key-highlightss-wrapper .spacer,
+    .spacer,
+    .page-transportation .key-highlightss-wrapper .spacer,
     .press-listing-runtime {
         padding: 60px 0;
     }
