@@ -5,20 +5,16 @@
 
 export async function fetchDamJson(assetPath) {
     try {
-        console.log('[DAM Helper] Original asset path:', assetPath);
+        // Check if we're on Edge Delivery (not AEM)
+        const isEdgeDelivery = !window.location.hostname.includes('adobeaemcloud.com');
 
-        // Convert AEM DAM paths to proxy URL ONLY on Edge Delivery
-        let fetchUrl = assetPath;
+        // On Edge Delivery, use CORS proxy. On AEM, use direct path.
+        const fetchUrl = isEdgeDelivery && assetPath.startsWith('/content/dam/')
+            ? `/tools/dam-proxy/dam-proxy.js?path=${encodeURIComponent(assetPath)}`
+            : assetPath;
 
-        // Check if we're on AEM (author or publish) - if so, use direct path
-        const isOnAem = window.location.hostname.includes('adobeaemcloud.com');
-
-        if (!isOnAem && assetPath.startsWith('/content/dam/')) {
-            // We're on Edge Delivery - use CORS proxy to fetch DAM assets
-            fetchUrl = `/tools/dam-proxy/dam-proxy.js?path=${encodeURIComponent(assetPath)}`;
-            console.log('[DAM Helper] Edge Delivery detected, using CORS proxy:', fetchUrl);
-        } else if (isOnAem) {
-            console.log('[DAM Helper] AEM detected, using direct DAM path:', assetPath);
+        if (isEdgeDelivery && assetPath.startsWith('/content/dam/')) {
+            console.log('[DAM Helper] Using CORS proxy:', fetchUrl);
         }
 
         // Try direct fetch first
@@ -28,55 +24,38 @@ export async function fetchDamJson(assetPath) {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            credentials: isOnAem ? 'same-origin' : 'omit'
+            credentials: 'same-origin'
         });
 
-        console.log('[DAM Helper] Response status:', response.status);
-        console.log('[DAM Helper] Response headers:', {
-            contentType: response.headers.get('content-type'),
-            contentDisposition: response.headers.get('content-disposition')
-        });
-
-        // If still getting download headers or 404, try with different approach
+        // If still getting download headers, try with different approach
         if (!response.ok || response.headers.get('content-disposition')?.includes('attachment')) {
-            console.log('[DAM Helper] Trying alternative fetch method...');
+            console.log('Trying alternative fetch method...');
 
             // Add query parameter to force inline
-            const url = new URL(fetchUrl);
+            const url = new URL(fetchUrl, window.location.origin);
             url.searchParams.append('inline', 'true');
 
             response = await fetch(url.toString(), {
                 headers: {
                     'Accept': 'application/json'
                 },
-                credentials: isOnAem ? 'same-origin' : 'omit'
+                credentials: 'same-origin'
             });
-        }
-
-        // Check if response is OK
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: Failed to fetch DAM asset from ${fetchUrl}`);
         }
 
         // Get the response as text first
         const text = await response.text();
-        console.log('[DAM Helper] Response length:', text.length);
-        console.log('[DAM Helper] Response preview:', text.substring(0, 200));
 
         // Parse as JSON
         try {
-            const jsonData = JSON.parse(text);
-            console.log('[DAM Helper] ✓ JSON parsed successfully');
-            return jsonData;
+            return JSON.parse(text);
         } catch (parseError) {
-            console.error('[DAM Helper] ❌ Failed to parse JSON:', parseError);
-            console.error('[DAM Helper] Response text (first 500 chars):', text.substring(0, 500));
-            console.error('[DAM Helper] Full response text:', text);
+            console.error('Failed to parse JSON:', parseError);
             throw new Error('Invalid JSON format');
         }
 
     } catch (error) {
-        console.error('[DAM Helper] Error fetching DAM asset:', error);
+        console.error('Error fetching DAM asset:', error);
         throw error;
     }
 }
