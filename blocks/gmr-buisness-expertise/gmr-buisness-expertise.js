@@ -6,11 +6,11 @@ export default function decorate(block) {
      1️⃣ Read authored content
   ================================ */
   const sectionTitleRow = rows[0];
-  const sectionDescRow  = rows[1];
-  const cardRows        = rows.slice(2);
+  const sectionDescRow = rows[1];
+  const cardRows = rows.slice(2);
 
   const sectionTitle = sectionTitleRow.textContent.trim();
-  const sectionDesc  = sectionDescRow.innerHTML;
+  const sectionDesc = sectionDescRow.innerHTML;
 
   /* ================================
      2️⃣ Hide authored rows (DO NOT REMOVE)
@@ -28,10 +28,10 @@ export default function decorate(block) {
   runtime.innerHTML = `
     <section class="sec-expertise spacer">
       <div class="container">  
-          <div class="row justify-content-center">
+          <div class="row justify-content-center g-4">
             <div class="col-12">
                 <div class="row">
-                    <div class="col-md-7 text-center mx-auto mb-5">
+                    <div class="col-md-7 text-center mx-auto">
                     <h2 class="sec-title">${sectionTitle}</h2>
                     <div class="sec-desc">${sectionDesc}</div>
                     </div>
@@ -57,32 +57,36 @@ export default function decorate(block) {
     // ───────────────────────────────────────
     //  Extract fields (adjust indices if order differs)
     // ───────────────────────────────────────
-    const imgCell     = cells[0];
-    const altCell     = cells[1];
-    const titleCell   = cells[2];
-    const descCell    = cells[3];
-    const ctaCell     = cells[4];
+    const imgCell = cells[0];
+    const altCell = cells[1];
+    const titleCell = cells[2];
+    const descCell = cells[3];
+    const ctaCell = cells[4];
 
     const authoredAlt = altCell?.textContent?.trim() || "";
-    const title       = titleCell?.textContent?.trim() || "";
-    const desc        = descCell?.textContent?.trim() || "";
+    const title = titleCell?.textContent?.trim() || "";
+    const desc = descCell?.textContent?.trim() || "";
 
     // Final alt logic: authored > title > ""
     const finalAlt = authoredAlt || title || "";
 
-    let ctaText   = "";
-    let ctaHref   = "";
+    let ctaText = "";
+    let ctaHref = "";
     let ctaTarget = "_self";
 
     if (ctaCell) {
       const link = ctaCell.querySelector("a");
       if (link) {
-        ctaText   = link.textContent.trim();
-        ctaHref   = link.getAttribute("href");
+        ctaText = link.textContent.trim();
+        ctaHref = link.getAttribute("href");
         ctaTarget = link.getAttribute("target") || "_self";
       } else {
         const text = ctaCell.textContent.trim();
-        if (text && text.toLowerCase() !== "na" && text.toLowerCase() !== "false") {
+        if (
+          text &&
+          text.toLowerCase() !== "na" &&
+          text.toLowerCase() !== "false"
+        ) {
           ctaText = text;
           ctaHref = "#";
         }
@@ -90,7 +94,7 @@ export default function decorate(block) {
     }
 
     const col = document.createElement("div");
-    col.className = "col-md-6 col-lg-4 mt-4";
+    col.className = "col-md-6 col-lg-4";
 
     const card = document.createElement("div");
     card.className = index === 0 ? "card card-ui-one" : "card card-ui-one";
@@ -129,7 +133,7 @@ export default function decorate(block) {
 
         const newImg = document.createElement("img");
         newImg.src = img.src;
-        newImg.alt = finalAlt;           // ← apply final alt here too
+        newImg.alt = finalAlt; // ← apply final alt here too
 
         imgWrap.append(newImg);
         card.append(imgWrap);
@@ -143,13 +147,14 @@ export default function decorate(block) {
     content.innerHTML = `
       <h3 class="card-title">${title}</h3>
       <p class="card-desc">${desc}</p>
-      ${ctaText
-        ? `<div class="card-cta">
+      ${
+        ctaText
+          ? `<div class="card-cta">
              <a href="${ctaHref}" target="${ctaTarget}" class="btn-link">
                ${ctaText}
              </a>
            </div>`
-        : ""
+          : ""
       }
     `;
 
