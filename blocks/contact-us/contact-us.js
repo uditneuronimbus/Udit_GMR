@@ -297,10 +297,14 @@ export default function decorate(block) {
     const mobileNumber = iti ? iti.getNumber(window.intlTelInputUtils.numberFormat.NATIONAL).replace(/\D/g, '') : formData.get('mobile');
     const fullMobileNumber = iti ? iti.getNumber() : `${phoneCode} ${mobileNumber}`; // For email display
 
+    // Get country full name
+    const selectedCountry = COUNTRIES.find(c => c.value === formData.get('country'));
+    const countryName = selectedCountry ? selectedCountry.label : formData.get('country');
+
     // Prepare payload for GMR backend API
     const payload = {
       enquiryType: formData.get('enquiry'),
-      country: formData.get('country'),
+      country: countryName, // Full country name (e.g., "India")
       country_code: phoneCode, // Separate field for phone code
       firstName: formData.get('firstName'),
       lastName: formData.get('lastName') || '',
