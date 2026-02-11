@@ -557,6 +557,7 @@ hr {
 .press-listing-runtime {
     padding: 80px 0;
 }
+.big-padding-bottom .spacer { padding-bottom: 160px;}
 .card-ui-two .card-img {
     border-radius: 0.5rem;
     padding: 0 0 70%;
@@ -1055,7 +1056,7 @@ hr {
     .partners-filter-runtime,
     .spacer,
     .page-transportation .key-highlightss-wrapper .spacer,
-    .press-listing-runtime {
+    .press-listing-runtime, .big-padding-bottom .spacer {
         padding: 60px 0;
     }
     .page-corporate-governance .default-section.bg-gray {
