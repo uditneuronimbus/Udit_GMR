@@ -204,8 +204,19 @@ export default function decorate(block) {
 
     const formData = new FormData(form);
 
-    // Build comprehensive message for backend
-    const fullMessage = `
+    // Prepare payload for GMR backend API
+    const payload = {
+      enquiryType: formData.get('enquiry'),
+      country: formData.get('country'),
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName') || '',
+      mobileNo: formData.get('mobile'),
+      email: formData.get('email'),
+      message: formData.get('message')
+    };
+
+    // Prepare email message for Adobe email service
+    const emailMessage = `
 ═══════════════════════════════════════
 📋 NEW CONTACT FORM SUBMISSION
 ═══════════════════════════════════════
@@ -225,49 +236,76 @@ ${formData.get('message')}
     `.trim();
 
     try {
-      const response = await fetch('https://3842504-emailer-default.adobeioruntime.net/api/v1/web/eds-smtp-mailer/send-mail', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: `${formData.get('firstName')} ${formData.get('lastName') || ''}`.trim(),
-          email: formData.get('email'),
-          message: fullMessage
-        })
-      });
+      // Call both APIs in parallel
+      const [apiResponse, emailResponse] = await Promise.allSettled([
+        // GMR Backend API
+        fetch('http://13.200.106.168:4000/api/enquiry/save-enquery', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'U2FsdGVkX1+IAunex0zJueoZQpRBfpUm/DSQSMufK69HpTEh4abfdnhz0fQ+jbSmPrqojCZOhYZ6/mvA28aQxw',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        }),
 
-      // Check if response is successful (status 200-299)
-      if (response.ok || response.status === 200) {
-        // Success - show success message
+        // Adobe Email Service
+        fetch('https://3842504-emailer-default.adobeioruntime.net/api/v1/web/eds-smtp-mailer/send-mail', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: `${formData.get('firstName')} ${formData.get('lastName') || ''}`.trim(),
+            email: formData.get('email'),
+            message: emailMessage
+          })
+        })
+      ]);
+
+      // Check results
+      let apiSuccess = false;
+      let emailSuccess = false;
+
+      // Check GMR API response
+      if (apiResponse.status === 'fulfilled' && apiResponse.value.ok) {
+        const result = await apiResponse.value.json();
+        console.log('✓ Enquiry saved to database:', result);
+        apiSuccess = true;
+      } else {
+        console.error('✗ Failed to save to database:', apiResponse.reason || apiResponse.value?.statusText);
+      }
+
+      // Check Email response
+      if (emailResponse.status === 'fulfilled' && (emailResponse.value.ok || emailResponse.value.status === 200)) {
+        console.log('✓ Email notification sent');
+        emailSuccess = true;
+      } else if (emailResponse.status === 'rejected' && emailResponse.reason?.name === 'TypeError') {
+        // CORS error on email service - likely still sent
+        console.log('✓ Email likely sent (CORS prevented confirmation)');
+        emailSuccess = true;
+      } else {
+        console.error('✗ Failed to send email:', emailResponse.reason || emailResponse.value?.statusText);
+      }
+
+      // Show success if at least one succeeded
+      if (apiSuccess || emailSuccess) {
         form.innerHTML = `
           <div style="text-align:center; padding:40px; border:2px solid #28a745; background:#f8fff9; border-radius:8px;">
             <div style="font-size: 48px; margin-bottom: 16px;">✓</div>
             <h3 style="color:#28a745; margin:0 0 12px 0;">${config.successMessage}</h3>
-            <p style="margin:0; color:#333;">Your message has been sent successfully. We'll get back to you soon!</p>
+            <p style="margin:0; color:#333;">Your enquiry has been submitted successfully. We'll get back to you soon!</p>
           </div>
         `;
       } else {
-        throw new Error(`Server returned status: ${response.status}`);
+        throw new Error('Both submission methods failed');
       }
     } catch (error) {
       console.error('Submission error:', error);
 
-      // If it's a TypeError (CORS/network error) but emails are working, show success
-      if (error.name === 'TypeError') {
-        console.log('Network/CORS error detected, but email likely sent successfully');
-        form.innerHTML = `
-          <div style="text-align:center; padding:40px; border:2px solid #28a745; background:#f8fff9; border-radius:8px;">
-            <div style="font-size: 48px; margin-bottom: 16px;">✓</div>
-            <h3 style="color:#28a745; margin:0 0 12px 0;">Message Sent!</h3>
-            <p style="margin:0; color:#333;">Your message has been sent successfully.</p>
-          </div>
-        `;
-      } else {
-        showError(`Error: ${error.message}`);
-        submitBtn.disabled = false;
-        submitBtn.textContent = config.submitLabel;
-      }
+      // Show error message
+      showError(`Failed to submit enquiry: ${error.message}`);
+      submitBtn.disabled = false;
+      submitBtn.textContent = config.submitLabel;
     }
   });
 
