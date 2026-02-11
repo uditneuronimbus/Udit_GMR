@@ -7,16 +7,18 @@ export async function fetchDamJson(assetPath) {
     try {
         console.log('[DAM Helper] Original asset path:', assetPath);
 
-        // Convert AEM DAM paths to full URLs when not on AEM author
+        // Convert AEM DAM paths to proxy URL ONLY on Edge Delivery
         let fetchUrl = assetPath;
 
-        // Check if we're NOT on AEM author and the path is a DAM path
-        const isAemAuthor = window.location.hostname.includes('adobeaemcloud.com');
+        // Check if we're on AEM (author or publish) - if so, use direct path
+        const isOnAem = window.location.hostname.includes('adobeaemcloud.com');
 
-        if (!isAemAuthor && assetPath.startsWith('/content/dam/')) {
-            // Use CORS proxy to fetch DAM assets (bypasses CORS restrictions)
+        if (!isOnAem && assetPath.startsWith('/content/dam/')) {
+            // We're on Edge Delivery - use CORS proxy to fetch DAM assets
             fetchUrl = `/tools/dam-proxy/dam-proxy.js?path=${encodeURIComponent(assetPath)}`;
             console.log('[DAM Helper] Edge Delivery detected, using CORS proxy:', fetchUrl);
+        } else if (isOnAem) {
+            console.log('[DAM Helper] AEM detected, using direct DAM path:', assetPath);
         }
 
         // Try direct fetch first
@@ -26,7 +28,7 @@ export async function fetchDamJson(assetPath) {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            credentials: isAemAuthor ? 'same-origin' : 'omit'
+            credentials: isOnAem ? 'same-origin' : 'omit'
         });
 
         console.log('[DAM Helper] Response status:', response.status);
@@ -47,7 +49,7 @@ export async function fetchDamJson(assetPath) {
                 headers: {
                     'Accept': 'application/json'
                 },
-                credentials: isAemAuthor ? 'same-origin' : 'omit'
+                credentials: isOnAem ? 'same-origin' : 'omit'
             });
         }
 
