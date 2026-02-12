@@ -28,7 +28,7 @@ export default async function decorate(block) {
   runtime.innerHTML = `
     <div class="sa-container">
       <div class="sa-header">
-        <h2>${sectionTitle}</h2>
+        ${sectionTitle}
         <div class="sa-description">${sectionDescription}</div>
       </div>
       <div class="sa-items"></div>
