@@ -18,33 +18,29 @@ export default async function decorate(block) {
 
   /* ================================
      2️⃣ UNIVERSAL EDITOR SAFE
-     👉 DO NOT DELETE AUTHORED HTML
   ================================ */
-  const isUE =
-    document.querySelector(
-      "aem-extension, [data-aue-resource], [data-aue-prop]"
-    );
+  const isUE = document.querySelector(
+    "aem-extension, [data-aue-resource], [data-aue-prop]"
+  );
 
   if (isUE) {
     block.dataset.aueType = "container";
     block.dataset.aueLabel = "GMR Business Brand";
 
-    // mark header editable
     rows[0].dataset.aueProp = "sectionTitle";
     rows[1].dataset.aueProp = "sectionDescription";
 
-    // mark multifield container
     itemRows.forEach((row, i) => {
       row.dataset.aueType = "item";
       row.dataset.aueLabel = `GMR Business Item ${i + 1}`;
     });
   }
 
-  /* Hide authored rows (IMPORTANT) */
+  /* Hide authored rows */
   rows.forEach((row) => (row.style.display = "none"));
 
   /* ================================
-     3️⃣ Create Swiper UI (outside block)
+     3️⃣ Create Swiper UI
   ================================ */
   const section = document.createElement("section");
   section.className = "sec-brand spacer";
@@ -75,17 +71,23 @@ export default async function decorate(block) {
   const wrapper = section.querySelector(".swiper-wrapper");
 
   /* ================================
-     4️⃣ Build Slides
+     4️⃣ Build Slides (FIXED CTA)
   ================================ */
   itemRows.forEach((row) => {
     const cells = [...row.children];
+
+    // Need 6 cells → image, alt, title, desc, label, link
+    if (cells.length < 6) return;
 
     const img = cells[0]?.querySelector("img");
     const alt = cells[1]?.textContent?.trim() || "";
     const title = cells[2]?.textContent?.trim() || "";
     const desc = cells[3]?.textContent?.trim() || "";
-    const ctaLink = cells[4]?.querySelector("a")?.href || "#";
+
+    // FIXED CTA extraction
     const ctaText = cells[4]?.textContent?.trim() || "Read More";
+    const linkEl = cells[5]?.querySelector("a");
+    const ctaLink = linkEl?.href || "";
 
     const slide = document.createElement("div");
     slide.className = "swiper-slide";
@@ -105,9 +107,14 @@ export default async function decorate(block) {
           <h5 class="card-title">${title}</h5>
           <div class="card-text mb-3">${desc}</div>
 
+          ${
+            ctaLink
+              ? `
           <div class="card-cta mt-auto">
             <a href="${ctaLink}" class="btn-link">${ctaText}</a>
-          </div>
+          </div>`
+              : ""
+          }
         </div>
       </div>
     `;
