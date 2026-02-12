@@ -13,6 +13,8 @@ const langMatchMap = {
   fr: "Français",
   es: "Español",
   el: "Ελληνικά",
+  "zh-sg": "中文 (简体)",
+  "zh-cn": "中文 (简体)",
 };
 export default async function decorate(block) {
   /* ===============================
@@ -112,6 +114,14 @@ export default async function decorate(block) {
         <button class="language-option ${currentLangCode === 'el' ? 'active' : ''}" data-lang="el" data-name="Ελληνικά">
           <span class="lang-native">Ελληνικά</span>
           <span class="lang-code">el</span>
+        </button>
+        <button class="language-option ${currentLangCode === 'zh-sg' ? 'active' : ''}" data-lang="zh-sg" data-name="中文 (简体)">
+          <span class="lang-native">中文 (简体)</span>
+          <span class="lang-code">zh-sg</span>
+        </button>
+        <button class="language-option ${currentLangCode === 'zh-cn' ? 'active' : ''}" data-lang="zh-cn" data-name="中文 (简体)">
+          <span class="lang-native">中文 (简体)</span>
+          <span class="lang-code">zh-cn</span>
         </button>
       </div>
     </div>
@@ -874,9 +884,12 @@ function updateSelectedLanguage(langCode, langName, container, saveToStorage = t
     const pathSegments = currentUrl.pathname.split("/");
 
     // AEM standard structure often has the language code as the first segment
+    // Support both 2-char codes (en, ja) and hyphenated codes (zh-sg, zh-cn)
     let langSegmentIndex = -1;
     for (let i = 0; i < pathSegments.length; i++) {
-      if (pathSegments[i].length === 2 && /^[a-z]{2}$/.test(pathSegments[i])) {
+      const segment = pathSegments[i];
+      // Match 2-char codes OR hyphenated codes like zh-sg, zh-cn
+      if (/^[a-z]{2}(-[a-z]{2})?$/.test(segment) && langMatchMap[segment]) {
         langSegmentIndex = i;
         break;
       }
@@ -916,7 +929,7 @@ function initBhashini(container) {
   // Look for bhashini-plugin-container inside the bhashini-group
   const bhashiniGroup = container.querySelector(".bhashini-group");
   if (!bhashiniGroup) return;
-  
+
   if (bhashiniGroup.querySelector(".bhashini-plugin-container")) return;
 
   const bhashiniContainer = document.createElement("div");
