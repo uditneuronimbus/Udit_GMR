@@ -13,7 +13,7 @@ export default async function decorate(block) {
   if (rows.length < 3) return;
 
   const sectionTitle = rows[0]?.textContent?.trim() || "";
-  const sectionDesc = rows[1]?.innerHTML || "";
+  const sectionDesc = rows[1]?.textContent?.trim() || "";
   const itemRows = rows.slice(2);
 
   /* ================================
@@ -83,7 +83,7 @@ export default async function decorate(block) {
     const img = cells[0]?.querySelector("img");
     const alt = cells[1]?.textContent?.trim() || "";
     const title = cells[2]?.textContent?.trim() || "";
-    const desc = cells[3]?.innerHTML || "";
+    const desc = cells[3]?.textContent?.trim() || "";
     const ctaLink = cells[4]?.querySelector("a")?.href || "#";
     const ctaText = cells[4]?.textContent?.trim() || "Read More";
 
