@@ -10,8 +10,11 @@
  * 3. Assets are served with proper CORS headers automatically
  */
 
-// AEM Publish instance URL - extracted from your project configuration
+// AEM instance URLs
+// Note: Using author instance because publish instance is not active
+// This is a development workaround - in production, publish should be used
 const AEM_PUBLISH_URL = 'https://publish-p168597-e1803019.adobeaemcloud.com';
+const AEM_AUTHOR_URL = 'https://author-p168597-e1803019.adobeaemcloud.com';
 
 export async function fetchDamJson(assetPath) {
     console.log('[DAM Helper] Fetching asset:', assetPath);
@@ -36,19 +39,13 @@ export async function fetchDamJson(assetPath) {
     console.log('[DAM Helper] Fetch URL:', fetchUrl);
 
     // Try multiple fetch strategies with fallbacks
+    // For AEM EDS: JSON files are stored in the repo, not DAM
     const strategies = [
-        // Strategy 1: EDS-mapped path (Adobe's recommended approach)
-        // This will work when the asset is published and paths.json is configured
+        // Strategy 1: Repo-based path (primary for EDS)
+        // Files in /animations/ folder are served by EDS
         () => directFetch(fetchUrl),
 
-        // Strategy 2: Direct from AEM publish with CORS mode
-        // (will fail with CORS in browser, but worth trying)
-        () => directFetchWithCors(`${AEM_PUBLISH_URL}${normalizedPath}`),
-
-        // Strategy 3: Local test file (for development only)
-        () => loadLocalTestFile(normalizedPath),
-
-        // Strategy 4: Local path (for AEM author environment)
+        // Strategy 2: Local path (for AEM author environment)
         () => directFetch(normalizedPath)
     ];
 
@@ -73,45 +70,29 @@ export async function fetchDamJson(assetPath) {
 
 /**
  * Determine the correct fetch URL based on environment
+ * For AEM EDS (Edge Delivery Services) - no publish instance exists
  */
 function getFetchUrl(assetPath) {
     const hostname = window.location.hostname;
 
-    // If we're on the AEM author/publish instance, use the local path
+    // For AEM EDS: Convert DAM paths to repo-based paths
+    // Recommended approach: Store JSON files in /animations/ folder in repo
+    if (assetPath.startsWith('/content/dam/gmr/animations/')) {
+        const filename = assetPath.replace('/content/dam/gmr/animations/', '');
+        const repoPath = `/animations/${filename}`;
+        console.log('[DAM Helper] Using repo-based path for EDS:', repoPath);
+        return repoPath;
+    }
+
+    // If we're on the AEM author instance, use the local path
     if (hostname.includes('adobeaemcloud.com')) {
         console.log('[DAM Helper] Detected AEM instance, using direct path');
         return assetPath;
     }
 
-    // For EDS (Edge Delivery Services) - use the mapped path
-    // Adobe's recommended approach: Map /content/dam/gmr/animations/ to /animations/
-    // This is configured in paths.json
-    if (assetPath.startsWith('/content/dam/gmr/animations/')) {
-        const filename = assetPath.replace('/content/dam/gmr/animations/', '');
-        const edsMappedPath = `/animations/${filename}`;
-        console.log('[DAM Helper] Using EDS-mapped path:', edsMappedPath);
-        return edsMappedPath;
-    }
-
-    // Fallback: If on localhost or other Edge Delivery domains and not using mapped path,
-    // try the dam-proxy (for backward compatibility)
-    const isEdgeDelivery = hostname === 'localhost' ||
-        hostname.includes('.aem.page') ||
-        hostname.includes('.aem.live') ||
-        hostname.includes('.hlx.page') ||
-        hostname.includes('.hlx.live');
-
-    if (isEdgeDelivery) {
-        // Use dam-proxy to bypass CORS
-        // The proxy runs server-side and adds CORS headers
-        const proxyUrl = `/tools/dam-proxy/dam-proxy.js?path=${encodeURIComponent(assetPath)}`;
-        console.log('[DAM Helper] Using dam-proxy to bypass CORS');
-        return proxyUrl;
-    }
-
-    // Default: try AEM publish instance (may fail with CORS)
-    console.warn('[DAM Helper] Unknown environment, trying AEM publish URL');
-    return `${AEM_PUBLISH_URL}${assetPath}`;
+    // Default: use the asset path as-is
+    console.log('[DAM Helper] Using asset path as-is:', assetPath);
+    return assetPath;
 }
 
 /**
