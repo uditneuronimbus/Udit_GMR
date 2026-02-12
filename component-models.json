@@ -225,6 +225,10 @@
             "value": "background-pink"
           },
           {
+            "name": "Big Padding Bottom",
+            "value": "big-padding-bottom"
+          },
+          {
             "name": "Minus Margin Top",
             "value": "minus-margin-top"
           }
@@ -949,6 +953,12 @@
         "name": "content",
         "label": "Content",
         "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Icon"
       }
     ]
   },

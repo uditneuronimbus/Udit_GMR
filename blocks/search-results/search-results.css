@@ -1,16 +1,149 @@
 .page-search .breadcrumbs-wrapper {
     display: none;
 }
-.search-results h2 {
-    background: url(../../icons/banner-pattern.svg) no-repeat top right
-        var(--blue);
+
+/* Blue Banner Header with Search */
+.search-results .search-results-header {
+    background: url(../../icons/banner-pattern.svg) no-repeat top right var(--blue);
     background-size: 200px;
-    color: var(--white);
+    padding: 2rem 1rem 3rem;
     text-align: center;
-    padding: 3rem 1rem;
-    font-size: 1.5rem;
+}
+
+/* Search Bar in Blue Area */
+.search-results .search-results-search-box {
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
+}
+
+.search-results .search-box-inline {
+    position: relative;
+    width: 100%;
+}
+
+.search-results .search-input-results {
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s;
+}
+
+.search-results .search-input-results:focus {
+    outline: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.search-results .search-input-results::placeholder {
+    color: #999;
+}
+
+/* Search Loader */
+.search-results .search-loader {
+    position: absolute;
+    right: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--blue);
+}
+
+.search-results .search-loader .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-top-color: var(--blue);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Dropdown Results */
+.search-results .search-results-dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-radius: 8px;
+    max-height: 400px;
+    overflow-y: auto;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.search-results .search-results-dropdown:empty {
+    display: none;
+}
+
+.search-results .search-results-dropdown a {
+    display: block;
+    padding: 0.875rem 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s;
+}
+
+.search-results .search-results-dropdown a:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.search-results .search-results-dropdown a:last-child {
+    border-bottom: none;
+    border-radius: 0 0 8px 8px;
+}
+
+.search-results .search-results-dropdown a:hover,
+.search-results .search-results-dropdown a.active {
+    background-color: #f5f5f5;
+}
+
+.search-results .search-results-dropdown .search-result strong {
+    display: block;
+    font-weight: var(--fw-semi-bold);
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    color: #000;
+}
+
+.search-results .search-results-dropdown .search-snippet {
+    margin: 0.25rem 0 0;
+    font-size: 0.875rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.search-results .search-results-dropdown small {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: #999;
+}
+
+.search-results .search-results-dropdown mark {
+    background-color: #fff3cd;
+    padding: 0 2px;
     font-weight: var(--fw-semi-bold);
 }
+
+/* Heading in Blue Area */
+.search-results h2 {
+    color: var(--white);
+    font-size: 1.5rem;
+    font-weight: var(--fw-semi-bold);
+    margin: 0;
+}
+
+/* Main Results List */
 .search-results-list {
     max-width: 1200px;
     margin: 0 auto;
@@ -26,16 +159,35 @@
     background: url(../../icons/arrow-right-black.svg) no-repeat
         calc(100% - 1.5rem) center var(--white);
 }
+
 .search-results .search-results-list a:hover {
     background: url(../../icons/arrow-right-black.svg) no-repeat
         calc(100% - 1rem) center var(--white);
 }
+
 .search-results .search-results-list a h3 {
     font-weight: var(--fw-semi-bold);
     font-size: var(--fs-large);
 }
+
 .search-results .search-results-list a p {
     margin: 0;
     opacity: 0.7;
     font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .search-results .search-results-header {
+        padding: 1.5rem 1rem 2rem;
+    }
+    
+    .search-results .search-results-search-box {
+        max-width: 100%;
+        padding: 0 1rem;
+    }
+    
+    .search-results-list {
+        padding: 1rem;
+    }
 }

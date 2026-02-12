@@ -1,6 +1,6 @@
 import { loadCSS, loadScript } from "../../scripts/aem.js";
 
-const SWIPER_JS = "../../scripts/swiper-bundle.min.js";
+const SWIPER_JS = "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js";
 
 function isValidRow(row) {
   return (

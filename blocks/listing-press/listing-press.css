@@ -40,7 +40,7 @@
 .press-listing-runtime .press-count{font-size:var(--fs-regular, 1rem);color:var(--text-grey);margin:0}
 .press-listing-runtime .press-sort{position:relative}
 .press-listing-runtime .sort-dropdown{position:relative}
-.press-listing-runtime .sort-toggle{display:flex;align-items:center;gap:8px;padding:12px 16px;background:var(--white);border:1px solid var(--lgrey);border-radius:8px;cursor:pointer;font-size:var(--fs-regular, 1rem);font-weight:var(--fw-medium,500);color:var(--charcoal);min-width:140px;justify-content:space-between;transition:border-color .2s ease}
+.press-listing-runtime .sort-toggle{display:flex;align-items:center;gap:8px;padding:12px 16px;background:var(--white);border:1px solid var(--lorange);border-radius:8px;cursor:pointer;font-size:var(--fs-regular, 1rem);font-weight:var(--fw-medium,500);color:var(--charcoal);min-width:140px;justify-content:space-between;transition:border-color .2s ease}
 .press-listing-runtime .sort-toggle:hover{border-color:var(--yellow)}
 .press-listing-runtime .sort-toggle.active{border-color:var(--yellow)}
 .press-listing-runtime .sort-toggle .icon-chevron{transition:transform .3s ease;color:var(--yellow)}

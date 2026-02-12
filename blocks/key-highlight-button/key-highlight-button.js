@@ -69,40 +69,42 @@ export default function decorate(block) {
   const grid = document.createElement("div");
   grid.className = "row g-4";
 
-  items.forEach((item) => {
-    // Extract all columns from the row
-    // Col 0: Image, Col 1: Title, Col 2: Description, Col 3: Button Label, Col 4: Button URL
-    const cols = [...item.children];
-    
-    const imgEl    = cols[0];
-    const titleEl  = cols[1];
-    const descEl   = cols[2]; // Added to capture description if needed
-    const btnLabel = cols[4]?.textContent?.trim(); // Index 4 based on your JSON model fields
-    const btnUrl   = cols[5]?.textContent?.trim() || cols[5]?.querySelector('a')?.href;
+ items.forEach((item) => {
+  const cols = [...item.children];
+  
+  const imgEl    = cols[0];
+  const titleEl  = cols[1];
+  const descEl   = cols[2];
 
-    const col = document.createElement("div");
-    col.className = "key-col col-md-6 col-lg-4";
+  // ✅ Corrected indexes
+  const btnLabel = cols[3]?.textContent?.trim();
+  const btnUrl   = cols[4]?.textContent?.trim() || cols[4]?.querySelector('a')?.href;
 
-    col.innerHTML = `
-      <div class="career-card position-relative">
-        <div class="career-card-img">
-          ${imgEl?.innerHTML || ""}
-        </div>
-        <div class="career-card-overlay position-absolute bottom-0 start-0 p-3 text-white">
-          <h3 class="mb-1">${titleEl?.textContent.trim() || ""}</h3>
-          ${btnLabel && btnUrl ? `
-            <div class="mt-2">
-              <a href="${btnUrl}" class="btn btn-sm btn-light text-primary">
-                ${btnLabel}
-              </a>
-            </div>
-          ` : ""}
-        </div>
+  const col = document.createElement("div");
+  col.className = "key-col col-md-6 col-lg-4";
+
+  col.innerHTML = `
+    <div class="career-card position-relative">
+      <div class="career-card-img">
+        ${imgEl?.innerHTML || ""}
       </div>
-    `;
+      <div class="career-card-overlay position-absolute bottom-0 start-0 p-3 text-white">
+        <h3 class="mb-1">${titleEl?.textContent.trim() || ""}</h3>
+        ${btnLabel && btnUrl ? `
+          <div class="mt-2">
+           <a href="${btnUrl}" class="career-link">
+              ${btnLabel}
+          </a>
 
-    grid.append(col);
-  });
+          </div>
+        ` : ""}
+      </div>
+    </div>
+  `;
+
+  grid.append(col);
+});
+
 
   wrapper.append(grid);
 

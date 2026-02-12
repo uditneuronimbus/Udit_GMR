@@ -97,7 +97,7 @@ button {
     outline-offset: 2px;
 }
 :focus:not(:focus-visible) {
-    outline: none;
+    outline: 0;
 }
 label {
     font-weight: 400;
@@ -107,7 +107,7 @@ iframe {
 }
 b,
 strong {
-    font-weight: 600;
+    font-weight: 700;
 }
 sub,
 sup {
@@ -218,8 +218,8 @@ hr {
 .bg-charcoal {
     background-color: var(--charcoal) !important;
 }
-.bg-sky-blue,
-.baclground-skyblue {
+.baclground-skyblue,
+.bg-sky-blue {
     background-color: var(--sky-blue) !important;
 }
 .text-blue,
@@ -362,8 +362,8 @@ hr {
 .btn-outline-primary:hover,
 .btn-primary:focus,
 .btn-primary:hover,
-.button.primary:hover,
-.button.primary:focus {
+.button.primary:focus,
+.button.primary:hover {
     background-color: var(--white);
     border-color: var(--lorange);
     color: var(--black);
@@ -497,10 +497,10 @@ hr {
 }
 .businesses-section.block,
 .container,
-.message-from-leadership,
 .default-section .default-content-wrapper,
 .global-leaders-aviation-wrapper,
-.listed-companies-wrapper {
+.listed-companies-wrapper,
+.message-from-leadership {
     max-width: 1440px;
     width: 100%;
     margin: 0 auto;
@@ -520,7 +520,6 @@ hr {
 .card-ui-one .card-body p.card-desc {
     min-height: 50px;
 }
-/* .page-airports .card-ui-one .card-body p.card-desc { min-height: 50px; } */
 .card-ui-one .card-img,
 .card-ui-three .card-img,
 .card-ui-two .card-img {
@@ -534,7 +533,9 @@ hr {
 }
 .sec-grid-2 .card-ui-one .card-img,
 .sec-grid-2 .card-ui-three .card-img,
-.sec-grid-2 .card-ui-two .card-img { padding: 0 0 45%; }
+.sec-grid-2 .card-ui-two .card-img {
+    padding: 0 0 45%;
+}
 .card-ui-one .card-body {
     padding: 1.25rem;
     font-size: var(--fs-regular);
@@ -551,9 +552,12 @@ hr {
 .default-section,
 .page-corporate-governance .overlay-banner-container,
 .partners-filter-runtime,
-.spacer,
-.press-listing-runtime {
-    padding: 80px 0;
+.press-listing-runtime,
+.spacer {
+    padding: 5rem 0;
+}
+.big-padding-bottom .spacer {
+    padding-bottom: 10rem;
 }
 .card-ui-two .card-img {
     border-radius: 0.5rem;
@@ -586,13 +590,17 @@ hr {
 }
 .card-ui-three {
     border: none;
-    background: 0 0;
+    background: var(--charcoal);
     overflow: hidden;
     position: relative;
+    padding: 0 0 86%;
 }
 .card-ui-three .card-img {
-    padding: 0 0 86%;
-    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 .card-ui-three .card-body {
     position: absolute;
@@ -896,8 +904,6 @@ hr {
 .page-transportation .key-highlightss-wrapper .spacer {
     padding-bottom: 160px;
 }
-
-/* corporate-governance */
 .page-corporate-governance .default-section.bg-gray {
     padding-bottom: 160px;
 }
@@ -905,15 +911,14 @@ hr {
     padding-top: 0 !important;
     margin-top: -4rem;
 }
-/* corporate-governance */
-/* about gmr impact */
 .gmr-impact .gla-wrapper.spacer {
     padding-bottom: 160px;
 }
-.gmr-impact .gla-wrapper > .container .col-lg-5.col-md-5,
-.gmr-impact .gla-wrapper > .container .col-md-7.col-lg-6 {
+.gmr-impact .gla-wrapper > .container .col-md-5,
+.gmr-impact .gla-wrapper > .container .col-md-7 {
     flex: 0 0 auto;
     width: 100%;
+    margin-left: 0;
 }
 .gmr-impact .gla-wrapper > .container {
     text-align: center;
@@ -931,9 +936,8 @@ hr {
 .gmr-impact .global-leaders-aviation .gla-footer > div {
     background-color: #e0e0e0;
 }
-
 .bg-sky-blue.commitment-cards-container .sec-commitment {
-    background: none;
+    background: 0 0;
 }
 .page-about .commitment-cards-container .sec-commitment {
     margin-top: -4rem;
@@ -989,32 +993,31 @@ hr {
 .all-business-cards-container .default-content-wrapper .primary:hover {
     background-color: var(--white);
 }
-/* about gmr impact */
-
 .bg-gray.all-business-cards-container .spacer {
     padding-bottom: 160px;
 }
-
+.pt-0 .spacer {
+    padding-top: 0;
+}
 @media (max-width: 1300px) {
     .businesses-section.block,
     .container,
-    .message-from-leadership,
     .default-section .default-content-wrapper,
     .global-leaders-aviation-wrapper,
-    .listed-companies-wrapper {
+    .listed-companies-wrapper,
+    .message-from-leadership {
         max-width: 100%;
         padding-left: 1rem;
         padding-right: 1rem;
     }
 }
-
 @media (max-width: 1199px) {
     .businesses-section.block,
     .container,
-    .message-from-leadership,
     .default-section .default-content-wrapper,
     .global-leaders-aviation-wrapper,
-    .listed-companies-wrapper {
+    .listed-companies-wrapper,
+    .message-from-leadership {
         padding-left: 2rem;
         padding-right: 2rem;
     }
@@ -1044,22 +1047,27 @@ hr {
         font-size: var(--fs-regular);
     }
     .awards-filter-runtime,
+    .big-padding-bottom .spacer,
     .default-section,
     .page-corporate-governance .overlay-banner-container,
+    .page-transportation .key-highlightss-wrapper .spacer,
     .partners-filter-runtime,
-    .spacer, .page-transportation .key-highlightss-wrapper .spacer,
-    .press-listing-runtime {
+    .press-listing-runtime,
+    .spacer {
         padding: 60px 0;
+    }
+    .big-padding-bottom .sec-expertise.spacer {
+        padding: 60px 0 100px 0;
     }
     .page-corporate-governance .default-section.bg-gray {
         padding-bottom: 120px;
     }
     .businesses-section.block,
     .container,
-    .message-from-leadership,
     .default-section .default-content-wrapper,
     .global-leaders-aviation-wrapper,
-    .listed-companies-wrapper {
+    .listed-companies-wrapper,
+    .message-from-leadership {
         padding-left: 1rem;
         padding-right: 1rem;
     }
@@ -1078,10 +1086,10 @@ hr {
     }
     .businesses-section.block,
     .container,
-    .message-from-leadership,
     .default-section .default-content-wrapper,
     .global-leaders-aviation-wrapper,
-    .listed-companies-wrapper {
+    .listed-companies-wrapper,
+    .message-from-leadership {
         max-width: 100%;
         padding-left: 16px;
         padding-right: 16px;
@@ -1140,10 +1148,10 @@ hr {
         height: 3rem !important;
         border-radius: 0.5rem;
     }
-    .swiper-button-next:before,
-    .swiper-button-prev:before,
     .swiper-button-next.swiper-button-disabled:before,
-    .swiper-button-prev.swiper-button-disabled:before {
+    .swiper-button-next:before,
+    .swiper-button-prev.swiper-button-disabled:before,
+    .swiper-button-prev:before {
         background-size: 14px;
     }
     .swiper-pagination-bullet {
@@ -1156,7 +1164,6 @@ hr {
         background: var(--blue) !important;
         width: 24px !important;
     }
-
     .sec-desc,
     .sec-desc p {
         font-size: var(--fs-normal);

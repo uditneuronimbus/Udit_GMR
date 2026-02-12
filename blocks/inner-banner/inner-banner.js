@@ -88,7 +88,7 @@ export default function decorate(block) {
 
   if (buttonLabel) {
     const btn = document.createElement("a");
-    btn.className = "btn btn-primary mt-4";
+    btn.className = "btn btn-primary mt-2";
     btn.href = buttonLink;
     btn.textContent = buttonLabel;
     leftCol.append(btn);

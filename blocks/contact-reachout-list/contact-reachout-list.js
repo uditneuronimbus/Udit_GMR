@@ -1,77 +1,98 @@
 export default function decorate(block) {
+  const isAuthorMode =
+    document.body.classList.contains('aem-AuthorLayer-Edit') ||
+    window.location.search.includes('wcmmode=edit');
+
   const rows = [...block.children];
   if (!rows.length) return;
 
   block.classList.add('contact-reachout');
 
   /* ===============================
+     PREVENT DOUBLE RENDER
+  =============================== */
+  const existingRuntime = block.querySelector('.contact-reachout-runtime');
+  if (existingRuntime) existingRuntime.remove();
+
+  /* ===============================
      1️⃣ Heading & Description
   =============================== */
   const headingRow = rows.shift();
-  const headingText =
-    headingRow?.querySelector('p')?.textContent?.trim() || '';
+  const headingText = headingRow?.querySelector('p')?.textContent?.trim() || '';
 
   const descRow = rows.shift();
   const descHTML = descRow?.innerHTML || '';
 
-  const container = document.createElement('div');
-  container.className = 'contact-reachout-container';
+  /* ===============================
+     2️⃣ Build Items HTML
+  =============================== */
+  let itemsHTML = '';
+  
+  if (rows.length) {
+    itemsHTML = rows.map((itemRow) => {
+      const children = [...itemRow.children];
+      if (!children.length) return '';
 
-  if (headingText) {
-    const h2 = document.createElement('h2');
-    h2.className = 'contact-reachout-heading';
-    h2.textContent = headingText;
-    container.appendChild(h2);
-  }
+      const heading = children[0]?.textContent?.trim() || '';
+      const contentHTML = children[1]?.innerHTML || '';
+      const iconCell = children[2];
+      
+      // Create icon HTML
+      let iconHTML = '';
+      if (iconCell) {
+        const img = iconCell.querySelector('img');
+        const link = iconCell.querySelector('a');
+        
+        if (img) {
+          iconHTML = `<img src="${img.src}" alt="${img.alt || 'Icon'}" loading="lazy">`;
+        } else if (link) {
+          iconHTML = `<img src="${link.href}" alt="Icon" loading="lazy">`;
+        } else {
+          const text = iconCell.textContent.trim();
+          if (text) {
+            iconHTML = `<span class="contact-reachout-icon ${text}" data-icon="${text}"></span>`;
+          }
+        }
+      }
 
-  if (descHTML) {
-    const descDiv = document.createElement('div');
-    descDiv.className = 'contact-reachout-description';
-    descDiv.innerHTML = descHTML;
-    container.appendChild(descDiv);
+      // Build item HTML
+      return `
+        <div class="contact-reachout-item">
+          <div class="contact-reachout-item-content-wrapper">
+            ${heading ? `<h3 class="contact-reachout-item-heading">${heading}</h3>` : ''}
+            <div class="contact-reachout-item-content">
+              ${iconHTML ? `<div class="contact-reachout-item-icon">${iconHTML}</div>` : ''}
+              ${contentHTML || ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }).filter(Boolean).join('');
   }
 
   /* ===============================
-     2️⃣ Items
+     3️⃣ Build Complete Container with Wrapper Divs
   =============================== */
-  if (rows.length) {
-    const listWrapper = document.createElement('div');
-    listWrapper.className = 'contact-reachout-items';
+  const container = document.createElement('div');
+  container.className = 'contact-reachout-container contact-reachout-runtime';
+  
+  container.innerHTML = `
+    <div class="contactSec spacer">
+      <div class="container">
+        <div class="contact-reachoutList">
+          ${headingText ? `<h2 class="contact-reachout-heading">${headingText}</h2>` : ''}
+          ${descHTML?.trim() ? `<div class="contact-reachout-description">${descHTML}</div>` : ''}
+          ${itemsHTML ? `<div class="contact-reachout-items">${itemsHTML}</div>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
 
-    rows.forEach((itemRow) => {
-      const children = [...itemRow.children];
-      if (!children.length) return;
-
-      const itemDiv = document.createElement('div');
-      itemDiv.className = 'contact-reachout-item';
-
-      /* ---- Item Heading (first <p>) ---- */
-      const headingEl = children.shift();
-      const headingText = headingEl?.textContent?.trim();
-
-      if (headingText) {
-        const h3 = document.createElement('h3');
-        h3.className = 'contact-reachout-item-heading';
-        h3.textContent = headingText;
-        itemDiv.appendChild(h3);
-      }
-
-      /* ---- Item Content (rest of elements) ---- */
-      if (children.length) {
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'contact-reachout-item-content';
-
-        children.forEach((el) => contentDiv.appendChild(el));
-
-        itemDiv.appendChild(contentDiv);
-      }
-
-      listWrapper.appendChild(itemDiv);
-    });
-
-    container.appendChild(listWrapper);
-  }
-
-  block.innerHTML = '';
+  /* =================================
+     HIDE AUTHORED CONTENT (NOT DELETE)
+  ================================= */
+  block.classList.add('contact-reachout-initialized');
   block.appendChild(container);
+
+  if (isAuthorMode) return;
 }
