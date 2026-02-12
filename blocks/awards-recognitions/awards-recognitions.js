@@ -145,7 +145,7 @@ export default async function decorate(block) {
      Load Swiper (UI Safe)
   ---------------------------------- */
   // await loadCSS('/libs/swiper/swiper-bundle.min.css');
-  await loadScript("../../scripts/swiper-bundle.min.js");
+  await loadScript("https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js");
 
 
   const original = [...block.children];
