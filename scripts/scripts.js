@@ -26,18 +26,21 @@ import {
   const segments = path.split('/');
 
   // Find current language in URL
+  // Support both 2-char codes (en, ja) and hyphenated codes (zh-sg, zh-cn)
   let langIndex = -1;
   let detectedLang = 'en'; // Default
   for (let i = 0; i < segments.length; i++) {
-    if (segments[i].length === 2 && /^[a-z]{2}$/.test(segments[i])) {
+    const segment = segments[i];
+    if (/^[a-z]{2}(-[a-z]{2})?$/.test(segment)) {
       langIndex = i;
-      detectedLang = segments[i];
+      detectedLang = segment;
       break;
     }
   }
 
   // 2. REDIRECT CHECK: If saved preference differs from URL
-  if (savedLang && savedLang !== 'en' && savedLang !== detectedLang) {
+  // Use location.replace() for instant redirect without adding to history
+  if (savedLang && savedLang !== detectedLang) {
     let newPath;
     if (langIndex !== -1) {
       segments[langIndex] = savedLang;
@@ -48,7 +51,8 @@ import {
 
     const finalUrl = window.location.origin + newPath.replace(/\/+/g, '/') + window.location.search + window.location.hash;
     if (finalUrl !== window.location.href) {
-      window.location.href = finalUrl;
+      // Use replace() instead of href for instant redirect without browser history entry
+      window.location.replace(finalUrl);
       return; // Stop execution, browser will redirect
     }
   }
@@ -237,10 +241,11 @@ export function decorateMain(main) {
    =============================== */
 async function loadEager(doc) {
   // Dynamically set lang attribute based on URL path instead of hardcoding "en"
+  // Support both 2-char codes (en, ja) and hyphenated codes (zh-sg, zh-cn)
   const pathParts = window.location.pathname.split('/');
   let currentLang = 'en';
   for (const part of pathParts) {
-    if (part.length === 2 && /^[a-z]{2}$/.test(part)) {
+    if (/^[a-z]{2}(-[a-z]{2})?$/.test(part)) {
       currentLang = part;
       break;
     }
