@@ -1,329 +1,136 @@
 import { loadCSS, loadScript } from "../../scripts/aem.js";
 
+const SWIPER_JS =
+  "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js";
+const SWIPER_CSS =
+  "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css";
+
 export default async function decorate(block) {
-  /* ----------------------------------
-     Load Swiper
-  ---------------------------------- */
-  await loadScript("https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js");
-
-  /* ----------------------------------
-     Check Universal Editor
-  ---------------------------------- */
-  const isUniversalEditor =
-    document.querySelector("aem-extension, [data-aue-resource], [data-aue-prop]");
-
-  const blockName = block.dataset.blockName || "gmr-brand";
-
-  if (isUniversalEditor) {
-    block.dataset.aueType = "container";
-    block.dataset.aueResource = `component/${blockName}`;
-    block.dataset.aueLabel = "GMR Brand";
-  }
-
-  /* ----------------------------------
-     Read authored content
-  ---------------------------------- */
+  /* ================================
+     1️⃣ Read authored content
+  ================================ */
   const rows = [...block.children];
+  if (rows.length < 3) return;
 
-  const sectionTitle =
-    rows[0]?.querySelector("p")?.textContent?.trim() || "";
-  const sectionDesc =
-    rows[1]?.querySelector("p")?.textContent?.trim() || "";
-
+  const sectionTitle = rows[0]?.textContent?.trim() || "";
+  const sectionDesc = rows[1]?.innerHTML || "";
   const itemRows = rows.slice(2);
 
-  /* ----------------------------------
-     CLEAR BLOCK FIRST (IMPORTANT)
-     Prevents model deletion issue
-  ---------------------------------- */
-  block.innerHTML = "";
+  /* ================================
+     2️⃣ UNIVERSAL EDITOR SAFE
+     👉 DO NOT DELETE AUTHORED HTML
+  ================================ */
+  const isUE =
+    document.querySelector(
+      "aem-extension, [data-aue-resource], [data-aue-prop]"
+    );
 
-  /* ----------------------------------
-     Build Layout
-  ---------------------------------- */
-  const section = document.createElement("div");
+  if (isUE) {
+    block.dataset.aueType = "container";
+    block.dataset.aueLabel = "GMR Business Brand";
+
+    // mark header editable
+    rows[0].dataset.aueProp = "sectionTitle";
+    rows[1].dataset.aueProp = "sectionDescription";
+
+    // mark multifield container
+    itemRows.forEach((row, i) => {
+      row.dataset.aueType = "item";
+      row.dataset.aueLabel = `GMR Business Item ${i + 1}`;
+    });
+  }
+
+  /* Hide authored rows (IMPORTANT) */
+  rows.forEach((row) => (row.style.display = "none"));
+
+  /* ================================
+     3️⃣ Create Swiper UI (outside block)
+  ================================ */
+  const section = document.createElement("section");
   section.className = "sec-brand spacer";
 
-  const container = document.createElement("div");
-  container.className = "container";
+  section.innerHTML = `
+    <div class="container">
 
-  /* ---------- Header ---------- */
-  const headerRow = document.createElement("div");
-  headerRow.className = "row";
+      <div class="row">
+        <div class="col-md-7 text-center mx-auto mb-5">
+          <h2 class="sec-title">${sectionTitle}</h2>
+          <div class="sec-desc">${sectionDesc}</div>
+        </div>
+      </div>
 
-  const headerCol = document.createElement("div");
-  headerCol.className = "col-md-7 text-center mx-auto mb-5";
+      <div class="swiper gmr-brand-swiper">
+        <div class="swiper-wrapper"></div>
+        <div class="gmr-swiper-nav d-flex gap-3 justify-content-center mt-4">
+          <button class="swiper-button-prev"></button>
+          <button class="swiper-button-next"></button>
+        </div>
+      </div>
 
-  const titleEl = document.createElement("h2");
-  titleEl.className = "sec-title";
-  titleEl.textContent = sectionTitle;
-
-  const descEl = document.createElement("p");
-  descEl.className = "sec-desc";
-  descEl.textContent = sectionDesc;
-
-  if (isUniversalEditor) {
-    titleEl.dataset.aueProp = "sectionTitle";
-    titleEl.dataset.aueType = "text";
-
-    descEl.dataset.aueProp = "sectionDescription";
-    descEl.dataset.aueType = "richtext";
-  }
-
-  headerCol.append(titleEl, descEl);
-  headerRow.appendChild(headerCol);
-  container.appendChild(headerRow);
-
-  /* ---------- Swiper ---------- */
-  const swiperContainer = document.createElement("div");
-  swiperContainer.className = "swiper gmr-brand-swiper";
-
-  const swiperWrapper = document.createElement("div");
-  swiperWrapper.className = "swiper-wrapper";
-
-  if (isUniversalEditor) {
-    swiperWrapper.dataset.aueProp = "items";
-    swiperWrapper.dataset.aueType = "multifield";
-    swiperWrapper.dataset.aueLabel = "Brand Items";
-    swiperWrapper.dataset.aueModel = "gmr-brand";
-  }
-
-  swiperContainer.appendChild(swiperWrapper);
-
-  /* ---------- Navigation ---------- */
-  const nav = document.createElement("div");
-  nav.className =
-    "gmr-swiper-nav d-flex gap-3 justify-content-center mt-4";
-
-  nav.innerHTML = `
-    <button class="swiper-button-prev"></button>
-    <button class="swiper-button-next"></button>
+    </div>
   `;
 
-  swiperContainer.appendChild(nav);
-  container.appendChild(swiperContainer);
+  block.after(section);
 
-  /* ----------------------------------
-     Build Slides
-  ---------------------------------- */
-  itemRows.forEach((row, index) => {
-    if (row.children.length < 3) return;
+  const wrapper = section.querySelector(".swiper-wrapper");
 
-    const imgCell = row.children[0];
-    const altCell = row.children[1];
-    const titleCell = row.children[2];
-    const descCell = row.children[3];
-    const ctaCell = row.children[4];
+  /* ================================
+     4️⃣ Build Slides
+  ================================ */
+  itemRows.forEach((row) => {
+    const cells = [...row.children];
 
-    const authoredAlt = altCell?.textContent?.trim() || "";
-    const cardTitle = titleCell?.textContent?.trim() || "";
-    const desc = descCell?.innerHTML?.trim() || "";
-    const ctaText = ctaCell?.textContent?.trim() || "Read More";
-    const ctaLink = ctaCell?.querySelector("a")?.href || "#";
+    const img = cells[0]?.querySelector("img");
+    const alt = cells[1]?.textContent?.trim() || "";
+    const title = cells[2]?.textContent?.trim() || "";
+    const desc = cells[3]?.innerHTML || "";
+    const ctaLink = cells[4]?.querySelector("a")?.href || "#";
+    const ctaText = cells[4]?.textContent?.trim() || "Read More";
 
-    const finalAlt = authoredAlt || cardTitle || "";
-
-    /* ----- Get picture ----- */
-    let pictureHtml = "";
-    const picture = imgCell?.querySelector("picture");
-
-    if (picture) {
-      const temp = document.createElement("div");
-      temp.innerHTML = picture.outerHTML;
-
-      const img = temp.querySelector("img");
-      if (img && finalAlt) img.setAttribute("alt", finalAlt);
-
-      pictureHtml = temp.innerHTML;
-    }
-
-    /* ----- Slide ----- */
     const slide = document.createElement("div");
     slide.className = "swiper-slide";
 
-    if (isUniversalEditor) {
-      slide.dataset.aueType = "item";
-      slide.dataset.aueResource = `component/${blockName}/item-${index}`;
-      slide.dataset.aueModel = "gmr-brand";
-      slide.dataset.aueLabel = `Brand Item ${index + 1}`;
-    }
+    slide.innerHTML = `
+      <div class="card card-ui-two h-100 p-4">
+        ${
+          img
+            ? `
+        <div class="card-img">
+          <img src="${img.src}" alt="${alt || title}">
+        </div>`
+            : ""
+        }
 
-    const card = document.createElement("div");
-    card.className = "card card-ui-two h-100 p-4";
+        <div class="card-body">
+          <h5 class="card-title">${title}</h5>
+          <div class="card-text mb-3">${desc}</div>
 
-    /* Image */
-    const imgDiv = document.createElement("div");
-    imgDiv.className = "card-img";
-    imgDiv.innerHTML = pictureHtml;
+          <div class="card-cta mt-auto">
+            <a href="${ctaLink}" class="btn-link">${ctaText}</a>
+          </div>
+        </div>
+      </div>
+    `;
 
-    if (isUniversalEditor) {
-      imgDiv.dataset.aueProp = "image";
-      imgDiv.dataset.aueType = "reference";
-    }
-
-    /* Body */
-    const body = document.createElement("div");
-    body.className = "card-body";
-
-    if (cardTitle) {
-      const t = document.createElement("h5");
-      t.className = "card-title";
-      t.textContent = cardTitle;
-
-      if (isUniversalEditor) {
-        t.dataset.aueProp = "title";
-        t.dataset.aueType = "text";
-      }
-
-      body.appendChild(t);
-    }
-
-    if (desc) {
-      const d = document.createElement("div");
-      d.className = "card-text mb-3";
-      d.innerHTML = desc;
-
-      if (isUniversalEditor) {
-        d.dataset.aueProp = "description";
-        d.dataset.aueType = "richtext";
-      }
-
-      body.appendChild(d);
-    }
-
-    /* CTA */
-    const ctaWrap = document.createElement("div");
-    ctaWrap.className = "card-cta mt-auto";
-
-    const link = document.createElement("a");
-    link.href = ctaLink;
-    link.textContent = ctaText;
-    link.className = "btn-link";
-
-    if (isUniversalEditor) {
-      link.dataset.aueProp = "ctaText";
-      link.dataset.aueHref = "ctaLink";
-    }
-
-    ctaWrap.appendChild(link);
-    body.appendChild(ctaWrap);
-
-    card.append(imgDiv, body);
-    slide.appendChild(card);
-    swiperWrapper.appendChild(slide);
+    wrapper.append(slide);
   });
 
-  /* ----------------------------------
-     Append Layout
-  ---------------------------------- */
-  block.appendChild(section);
-  block.appendChild(container);
+  /* ================================
+     5️⃣ Load Swiper
+  ================================ */
+  await loadCSS(SWIPER_CSS);
+  await loadScript(SWIPER_JS);
 
-  /* ----------------------------------
-     Add Universal Editor Model
-     (AFTER rendering — VERY IMPORTANT)
-  ---------------------------------- */
-  /* ----------------------------------
-   Add Universal Editor Models
----------------------------------- */
-if (isUniversalEditor) {
-  const modelScript = document.createElement("script");
-  modelScript.type = "application/json";
-  modelScript.dataset.aueModel = "gmr-brand";
-
-  modelScript.textContent = JSON.stringify({
-    models: [
-
-      /* ---------- MAIN COMPONENT ---------- */
-      {
-        id: "gmr-brand",
-        title: "GMR Business Brand",
-        fields: [
-          {
-            component: "text",
-            name: "sectionTitle",
-            label: "Section Title"
-          },
-          {
-            component: "richtext",
-            name: "sectionDescription",
-            label: "Section Description"
-          },
-          {
-            component: "multifield",
-            name: "items",
-            label: "GMR Business Item",
-            item: {
-              component: "model",
-              id: "gmr-brand-item"
-            }
-          }
-        ]
-      },
-
-      /* ---------- ITEM MODEL ---------- */
-      {
-        id: "gmr-brand-item",
-        title: "GMR Business Item",
-        fields: [
-          {
-            component: "reference",
-            name: "image",
-            label: "Card Image"
-          },
-          {
-            component: "text",
-            name: "alt",
-            label: "Alt Text"
-          },
-          {
-            component: "text",
-            name: "title",
-            label: "Title"
-          },
-          {
-            component: "richtext",
-            name: "description",
-            label: "Description"
-          },
-          {
-            component: "text",
-            name: "ctaText",
-            label: "CTA Text"
-          },
-          {
-            component: "text",
-            name: "ctaLink",
-            label: "CTA Link"
-          }
-        ]
-      }
-
-    ]
+  new window.Swiper(section.querySelector(".gmr-brand-swiper"), {
+    slidesPerView: 1,
+    spaceBetween: 24,
+    navigation: {
+      nextEl: section.querySelector(".swiper-button-next"),
+      prevEl: section.querySelector(".swiper-button-prev"),
+    },
+    breakpoints: {
+      768: { slidesPerView: 2 },
+      1024: { slidesPerView: 3 },
+    },
   });
-
-  block.appendChild(modelScript);
-}
-
-
-  /* ----------------------------------
-     Init Swiper
-  ---------------------------------- */
-  setTimeout(() => {
-    if (window.Swiper) {
-      new window.Swiper(".gmr-brand-swiper", {
-        slidesPerView: 1,
-        spaceBetween: 24,
-        loop: false,
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-        breakpoints: {
-          768: { slidesPerView: 2},
-          1024: { slidesPerView: 3 },
-        },
-      });
-    }
-  }, 200);
 }
