@@ -914,8 +914,8 @@ hr {
 .gmr-impact .gla-wrapper.spacer {
     padding-bottom: 160px;
 }
-.gmr-impact .gla-wrapper > .container .col-lg-5.col-md-5,
-.gmr-impact .gla-wrapper > .container .col-md-7.col-lg-6 {
+.gmr-impact .gla-wrapper > .container .col-md-5,
+.gmr-impact .gla-wrapper > .container .col-md-7 {
     flex: 0 0 auto;
     width: 100%;
     margin-left: 0;
