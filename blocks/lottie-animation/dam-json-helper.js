@@ -1,110 +1,167 @@
 /**
- * Helper to fetch JSON from DAM assets correctly
- * Handles cases where AEM forces download instead of inline viewing
+ * DAM JSON Helper - Adobe Edge Delivery Services Compatible
+ * 
+ * According to Adobe's official documentation, DAM assets can be fetched
+ * directly from Edge Delivery Services after they are published in AEM.
+ * 
+ * Requirements:
+ * 1. Assets must be published in AEM DAM
+ * 2. Use direct /content/dam/ paths (no proxy needed)
+ * 3. Assets are served with proper CORS headers automatically
  */
 
 export async function fetchDamJson(assetPath) {
-    try {
-        // Check if we're on Edge Delivery (not AEM)
-        const isEdgeDelivery = !window.location.hostname.includes('adobeaemcloud.com');
+    console.log('[DAM Helper] Fetching asset:', assetPath);
 
-        // On Edge Delivery, use CORS proxy. On AEM, use direct path.
-        const fetchUrl = isEdgeDelivery && assetPath.startsWith('/content/dam/')
-            ? `/tools/dam-proxy/dam-proxy.js?path=${encodeURIComponent(assetPath)}`
-            : assetPath;
+    // Validate input
+    if (!assetPath) {
+        throw new Error('Asset path is required');
+    }
 
-        if (isEdgeDelivery && assetPath.startsWith('/content/dam/')) {
-            console.log('[DAM Helper] Using CORS proxy:', fetchUrl);
+    // Normalize the path - ensure it starts with /content/dam/
+    let normalizedPath = assetPath;
+    if (!normalizedPath.startsWith('/content/dam/')) {
+        if (normalizedPath.startsWith('content/dam/')) {
+            normalizedPath = '/' + normalizedPath;
+        } else {
+            throw new Error('Invalid DAM path. Must start with /content/dam/');
         }
+    }
 
-        // Try direct fetch first
-        let response = await fetch(fetchUrl, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            credentials: 'same-origin'
-        });
+    // Try multiple fetch strategies with fallbacks
+    const strategies = [
+        // Strategy 1: Direct fetch (recommended by Adobe for Edge Delivery)
+        () => directFetch(normalizedPath),
+        
+        // Strategy 2: With inline query parameter
+        () => directFetch(`${normalizedPath}?inline=true`),
+        
+        // Strategy 3: For AEM author/publish environments
+        () => aemEnvironmentFetch(normalizedPath)
+    ];
 
-        // If still getting download headers, try with different approach
-        if (!response.ok || response.headers.get('content-disposition')?.includes('attachment')) {
-            console.log('Trying alternative fetch method...');
-
-            // Add query parameter to force inline
-            const url = new URL(fetchUrl, window.location.origin);
-            url.searchParams.append('inline', 'true');
-
-            response = await fetch(url.toString(), {
-                headers: {
-                    'Accept': 'application/json'
-                },
-                credentials: 'same-origin'
-            });
-        }
-
-        // Get the response as text first
-        const text = await response.text();
-
-        // Parse as JSON
+    let lastError;
+    
+    for (let i = 0; i < strategies.length; i++) {
         try {
-            return JSON.parse(text);
-        } catch (parseError) {
-            console.error('Failed to parse JSON:', parseError);
-            throw new Error('Invalid JSON format');
+            console.log(`[DAM Helper] Trying strategy ${i + 1}...`);
+            const data = await strategies[i]();
+            console.log('[DAM Helper] ✓ Successfully loaded JSON');
+            return data;
+        } catch (error) {
+            console.warn(`[DAM Helper] Strategy ${i + 1} failed:`, error.message);
+            lastError = error;
+            // Continue to next strategy
         }
+    }
 
-    } catch (error) {
-        console.error('Error fetching DAM asset:', error);
-        throw error;
+    // All strategies failed
+    throw createDetailedError(normalizedPath, lastError);
+}
+
+/**
+ * Direct fetch - Adobe's recommended approach for Edge Delivery Services
+ */
+async function directFetch(url) {
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'
+        },
+        credentials: 'same-origin'
+    });
+
+    if (!response.ok) {
+        if (response.status === 404) {
+            throw new Error('Asset not found (404). The asset may not be published in AEM DAM.');
+        }
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    // Check if response is trying to force download
+    const contentDisposition = response.headers.get('content-disposition');
+    if (contentDisposition && contentDisposition.includes('attachment')) {
+        console.warn('[DAM Helper] Server is forcing download, but continuing...');
+    }
+
+    const contentType = response.headers.get('content-type');
+    console.log('[DAM Helper] Content-Type:', contentType);
+
+    // Get response as text first to handle edge cases
+    const text = await response.text();
+    
+    if (!text || text.trim().length === 0) {
+        throw new Error('Empty response received');
+    }
+
+    // Parse JSON
+    try {
+        return JSON.parse(text);
+    } catch (parseError) {
+        console.error('[DAM Helper] Failed to parse JSON. First 200 chars:', text.substring(0, 200));
+        throw new Error(`Invalid JSON format: ${parseError.message}`);
     }
 }
 
 /**
- * Alternative: Use FileReader API if you have the asset reference
+ * Fetch for AEM author/publish environments
  */
-export async function readJsonFromAsset(assetReference) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
+async function aemEnvironmentFetch(assetPath) {
+    // Check if we're on an AEM environment
+    const isAemEnvironment = window.location.hostname.includes('adobeaemcloud.com') ||
+                            window.location.hostname.includes('aem.page') ||
+                            window.location.hostname.includes('aem.live');
 
-        reader.onload = (event) => {
-            try {
-                const json = JSON.parse(event.target.result);
-                resolve(json);
-            } catch (error) {
-                reject(new Error('Invalid JSON'));
-            }
-        };
+    if (!isAemEnvironment) {
+        throw new Error('Not an AEM environment');
+    }
 
-        reader.onerror = () => reject(new Error('Failed to read file'));
-
-        // This would work if you have access to the File object
-        reader.readAsText(assetReference);
-    });
+    console.log('[DAM Helper] Detected AEM environment, using direct path');
+    
+    return directFetch(assetPath);
 }
 
 /**
- * Fetch via AEM's asset delivery API
+ * Create a detailed error with troubleshooting information
  */
-export async function fetchViaAssetAPI(assetPath) {
-    // Remove /content/dam prefix if present and add API endpoint
-    const cleanPath = assetPath.replace('/content/dam/', '');
-    const apiUrl = `/api/assets/${cleanPath}`;
+function createDetailedError(assetPath, originalError) {
+    const error = new Error(
+        `Failed to load DAM asset: ${assetPath}\n\n` +
+        `Original error: ${originalError.message}\n\n` +
+        `Troubleshooting steps:\n` +
+        `1. Verify the asset is published in AEM DAM\n` +
+        `2. Check the asset path is correct: ${assetPath}\n` +
+        `3. Ensure the asset is a valid JSON file\n` +
+        `4. Check browser console for CORS or network errors`
+    );
+    
+    error.originalError = originalError;
+    error.assetPath = assetPath;
+    
+    return error;
+}
 
+/**
+ * Utility: Check if an asset is accessible
+ * Useful for pre-validation before attempting to load
+ */
+export async function checkAssetAvailability(assetPath) {
     try {
-        const response = await fetch(apiUrl, {
-            headers: {
-                'Accept': 'application/json'
-            }
+        const response = await fetch(assetPath, {
+            method: 'HEAD',
+            credentials: 'same-origin'
         });
-
-        if (!response.ok) {
-            throw new Error(`API request failed: ${response.status}`);
-        }
-
-        return await response.json();
+        
+        return {
+            available: response.ok,
+            status: response.status,
+            contentType: response.headers.get('content-type')
+        };
     } catch (error) {
-        console.error('Asset API fetch failed:', error);
-        throw error;
+        return {
+            available: false,
+            status: 0,
+            error: error.message
+        };
     }
 }
