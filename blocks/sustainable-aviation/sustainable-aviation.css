@@ -35,6 +35,10 @@ display: block;
   margin-bottom: 64px;
 }
 
+.sa-title strong {
+  font-weight: 600;
+}
+
 .sa-header h2 {
   font-size: 48px;
   font-weight: 400;
