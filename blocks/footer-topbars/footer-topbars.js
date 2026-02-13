@@ -5,6 +5,7 @@ export default function decorate(block) {
   const firstRow = authoredRows[0];
   const cells = firstRow ? [...firstRow.children] : [];
 
+  // Prevent duplicated logo image: extract only src
   let image = "";
   if (cells[0]) {
     const img = cells[0].querySelector("img");
@@ -17,9 +18,6 @@ export default function decorate(block) {
   const buttonLabel = cells[4] ? cells[4].innerText.trim() : "";
   const textHtml = cells[5] ? cells[5].innerHTML : "";
 
-  // ------------------------------------------------------------------
-  // BLUE STRIP
-  // ------------------------------------------------------------------
   const blueStrip = document.createElement("div");
   blueStrip.classList.add("footer-top", "bg-primary");
 
@@ -35,87 +33,47 @@ export default function decorate(block) {
     "gap-2",
   );
 
-  // IMAGE WRAPPER
-  const imgWrap = document.createElement("div");
-  imgWrap.classList.add("footertopbar-image");
+  item.innerHTML = `
+      <div class="footertopbar-image">
+        ${image ? `<img src="${image}" alt="">` : ""}
+      </div>
 
-  if (image) {
-    const imgEl = document.createElement("img");
-    imgEl.src = image;
-    imgEl.alt = "";
-    imgWrap.appendChild(imgEl);
-  }
-  item.appendChild(imgWrap);
+      <div class="ms-md-auto social-links d-flex gap-2">
+        ${
+          linkedin
+            ? `<a href="${linkedin}"><img src="/icons/linkedin-icon.svg" alt="Linkedin" /></a>`
+            : ""
+        }
+        ${
+          facebook
+            ? `<a href="${facebook}"><img src="/icons/facebook-icon.svg" alt="Facebook" /></a>`
+            : ""
+        }
+        ${
+          youtube
+            ? `<a href="${youtube}"><img src="/icons/youtube-icon.svg" alt="YouTube" /></a>`
+            : ""
+        }
+      </div>
 
-  // SOCIAL LINKS
-  const socialWrap = document.createElement("div");
-  socialWrap.classList.add("ms-md-auto", "social-links", "d-flex", "gap-2");
+      <div class="group-btn ms-md-0 ms-auto">
+        ${
+          buttonLabel
+            ? `<button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                 data-bs-target="#groupWebsiteCollapse" aria-expanded="false"
+                 aria-controls="groupWebsiteCollapse">${buttonLabel} <span></span></button>`
+            : ""
+        }
+      </div>
 
-  if (linkedin) {
-    const a = document.createElement("a");
-    a.href = linkedin;
-    const icon = document.createElement("img");
-    icon.src = "/icons/linkedin-icon.svg";
-    icon.alt = "Linkedin";
-    a.appendChild(icon);
-    socialWrap.appendChild(a);
-  }
-
-  if (facebook) {
-    const a = document.createElement("a");
-    a.href = facebook;
-    const icon = document.createElement("img");
-    icon.src = "/icons/facebook-icon.svg";
-    icon.alt = "Facebook";
-    a.appendChild(icon);
-    socialWrap.appendChild(a);
-  }
-
-  if (youtube) {
-    const a = document.createElement("a");
-    a.href = youtube;
-    const icon = document.createElement("img");
-    icon.src = "/icons/youtube-icon.svg";
-    icon.alt = "YouTube";
-    a.appendChild(icon);
-    socialWrap.appendChild(a);
-  }
-  item.appendChild(socialWrap);
-
-  // BUTTON WRAPPER
-  const btnWrap = document.createElement("div");
-  btnWrap.classList.add("group-btn", "ms-md-0", "ms-auto");
-
-  if (buttonLabel) {
-    const btn = document.createElement("button");
-    btn.classList.add("btn", "btn-primary");
-    btn.type = "button";
-    btn.setAttribute("data-bs-toggle", "collapse");
-    btn.setAttribute("data-bs-target", "#groupWebsiteCollapse");
-    btn.setAttribute("aria-expanded", "false");
-    btn.setAttribute("aria-controls", "groupWebsiteCollapse");
-
-    btn.textContent = buttonLabel;
-
-    const span = document.createElement("span");
-    btn.appendChild(span);
-
-    btnWrap.appendChild(btn);
-  }
-  item.appendChild(btnWrap);
-
-  // FOOTER TEXT
-  const textWrap = document.createElement("div");
-  textWrap.classList.add("footertopbar-text");
-  textWrap.innerHTML = textHtml; // SAFE: this is authored content
-  item.appendChild(textWrap);
+      <div class="footertopbar-text">
+        ${textHtml}
+      </div>
+    `;
 
   blueContainer.appendChild(item);
   blueStrip.appendChild(blueContainer);
 
-  // ------------------------------------------------------------------
-  // COLLAPSE SECTION
-  // ------------------------------------------------------------------
   const collapseSection = document.createElement("div");
   collapseSection.classList.add(
     "footer-collapse",
@@ -145,7 +103,7 @@ export default function decorate(block) {
   collapseContainer.appendChild(loopRow);
   collapseSection.appendChild(collapseContainer);
 
-  // Replace content safely
+  // Replace content
   block.innerHTML = "";
   block.appendChild(blueStrip);
   block.appendChild(collapseSection);
