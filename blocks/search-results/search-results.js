@@ -252,7 +252,38 @@ export default async function decorate(block) {
     });
 
     if (!hits.length) {
-      resultsList.innerHTML = "<p>No results found.</p>";
+      list.innerHTML = `
+        <section class="no-results-section">
+          <div class="no-results">
+        
+            <div class="no-results-icon">
+              <img src="/icons/search-warning.svg" alt="No results icon" />
+            </div>
+        
+            <h2 class="no-results-title">
+              Your Search did not Return Any Results.
+            </h2>
+        
+            <p class="no-results-subtext">
+              Please check the spelling or try broader terms.
+            </p>
+        
+            <p class="no-results-browse">
+              You can also browse key sections below.
+            </p>
+        
+            <div class="no-results-divider"></div>
+        
+            <div class="no-results-links">
+              <a href="#">INVESTOR RELATIONS</a>
+              <a href="#">SUSTAINABILITY</a>
+              <a href="#">CAREERS</a>
+            </div>
+        
+            <div class="no-results-divider"></div>
+        
+          </div>
+        </section>`
       return;
     }
 
@@ -278,6 +309,37 @@ export default async function decorate(block) {
 
   } catch (e) {
     console.error("Search page failed", e);
-    block.innerHTML += "<p>Error loading search results.</p>";
+    block.innerHTML += `
+        <section class="no-results-section">
+          <div class="no-results">
+        
+            <div class="no-results-icon">
+              <img src="/icons/search-warning.svg" alt="No results icon" />
+            </div>
+        
+            <h2 class="no-results-title">
+              Your Search did not Return Any Results.
+            </h2>
+        
+            <p class="no-results-subtext">
+              Please check the spelling or try broader terms.
+            </p>
+        
+            <p class="no-results-browse">
+              You can also browse key sections below.
+            </p>
+        
+            <div class="no-results-divider"></div>
+        
+            <div class="no-results-links">
+              <a href="#">INVESTOR RELATIONS</a>
+              <a href="#">SUSTAINABILITY</a>
+              <a href="#">CAREERS</a>
+            </div>
+        
+            <div class="no-results-divider"></div>
+        
+          </div>
+        </section>`;
   }
 }
