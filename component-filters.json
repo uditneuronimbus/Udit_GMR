@@ -372,6 +372,12 @@
     "components": []
   },
   {
+    "id": "media-cards",
+    "components": [
+      "media-cards-item"
+    ]
+  },
+  {
     "id": "media-contact-header",
     "components": [
       "media-contact-item"

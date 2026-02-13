@@ -1621,6 +1621,37 @@
           }
         },
         {
+          "title": "Media Cards",
+          "id": "media-cards",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "media-cards",
+                  "model": "media-cards",
+                  "filter": "media-cards"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Media Card",
+          "id": "media-cards-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "media-cards-item",
+                  "model": "media-cards-item"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Media Contact Header",
           "id": "media-contact-header",
           "plugins": {
