@@ -359,10 +359,11 @@ export default async function decorate(block) {
 
     const imageMap = new Map();
     // Detect current language from URL path
+    // Support both 2-char codes (en, ja) and hyphenated codes (zh-cn, zh-sg)
     const pathSegments = window.location.pathname.split("/");
     let currentLang = "en"; // Default
     for (const segment of pathSegments) {
-      if (segment.length === 2 && /^[a-z]{2}$/.test(segment)) {
+      if (/^[a-z]{2}(-[a-z]{2})?$/.test(segment)) {
         currentLang = segment;
         break;
       }
