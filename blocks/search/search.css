@@ -20,11 +20,11 @@
     right: 0;
     background-size: 20px;
 }
-.page-en .btn-search,
+.page-home .btn-search,
 .page-home .btn-search {
     filter: invert(1);
 }
-.page-en .affix .btn-search,
+.page-home .affix .btn-search,
 .page-home .affix .btn-search {
     filter: invert(0);
 }

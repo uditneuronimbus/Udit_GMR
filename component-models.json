@@ -229,6 +229,30 @@
             "value": "big-padding-bottom"
           },
           {
+            "name": "Leadership Banner",
+            "value": "leadership-banner"
+          },
+          {
+            "name": "Leadership Message",
+            "value": "leadership-message"
+          },
+          {
+            "name": "Navigation Left",
+            "value": "navigation-left"
+          },
+          {
+            "name": "Navigation-Right",
+            "value": "navigation-right"
+          },
+          {
+            "name": "Sec Grid 3",
+            "value": "Sec-Grid-3"
+          },
+          {
+            "name": "Sec Grid 4",
+            "value": "Sec-Grid-4"
+          },
+          {
             "name": "Minus Margin Top",
             "value": "minus-margin-top"
           }
@@ -2511,9 +2535,10 @@
         "label": "Slide Description"
       },
       {
-        "component": "image",
-        "name": "slideImage",
-        "label": "Slide Image"
+        "component": "reference",
+        "name": "image",
+        "label": "Holdings Image",
+        "valueType": "string"
       }
     ]
   },
@@ -2928,6 +2953,97 @@
         "valueType": "string",
         "required": true,
         "rootPath": "/content/dam/gmr/animations"
+      }
+    ]
+  },
+  {
+    "id": "media-cards",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Heading",
+        "valueType": "string",
+        "defaultValue": "Media Cards"
+      },
+      {
+        "component": "richtext",
+        "name": "descriptionHead",
+        "label": "Description Head",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "media-cards-item",
+    "itemLabel": "title",
+    "fields": [
+      {
+        "component": "select",
+        "name": "networkType",
+        "label": "Network Type (For Filtering)",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "None",
+            "value": "none"
+          },
+          {
+            "name": "Group Holdings Board",
+            "value": "groupHoldingsBoard"
+          },
+          {
+            "name": "Other Images",
+            "value": "otherImages"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Holdings Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imagealt",
+        "label": "Image-ALT"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaLabel",
+        "label": "Link Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaUrl",
+        "label": "Link URL",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaLabel1",
+        "label": "Link Text1",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaUrl1",
+        "label": "Link URL1",
+        "valueType": "string"
       }
     ]
   },
