@@ -257,7 +257,7 @@ export default async function decorate(block) {
           <div class="no-results">
         
             <div class="no-results-icon">
-              <img src="/icons/search-warning.svg" alt="No results icon" />
+              <img src="../../icons/logo.svg" alt="No results icon" />
             </div>
         
             <h2 class="no-results-title">
@@ -314,7 +314,7 @@ export default async function decorate(block) {
           <div class="no-results">
         
             <div class="no-results-icon">
-              <img src="/icons/search-warning.svg" alt="No results icon" />
+              <img src="../../icons/logo.svg" alt="No results icon" />
             </div>
         
             <h2 class="no-results-title">
