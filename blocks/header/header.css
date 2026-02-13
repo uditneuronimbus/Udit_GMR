@@ -147,7 +147,7 @@ header.header-wrapper {
 /********************************************
   MEGA MENU PANEL (LEVEL 1)
 *********************************************/
-.nav-brand ul > li > h4,
+.nav-brand ul > li > .menu-title,
 .nav-brand ul > li > p:nth-child(3),
 .nav-brand ul > li > ul {
     display: none !important;
@@ -226,7 +226,7 @@ header.header-wrapper {
     overflow: hidden;
 }
 
-.mega-left h4 {
+.mega-left .menu-title {
     font-size: 0.7rem;
     font-weight: 700;
     margin: 0;
