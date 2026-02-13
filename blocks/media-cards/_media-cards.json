@@ -83,8 +83,8 @@
                 },
                 {
                     "component": "text",
-                    "name": "imageAlt",
-                    "label": "Image-Alt"
+                    "name": "imagealt",
+                    "label": "Image-ALT"
                 },
                 {
                     "component": "text",
