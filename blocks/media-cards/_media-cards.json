@@ -53,7 +53,7 @@
         },
         {
             "id": "media-cards-item",
-            "itemLabel": "airportName",
+            "itemLabel": "title",
             "fields": [
                 {
                     "component": "select",
