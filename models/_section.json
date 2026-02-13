@@ -123,6 +123,14 @@
               "value": "navigation-right"
             },
             {
+              "name": "Sec Grid 3",
+              "value": "Sec-Grid-3"
+            },
+            {
+              "name": "Sec Grid 4",
+              "value": "Sec-Grid-4"
+            },
+            {
               "name": "Minus Margin Top",
               "value": "minus-margin-top"
             }
@@ -190,7 +198,8 @@
         "contact-reachout-list",
         "image-scroll-card",
         "key-highlight-button",
-        "lottie-animation"
+        "lottie-animation",
+        "media-cards"
       ]
     }
   ]
