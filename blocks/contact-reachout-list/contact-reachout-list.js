@@ -83,6 +83,7 @@ export default function decorate(block) {
           ${headingText ? `<h2 class="contact-reachout-heading">${headingText}</h2>` : ''}
           ${descHTML?.trim() ? `<div class="contact-reachout-description">${descHTML}</div>` : ''}
           ${itemsHTML ? `<div class="contact-reachout-items">${itemsHTML}</div>` : ''}
+          <a href="/en/contact-us" title="Contact Us" class="btn btn-primary mt-4">Contact Us</a>
         </div>
       </div>
     </div>
