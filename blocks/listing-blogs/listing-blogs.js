@@ -36,6 +36,50 @@ export default async function decorate(block) {
       <div class="press-layout desktop-layout">
         <aside class="press-filter-panel">
           <h4>Filter By</h4>
+          
+          <!-- Year -->
+          <div class="filter-group filter-group-collapsible">
+            <button class="filter-toggle active" data-target="year-options">
+              <span>Year - <span class="selected-year">${defaultYear}</span></span>
+              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="filter-options" id="year-options">
+              <label class="filter-option active">
+                <input type="radio" name="desktop-year" value="" checked>
+                <span>All Years</span>
+              </label>
+              ${dynamicYears.map(y =>
+                `<label class="filter-option">
+                  <input type="radio" name="desktop-year" value="${y}">
+                  <span>${y}</span>
+                </label>`
+              ).join("")}
+            </div>
+          </div>
+
+          <!-- Month -->
+          <div class="filter-group filter-group-collapsible">
+            <button class="filter-toggle" data-target="month-options">
+              <span>Month</span>
+              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="filter-options hidden" id="month-options">
+              <label class="filter-option active">
+                <input type="radio" name="desktop-month" value="" checked>
+                <span>All Months</span>
+              </label>
+              ${dynamicMonths.map(m =>
+                `<label class="filter-option">
+                  <input type="radio" name="desktop-month" value="${m}">
+                  <span>${m}</span>
+                </label>`
+              ).join("")}
+            </div>
+          </div>
 
           <!-- Category -->
           <div class="filter-group filter-group-collapsible">
