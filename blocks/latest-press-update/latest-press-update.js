@@ -18,9 +18,31 @@ function formatDate(dateString) {
     year: "numeric",
   });
 }
+function getCategoryFromURL() {
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  if (!parts.length) return "";
+
+  let slug = parts[parts.length - 1].toLowerCase();
+
+  // Custom overrides
+  const slugMap = {
+    "blogs": "blog",
+  };
+
+  return slugMap[slug] || slug;
+}
 
 export default async function decorate(block) {
-  const labelText = block.textContent.trim() || "LATEST PRESS UPDATE";
+  const limit = 3;
+  const offset = 0;
+  const category = getCategoryFromURL();
+  let labeltitle = '';
+  if (category === "press-release") {
+    labeltitle = "LATEST PRESS RELEASE";
+  } else if (category === "blog") {
+    labeltitle = "LATEST INSIGHTS";
+  }
+  let labelText = block.textContent.trim() || labeltitle;
   block.innerHTML = "";
   
 
@@ -41,10 +63,6 @@ export default async function decorate(block) {
      Fetch latest press
   ================================ */
   try {
-      const limit = 3;
-      const offset = 0;
-      const category = "press-release";
-
      const apiUrl =
           `${getApiHost()}/api/v1/web/gmr-api/recent-posts` +
           `?limit=${encodeURIComponent(limit)}` +
@@ -63,7 +81,7 @@ export default async function decorate(block) {
     const item = items[0];
     
     if (!item) {
-      wrapper.innerHTML = "<p>No press updates found.</p>";
+      wrapper.innerHTML = `<p>No ${category} updates found.</p>`;
       return;
     }
 
@@ -124,7 +142,7 @@ export default async function decorate(block) {
       </div>
     `;
   } catch (err) {
-    console.error("Latest press update error:", err);
+    console.error(`Latest ${category} update error:`, err);
     wrapper.innerHTML = "<p>Error loading press update.</p>";
   }
 }
