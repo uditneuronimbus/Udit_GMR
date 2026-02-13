@@ -107,6 +107,22 @@
               "value": "big-padding-bottom"
             },
             {
+              "name": "Leadership Banner",
+              "value": "leadership-banner"
+            },
+            {
+              "name": "Leadership Message",
+              "value": "leadership-message"
+            },
+            {
+              "name": "Navigation Left",
+              "value": "navigation-left"
+            },
+            {
+              "name": "Navigation-Right",
+              "value": "navigation-right"
+            },
+            {
               "name": "Minus Margin Top",
               "value": "minus-margin-top"
             }
