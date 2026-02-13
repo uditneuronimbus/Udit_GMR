@@ -474,7 +474,8 @@ export default async function decorate(block) {
       const logoPictures = navBrand.querySelectorAll("picture");
       logoPictures.forEach((picture) => {
         const logoLink = document.createElement("a");
-        logoLink.href = `/${currentLang}/`;
+        // Use absolute URL to prevent duplicate language codes in path
+        logoLink.href = `${window.location.origin}/${currentLang}/`;
         logoLink.setAttribute("aria-label", "GMR Home");
         logoLink.className = "navbar-logo";
 
