@@ -359,10 +359,11 @@ export default async function decorate(block) {
 
     const imageMap = new Map();
     // Detect current language from URL path
+    // Support both 2-char codes (en, ja) and hyphenated codes (zh-cn, zh-sg)
     const pathSegments = window.location.pathname.split("/");
     let currentLang = "en"; // Default
     for (const segment of pathSegments) {
-      if (segment.length === 2 && /^[a-z]{2}$/.test(segment)) {
+      if (/^[a-z]{2}(-[a-z]{2})?$/.test(segment)) {
         currentLang = segment;
         break;
       }
@@ -473,7 +474,8 @@ export default async function decorate(block) {
       const logoPictures = navBrand.querySelectorAll("picture");
       logoPictures.forEach((picture) => {
         const logoLink = document.createElement("a");
-        logoLink.href = `/${currentLang}/`;
+        // Use absolute URL to prevent duplicate language codes in path
+        logoLink.href = `${window.location.origin}/${currentLang}/`;
         logoLink.setAttribute("aria-label", "GMR Home");
         logoLink.className = "navbar-logo";
 
