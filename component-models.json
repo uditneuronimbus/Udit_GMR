@@ -4012,5 +4012,9 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "listing-blog",
+    "fields": []
   }
 ]

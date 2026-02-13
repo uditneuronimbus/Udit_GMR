@@ -65,7 +65,8 @@
       "key-highlight-button",
       "latest-press-update",
       "lottie-animation",
-      "listing-press"
+      "listing-press",
+      "listing-blog"
     ]
   },
   {
@@ -487,5 +488,9 @@
     "components": [
       "value-cards"
     ]
+  },
+  {
+    "id": "listing-blog",
+    "components": []
   }
 ]
