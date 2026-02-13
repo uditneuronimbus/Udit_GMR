@@ -35,11 +35,9 @@ export default function decorate(block) {
 
   /* ---------- BUTTON FIX ---------- */
   if (buttonRow) {
-    // Franklin rows usually have columns (divs). 
     // We map all divs inside the row to get their text content.
     const cols = [...buttonRow.children];
     
-    // Most common Franklin structure: Col 1 = Label, Col 2 = URL
     const label = cols[0]?.textContent?.trim();
     const url = cols[1]?.textContent?.trim() || cols[1]?.querySelector('a')?.href;
 
@@ -50,7 +48,6 @@ export default function decorate(block) {
         </a>
       `;
     } else if (label) {
-      // Fallback if only label exists (e.g., if it's already a link)
       const link = buttonRow.querySelector('a');
       headerRight.innerHTML = `
         <a href="${link ? link.href : '#'}" class="btn btn-primary">
@@ -64,7 +61,6 @@ export default function decorate(block) {
   headerRow.append(headerLeft, headerRight);
   wrapper.append(headerRow);
 
-  /* ---------- Cards Grid ---------- */
   /* ---------- Cards Grid ---------- */
   const grid = document.createElement("div");
   grid.className = "row g-4";
@@ -113,6 +109,12 @@ export default function decorate(block) {
   section.append(wrapper);
   block.append(section);
 }
+
+
+
+
+
+
 
 
 
