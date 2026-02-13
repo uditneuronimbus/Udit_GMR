@@ -3006,8 +3006,8 @@
       },
       {
         "component": "text",
-        "name": "imageAlt",
-        "label": "Alt-Text"
+        "name": "imagesAlt",
+        "label": "Alt-Text1"
       },
       {
         "component": "text",
