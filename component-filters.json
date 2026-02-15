@@ -63,10 +63,6 @@
       "contact-reachout-list",
       "image-scroll-card",
       "key-highlight-button",
-      "latest-press-update",
-      "lottie-animation",
-      "listing-press",
-      "listing-blog"
       "lottie-animation",
       "media-cards"
     ]
@@ -369,6 +365,10 @@
     ]
   },
   {
+    "id": "listing-blog",
+    "components": []
+  },
+  {
     "id": "listing-press",
     "components": []
   },
@@ -496,9 +496,5 @@
     "components": [
       "value-cards"
     ]
-  },
-  {
-    "id": "listing-blog",
-    "components": []
   }
 ]
