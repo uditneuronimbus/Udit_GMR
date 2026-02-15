@@ -29,13 +29,13 @@ export default function decorate(block) {
      BUILD RUNTIME
   ================================= */
   const runtime = document.createElement('div');
-  runtime.className = 'values-runtime';
+  runtime.className = 'values-runtime spacer';
 
   const section = document.createElement('div');
-  section.className = 'values-section';
+  section.className = 'values-section container';
 
   const titleEl = document.createElement('h2');
-  titleEl.className = 'values-title';
+  titleEl.className = 'sec-title text-center mb-5';
   titleEl.textContent = sectionTitle;
 
   const cardsWrapper = document.createElement('div');

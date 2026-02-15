@@ -11,27 +11,18 @@
    WRAPPER & SECTION
 ================================ */
 .values-and-beliefs-wrapper {
-  margin-bottom: 64px;
-  background: var(--light-grey);
+  background: var(--lgrey);
 }
 
 .values-and-beliefs .block {
   background-color: var(--lgrey) !important;
 }
 
-.values-section {
+/* .values-section {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px 64px;
-}
-
-.values-title {
-  text-align: center;
-  font-size: 36px;
-  font-weight: 700;
-  margin-bottom: 40px;
-  color: #000;
-}
+} */
 
 /* ===============================
    GRID
