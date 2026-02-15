@@ -255,6 +255,10 @@
           {
             "name": "Minus Margin Top",
             "value": "minus-margin-top"
+          },
+          {
+            "name": "Swiper Slider",
+            "value": "sec-swiper-slider"
           }
         ]
       }
