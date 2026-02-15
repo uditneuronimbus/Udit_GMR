@@ -13,6 +13,7 @@
 .leadership-message.media-cards-container .card .card-body .card-title { font-size: var(--fs-medium); font-weight: 600; margin-bottom: .5rem; }
 .leadership-message.media-cards-container .card .card-body .card-text { font-size: var(--fs-normal); margin-bottom: .5rem; }
 .leadership-message.media-cards-container .card .card-body .card-cta { position: absolute; bottom: 15px; left: 17px; z-index: 2; }
+.sec-swiper-slider .media-cards-wrapper .swiper-pagination { position:static; margin-top: 1.5rem;}
 
 @media (max-width:767px){
 .overview-runtime{padding:60px 0}
