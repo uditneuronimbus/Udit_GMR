@@ -2939,10 +2939,6 @@
     ]
   },
   {
-    "id": "listing-blog",
-    "fields": []
-  },
-  {
     "id": "listing-press",
     "fields": []
   },
@@ -4132,5 +4128,9 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "listing-blog",
+    "fields": []
   }
 ]

@@ -146,7 +146,7 @@ export default function decorate(block) {
       div.className = `overview-card ${colClass} mt-4`;
 
       div.innerHTML = `
-        <div class="card card-ui h-100 p-4">
+        <div class="card card-ui h-100 p-3">
 
           ${
             card.image
@@ -165,22 +165,24 @@ export default function decorate(block) {
                 ? `<p class="card-text">${card.description}</p>`
                 : ""
             }
-
+            <div class="card-cta">
+            
             ${
               card.link1
-                ? `<a href="${card.link1}" class="btn-link download">
+                ? `<div><a href="${card.link1}" class="btn-link download">
                     ${card.ctaLabel1 || "DOWNLOAD"}
-                  </a>`
+                  </a></div>`
                 : ""
             }
 
             ${
               card.link2
-                ? `<a href="${card.link2}" class="btn-link download">
+                ? `<div><a href="${card.link2}" class="btn-link download">
                     ${card.ctaLabel2 || "DOWNLOAD"}
-                  </a>`
+                  </a></div>`
                 : ""
             }
+            </div>
 
           </div>
         </div>
