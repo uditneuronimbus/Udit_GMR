@@ -11,7 +11,7 @@
 ===================================================== */
 .mfl-runtime {
   padding: 80px 0;
-  background: #ffffff;
+  background: var(--white);
 }
 
 .mfl-container {
@@ -211,7 +211,7 @@
 /* =====================================================
    MOBILE
 ===================================================== */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .mfl-runtime {
     padding: 60px 0;
   }

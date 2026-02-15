@@ -8,48 +8,65 @@ export default async function decorate(block) {
     document.body.classList.contains('aem-AuthorLayer-Edit') ||
     window.location.search.includes('wcmmode=edit');
 
+  const rows = [...block.children];
+  if (!rows.length) return;
+
   /* ================================
-     COLLECT AUTHORED ITEMS
+     1️⃣ GET SECTION TITLE (BLOCK FIELD)
   ================================ */
-  const items = [...block.children].filter((child) => {
+  let sectionTitle = '';
+
+  const firstRow = rows[0];
+  if (firstRow?.children?.length === 1 && !firstRow.querySelector('img')) {
+    sectionTitle = firstRow.textContent.trim();
+  }
+
+  /* ================================
+     2️⃣ COLLECT AUTHORED ITEMS
+  ================================ */
+  const items = rows.filter((row, index) => {
+    if (index === 0 && sectionTitle) return false; // skip title row
+
     return (
-      child.tagName === 'DIV' &&
-      child.children.length >= 4 &&
-      child.querySelector('img, picture')
+      row.tagName === 'DIV' &&
+      row.children.length >= 4 &&
+      row.querySelector('img, picture')
     );
   });
 
   if (!items.length) return;
 
   /* ================================
-     READ AUTHORED CONTENT
+     3️⃣ READ ITEM DATA
   ================================ */
-  const slidesData = items
-    .map((item) => {
-      const cells = [...item.children];
-      if (cells.length < 4) return null;
+  const slidesData = items.map((item) => {
+    const cells = [...item.children];
 
-      return {
-        image: cells[0].innerHTML.trim(),
-        subtitle: cells[1].textContent.trim(),
-        message: cells[2].innerHTML.trim(),
-        designation: cells[3].textContent.trim(),
-      };
-    })
-    .filter(Boolean);
+    return {
+      image: cells[0].innerHTML.trim(),
+      subtitle: cells[1].textContent.trim(),
+      message: cells[2].innerHTML.trim(),
+      designation: cells[3].textContent.trim(),
+    };
+  });
 
   /* ================================
-     HIDE AUTHORED CONTENT (NOT DELETE)
+     4️⃣ BUILD RUNTIME UI
   ================================ */
   block.classList.add('mfl-initialized');
 
-  /* ================================
-     BUILD RUNTIME SWIPER
-  ================================ */
   const container = document.createElement('div');
   container.className = 'mfl-runtime';
 
   container.innerHTML = `
+    ${
+      sectionTitle
+        ? `<div class="mfl-section-header mb-5">
+            <h2 class="sec-title">${sectionTitle}</h2>
+           </div>`
+        : ''
+    }
+
     <div class="swiper mfl-swiper">
       <div class="swiper-wrapper"></div>
 
@@ -73,7 +90,7 @@ export default async function decorate(block) {
         <div class="mfl-image">${data.image}</div>
 
         <div class="mfl-content">
-          <h2 class="mfl-title">${data.subtitle}</h2>
+          <h3 class="mfl-title">${data.subtitle}</h3>
           <div class="mfl-message">${data.message}</div>
           <div class="mfl-author">${data.designation}</div>
         </div>
@@ -84,12 +101,12 @@ export default async function decorate(block) {
   });
 
   /* ================================
-     DO NOT INIT SWIPER IN EDIT MODE
+     5️⃣ AUTHOR MODE SAFE
   ================================ */
   if (isAuthorMode) return;
 
   /* ================================
-     LOAD SWIPER & INIT
+     6️⃣ LOAD SWIPER
   ================================ */
   await loadCSS(SWIPER_CSS);
   await loadScript(SWIPER_JS);
