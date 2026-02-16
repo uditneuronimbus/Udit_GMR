@@ -4179,5 +4179,13 @@
         "label": "Section Category"
       }
     ]
+  },
+  {
+    "id": "story-update-page",
+    "fields": []
+  },
+  {
+    "id": "hero-press",
+    "fields": []
   }
 ]
