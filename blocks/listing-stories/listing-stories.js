@@ -264,7 +264,7 @@ export default async function decorate(block) {
       <article class="press-card">
         <div class="press-card-body">
           <div class="press-card-image">
-          <a href="news-update?post=${link}">  
+          <a href="story-update?post=${link}">  
           <img
               src="${item.storyImage?._publishUrl || ""}"
               alt="${item.title || ""}"
@@ -281,7 +281,7 @@ export default async function decorate(block) {
           </div>
 
           <div class="press-card-footer">
-            <a href="news-update?post=${link}" class="btn-link">
+            <a href="story-update?post=${link}" class="btn-link">
               READ MORE
             </a>
           </div>

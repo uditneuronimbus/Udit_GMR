@@ -1,6 +1,6 @@
-import { getNewsDetail } from "../../scripts/news-api.js";
 import { formatDate } from "../../scripts/common.js";
 import { getSlugFromURL } from "../../scripts/common.js";
+import { getApiHost } from "../../scripts/api.js";
 
 const PUBLISH_DOMAIN =
   "https://publish-p168597-e1803019.adobeaemcloud.com";
@@ -19,6 +19,7 @@ function fixImageSrc(html) {
 
 export default async function decorate(block) {
   const slug = getSlugFromURL();
+  
   const currentUrl = window.location.href;
 
   block.innerHTML = "";
@@ -78,50 +79,28 @@ export default async function decorate(block) {
 
   const contentWrapper = container.querySelector(".news-detail-wrapper");
 
-    function getStoryDetail() {
-        if (newsPromise) {
-        return newsPromise;
-        }
-    
-        const slug = getSlugFromURL();
-    
-        if (!slug) {
-        newsPromise = Promise.resolve(null);
-        return newsPromise;
-        }
-    
-        const apiUrl =
-        `${getApiHost()}/api/v1/web/gmr-api/story-update` +
-        `?slugUrl=${encodeURIComponent(slug)}`;
-    
-        newsPromise = fetch(apiUrl)
-        .then((res) => {
-            if (!res.ok) {
-            throw new Error(`News API failed: ${res.status}`);
-            }
-            return res.json();
-        })
-        .then((json) => {
-            return json?.data?.data?.newsList?.items?.[0] || null;
-        })
-        .catch((err) => {
-            console.error("news-api error:", err);
-            newsPromise = null; // allow retry if needed
-            return null;
-        });
-    
-        return newsPromise;
-    }
     
 
   /* ================================
      Fetch news detail
   ================================ */
   try {
-    const item = await getStoryDetail();
+    const apiUrl =
+        `${getApiHost()}/api/v1/web/gmr-api/story-details` +
+        `?slugUrl=${encodeURIComponent(slug)}`;
+
+    console.log("________________________", apiUrl);
+    
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(res.status);
+
+    const json = await res.json();
+    const items = json?.data?.data?.successStoryList?.items || [];
+
+    const item = items[0] || null;
 
     if (!item) {
-      contentWrapper.innerHTML = "<p>News not found.</p>";
+      contentWrapper.innerHTML = "<p>Story not found.</p>";
       return;
     }
 
