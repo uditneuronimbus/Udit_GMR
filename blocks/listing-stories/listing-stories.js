@@ -262,17 +262,18 @@ export default async function decorate(block) {
 
     return `
       <article class="press-card">
-        <div class="press-card-image">
-        <a href="news-update?post=${link}">  
-        <img
-            src="${item.storyImage?._publishUrl || ""}"
-            alt="${item.title || ""}"
-            loading="lazy"
-          />
-          </a>
-        </div>
-
         <div class="press-card-body">
+          <div class="press-card-image">
+          <a href="news-update?post=${link}">  
+          <img
+              src="${item.storyImage?._publishUrl || ""}"
+              alt="${item.title || ""}"
+              loading="lazy"
+            />
+            </a>
+          </div>
+
+        
           <h3 class="press-card-title">${title}</h3>
 
           <div class="press-card-meta">
@@ -640,10 +641,6 @@ async function fetchApiData(limit = 2, offset = 0, orderby = "desc") {
   
   const json = await res.json();
   const items = json?.data?.data?.successStoryList?.items || [];
-
-  
-  console.log("_______________________________________________", items);
-  
   
   return items;
 }

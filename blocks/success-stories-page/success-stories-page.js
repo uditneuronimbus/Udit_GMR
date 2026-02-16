@@ -15,8 +15,6 @@ export default async function decorate(block) {
 
   const title = titleEl?.textContent?.trim() || "";
   const description = descEl?.innerHTML || "";
-  const ctaText = ctaTextEl?.textContent?.trim() || "";
-  const ctaLink = ctaLinkEl?.textContent?.trim() || "#";
   const category = categoryEl?.textContent?.trim().toLowerCase() || "";
 
   /* -----------------------------
@@ -25,6 +23,7 @@ export default async function decorate(block) {
   const runtime = document.createElement("div");
   runtime.className = "success-stories-runtime container";
 
+  block.innerHTML = "";
   block.append(runtime);
   block.classList.add("success-stories-initialized");
 
@@ -37,10 +36,6 @@ export default async function decorate(block) {
       <div class="col-lg-4">
         <h2 class="text-primary sec-title">${title}</h2>
         <div class="sec-desc">${description}</div>
-        <div class="my-5">
-          <a href="${ctaLink}" class="btn btn-primary">${ctaText}</a>
-        </div>
-
         <div class="swiper-button">
           <button class="swiper-button-prev"></button>
 
