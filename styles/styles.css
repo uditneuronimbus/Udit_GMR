@@ -332,4 +332,5 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .navigation-right .default-content-wrapper{right:0}
 .leadership-message .default-content-wrapper{padding-bottom:2.5rem!important;margin-bottom:2.5rem}
 .navigation-right.leadership-message{margin-top:-80px}
+.pt-0.message-from-leadership-container .mfl-runtime { padding-bottom: 0; }
 }

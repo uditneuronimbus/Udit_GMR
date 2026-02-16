@@ -145,7 +145,28 @@ export default function decorate(block) {
   const closeModalBtn = runtime.querySelector('.close-modal');
 
   /* ================================
-     6️⃣ Data Collection & Card Building
+     6️⃣ Create No Awards Message Elements
+  ================================ */
+  const createNoAwardsMessage = () => {
+    const noAwardsCard = document.createElement('div');
+    noAwardsCard.className = 'award-card no-awards-message';
+    noAwardsCard.style.display = 'none';
+    noAwardsCard.innerHTML = `
+      <div class="award-content text-center">
+        <h3 class="mb-0">No Awards Found</h3>
+      </div>
+    `;
+    return noAwardsCard;
+  };
+
+  const desktopNoAwardsMsg = createNoAwardsMessage();
+  const mobileNoAwardsMsg = createNoAwardsMessage();
+  
+  desktopList.appendChild(desktopNoAwardsMsg);
+  mobileList.appendChild(mobileNoAwardsMsg);
+
+  /* ================================
+     7️⃣ Data Collection & Card Building
   ================================ */
   const years = new Set();
   const categories = new Set();
@@ -268,7 +289,7 @@ export default function decorate(block) {
   });
 
   /* ================================
-     7️⃣ Populate Filters
+     8️⃣ Populate Filters
   ================================ */
   const sortedYears = Array.from(years).sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
   const sortedCategories = Array.from(categories).sort();
@@ -305,7 +326,7 @@ export default function decorate(block) {
   });
 
   /* ================================
-     8️⃣ State Management
+     9️⃣ State Management
   ================================ */
   const state = {
     year: "",
@@ -315,9 +336,19 @@ export default function decorate(block) {
   };
 
   /* ================================
-     9️⃣ Filter Functions
+     🔟 Filter Functions
   ================================ */
-  function applyFilter(yearVal, catVal, cards) {
+  function checkAndShowNoAwardsMessage(messageElement, cards) {
+    const visibleCards = cards.filter(card => card.style.display !== "none");
+    
+    if (visibleCards.length === 0) {
+      messageElement.style.display = "block";
+    } else {
+      messageElement.style.display = "none";
+    }
+  }
+
+  function applyFilter(yearVal, catVal, cards, messageElement) {
     state.year = yearVal;
     state.category = catVal;
 
@@ -327,6 +358,8 @@ export default function decorate(block) {
       card.style.display = yearMatch && catMatch ? "" : "none";
     });
 
+    // Check if any awards are visible
+    checkAndShowNoAwardsMessage(messageElement, cards);
     updateButtonText();
   }
 
@@ -390,12 +423,12 @@ export default function decorate(block) {
   }
 
   /* ================================
-     🔟 Event Listeners
+     1️⃣1️⃣ Event Listeners
   ================================ */
   // Desktop Filters
   yearSelectDesktop.addEventListener("change", () => {
     const activeCat = categoryListDesktop.querySelector(".active")?.dataset.category || "all";
-    applyFilter(yearSelectDesktop.value, activeCat, cardsDesktop);
+    applyFilter(yearSelectDesktop.value, activeCat, cardsDesktop, desktopNoAwardsMsg);
   });
 
   categoryListDesktop.addEventListener("click", e => {
@@ -404,7 +437,7 @@ export default function decorate(block) {
     categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
     e.target.classList.add("active");
 
-    applyFilter(yearSelectDesktop.value, e.target.dataset.category, cardsDesktop);
+    applyFilter(yearSelectDesktop.value, e.target.dataset.category, cardsDesktop, desktopNoAwardsMsg);
   });
 
   // Mobile Filters
@@ -429,7 +462,7 @@ export default function decorate(block) {
 
   // Apply Button
   applyButton.addEventListener('click', () => {
-    applyFilter(state.tempYear, state.tempCategory, cardsMobile);
+    applyFilter(state.tempYear, state.tempCategory, cardsMobile, mobileNoAwardsMsg);
     closeModal();
   });
 
@@ -441,11 +474,17 @@ export default function decorate(block) {
   });
 
   /* ================================
-     1️⃣1️⃣ Initialize
+     1️⃣2️⃣ Initialize
   ================================ */
-  // Set initial state (show all)
-  applyFilter("", "all", cardsDesktop);
-  applyFilter("", "all", cardsMobile);
+  // Check if there are any awards
+  if (authoredItems.length === 0) {
+    desktopNoAwardsMsg.style.display = "block";
+    mobileNoAwardsMsg.style.display = "block";
+  } else {
+    // Set initial state (show all)
+    applyFilter("", "all", cardsDesktop, desktopNoAwardsMsg);
+    applyFilter("", "all", cardsMobile, mobileNoAwardsMsg);
+  }
 
   // Initialize desktop UI
   yearSelectDesktop.value = "";
@@ -453,6 +492,4 @@ export default function decorate(block) {
   categoryListDesktop.querySelector('li[data-category="all"]').classList.add("active");
 
   console.log("Awards List block initialized");
-  
-  
 }
