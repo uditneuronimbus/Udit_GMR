@@ -1,4 +1,5 @@
 import { getNewsDetail } from "../../scripts/news-api.js";
+import { getApiHost } from "../../scripts/api.js";
 
 // const PUBLISH_DOMAIN = "https://publish-p168597-e1803019.adobeaemcloud.com";
 
@@ -199,21 +200,26 @@ export default async function decorate(block) {
   const contentWrapper = container.querySelector(".news-detail-wrapper");
 
   try {
-    // const apiUrl =
-    //   `${getApiHost()}/api/v1/web/gmr-api/news-details` +
-    //   `?slugUrl=${encodeURIComponent(slug)}`;
+    const apiUrl =
+      `${getApiHost()}/api/v1/web/gmr-api/story-details` +
+      `?slugUrl=${encodeURIComponent(slug)}`;
 
-    // const res = await fetch(apiUrl);
-    // if (!res.ok) throw new Error(`API error ${res.status}`);
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(`API error ${res.status}`);
 
-    // const json = await res.json();
-    const item = await getNewsDetail();
+    const json = await res.json();
+    const items = json?.data?.data?.successStoryList?.items || [];
+
+    if (!items.length) {
+      cardsWrapper.innerHTML = "<p>No news found.</p>";
+      return;
+    }
+    const item = items[0];
 
     if (!item) {
       contentWrapper.innerHTML = "<p>News not found.</p>";
       return;
     }
-    console.log("_____________________________", item);
     
 
     /* Inject Hero */
