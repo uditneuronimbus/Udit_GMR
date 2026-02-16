@@ -69,7 +69,8 @@
       "listing-blog",
       "listing-stories",
       "lottie-animation",
-      "media-cards"
+      "media-cards",
+      "success-stories-page"
     ]
   },
   {
@@ -508,6 +509,10 @@
   },
   {
     "id": "listing-stories",
+    "components": []
+  },
+  {
+    "id": "success-stories-page",
     "components": []
   }
 ]
