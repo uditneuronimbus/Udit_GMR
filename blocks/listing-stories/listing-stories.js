@@ -13,7 +13,7 @@ export default async function decorate(block) {
   const dynamicSubCats = data.subCategories || [];
 
   const defaultYear = "All";
-  const limit = 2;
+  const limit = 10;
   
   /* ================= State Management ================= */
   let state = {
@@ -630,7 +630,7 @@ export default async function decorate(block) {
 
 /* ================= API Functions ================= */
 
-async function fetchApiData(limit = 2, offset = 0, orderby = "desc") {
+async function fetchApiData(limit = 10, offset = 0, orderby = "desc") {
   const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/success-stories` +
     `?limit=${encodeURIComponent(limit)}` +
     `&offset=${encodeURIComponent(offset)}` +
