@@ -26,12 +26,13 @@ export default async function decorate(block) {
   block.innerHTML = "";
   block.append(runtime);
   block.classList.add("success-stories-initialized");
+  block.className = "spacer";
 
   /* -----------------------------
      3️⃣ Layout
      ----------------------------- */
   runtime.innerHTML = `
-  <div class="inner-container spacer">
+  <div class="inner-container">
     <div class="row">
       <div class="col-lg-4">
         <h2 class="text-primary sec-title">${title}</h2>
