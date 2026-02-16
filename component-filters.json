@@ -452,9 +452,7 @@
   },
   {
     "id": "press-hero",
-    "components": [
-      "press-hero"
-    ]
+    "components": []
   },
   {
     "id": "press-nav",
