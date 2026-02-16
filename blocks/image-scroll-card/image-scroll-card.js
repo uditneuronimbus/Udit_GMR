@@ -48,7 +48,7 @@ export default function decorate(block) {
   /* Header */
   if (heading || description) {
     const header = document.createElement('div');
-    header.className = 'isc-header';
+    header.className = 'col-md-7 text-center mx-auto mb-3 isc-header';
 
     if (heading) {
       const h2 = document.createElement('h2');

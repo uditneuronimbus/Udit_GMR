@@ -74,6 +74,7 @@
       "success-stories-page",
       "story-update-page",
       "hero-press"
+      "success-stories-page"
     ]
   },
   {
@@ -458,9 +459,7 @@
   },
   {
     "id": "press-hero",
-    "components": [
-      "press-hero"
-    ]
+    "components": []
   },
   {
     "id": "press-nav",
