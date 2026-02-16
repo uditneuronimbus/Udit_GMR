@@ -1,16 +1,10 @@
-.sec-title {
-    font-size: 44px;
-}
-
-
-
 .card-ui-three .card-body h3{
-    font-size: 22px;
+    font-size: var(--fs-large);
     font-weight: 500;
 }
 
 .card-ui-three .card-body p{
-    font-size: 16px;
+    font-size: var(--fs-normal);
     font-weight: 400;
     color: var(--light-grey);
 }

@@ -370,6 +370,10 @@
     ]
   },
   {
+    "id": "listing-blog",
+    "components": []
+  },
+  {
     "id": "listing-press",
     "components": []
   },

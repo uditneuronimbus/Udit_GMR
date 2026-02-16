@@ -99,6 +99,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .bg-black{background-color:var(--black)!important}
 .bg-charcoal{background-color:var(--charcoal)!important}
 .baclground-skyblue,.bg-sky-blue{background-color:var(--sky-blue)!important}
+.background-pink{background-color:var(--lpink)!important}
 .text-blue,.text-primary{color:var(--blue)!important}
 .text-red{color:var(--red)!important}
 .text-secondary,.text-yellow{color:var(--yellow)!important}
@@ -120,6 +121,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .badge.foundation{background-color:var(--green)}
 .btn-link{color:var(--lorange);text-transform:uppercase;display:inline-flex;text-decoration:none;font-weight:var(--fw-semi-bold);align-items:center;gap:.75rem;position:relative;padding:.5rem 0}
 .btn-link:after{content:"";background:url(../../icons/arrow-right-yellow.svg) no-repeat center;background-size:100%;width:6px;height:14px;transition-duration:.3s;position:relative;right:0}
+.btn-link.download:after { background:url(../../icons/download-yellow.svg) no-repeat center; width:14px;height:14px; background-size: 14px; }
 .btn-link:before{content:"";position:absolute;bottom:.25rem;left:0;width:100%;height:1px;background-color:var(--yellow);transform:scaleX(0);transform-origin:right;transition:transform .6s cubic-bezier(.19, 1, .22, 1)}
 .btn-link:focus,.btn-link:hover{color:var(--lorange)}
 .btn-link:hover:before{transform:scaleX(1);transform-origin:left}
@@ -161,7 +163,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .card-ui-one .card-body{padding:1.25rem;font-size:var(--fs-regular);color:var(--charcoal);border-radius:.5rem;background:var(--white);height:100%}
 .card-ui-one .card-title{font-size:var(--fs-medium);font-weight:var(--fw-semi-bold)}
 .awards-filter-runtime,.default-section,.leadership-message .default-content-wrapper,.page-corporate-governance .overlay-banner-container,.partners-filter-runtime,.press-listing-runtime,.spacer{padding:5rem 0}
-.big-padding-bottom .spacer{padding-bottom:10rem}
+.big-padding-bottom .spacer{padding-bottom:10rem!important;}
 .card-ui-two .card-img{border-radius:.5rem;padding:0 0 70%;margin-bottom:1rem}
 .card-ui-one .card-img img,.card-ui-three .card-img img,.card-ui-two .card-img img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition-duration:.3s}
 .card-ui-two .card-body{padding:0;font-size:var(--fs-regular);color:var(--charcoal)}
@@ -207,9 +209,12 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .apply-filter-btn{padding:20px;background:var(--white);box-shadow:0 -1px 4px rgba(0,0,0,.12)}
 .apply-btn{width:auto;min-width:95px;padding:14px;background:var(--blue);color:var(--white);border:none;border-radius:8px;cursor:pointer;font-size:var(--fs-normal);font-weight:600;transition:background-color .2s ease}
 .apply-btn:hover{background:var(--charcoal)}
-.card-img,.card-img-bottom{border-bottom-right-radius:4px;border-bottom-left-radius:4px}
-.card-img,.card-img-top{border-top-left-radius:4px;border-top-right-radius:4px}
+.card-img { overflow: hidden; border: 1px solid var(--lgrey);}
+.card-img,.card-img-bottom{border-bottom-right-radius:.5rem;border-bottom-left-radius:.5rem}
+.card-img,.card-img-top{border-top-left-radius:.5rem;border-top-right-radius:.5rem}
 .card-title{line-height:1.4}
+.card-cta { display: flex; align-items: center; }
+.card-cta > div { flex: 1;  }
 .news-updates .card-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;min-height:52px;line-height:1.4}
 .stories-swiper .card-text{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;min-height:42px}
 .card-text{min-height:42px}
@@ -262,6 +267,22 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .navigation-left.leadership-message p,.navigation-right.leadership-message p{font-size:var(--fs-regular);margin-bottom:.5rem;opacity:.5}
 .navigation-left.leadership-message h4,.navigation-right.leadership-message h4{font-size:var(--fs-medium);margin-bottom:.5rem;font-weight:800;color:var(--black)}
 .navigation-left.leadership-message h5,.navigation-right.leadership-message h5{font-size:var(--fs-normal);margin-bottom:0}
+
+/* education page */
+.background-pink.message-from-leadership-container .message-from-leadership { background: none;}
+.background-pink.message-from-leadership-container .message-from-leadership:after { display: none;}
+.background-pink.message-from-leadership-container .mfl-card { grid-template-columns: 40% 48%; }
+.minus-margin-top.message-from-leadership-container { margin-top: -4rem; padding-top: 4rem; }
+@media (min-width:768px){
+.background-pink.message-from-leadership-container .mfl-section-header { margin-bottom: -60px!important; }
+.background-pink.message-from-leadership-container .swiper { padding-top: 140px; }
+.background-pink.message-from-leadership-container .mfl-navigation { margin-top: 0; position: absolute; top: 0; right: 0; }
+}
+@media (max-width:767px){
+.background-pink.message-from-leadership-container .mfl-card { grid-template-columns: 1fr; }  
+}
+/* education page */
+
 @media (max-width:1300px){
 .businesses-section.block,.container,.default-section .default-content-wrapper,.global-leaders-aviation-wrapper,.listed-companies-wrapper,.message-from-leadership{max-width:100%;padding-left:1rem;padding-right:1rem}
 }
