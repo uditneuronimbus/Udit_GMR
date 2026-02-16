@@ -119,7 +119,9 @@ function addPageSlugClass() {
 
   // ⭐ Language-only homepage check
   // Matches /en/, /jp/, /eu/, /fr/, /de/, etc.
-  const langOnlyHome = path.length === 1 && /^[a-zA-Z]{2,3}$/.test(path[0]);
+  const langOnlyHome =
+    path.length === 1 &&
+    (/^[a-zA-Z]{2,3}$/.test(path[0]) || ["zh-sg", "zh-cn"].includes(path[0]));
 
   if (langOnlyHome) {
     document.body.classList.add("page-home");
