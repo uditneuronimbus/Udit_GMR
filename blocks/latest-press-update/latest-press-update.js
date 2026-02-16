@@ -64,10 +64,12 @@ export default async function decorate(block) {
   ================================ */
   try {
      const apiUrl =
-          `${getApiHost()}/api/v1/web/gmr-api/recent-posts` +
-          `?limit=${encodeURIComponent(limit)}` +
-          `&soffset=${encodeURIComponent(offset)}` +
-          `&category=${encodeURIComponent(category)}`;
+          `${getApiHost()}/api/v1/web/gmr-api/latest-news` +
+          `?category=${encodeURIComponent(category)}`;
+          
+
+    console.log("________________________________________", apiUrl);
+    
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`API error ${res.status}`);
 
@@ -79,6 +81,9 @@ export default async function decorate(block) {
     }
 
     const item = items[0];
+    console.log("_____________________________________________", item.description?.plaintext);
+    
+    
     
     if (!item) {
       wrapper.innerHTML = `<p>No ${category} updates found.</p>`;
@@ -105,10 +110,6 @@ export default async function decorate(block) {
           ${item.title || ""}
         </h1>
 
-        <p class="lpu-location">
-          ${item.location || item.city || "Location not specified"}
-        </p>
-
         <div class="lpu-meta">
           <span class="lpu-category badge ${categorySlug}">
             ${slugToTitle(item.subCategory || item.category || "Press")}
@@ -124,6 +125,9 @@ export default async function decorate(block) {
             ${publishDateFormatted}
           </span>
         </div>
+        <p class="lpu-description">
+          ${item.description?.plaintext || "No description available."}
+        </p>
 
         <a
           href="/en/news-update?post=${item.slugUrl}"
