@@ -289,6 +289,17 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 @media (max-width:1199px){
 .businesses-section.block,.container,.default-section .default-content-wrapper,.global-leaders-aviation-wrapper,.leadership-message,.listed-companies-wrapper,.message-from-leadership{padding-left:2rem;padding-right:2rem}
 .page-corporate-governance .banner-overlay-text .col-md-7{width:75%}
+ .navigation-left .default-content-wrapper h5, .navigation-right .default-content-wrapper h5 { display:none; }
+ .navigation-left .default-content-wrapper h4, .navigation-right .default-content-wrapper h4,  .navigation-left .default-content-wrapper p, .navigation-right .default-content-wrapper p { margin: 0; font-size:var(--fs-small); }
+ .leadership-message .default-content-wrapper{ padding: 1rem!important;}
+ .navigation-left .default-content-wrapper, .navigation-right .default-content-wrapper { width: 100%; max-width: 170px; }
+.navigation-left.leadership-message p.button-container, .navigation-right.leadership-message p.button-container { top:85px; }
+.navigation-right.leadership-message{margin-top:-115px}
+ .navigation-left .default-content-wrapper p.button-container,.navigation-right .default-content-wrapper p.button-container{display:block;transform:none}
+.leadership-banner .inner-hero-text p,.navigation-left.leadership-message p.button-container,.navigation-right.leadership-message p.button-container{display:block}
+.leadership-message h2{font-size:var(--fs-xlarge)}
+.navigation-left .default-content-wrapper{left:0}
+.navigation-right .default-content-wrapper{right:0}
 }
 @media (max-width:991px){
 .h1,h1{font-size:var(--fs-xl)}
@@ -323,14 +334,8 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .swiper-pagination-bullet-active{background:var(--blue)!important;width:24px!important}
 .sec-desc,.sec-desc p{font-size:var(--fs-normal)}
 .card-ui-one .card-body p.card-desc{min-height:inherit}
-.navigation-left .default-content-wrapper,.navigation-right .default-content-wrapper{position:static;background:0 0;padding:0;border-radius:0;width:100%}
-.leadership-message p.button-container,.navigation-left .default-content-wrapper h4,.navigation-left .default-content-wrapper h5,.navigation-left .default-content-wrapper p,.navigation-right .default-content-wrapper h4,.navigation-right .default-content-wrapper h5,.navigation-right .default-content-wrapper p{display:none}
-.navigation-left .default-content-wrapper p.button-container,.navigation-right .default-content-wrapper p.button-container{display:block;transform:none}
-.leadership-banner .inner-hero-text p,.navigation-left.leadership-message p.button-container,.navigation-right.leadership-message p.button-container{display:block}
-.leadership-message h2{font-size:var(--fs-xlarge)}
-.navigation-left .default-content-wrapper{left:0}
-.navigation-right .default-content-wrapper{right:0}
-.leadership-message .default-content-wrapper{padding-bottom:2.5rem!important;margin-bottom:2.5rem}
-.navigation-right.leadership-message{margin-top:-80px}
+/*.navigation-left .default-content-wrapper,.navigation-right .default-content-wrapper{position:static;background:0 0;padding:0;border-radius:0;width:100%}
+ .leadership-message p.button-container,.navigation-left .default-content-wrapper h4,.navigation-left .default-content-wrapper h5,.navigation-left .default-content-wrapper p,.navigation-right .default-content-wrapper h4,.navigation-right .default-content-wrapper h5,.navigation-right .default-content-wrapper p{display:none} */
+ .leadership-message { padding: 0;}
 .pt-0.message-from-leadership-container .mfl-runtime { padding-bottom: 0; }
 }
