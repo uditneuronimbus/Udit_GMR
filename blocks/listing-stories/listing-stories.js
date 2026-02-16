@@ -13,7 +13,7 @@ export default async function decorate(block) {
   const dynamicSubCats = data.subCategories || [];
 
   const defaultYear = "All";
-  const limit = 10;
+  const limit = 2;
   
   /* ================= State Management ================= */
   let state = {
@@ -54,28 +54,6 @@ export default async function decorate(block) {
                 `<label class="filter-option">
                   <input type="radio" name="desktop-year" value="${y}">
                   <span>${y}</span>
-                </label>`
-              ).join("")}
-            </div>
-          </div>
-
-          <!-- Month -->
-          <div class="filter-group filter-group-collapsible">
-            <button class="filter-toggle" data-target="month-options">
-              <span>Month</span>
-              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-            <div class="filter-options hidden" id="month-options">
-              <label class="filter-option active">
-                <input type="radio" name="desktop-month" value="" checked>
-                <span>All Months</span>
-              </label>
-              ${dynamicMonths.map(m =>
-                `<label class="filter-option">
-                  <input type="radio" name="desktop-month" value="${m}">
-                  <span>${m}</span>
                 </label>`
               ).join("")}
             </div>
@@ -163,8 +141,8 @@ export default async function decorate(block) {
       <!-- Mobile Layout -->
       <div class="press-layout mobile-layout">
         <div class="mobile-filter-buttons">
-          <button class="mobile-filter-btn year-btn" data-type="year-month">
-            Year & Month <span class="arrow">
+          <button class="mobile-filter-btn year-btn" data-type="year">
+            Year <span class="arrow">
               <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
               </svg>
@@ -203,22 +181,6 @@ export default async function decorate(block) {
                 ${dynamicYears.map(y =>
                   `<label><input type="radio" name="mobile-year" value="${y}"> ${y}</label>`
                 ).join("")}
-              </div>
-              
-              <div class="filter-group month-group" style="display: none;">
-                <label><input type="radio" name="mobile-month" value="" checked> All Months</label>
-                <label><input type="radio" name="mobile-month" value="01"> January</label>
-                <label><input type="radio" name="mobile-month" value="02"> February</label>
-                <label><input type="radio" name="mobile-month" value="03"> March</label>
-                <label><input type="radio" name="mobile-month" value="04"> April</label>
-                <label><input type="radio" name="mobile-month" value="05"> May</label>
-                <label><input type="radio" name="mobile-month" value="06"> June</label>
-                <label><input type="radio" name="mobile-month" value="07"> July</label>
-                <label><input type="radio" name="mobile-month" value="08"> August</label>
-                <label><input type="radio" name="mobile-month" value="09"> September</label>
-                <label><input type="radio" name="mobile-month" value="10"> October</label>
-                <label><input type="radio" name="mobile-month" value="11"> November</label>
-                <label><input type="radio" name="mobile-month" value="12"> December</label>
               </div>
               
               <div class="filter-group category-group" style="display: none;">
@@ -262,8 +224,7 @@ export default async function decorate(block) {
   const modalOverlay = block.querySelector('.mobile-filter-overlay');
   const closeModalBtn = block.querySelector('.close-modal');
   const applyBtn = block.querySelector('.apply-btn');
-  const yearGroup = block.querySelector('.year-group');
-  const monthGroup = block.querySelector('.month-group');
+  const yearGroup = block.querySelector('.year-group'); 
   const categoryGroup = block.querySelector('.category-group');
   const tagGroup = block.querySelector('.tag-group');
 
@@ -272,13 +233,6 @@ export default async function decorate(block) {
   function updateHeader() {
     const parts = [];
     if (state.year) parts.push(state.year);
-    if (state.month) {
-      // Convert month number to month name
-      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
-                         'July', 'August', 'September', 'October', 'November', 'December'];
-      const monthName = monthNames[parseInt(state.month) - 1] || state.month;
-      parts.push(monthName);
-    }
     if (state.subCategory) parts.push(slugToTitle(state.subCategory));
     if (state.tag) parts.push(state.tag);
     summaryText.textContent = parts.length ? parts.join(" • ") : "All Years";
@@ -298,6 +252,7 @@ export default async function decorate(block) {
     const title = item?.title || "Untitled";
     const subCategory = item?.subCategory || "";
     const updatedDate = item?.lastUpdated || "";
+    const description = item?.description?.plaintext || "";
     const link = item?.slugUrl || "#";
     const publishDateRaw = item.publishDate?.iso || item.publishDate?.value || item.publishDate || "";
     const publishDateFormatted = formatDate(publishDateRaw);
@@ -307,38 +262,28 @@ export default async function decorate(block) {
 
     return `
       <article class="press-card">
-        <div class="press-card-image">
-        <a href="news-update?post=${link}">  
-        <img
-            src="${item.cardImage?._publishUrl || ""}"
-            alt="${item.title || ""}"
-            loading="lazy"
-          />
-          </a>
-        </div>
-
         <div class="press-card-body">
+          <div class="press-card-image">
+          <a href="news-update?post=${link}">  
+          <img
+              src="${item.storyImage?._publishUrl || ""}"
+              alt="${item.title || ""}"
+              loading="lazy"
+            />
+            </a>
+          </div>
+
+        
           <h3 class="press-card-title">${title}</h3>
 
           <div class="press-card-meta">
-            ${subCategory ? `<span class="badge ${badgeClass}">${slugToTitle(subCategory)}</span>` : ""}
-            ${subCategory && publishDateFormatted ? '<span class="meta-separator">|</span>' : ''}
-            ${publishDateFormatted ? `<span class="meta-date">
-              <svg class="icon-calendar" width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1.66669 10C1.66669 6.85734 1.66669 5.286 2.643 4.30968C3.61931 3.33337 5.19066 3.33337 8.33335 3.33337H11.6667C14.8094 3.33337 16.3807 3.33337 17.357 4.30968C18.3334 5.286 18.3334 6.85734 18.3334 10V11.6667C18.3334 14.8094 18.3334 16.3808 17.357 17.3571C16.3807 18.3334 14.8094 18.3334 11.6667 18.3334H8.33335C5.19066 18.3334 3.61931 18.3334 2.643 17.3571C1.66669 16.3808 1.66669 14.8094 1.66669 11.6667V10Z" stroke="currentColor" stroke-width="1.5"/>
-                <path d="M5.83331 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M14.1667 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M2.08331 7.5H17.9166" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-              ${publishDateFormatted}
-            </span>` : ""}
+            ${description ? `<p class="press-card-description">${description}</p>` : ""}
           </div>
 
           <div class="press-card-footer">
             <a href="news-update?post=${link}" class="btn-link">
               READ MORE
             </a>
-            ${updatedDate ? `<span class="meta-updated">Last Updated : ${updatedDate}</span>` : ""}
           </div>
         </div>
       </article>
@@ -353,16 +298,8 @@ export default async function decorate(block) {
       mobileList.innerHTML = '<div class="loading">Loading...</div>';
       countText.textContent = 'Loading...';
 
-      console.log('Fetching count with filters:', {
-        year: state.year,
-        month: state.month,
-        subCategory: state.subCategory,
-        tag: state.tag,
-        sort: state.sort
-      });
-
       state.totalCount = await fetchApiCount(
-        "press-release",
+        "",
         state.subCategory,
         state.year,
         state.month,
@@ -370,18 +307,11 @@ export default async function decorate(block) {
         state.sort
       );
 
-      console.log('Total count returned:', state.totalCount);
-
       state.offset = (state.page - 1) * state.limit;
 
       const items = await fetchApiData(
         state.limit,
         state.offset,
-        "press-release",
-        state.subCategory,
-        state.year,
-        state.month,
-        state.tag,
         state.sort
       );
 
@@ -483,10 +413,9 @@ export default async function decorate(block) {
       let text = btn.textContent.split('<')[0].trim();
       
       switch(type) {
-        case 'year-month':
+        case 'year':
           const yearText = state.year || 'Year';
-          const monthText = state.month || 'Month';
-          text = `${yearText} & ${monthText}`;
+          text = `${yearText}`;
           break;
         case 'category':
           text = state.subCategory ? slugToTitle(state.subCategory) : 'Category';
@@ -510,15 +439,13 @@ export default async function decorate(block) {
     
     // Hide all groups first
     yearGroup.style.display = 'none';
-    monthGroup.style.display = 'none';
     categoryGroup.style.display = 'none';
     tagGroup.style.display = 'none';
     
     // Show selected group based on button type
     switch(type) {
-      case 'year-month':
+      case 'year':
         yearGroup.style.display = 'block';
-        monthGroup.style.display = 'block';
         break;
       case 'category':
         categoryGroup.style.display = 'block';
@@ -533,11 +460,6 @@ export default async function decorate(block) {
     const yearRadio = yearGroup.querySelector(`input[name="mobile-year"][value="${state.year}"]`);
     if (yearRadio) yearRadio.checked = true;
     else yearGroup.querySelector('input[name="mobile-year"][value=""]').checked = true;
-    
-    // Month group
-    const monthRadio = monthGroup.querySelector(`input[name="mobile-month"][value="${state.month}"]`);
-    if (monthRadio) monthRadio.checked = true;
-    else monthGroup.querySelector('input[name="mobile-month"][value=""]').checked = true;
     
     // Category group
     const catRadio = categoryGroup.querySelector(`input[name="mobile-subcat"][value="${state.subCategory}"]`);
@@ -558,7 +480,6 @@ export default async function decorate(block) {
   function applyMobileFilters() {
     // Get values from all radio groups
     const selectedYear = yearGroup.querySelector('input[name="mobile-year"]:checked');
-    const selectedMonth = monthGroup.querySelector('input[name="mobile-month"]:checked');
     const selectedCat = categoryGroup.querySelector('input[name="mobile-subcat"]:checked');
     const selectedTag = tagGroup.querySelector('input[name="mobile-tag"]:checked');
     
@@ -568,10 +489,6 @@ export default async function decorate(block) {
       state.page = 1;
     }
     
-    if (selectedMonth && selectedMonth.value !== state.month) {
-      state.month = selectedMonth.value;
-      state.page = 1;
-    }
     
     if (selectedCat && selectedCat.value !== state.subCategory) {
       state.subCategory = selectedCat.value;
@@ -627,7 +544,6 @@ export default async function decorate(block) {
   };
 
   setupRadioFilters('desktop-year', 'year');
-  setupRadioFilters('desktop-month', 'month');
   setupRadioFilters('desktop-subcat', 'subCategory');
   setupRadioFilters('desktop-tag', 'tag');
 
@@ -714,50 +630,34 @@ export default async function decorate(block) {
 
 /* ================= API Functions ================= */
 
-async function fetchApiData(limit = 10, offset = 0, category = "press-release", subCategory = "", publishyear = "", publishmonth = "", tag = "", orderby = "desc") {
-  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/all-news` +
+async function fetchApiData(limit = 2, offset = 0, orderby = "desc") {
+  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/success-stories` +
     `?limit=${encodeURIComponent(limit)}` +
     `&offset=${encodeURIComponent(offset)}` +
-    `&category=${encodeURIComponent(category)}` +
-    `&subcategory=${encodeURIComponent(subCategory)}` +
-    `&publishyear=${encodeURIComponent(publishyear)}` +
-    `&publishmonth=${encodeURIComponent(publishmonth.toLowerCase())}` +
-    `&tag=${encodeURIComponent(tag.toLowerCase())}` +
     `&orderby=${encodeURIComponent(orderby)}`;
-  
-  console.log('📡 Fetching data API:', apiUrl);
     
   const res = await fetch(apiUrl);
   if (!res.ok) throw new Error(`API error ${res.status}`);
   
   const json = await res.json();
-  const items = json?.data?.data?.newsList?.items || [];
-  
-  console.log('✅ Data API returned items:', items.length);
+  const items = json?.data?.data?.successStoryList?.items || [];
   
   return items;
 }
 
-async function fetchApiCount(category = "press-release", subCategory = "", publishyear = "", publishmonth = "", tag = "", orderby = "desc") {
-  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/all-news` +
+async function fetchApiCount( orderby = "desc") {
+  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/success-stories` +
     `?limit=10000` +  
     `&offset=0` +
-    `&category=${encodeURIComponent(category)}` +
-    `&subcategory=${encodeURIComponent(subCategory)}` +
-    `&publishyear=${encodeURIComponent(publishyear)}` +
-    `&publishmonth=${encodeURIComponent(publishmonth.toLowerCase())}` +
-    `&tag=${encodeURIComponent(tag.toLowerCase())}` +
     `&orderby=${encodeURIComponent(orderby)}`;
   
-  console.log('📊 Fetching count API:', apiUrl);
     
   const res = await fetch(apiUrl);
   if (!res.ok) throw new Error(`API error ${res.status}`);
   
   const json = await res.json();
-  const items = json?.data?.data?.newsList?.items || [];
+  const items = json?.data?.data?.successStoryList?.items || [];
   
-  console.log('✅ Count API returned:', items.length);
   
   return items.length;
 }
