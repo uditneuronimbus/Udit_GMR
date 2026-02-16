@@ -1,0 +1,151 @@
+.ish-swiper {
+  width: 100%;
+}
+
+.swiper-slide {
+  height: auto;
+}
+/* =====================================
+   Main Card Wrapper
+===================================== */
+.inner-slider-horizontal .ish-wrapper {
+  background: linear-gradient(135deg, #0e4da4 0%, #1c66c2 100%);
+  border-radius: 14px;
+  padding: 60px 70px;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+/* =====================================
+   Section Title
+===================================== */
+.ish-header {
+  margin-bottom: 40px;
+}
+
+.ish-title {
+  font-size: 28px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* =====================================
+   Slide Layout (Left Content + Right Image)
+===================================== */
+.ish-slide-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+}
+
+/* =====================================
+   Left Content
+===================================== */
+.ish-slide-content {
+  max-width: 480px;
+}
+
+.ish-slide-year {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.ish-slide-title {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.ish-slide-description {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* =====================================
+   Right Image
+===================================== */
+.ish-slide-image img {
+  width: 420px;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* =====================================
+   Swiper Container
+===================================== */
+.ish-swiper {
+  width: 100%;
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  height: auto;
+}
+
+/* =====================================
+   Navigation Arrows (Styled Like Screenshot)
+===================================== */
+.ish-navigation {
+  /* position: absolute; */
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 5;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 14px;
+  color: #ffc83d;
+  font-weight: bold;
+}
+
+/* =====================================
+   Pagination (Optional Dots)
+===================================== */
+.swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+  background: #ffc83d;
+}
+
+/* =====================================
+   Responsive
+===================================== */
+@media (max-width: 1024px) {
+  .ish-slide-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .ish-slide-image img {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .ish-navigation {
+    left: 10px;
+  }
+}

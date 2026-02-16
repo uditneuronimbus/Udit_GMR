@@ -181,7 +181,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .values-cards {
     grid-template-columns: 1fr;
   }
@@ -190,9 +190,14 @@
     font-size: 26px;
   }
 
-  .value-card-image {
-    margin-bottom: 48px;
+  .value-card-overlay {
+    font-size: 18px;
+    font-weight: 600;
   }
+
+  /* .value-card-image {
+    margin-bottom: 48px;
+  } */
 }
 
 /* ===============================

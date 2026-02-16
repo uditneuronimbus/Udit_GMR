@@ -93,12 +93,21 @@
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 767px) {
     .leadership-grid {
         grid-template-columns: 1fr;
     }
 
     .leader-content {
         min-height: auto;
+    }
+
+    .leadership-title {
+        font-size: 24px;
+        font-weight: 400;
+    }
+
+    .leader-image img {
+        height: auto;
     }
 }
