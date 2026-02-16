@@ -72,7 +72,8 @@
       "media-cards",
       "press-hero",
       "success-stories-page",
-      "story-update-page"
+      "story-update-page",
+      "hero-press"
     ]
   },
   {
@@ -519,6 +520,10 @@
   },
   {
     "id": "success-stories-page",
+    "components": []
+  },
+  {
+    "id": "hero-press",
     "components": []
   }
 ]
