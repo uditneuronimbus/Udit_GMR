@@ -66,7 +66,8 @@
       "latest-press-update",
       "lottie-animation",
       "listing-press",
-      "listing-blog"
+      "listing-blog",
+      "listing-stories",
       "lottie-animation",
       "media-cards"
     ]
@@ -499,6 +500,10 @@
   },
   {
     "id": "listing-blog",
+    "components": []
+  },
+  {
+    "id": "listing-stories",
     "components": []
   }
 ]
