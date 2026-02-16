@@ -91,7 +91,7 @@ export default async function decorate(block) {
         }
     
         const apiUrl =
-        `${getApiHost()}/api/v1/web/gmr-api/success-stories` +
+        `${getApiHost()}/api/v1/web/gmr-api/story-update` +
         `?slugUrl=${encodeURIComponent(slug)}`;
     
         newsPromise = fetch(apiUrl)
