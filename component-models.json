@@ -4179,5 +4179,9 @@
         "label": "Section Category"
       }
     ]
+  },
+  {
+    "id": "news-update-page",
+    "fields": []
   }
 ]

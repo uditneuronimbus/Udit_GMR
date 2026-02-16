@@ -71,7 +71,8 @@
       "lottie-animation",
       "media-cards",
       "press-hero",
-      "success-stories-page"
+      "success-stories-page",
+      "news-update-page"
     ]
   },
   {
@@ -79,6 +80,10 @@
     "components": [
       "airport-overview-item"
     ]
+  },
+  {
+    "id": "news-update-page",
+    "components": []
   },
   {
     "id": "all-business-cards",
