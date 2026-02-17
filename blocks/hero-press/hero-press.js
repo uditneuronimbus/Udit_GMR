@@ -1,23 +1,7 @@
 import { getNewsDetail } from "../../scripts/news-api.js";
 import { getApiHost } from "../../scripts/api.js";
+import { formatDate } from "../../scripts/common.js";
 
-// const PUBLISH_DOMAIN = "https://publish-p168597-e1803019.adobeaemcloud.com";
-
-/* ================================
-   Date formatter
-================================ */
-function formatDate(dateString) {
-  if (!dateString) return "";
-
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return "";
-
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
 function slugToTitle(str) {
   return str
     .split('-')

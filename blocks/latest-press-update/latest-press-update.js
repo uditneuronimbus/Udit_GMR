@@ -1,23 +1,7 @@
 import { getApiHost } from "../../scripts/api.js";
 import { slugToTitle } from "../../scripts/common.js";
+import { formatDate } from "../../scripts/common.js";
 
-
-
-/* ================================
-   Date formatter
-================================ */
-function formatDate(dateString) {
-  if (!dateString) return "";
-
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return "";
-
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
 function getCategoryFromURL() {
   const parts = window.location.pathname.split("/").filter(Boolean);
   if (!parts.length) return "";
@@ -68,33 +52,24 @@ export default async function decorate(block) {
           `?category=${encodeURIComponent(category)}`;
           
 
-    console.log("________________________________________", apiUrl);
-    
-    const res = await fetch(apiUrl);
-    if (!res.ok) throw new Error(`API error ${res.status}`);
-
-    const json = await res.json();
-    const items = json?.data?.data?.newsList?.items || [];
-    if (!items.length) {
-      block.innerHTML = "<p>No news available.</p>";
-      return;
-    }
-
-    const item = items[0];
-    console.log("_____________________________________________", item.description?.plaintext);
-    
-    
-    
+          
+          const res = await fetch(apiUrl);
+          if (!res.ok) throw new Error(`API error ${res.status}`);
+          
+          const json = await res.json();
+          const items = json?.data?.data?.newsList?.items || [];
+          if (!items.length) {
+            block.innerHTML = "<p>No news available.</p>";
+            return;
+          }
+          
+          const item = items[0];
     if (!item) {
       wrapper.innerHTML = `<p>No ${category} updates found.</p>`;
       return;
     }
 
-    const publishDateRaw =
-      item.publishDate?.iso ||
-      item.publishDate?.value ||
-      item.publishDate ||
-      "";
+    const publishDateRaw = item.publishMonth + " " + item.publishYear;
 
     const publishDateFormatted = formatDate(publishDateRaw);
     const categorySlug = (item.subCategory || item.category || "press")
