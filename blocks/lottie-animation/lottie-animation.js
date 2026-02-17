@@ -3,7 +3,7 @@
  * Properly handles JSON from AEM DAM assets
  */
 
-import { fetchDamJson } from './dam-json-helper.js';
+import { fetchLottieJson } from './dam-json-helper.js';
 
 export default async function decorate(block) {
   // Parse block properties
@@ -14,15 +14,13 @@ export default async function decorate(block) {
     console.debug('[Lottie] Parsed properties:', props);
   }
 
-  // Get asset path (case-insensitive search + deep search fallback)
+  // Get animation filename (prioritize local repo)
   const assetPath =
     props.animation ||
+    props.animationfilename ||
+    props.filename ||
     props.animationjsonfile ||
-    props.animationjsonfiles || // Added support for plural label
-    props.animationasset ||
-    props.assetpath ||
-    Object.values(props).find(v => typeof v === 'string' && v.includes('/content/dam/') && v.endsWith('.json')) ||
-    scanBlockForDamPath(block);
+    scanBlockForFilename(block);
 
   if (!assetPath) {
     block.innerHTML = `
@@ -54,16 +52,16 @@ export default async function decorate(block) {
   }
 
   // Show loading state
-  block.innerHTML = '<div class="loading">Loading animation from DAM...</div>';
+  block.innerHTML = '<div class="loading">Loading animation...</div>';
   block.classList.add('lottie-animation-block');
 
   try {
     // Load Lottie library
     await loadLottieLibrary();
 
-    // Fetch animation data from DAM
-    console.log('[Lottie] Fetching animation from:', finalPath);
-    const animationData = await fetchDamJson(finalPath);
+    // Fetch animation data from repository
+    console.log('[Lottie] Fetching animation:', finalPath);
+    const animationData = await fetchLottieJson(finalPath);
     console.log('[Lottie] Animation data loaded:', animationData.nm || 'Unnamed');
 
     // Build the component UI
@@ -123,24 +121,18 @@ function parseBlockProps(block) {
   return props;
 }
 
-function scanBlockForDamPath(block) {
-  // Deep search for anything containing /content/dam/ and ending in .json
-  // Check links
-  const link = block.querySelector('a[href*="/content/dam/"]');
-  if (link && link.getAttribute('href').endsWith('.json')) {
-    return link.getAttribute('href');
-  }
-
-  // Check text content
+function scanBlockForFilename(block) {
+  // Check for any text that looks like a filename
   const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
   let node;
   while (node = walker.nextNode()) {
     const text = node.textContent.trim();
-    if (text.includes('/content/dam/') && text.endsWith('.json')) {
-      // Extract the path if buried in other text
-      const match = text.match(/(\/content\/dam\/.*?\.json)/);
-      if (match) return match[1];
+    if (text && !text.includes(' ') && !text.includes('/')) {
       return text;
+    }
+    // Also check for full DAM paths to extract filename as fallback
+    if (text.includes('/content/dam/') && text.endsWith('.json')) {
+      return text.split('/').pop().replace('.json', '');
     }
   }
 
@@ -270,40 +262,24 @@ function addControls(block, animation) {
   }
 }
 
-function showError(block, assetPath, error) {
-  const isPublishingError = error.message.includes('404') || error.message.includes('not found');
-
+function showError(block, filename, error) {
   block.innerHTML = `
     <div class="animation-error">
       <h3>❌ Failed to Load Animation</h3>
       <div class="error-details">
-        <p><strong>Asset Path:</strong> ${assetPath}</p>
+        <p><strong>Animation:</strong> ${filename}</p>
         <p><strong>Error:</strong> ${error.message}</p>
       </div>
-      ${isPublishingError ? `
-        <div class="error-publishing-help">
-          <h4>📋 Publishing Required</h4>
-          <p>This asset needs to be published in AEM DAM. Follow these steps:</p>
-          <ol>
-            <li>Open AEM DAM and locate the asset: <code>${assetPath}</code></li>
-            <li>Select the asset and click "Quick Publish" or "Manage Publication"</li>
-            <li>Wait for the publishing process to complete (usually 1-2 minutes)</li>
-            <li>Refresh this page to load the animation</li>
-          </ol>
-        </div>
-      ` : ''}
+      <div class="error-help">
+        <p><strong>How to fix:</strong></p>
+        <ul>
+          <li>Make sure the file <code>${filename}.json</code> is in the <code>/blocks/lottie-animation/lottie-data/</code> folder.</li>
+          <li>Verify the filename is spelled correctly (case-sensitive).</li>
+          <li>Ensure the JSON is a valid Lottie animation format.</li>
+        </ul>
+      </div>
       <div class="error-actions">
         <button onclick="location.reload()">🔄 Retry</button>
-        <a href="${assetPath}" target="_blank" class="btn-secondary">📄 View JSON File</a>
-      </div>
-      <div class="error-help">
-        <p><strong>Common Issues:</strong></p>
-        <ul>
-          <li><strong>404 Error:</strong> File not published in AEM DAM (see steps above)</li>
-          <li><strong>Invalid JSON:</strong> File format is corrupted or not a valid Lottie JSON</li>
-          <li><strong>Incorrect path:</strong> Verify the path starts with /content/dam/</li>
-          <li><strong>CORS errors:</strong> Check browser console for network errors</li>
-        </ul>
       </div>
     </div>
   `;

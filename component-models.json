@@ -2962,13 +2962,12 @@
     "id": "lottie-animation",
     "fields": [
       {
-        "component": "aem-content",
+        "component": "text",
         "name": "animation",
-        "label": "Animation JSON Files",
-        "description": "Select the Lottie animation JSON file from DAM",
+        "label": "Animation Filename",
+        "description": "Enter the filename (e.g., mapanimation5) of the JSON stored in lottie-data folder",
         "valueType": "string",
-        "required": true,
-        "rootPath": "/content/dam/gmr/animations"
+        "required": true
       }
     ]
   },

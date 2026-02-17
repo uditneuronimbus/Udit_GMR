@@ -1,3 +1,5 @@
+import { getFetchUrl } from '../lottie-animation/dam-json-helper.js';
+
 export default function decorate(block) {
   const rows = [...block.children];
   if (rows.length < 5) return;
@@ -30,15 +32,14 @@ export default function decorate(block) {
   let finalLottiePath = "";
 
   const lottieLink = lottiePathRow?.querySelector("a");
+  const lottieText = lottiePathRow?.textContent?.trim();
+
   if (lottieLink) {
     const href = lottieLink.getAttribute("href") || "";
-    const cleanPath = href.split("?")[0];
-
-    if (cleanPath.endsWith(".json")) {
-      finalLottiePath = cleanPath;
-    } else {
-      console.warn("❌ Invalid Lottie file (not JSON):", href);
-    }
+    finalLottiePath = getFetchUrl(href);
+  } else if (lottieText) {
+    // Treat as repository filename
+    finalLottiePath = getFetchUrl(lottieText);
   }
 
   /* ================================
@@ -186,7 +187,7 @@ export default function decorate(block) {
       renderer: "svg",
       loop: true,
       autoplay: true,
-      path: 'finalLottiePath',
+      path: finalLottiePath,
     });
   } else if (!window.bodymovin) {
     console.warn("❌ bodymovin library not loaded");
