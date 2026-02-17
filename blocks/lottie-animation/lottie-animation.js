@@ -18,21 +18,23 @@ export default async function decorate(block) {
   const assetPath =
     props.animation ||
     props.animationfilename ||
-    props.filename ||
     props.animationjsonfile ||
+    props.animationjsonfiles ||
+    props.filename ||
     scanBlockForFilename(block);
 
   if (!assetPath) {
+    const isDAMWarning = block.classList.contains('lottie-animation-block');
     block.innerHTML = `
       <div class="animation-placeholder">
-        <p>⚠️ No animation selected</p>
-        <p>Please select a Lottie JSON file from DAM</p>
-        ${props.showcontrols ? `
-          <div class="debug-info" style="font-size:10px; opacity:0.5; margin-top:20px; line-height: 1.5;">
-            <strong>Debug info:</strong><br>
-            Available keys: ${Object.keys(props).join(', ') || 'none'}<br>
-            Classes: ${block.className}<br>
-            Table rows: ${block.querySelectorAll(':scope > div').length}
+        <p>⚠️ No Lottie Animation Selected</p>
+        <p>Authoring tip: Enter a filename (like <code>mapanimation5</code>) from the <code>lottie-data</code> folder.</p>
+        ${props.showcontrols || window.location.hostname.includes('localhost') || window.location.hostname.includes('.aem.page') ? `
+          <div class="debug-info" style="font-size:10px; opacity:0.6; margin-top:20px; line-height: 1.5; border-top:1px solid rgba(0,0,0,0.1); padding-top:10px;">
+            <strong>Debug for Authors:</strong><br>
+            Properties detected: ${Object.keys(props).filter(k => !k.startsWith('aue')).join(', ') || 'none'}<br>
+            Block content length: ${block.textContent.trim().length} chars<br>
+            Hostname: ${window.location.hostname}
           </div>
         ` : ''}
       </div>
@@ -52,23 +54,35 @@ export default async function decorate(block) {
   }
 
   // Show loading state
-  block.innerHTML = '<div class="loading">Loading animation...</div>';
+  block.innerHTML = '<div class="loading">Loading...</div>';
   block.classList.add('lottie-animation-block');
 
-  try {
-    // Load Lottie library
-    await loadLottieLibrary();
+  // Create an observer to lazy-load the animation
+  const observer = new IntersectionObserver((entries) => {
+    if (entries.some((entry) => entry.isIntersecting)) {
+      observer.disconnect();
+      initAnimation(block, finalPath, props);
+    }
+  }, { threshold: 0, rootMargin: '200px' });
 
-    // Fetch animation data from repository
-    console.log('[Lottie] Fetching animation:', finalPath);
-    const animationData = await fetchLottieJson(finalPath);
-    console.log('[Lottie] Animation data loaded:', animationData.nm || 'Unnamed');
+  observer.observe(block);
+}
+
+async function initAnimation(block, finalPath, props) {
+  try {
+    // Parallelize library loading and JSON fetching
+    const [_, animationData] = await Promise.all([
+      loadLottieLibrary(),
+      fetchLottieJson(finalPath)
+    ]);
+
+    console.log('[Lottie] Animation ready:', animationData.nm || 'Unnamed');
 
     // Build the component UI
     buildAnimationUI(block, animationData, props, finalPath);
 
   } catch (error) {
-    console.error('[Lottie] Failed to load animation:', error);
+    console.error('[Lottie] Initialization failed:', error);
     showError(block, finalPath, error);
   }
 }

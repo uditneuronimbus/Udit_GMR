@@ -177,19 +177,24 @@ export default function decorate(block) {
      🔟 Initialize Lottie (bodymovin)
   ================================ */
 
-  if (
-    window.bodymovin &&
-    window.innerWidth >= 768 &&
-    finalLottiePath
-  ) {
-    window.bodymovin.loadAnimation({
-      container: lottieWrap,
-      renderer: "svg",
-      loop: true,
-      autoplay: true,
-      path: finalLottiePath,
-    });
-  } else if (!window.bodymovin) {
-    console.warn("❌ bodymovin library not loaded");
+  if (finalLottiePath && window.innerWidth >= 768) {
+    const lottieObserver = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        lottieObserver.disconnect();
+        if (window.bodymovin) {
+          window.bodymovin.loadAnimation({
+            container: lottieWrap,
+            renderer: "svg",
+            loop: true,
+            autoplay: true,
+            path: finalLottiePath,
+          });
+        } else {
+          console.warn("❌ bodymovin library not loaded");
+        }
+      }
+    }, { threshold: 0, rootMargin: '200px' });
+
+    lottieObserver.observe(block);
   }
 }
