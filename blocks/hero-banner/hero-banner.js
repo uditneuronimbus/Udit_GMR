@@ -92,11 +92,11 @@ function buildQuickLinks(block) {
 
   /* Static Links */
   const links = [
-    { label: "Investors", url: "#" },
-    { label: "About GMR", url: "#" },
-    { label: "Foundation", url: "#" },
-    { label: "Contact Us", url: "#" },
-    { label: "Careers", url: "#" },
+    { label: "Investors", url: "/en/investors" },
+    { label: "About GMR", url: "/en/about" },
+    { label: "Foundation", url: "/en/foundation" },
+    { label: "Contact Us", url: "/en/contact" },
+    { label: "Careers", url: "/en/careers" },
   ];
 
   links.forEach((link) => {

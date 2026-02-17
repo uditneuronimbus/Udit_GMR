@@ -377,6 +377,10 @@ hr {
     border-color: var(--lorange);
     color: var(--black);
 }
+.btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active {
+    color: var(--black);
+    background-color: var(--white);
+    border-color: var(--lorange);}
 .btn-transparent {
     padding: 0;
     font-weight: 500;
