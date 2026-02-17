@@ -1,10 +1,19 @@
 /* Hide authored content only after JS runs */
-.image-scroll-card.image-scroll-card-initialized > :not(.image-scroll-card-runtime) {
-  display: none;
+.image-scroll-card.image-scroll-card-initialized
+    > :not(.image-scroll-card-runtime) {
+    display: none;
 }
 
+.logo-slider-swiper {
+    width: calc(100vw - ((100vw - 1300px) / 2));
+    margin-left: auto;
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
 
-.image-scroll-card-runtime{
+.image-scroll-card-runtime {
     margin-top: 50px;
 }
 
@@ -27,8 +36,8 @@
     justify-content: space-evenly; */
 
     display: grid;
-  grid-template-columns: repeat(6, 1fr); /* 6 images per row */
-  gap: 20px; /* space between logos */
-  align-items: center;
-  justify-items: center;
+    grid-template-columns: repeat(6, 1fr); /* 6 images per row */
+    gap: 20px; /* space between logos */
+    align-items: center;
+    justify-items: center;
 }
