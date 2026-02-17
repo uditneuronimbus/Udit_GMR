@@ -10,6 +10,9 @@
 .lpu-left .btn-link{max-width:101px}
 .lpu-right{position:relative;width:100%;height:100%;border-radius:0;overflow:hidden}
 .lpu-right img{width:100%;height:100%;object-fit:cover}
+@media (max-width:1400px){
+.lpu-left { max-width: 705px; padding: 3rem 7rem 3rem 1rem; }
+}
 @media (max-width:900px){
 .latest-press-update .lpu-wrapper{grid-template-columns:1fr}
 .lpu-left{padding:32px}
@@ -19,5 +22,5 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; font-size:var(--fs-large)
 }

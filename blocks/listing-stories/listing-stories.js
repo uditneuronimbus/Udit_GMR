@@ -274,7 +274,7 @@ export default async function decorate(block) {
           </div>
 
         
-          <h3 class="press-card-title">${title}</h3>
+          <h3 class="press-card-title"><a href="story-update?post=${link}">${title}</a></h3>
 
           <div class="press-card-meta">
             ${description ? `<p class="press-card-description">${description}</p>` : ""}

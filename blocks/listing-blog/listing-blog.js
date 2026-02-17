@@ -237,7 +237,7 @@ export default async function decorate(block) {
         </div>
 
         <div class="press-card-body">
-          <h3 class="press-card-title">${title}</h3>
+          <h3 class="press-card-title"><a href="news-update?post=${link}">${title}</a></h3>
 
           <div class="press-card-meta">
             ${subCategory ? `<span class="badge ${badgeClass}">${slugToTitle(subCategory)}</span>` : ""}
