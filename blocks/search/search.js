@@ -198,7 +198,7 @@ block.innerHTML = `
   });
 
   input.addEventListener("keydown", (e) => {
-    if (!results.length) return;
+    // if (!results.length) return;
 
     switch (e.key) {
       case "ArrowDown":
