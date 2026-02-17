@@ -1,0 +1,6 @@
+.sec-photo-slider {
+    background: var(--sky-blue);
+}
+.sec-photo-slider .card-img {
+    padding-bottom: 55%;
+}
