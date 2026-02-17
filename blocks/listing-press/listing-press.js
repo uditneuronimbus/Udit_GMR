@@ -299,7 +299,7 @@ export default async function decorate(block) {
     const subCategory = item?.subCategory || "";
     const updatedDate = item?.lastUpdated || "";
     const link = item?.slugUrl || "#";
-    const publishDateRaw = item.publishDate?.iso || item.publishDate?.value || item.publishDate || "";
+    const publishDateRaw = item.publishMonth + " " + item.publishYear;  
     const publishDateFormatted = formatDate(publishDateRaw);
     
     // Create badge class from subCategory
