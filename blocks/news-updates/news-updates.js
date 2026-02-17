@@ -56,7 +56,6 @@ export default async function decorate(block) {
 
     const json = await res.json();
     const items = json?.data?.data?.newsList?.items || [];
-    console.log("------------------------------------", items);
 
     if (!items.length) {
       cardsWrapper.innerHTML = "<p>No news found.</p>";

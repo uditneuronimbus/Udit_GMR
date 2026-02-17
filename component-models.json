@@ -2242,6 +2242,10 @@
     ]
   },
   {
+    "id": "hero-press",
+    "fields": []
+  },
+  {
     "id": "hero",
     "fields": [
       {
@@ -2951,6 +2955,10 @@
     "fields": []
   },
   {
+    "id": "listing-stories",
+    "fields": []
+  },
+  {
     "id": "lottie-animation",
     "fields": [
       {
@@ -3610,6 +3618,48 @@
     ]
   },
   {
+    "id": "photo-gallery-slider",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Section Heading",
+        "valueType": "string",
+        "defaultValue": "Everyday Life at GMR"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Section Description",
+        "valueType": "string",
+        "defaultValue": "At GMR, the countless small moments in our people's workday show the human side of building big things together."
+      }
+    ]
+  },
+  {
+    "id": "photo-gallery-slider-item",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "altText",
+        "label": "Alt Text",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "press-hero",
     "fields": []
   },
@@ -4022,6 +4072,45 @@
     ]
   },
   {
+    "id": "story-update-page",
+    "fields": []
+  },
+  {
+    "id": "success-stories-page",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionTitle",
+        "label": "Section Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "sectionDescription",
+        "label": "Section Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionCTA",
+        "label": "Section CTA Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionCTALink",
+        "label": "Section CTA Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "category",
+        "label": "Section Category"
+      }
+    ]
+  },
+  {
     "id": "success-stories",
     "fields": [
       {
@@ -4134,49 +4223,6 @@
         "name": "quoteAuthor",
         "label": "Quote Author",
         "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "listing-blog",
-    "fields": []
-  },
-  {
-    "id": "listing-stories",
-    "fields": []
-  },
-  {
-    "id": "success-stories-page",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "sectionTitle",
-        "label": "Section Title"
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "sectionDescription",
-        "label": "Section Description"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "sectionCTA",
-        "label": "Section CTA Text"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "sectionCTALink",
-        "label": "Section CTA Link"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "category",
-        "label": "Section Category"
       }
     ]
   }

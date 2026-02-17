@@ -1,7 +1,13 @@
 .gmr-tabs-container {
     background: var(--blue);
     background: linear-gradient(180deg, #06c 0, #1e3c6b 100%);
-    position: relative
+    position: relative;
+}
+.sec-grid-4 .gmr-tabs-nav {
+    display: none;
+}
+.sec-grid-4 .gmr-cards [class*="col-"] {
+    width: 25%;
 }
 
 .gmr-tabs-container:before {
@@ -15,7 +21,7 @@
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: center;
-    z-index: 1
+    z-index: 1;
 }
 
 .gmr-tabs-wrapper {
@@ -35,7 +41,7 @@
 .gmr-tab-btn:hover {
     border-color: var(--yellow);
     background-color: transparent;
-    transition-duration: .3s;
+    transition-duration: 0.3s;
     color: var(--yellow);
 }
 
@@ -58,7 +64,7 @@
     font-size: var(--fs-normal);
 }
 
-@media (max-width:767px) {
+@media (max-width: 767.5px) {
     .gmr-tab-btn {
         background: none;
         color: var(--yellow);
@@ -70,13 +76,13 @@
 
     .gmr-tab-btn:after {
         position: absolute;
-        content: '';
+        content: "";
         bottom: 0;
         left: 0;
         background-color: var(--white);
         width: 0;
         height: 2px;
-        transition-duration: .3s;
+        transition-duration: 0.3s;
     }
 
     .gmr-tab-btn.active {
@@ -88,5 +94,20 @@
 
     .gmr-tab-btn.active:after {
         width: 100%;
+    }
+    .sec-grid-4 .gmr-cards [class*="col-"] {
+        width: 100%;
+    }
+    .sec-grid-4 .gmr-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        text-align: left !important;
+        padding: 0;
+    }
+    .gmr-card-icon {
+        flex: 0 0 auto;
+        width: 3rem;
+        margin: 0 !important;
     }
 }

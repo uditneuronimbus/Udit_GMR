@@ -1,110 +1,88 @@
+import { loadCSS, loadScript } from "../../scripts/aem.js";
 
-export default function decorate(block) {
-  const isAuthorMode =
-    document.body.classList.contains('aem-AuthorLayer-Edit') ||
-    window.location.search.includes('wcmmode=edit');
+const SWIPER_JS = "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js";
+const SWIPER_CSS =
+  "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css";
 
-  /* ==============================
-     INIT GUARD
-  ============================== */
-  if (block.classList.contains('image-scroll-card-initialized')) return;
+export default async function decorate(block) {
+  /* ---------- Load Swiper ---------- */
+  await loadCSS(SWIPER_CSS);
+  await loadScript(SWIPER_JS);
 
-  const rows = [...block.children];
-  if (!rows.length) return;
+  /* ---------- Preserve authored structure ---------- */
+  const original = [...block.children];
+  if (original.length < 3) return;
 
-  /* ==============================
-     READ SECTION DATA
-  ============================== */
-  const heading = rows[0]?.querySelector('h1, h2, h3, p')?.textContent?.trim();
-  const description = rows[1]?.querySelector('p')?.textContent?.trim();
+  const headingRow = original[0];
+  const descRow = original[1];
+  const items = original.slice(2); // image-slider-item
 
-  /* ==============================
-     READ ITEM DATA
-  ============================== */
-  const items = rows.slice(2)
-    .map((row) => {
-      const title = row.children[0]?.textContent?.trim();
-      const logo = row.querySelector('img, picture');
+  block.classList.add("sec-image-slider", "spacer");
 
-      if (!logo) return null;
+  /* ---------- Container ---------- */
+  const container = document.createElement("div");
+  container.className = "container";
 
-      return { title, logo };
-    })
-    .filter(Boolean);
+  /* ---------- Header ---------- */
+  const headerRow = document.createElement("div");
+  headerRow.className = "row";
 
-  if (!items.length) return;
+  const col = document.createElement("div");
+  col.className = "col-md-7 text-center mx-auto mb-5";
 
-  /* ==============================
-     MARK BLOCK AS INITIALIZED
-  ============================== */
-  block.classList.add('image-scroll-card-initialized');
-
-  /* ==============================
-     BUILD RUNTIME MARKUP
-  ============================== */
-  const runtime = document.createElement('div');
-  runtime.className = 'image-scroll-card-runtime';
-
-  /* Header */
-  if (heading || description) {
-    const header = document.createElement('div');
-    header.className = 'col-md-7 text-center mx-auto mb-3 isc-header';
-
-    if (heading) {
-      const h2 = document.createElement('h2');
-      h2.className = 'isc-title';
-      h2.textContent = heading;
-      header.appendChild(h2);
-    }
-
-    if (description) {
-      const p = document.createElement('p');
-      p.className = 'isc-description';
-      p.textContent = description;
-      header.appendChild(p);
-    }
-
-    runtime.appendChild(header);
+  const headingText = headingRow.textContent.trim();
+  if (headingText) {
+    const h2 = document.createElement("h2");
+    h2.className = "sec-title";
+    h2.textContent = headingText;
+    col.append(h2);
   }
 
-  /* Logo Track */
-  const trackWrapper = document.createElement('div');
-  trackWrapper.className = 'isc-track-wrapper';
+  if (descRow.innerHTML.trim()) {
+    const desc = document.createElement("div");
+    desc.className = "sec-desc";
+    desc.innerHTML = descRow.innerHTML;
+    col.append(desc);
+  }
 
-  const track = document.createElement('div');
-  track.className = 'isc-track';
+  headerRow.append(col);
+  container.append(headerRow);
 
-  items.forEach(({ title, logo }) => {
-    const card = document.createElement('div');
-    card.className = 'isc-card';
+  /* ---------- Swiper ---------- */
+  const swiper = document.createElement("div");
+  swiper.className = "swiper logo-slider-swiper";
 
-    const imageWrapper = document.createElement('div');
-    imageWrapper.className = 'isc-logo';
+  const swiperWrapper = document.createElement("div");
+  swiperWrapper.className = "swiper-wrapper";
 
-    imageWrapper.appendChild(logo);
+  /* ---------- Keep image-slider-item intact ---------- */
+  items.forEach((item) => {
+    const slide = document.createElement("div");
+    slide.className = "swiper-slide";
 
-    if (title && logo.tagName === 'IMG') {
-      logo.alt = title;
-      logo.title = title;
-    }
-
-    card.appendChild(imageWrapper);
-    track.appendChild(card);
+    slide.append(item); // ✅ KEEP image-slider-item
+    swiperWrapper.append(slide);
   });
 
-  trackWrapper.appendChild(track);
-  runtime.appendChild(trackWrapper);
+  swiper.append(swiperWrapper);
 
-  /* ==============================
-     APPEND (DO NOT REPLACE)
-  ============================== */
-  block.appendChild(runtime);
+  /* ---------- Navigation ---------- */
 
-  /* ==============================
-     SKIP JS BEHAVIOR IN EDIT MODE
-  ============================== */
-  if (isAuthorMode) return;
+  container.append(swiper);
 
-  // 👉 If later you add animation / scroll logic,
-  // initialize it here (publish only)
+  /* ---------- Replace block ---------- */
+  block.innerHTML = "";
+  block.append(container);
+
+  /* ---------- Init Swiper ---------- */
+  new window.Swiper(swiper, {
+    slidesPerView: 5,
+    spaceBetween: 20,
+    loop: items.length > 1,
+    breakpoints: {
+      0: { slidesPerView: 3.2 },
+      576: { slidesPerView: 4.5 },
+      992: { slidesPerView: 5.5 },
+    },
+  });
 }

@@ -203,7 +203,8 @@
         "image-scroll-card",
         "key-highlight-button",
         "lottie-animation",
-        "media-cards"
+        "media-cards",
+        "photo-gallery-slider"
       ]
     }
   ]

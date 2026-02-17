@@ -63,14 +63,9 @@
       "contact-reachout-list",
       "image-scroll-card",
       "key-highlight-button",
-      "latest-press-update",
-      "lottie-animation",
-      "listing-press",
-      "listing-blog",
-      "listing-stories",
       "lottie-animation",
       "media-cards",
-      "success-stories-page"
+      "photo-gallery-slider"
     ]
   },
   {
@@ -301,6 +296,10 @@
     ]
   },
   {
+    "id": "hero-press",
+    "components": []
+  },
+  {
     "id": "image-scroll-card",
     "components": [
       "image-scroll-card-item"
@@ -379,6 +378,10 @@
     "components": []
   },
   {
+    "id": "listing-stories",
+    "components": []
+  },
+  {
     "id": "lottie-animation",
     "components": []
   },
@@ -450,6 +453,12 @@
     ]
   },
   {
+    "id": "photo-gallery-slider",
+    "components": [
+      "photo-gallery-slider-item"
+    ]
+  },
+  {
     "id": "press-hero",
     "components": [
       "press-hero"
@@ -488,6 +497,14 @@
     "components": []
   },
   {
+    "id": "story-update-page",
+    "components": []
+  },
+  {
+    "id": "success-stories-page",
+    "components": []
+  },
+  {
     "id": "success-stories",
     "components": []
   },
@@ -502,17 +519,5 @@
     "components": [
       "value-cards"
     ]
-  },
-  {
-    "id": "listing-blog",
-    "components": []
-  },
-  {
-    "id": "listing-stories",
-    "components": []
-  },
-  {
-    "id": "success-stories-page",
-    "components": []
   }
 ]
