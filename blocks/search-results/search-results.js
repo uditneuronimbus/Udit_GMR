@@ -53,7 +53,7 @@ function renderNoResults(container, query) {
         <div class="no-results-divider"></div>
 
         <div class="no-results-links">
-          <a href="/en/investor-relations">INVESTOR RELATIONS</a>
+          <a href="/en/investors">INVESTOR RELATIONS</a>
           <a href="/en/sustainability">SUSTAINABILITY</a>
           <a href="/en/careers">CAREERS</a>
         </div>
@@ -85,11 +85,10 @@ export default async function decorate(block) {
             <span class="loader-text">Searching...</span>
           </div>
 
-          <div class="search-results-dropdown" role="listbox"></div>
         </div>
       </div>
 
-      ${query ? `<h2>Search results for "${query}"</h2>` : ""}
+        ${query ? `<h2 id="search-results-heading">Search results for "${query}"</h2>` : ""}
     </div>
 
     <section class="sec-search spacer">
@@ -253,6 +252,8 @@ export default async function decorate(block) {
     });
 
     if (!hits.length) {
+      const heading = block.querySelector("#search-results-heading");
+      if (heading) heading.hidden = true;
       renderNoResults(resultsList, query);
       return;
     }
