@@ -37,7 +37,7 @@ export default async function decorate(block) {
   const offset = 0;
   const category = getCategoryFromURL();
   let labeltitle = '';
-  if (category === "press-release") {
+  if (category === "press-releases") {
     labeltitle = "LATEST PRESS RELEASE";
   } else if (category === "blog") {
     labeltitle = "LATEST INSIGHTS";
