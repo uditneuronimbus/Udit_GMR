@@ -88,7 +88,14 @@
 .lottie-animation-container {
     position: relative;
     width: 100%;
-    height: auto;
+    height: auto; min-height: 700px;
+}
+.lottie-animation-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 66.66666667%;
 }
 
 .lottie-animation-container svg,
