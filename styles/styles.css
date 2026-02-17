@@ -377,10 +377,15 @@ hr {
     border-color: var(--lorange);
     color: var(--black);
 }
-.btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active {
+.btn-check:checked + .btn,
+.btn.active,
+.btn.show,
+.btn:first-child:active,
+:not(.btn-check) + .btn:active {
     color: var(--black);
     background-color: var(--white);
-    border-color: var(--lorange);}
+    border-color: var(--lorange);
+}
 .btn-transparent {
     padding: 0;
     font-weight: 500;
@@ -501,7 +506,7 @@ hr {
 }
 .swiper-button-next.swiper-button-disabled,
 .swiper-button-prev.swiper-button-disabled {
-    background: 0 0;
+    background: var(--white);
     opacity: 1 !important;
 }
 .swiper-button-next.swiper-button-disabled:before,
