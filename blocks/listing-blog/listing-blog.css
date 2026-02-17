@@ -24,6 +24,7 @@
 .press-filter-panel .filter-toggle.active .icon-chevron{transform:rotate(180deg)}
 .press-filter-panel .filter-toggle .selected-year{color:var(--lorange)}
 .press-filter-panel .filter-options{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.5rem;max-height:300px;overflow-y:auto}
+.press-filter-panel .filter-option span { text-transform: capitalize; }
 .press-filter-panel .filter-options.hidden{display:none}
 .press-filter-panel .filter-option{padding:12px 44px 12px 16px;cursor:pointer;font-size:var(--fs-normal);color:var(--charcoal);transition:color .2s;font-weight:500;border-radius:8px;background-color:var(--white);position:relative}
 .press-filter-panel .filter-option::before{content:"";position:absolute;right:14px;top:50%;transform:translateY(-50%);width:24px;height:24px;background-repeat:no-repeat;background-size:contain;background-image:url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 12H20M20 12L14 6M20 12L14 18' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");transition:opacity .2s ease,transform .2s ease}
