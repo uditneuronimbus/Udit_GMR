@@ -71,6 +71,7 @@ export default async function decorate(block) {
 
   block.innerHTML = `
     <div class="search-results-header">
+     ${query ? `<h2 class="mb-4" id="search-results-heading">Search results for "${query}"</h2>` : ""}
       <div class="search-results-search-box">
         <div class="search-box-inline" role="combobox" aria-expanded="false">
           <input
@@ -88,10 +89,10 @@ export default async function decorate(block) {
         </div>
       </div>
 
-        ${query ? `<h2 id="search-results-heading">Search results for "${query}"</h2>` : ""}
+       
     </div>
 
-    <section class="sec-search spacer">
+    <section class="sec-search py-4">
       <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">

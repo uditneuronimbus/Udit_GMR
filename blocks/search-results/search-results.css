@@ -24,7 +24,7 @@
 /* Search Bar in Blue Area */
 .search-results .search-results-search-box {
     max-width: 600px;
-    margin: 0 auto 1.5rem;
+    margin: 0 auto;
 }
 
 .search-results .search-box-inline {
