@@ -1,12 +1,10 @@
 /* Lottie Animation Component - Enhanced Authoring Experience */
 
 .lottie-animation-block {
-    max-width: 1200px;
-    margin: 2rem auto;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin: 0 auto;
     overflow: hidden;
+    position: relative;
 }
 
 /* Info Panel */
@@ -89,13 +87,8 @@
 /* Animation Container */
 .lottie-animation-container {
     position: relative;
-}
-
-.lottie-animation-container .gan-wrapper { min-height: 700px; display: flex; align-items: center; }
-.lottie-animation-wrapper {
-    position: absolute;
-    top: 60px;
-    right: 1rem;
+    width: 100%;
+    height: auto;
 }
 
 .lottie-animation-container svg,
@@ -260,7 +253,6 @@
 
 /* Responsive */
 @media (max-width: 767px) {
-    .lottie-animation-wrapper { display: none;}
     .lottie-animation-block {
         margin: 1rem;
         border-radius: 4px;

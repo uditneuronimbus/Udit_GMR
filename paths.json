@@ -7,7 +7,8 @@
     "/content/GMR/metadata:/metadata.json",
     "/content/aero-gmr/en/:/aero-gmr/",
     "/content/aero-gmr/configuration:/.helix/config.json",
-    "/content/aero-gmr/metadata:/metadata.json"
+    "/content/aero-gmr/metadata:/metadata.json",
+    "/content/dam/gmr/animations/:/animations/"
   ],
   "includes": [
     "/content/GMR/",
