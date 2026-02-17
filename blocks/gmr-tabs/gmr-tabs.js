@@ -5,9 +5,7 @@ export default function decorate(block) {
   /* ===============================
      1️⃣ Section title
   =============================== */
-  const sectionTitle = rows[0]
-    ?.querySelector("p")
-    ?.textContent?.trim();
+  const sectionTitle = rows[0]?.querySelector("p")?.textContent?.trim();
 
   const itemRows = rows.slice(1);
 
@@ -69,7 +67,7 @@ export default function decorate(block) {
             class="btn gmr-tab-btn ${i === 0 ? "active" : ""}"
             data-tab="${i}">
             ${title}
-          </button>`
+          </button>`,
           )
           .join("")}
       </div>
@@ -91,11 +89,11 @@ export default function decorate(block) {
     const cards = tabsMap[tabTitle];
 
     contentWrap.innerHTML = `
-      <div class="row justify-content-center gmr-cards">
+      <div class="row justify-content-center gmr-cards g-4">
         ${cards
           .map(
             (card) => `
-          <div class="col-md-4 col-sm-6 mb-4">
+          <div class="col-md-4 col-sm-6">
             <div class="gmr-card text-center h-100">
               ${
                 card.icon
@@ -109,13 +107,9 @@ export default function decorate(block) {
                   ? `<h4 class="gmr-card-title">${card.title}</h4>`
                   : ""
               }
-              ${
-                card.desc
-                  ? `<p class="gmr-card-desc">${card.desc}</p>`
-                  : ""
-              }
+              ${card.desc ? `<p class="gmr-card-desc">${card.desc}</p>` : ""}
             </div>
-          </div>`
+          </div>`,
           )
           .join("")}
       </div>

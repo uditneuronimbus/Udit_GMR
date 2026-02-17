@@ -7,8 +7,8 @@ const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY, {
   hosts: [
     { url: `${ALGOLIA_APP_ID}-dsn.algolia.net`, accept: true },
     { url: `${ALGOLIA_APP_ID}-1.algolianet.com`, accept: true },
-    { url: `${ALGOLIA_APP_ID}-2.algolianet.com`, accept: true }
-  ]
+    { url: `${ALGOLIA_APP_ID}-2.algolianet.com`, accept: true },
+  ],
 });
 
 const index = client.initIndex(ALGOLIA_INDEX);
@@ -92,7 +92,15 @@ export default async function decorate(block) {
       ${query ? `<h2>Search results for "${query}"</h2>` : ""}
     </div>
 
-    <div class="search-results-list"></div>
+    <section class="sec-search spacer">
+      <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+              <div class="search-results-list"></div>
+            </div>
+        </div>
+      </div>
+    </section>
   `;
 
   const input = block.querySelector(".search-input-results");
@@ -137,7 +145,8 @@ export default async function decorate(block) {
 
     hits.slice(0, 10).forEach((item, i) => {
       const a = document.createElement("a");
-      const lang = window.location.pathname.split("/").filter(Boolean)[0] || "en";
+      const lang =
+        window.location.pathname.split("/").filter(Boolean)[0] || "en";
 
       a.href = item.path || `/${lang}/`;
       a.role = "option";
@@ -177,7 +186,7 @@ export default async function decorate(block) {
       const { hits } = await index.search(q, {
         hitsPerPage: 10,
         attributesToSnippet: ["content:35", "description:25"],
-        snippetEllipsisText: "..."
+        snippetEllipsisText: "...",
       });
 
       if (hits.length) renderDropdown(hits, q);
@@ -215,7 +224,8 @@ export default async function decorate(block) {
         e.preventDefault();
         const q = input.value.trim();
         if (!q) return;
-        const lang = window.location.pathname.split("/").filter(Boolean)[0] || "en";
+        const lang =
+          window.location.pathname.split("/").filter(Boolean)[0] || "en";
         window.location.href = `/${lang}/search?q=${encodeURIComponent(q)}`;
         break;
 
@@ -239,7 +249,7 @@ export default async function decorate(block) {
     const { hits } = await index.search(query, {
       hitsPerPage: 20,
       attributesToSnippet: ["content:40"],
-      snippetEllipsisText: "..."
+      snippetEllipsisText: "...",
     });
 
     if (!hits.length) {
@@ -254,9 +264,7 @@ export default async function decorate(block) {
       el.className = "search-result-item";
 
       const snippet =
-        item._snippetResult?.content?.value ||
-        item.description ||
-        "";
+        item._snippetResult?.content?.value || item.description || "";
 
       const safeHref = item.path || `/${lang}/`;
 
@@ -269,7 +277,6 @@ export default async function decorate(block) {
 
       resultsList.appendChild(el);
     });
-
   } catch (e) {
     console.error("Search page failed", e);
     renderNoResults(resultsList, query);
