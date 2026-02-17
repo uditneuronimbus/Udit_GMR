@@ -19,6 +19,7 @@
     z-index: 1;
     pointer-events: none;
 }
+.bg-sky-blue.commitment-cards-container .sec-commitment:before { display:none; }
 .sec-commitment .container {
     position: relative;
     z-index: 2;
