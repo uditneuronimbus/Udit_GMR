@@ -85,7 +85,6 @@ export default async function decorate(block) {
             <span class="loader-text">Searching...</span>
           </div>
 
-          <div class="search-results-dropdown" role="listbox"></div>
         </div>
       </div>
 

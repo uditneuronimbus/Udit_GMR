@@ -229,11 +229,6 @@ block.innerHTML = `
     }
   });
 
-  if (!clickedInsideSearch) {
-    clearAll();
-  }
-
-
   document.addEventListener("mousedown", (e) => {
     const searchBox = block.querySelector(".search-box");
     const toggleBtn = block.querySelector(".btn-search");
@@ -242,7 +237,7 @@ block.innerHTML = `
       searchBox.contains(e.target) || toggleBtn.contains(e.target);
 
     if (!clickedInsideSearch) {
-      clearResults();
+      clearAll();
     }
   });
 }
