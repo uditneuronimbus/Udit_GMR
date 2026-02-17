@@ -161,6 +161,26 @@ const hasAnyContent = hasTitle || hasImage || hasContent || hasContacts;
     }
 
     ${
+      item.uploadPdf?._publishUrl
+        ? `<div class="news-pdf-download">
+             <a
+               class="btn btn-primary btn-pdf-download"
+               href="${item.uploadPdf._publishUrl}"
+               download
+               target="_blank"
+               rel="noopener noreferrer"
+             >
+               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <path d="M12 3V15M12 15L8 11M12 15L16 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                 <path d="M3 21H21M3 17V21M21 17V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+               </svg>
+               Download PDF
+             </a>
+           </div>`
+        : ""
+    }
+
+    ${
       hasImage
         ? `<div class="news-card">
              <img
