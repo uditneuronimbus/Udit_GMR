@@ -11,27 +11,18 @@
    WRAPPER & SECTION
 ================================ */
 .values-and-beliefs-wrapper {
-  margin-bottom: 64px;
-  background: var(--light-grey);
+  background: var(--lgrey);
 }
 
 .values-and-beliefs .block {
   background-color: var(--lgrey) !important;
 }
 
-.values-section {
+/* .values-section {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px 64px;
-}
-
-.values-title {
-  text-align: center;
-  font-size: 36px;
-  font-weight: 700;
-  margin-bottom: 40px;
-  color: #000;
-}
+} */
 
 /* ===============================
    GRID
@@ -190,7 +181,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .values-cards {
     grid-template-columns: 1fr;
   }
@@ -199,9 +190,14 @@
     font-size: 26px;
   }
 
-  .value-card-image {
-    margin-bottom: 48px;
+  .value-card-overlay {
+    font-size: 18px;
+    font-weight: 600;
   }
+
+  /* .value-card-image {
+    margin-bottom: 48px;
+  } */
 }
 
 /* ===============================

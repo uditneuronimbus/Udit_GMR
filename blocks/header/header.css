@@ -22,7 +22,7 @@ header.header-wrapper {
 }
 
 .page-home .primary-header:hover,
-.page-en .primary-header:hover {
+.page-home .primary-header:hover {
     background: var(--blue);
 }
 
@@ -61,15 +61,15 @@ header.header-wrapper {
 
 .navbar-logo + .navbar-logo,
 .page-home .navbar-logo:first-child,
-.page-en .navbar-logo:first-child,
+.page-home .navbar-logo:first-child,
 .page-home .affix .navbar-logo + .navbar-logo,
-.page-en .affix .navbar-logo + .navbar-logo {
+.page-home .affix .navbar-logo + .navbar-logo {
     display: none;
 }
 .page-home .navbar-logo + .navbar-logo,
-.page-en .navbar-logo + .navbar-logo,
+.page-home .navbar-logo + .navbar-logo,
 .page-home .affix .navbar-logo:first-child,
-.page-en .affix .navbar-logo:first-child {
+.page-home .affix .navbar-logo:first-child {
     display: block;
 }
 
@@ -125,20 +125,20 @@ header.header-wrapper {
 .primary-header.header-wrapper.affix .nav-brand ul > li > p > a {
     color: var(--charcoal);
 }
-.page-en .nav-brand ul > li.has-mega > a:after,
-.page-en .nav-brand ul > li.has-mega > p > a:after,
+.page-home .nav-brand ul > li.has-mega > a:after,
+.page-home .nav-brand ul > li.has-mega > p > a:after,
 .page-home .nav-brand ul > li.has-mega > p > a:after,
 .page-home .nav-brand ul > li.has-mega > a:after {
     filter: invert(1);
 }
-.page-en .affix .nav-brand ul > li.has-mega > a:after,
-.page-en .affix .nav-brand ul > li.has-mega > p > a:after,
+.page-home .affix .nav-brand ul > li.has-mega > a:after,
+.page-home .affix .nav-brand ul > li.has-mega > p > a:after,
 .page-home .affix .nav-brand ul > li.has-mega > a:after,
 .page-home .affix .nav-brand ul > li.has-mega > p > a:after {
     filter: invert(0);
 }
-.page-en .nav-brand .default-content-wrapper > ul > li > a,
-.page-en .nav-brand .default-content-wrapper > ul > li > p > a,
+.page-home .nav-brand .default-content-wrapper > ul > li > a,
+.page-home .nav-brand .default-content-wrapper > ul > li > p > a,
 .page-home .nav-brand .default-content-wrapper > ul > li > a,
 .page-home .nav-brand .default-content-wrapper > ul > li > p > a {
     color: var(--white);
@@ -147,7 +147,7 @@ header.header-wrapper {
 /********************************************
   MEGA MENU PANEL (LEVEL 1)
 *********************************************/
-.nav-brand ul > li > h4,
+.nav-brand ul > li > .menu-title,
 .nav-brand ul > li > p:nth-child(3),
 .nav-brand ul > li > ul {
     display: none !important;
@@ -226,7 +226,7 @@ header.header-wrapper {
     overflow: hidden;
 }
 
-.mega-left h4 {
+.mega-left .menu-title {
     font-size: 0.7rem;
     font-weight: 700;
     margin: 0;
@@ -344,9 +344,9 @@ header.header-wrapper {
     background: var(--charcoal);
 }
 
-.page-en .nav-hamburger-icon,
-.page-en .nav-hamburger-icon:before,
-.page-en .nav-hamburger-icon:after {
+.page-home .nav-hamburger-icon,
+.page-home .nav-hamburger-icon:before,
+.page-home .nav-hamburger-icon:after {
     background: var(--white);
 }
 
@@ -411,7 +411,7 @@ header.header-wrapper {
         margin-left: auto;
     }
 
-    .page-en .primary-header {
+    .page-home .primary-header {
         background: var(--blue);
     }
 

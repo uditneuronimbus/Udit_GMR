@@ -107,8 +107,36 @@
               "value": "big-padding-bottom"
             },
             {
+              "name": "Leadership Banner",
+              "value": "leadership-banner"
+            },
+            {
+              "name": "Leadership Message",
+              "value": "leadership-message"
+            },
+            {
+              "name": "Navigation Left",
+              "value": "navigation-left"
+            },
+            {
+              "name": "Navigation-Right",
+              "value": "navigation-right"
+            },
+            {
+              "name": "Sec Grid 3",
+              "value": "Sec-Grid-3"
+            },
+            {
+              "name": "Sec Grid 4",
+              "value": "Sec-Grid-4"
+            },
+            {
               "name": "Minus Margin Top",
               "value": "minus-margin-top"
+            },
+            {
+              "name": "Swiper Slider",
+              "value": "sec-swiper-slider"
             }
           ]
         }
@@ -174,7 +202,9 @@
         "contact-reachout-list",
         "image-scroll-card",
         "key-highlight-button",
-        "lottie-animation"
+        "lottie-animation",
+        "media-cards",
+        "photo-gallery-slider"
       ]
     }
   ]

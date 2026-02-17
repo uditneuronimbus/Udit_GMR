@@ -3,7 +3,7 @@
     min-height: 100px;
     overflow: hidden;
     padding: 0 0 48%;
-    margin-top: -4rem;
+    /* margin-top: -4rem; */
 }
 
 .no-margin .flat-banner {
@@ -74,5 +74,9 @@
 
     .flat-overlay {
         padding: 0 0 48px;
+    }
+
+    .flat-banner {
+        margin-top: 0px;
     }
 }

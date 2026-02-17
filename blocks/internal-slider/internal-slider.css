@@ -1,0 +1,250 @@
+/* =========================================
+   SECTION BASE
+========================================= */
+.internal-slider-wrapper {
+  background: var(--lpink);
+  /* padding: 100px 20px; */
+  position: relative;
+  overflow: hidden;
+}
+
+/* subtle circular background */
+.internal-slider-wrapper::before {
+    background-image: url(../../img/Groupb.png);
+    position: absolute;
+  width: 520px;
+  height: 520px;
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 50%;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+.internal-slider-header {
+  text-align: center;
+  max-width: 750px;
+  margin: 0 auto 70px auto;
+  position: relative;
+  z-index: 2;
+}
+
+.internal-slider-eyebrow {
+  display: inline-block;
+  background: #2f5ea7;
+  color: #fff;
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 4px;
+  margin-bottom: 18px;
+}
+
+.internal-slider-title {
+  font-size: 34px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #1d1d1d;
+}
+
+.internal-slider-subtitle {
+  font-size: 14px;
+  color: #5c5c5c;
+  line-height: 1.6;
+}
+
+/* =========================================
+   SWIPER CONTAINER
+========================================= */
+.internal-slider-container {
+  position: relative;
+  /* max-width: 1150px; */
+  margin: auto;
+  z-index: 2;
+}
+
+.internal-swiper {
+  padding-bottom: 60px;
+}
+
+/* =========================================
+   SLIDE LAYOUT
+========================================= */
+.internal-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  background-image: url(../../img/Groupb.png);
+  background-repeat:no-repeat ;
+  margin-left: 160px;
+}
+
+/* =========================================
+   CONTENT CARD (LEFT)
+========================================= */
+.internal-slide-content {
+  max-width: 380px;
+  position: relative;
+  z-index: 3;
+  margin-right: -90px; /* overlap effect */
+  padding: 50px;
+}
+
+.internal-slide-badge {
+  display: inline-block;
+  background: var(--royal-blue);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 4px;
+  margin-bottom: 14px;
+}
+
+.internal-slide-title {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: var(--turquoise);
+}
+
+.internal-slide-description {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--charcoal);
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  width: 325px;
+}
+
+.internal-slide-index {
+  position: absolute;
+  right: -45px;
+  bottom: -25px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8fb3d9;
+}
+
+/* =========================================
+   IMAGE (RIGHT)
+========================================= */
+.internal-slide-image img {
+  width: 560px;
+  height: 360px;
+  object-fit: cover;
+  border-radius: 14px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+}
+
+/* =========================================
+   SWIPER NAVIGATION ARROWS
+========================================= */
+.internal-slider-navigation .swiper-button-prev,
+.internal-slider-navigation .swiper-button-next {
+  color: #d6a554;
+  width: 42px;
+  height: 42px;
+}
+
+.internal-slider-navigation .swiper-button-prev::after,
+.internal-slider-navigation .swiper-button-next::after {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Position arrows slightly outside */
+.swiper-button-prev {
+  left: -60px;
+}
+
+.swiper-button-next {
+  right: -60px;
+}
+
+/* =========================================
+   PAGINATION (DOT LINE STYLE)
+========================================= */
+.swiper-pagination {
+  bottom: 0 !important;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #f2b866;
+  opacity: 0.5;
+  border-radius: 50%;
+}
+
+.swiper-pagination-bullet-active {
+  background: #f29c1f;
+  opacity: 1;
+}
+
+
+/* Default Layout */
+.internal-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+}
+
+/* Reverse for even slides */
+.reverse-layout {
+  flex-direction: row-reverse;
+}
+
+/* Overlap handling */
+.internal-slide-content {
+  margin-right: -90px;
+}
+
+.reverse-layout .internal-slide-content {
+  margin-right: 0;
+  margin-left: -90px;
+}
+
+
+.internal-slider-navigation {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+@media (max-width: 1024px) {
+
+  .internal-slide {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .internal-slide-content {
+    margin-right: 0;
+    margin-bottom: -40px;
+  }
+
+  .internal-slide-image img {
+    width: 100%;
+    height: auto;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    display: none;
+  }
+}

@@ -359,10 +359,11 @@ export default async function decorate(block) {
 
     const imageMap = new Map();
     // Detect current language from URL path
-    const pathSegments = window.location.pathname.split('/');
-    let currentLang = 'en'; // Default
+    // Support both 2-char codes (en, ja) and hyphenated codes (zh-cn, zh-sg)
+    const pathSegments = window.location.pathname.split("/");
+    let currentLang = "en"; // Default
     for (const segment of pathSegments) {
-      if (segment.length === 2 && /^[a-z]{2}$/.test(segment)) {
+      if (/^[a-z]{2}(-[a-z]{2})?$/.test(segment)) {
         currentLang = segment;
         break;
       }
@@ -384,15 +385,18 @@ export default async function decorate(block) {
       console.log("Navigation fragment loaded:", fragment ? "Yes" : "No");
 
       // FALLBACK: If current language fragment fails, try the absolute English one
-      if (!fragment && currentLang !== 'en') {
-        console.log("Language-specific nav failed, falling back to English nav:", englishNavPath);
+      if (!fragment && currentLang !== "en") {
+        console.log(
+          "Language-specific nav failed, falling back to English nav:",
+          englishNavPath,
+        );
         fragment = await loadFragment(englishNavPath);
       }
     } catch (error) {
       console.log("Navigation fragment loading failed:", error);
 
       // Secondary fallback to English on error
-      if (currentLang !== 'en') {
+      if (currentLang !== "en") {
         try {
           fragment = await loadFragment(englishNavPath);
         } catch (e) {
@@ -470,7 +474,8 @@ export default async function decorate(block) {
       const logoPictures = navBrand.querySelectorAll("picture");
       logoPictures.forEach((picture) => {
         const logoLink = document.createElement("a");
-        logoLink.href = `/${currentLang}/`;
+        // Use absolute URL to prevent duplicate language codes in path
+        logoLink.href = `${window.location.origin}/${currentLang}/`;
         logoLink.setAttribute("aria-label", "GMR Home");
         logoLink.className = "navbar-logo";
 
@@ -544,7 +549,10 @@ export default async function decorate(block) {
               { text: "INVESTORS", href: `/${currentLang}/investors` },
               { text: "NEWS & INSIGHTS", href: `/${currentLang}/news` },
               { text: "CAREERS", href: `/${currentLang}/careers` },
-              { text: "SUSTAINABILITY", href: `/${currentLang}/sustainability` },
+              {
+                text: "SUSTAINABILITY",
+                href: `/${currentLang}/sustainability`,
+              },
               { text: "FOUNDATION", href: `/${currentLang}/foundation` },
             ];
 
@@ -614,6 +622,13 @@ export default async function decorate(block) {
             const mainLinkEl = li.querySelector("a");
             let menuTitleText = mainLinkEl ? mainLinkEl.textContent.trim() : "";
             const customTitleEl = li.querySelector("h4");
+            if (customTitleEl) {
+              const newDiv = document.createElement("div");
+              newDiv.className = "menu-title";
+              newDiv.textContent = customTitleEl.textContent.trim();
+
+              customTitleEl.replaceWith(newDiv); // Replace h4 with new div
+            }
             let descriptionText = "";
             const allPs = li.querySelectorAll(":scope > p");
             allPs.forEach((p) => {
@@ -639,9 +654,14 @@ export default async function decorate(block) {
 
             const colLeft = document.createElement("div");
             colLeft.className = "mega-col mega-left";
-            const sectionTitle = document.createElement("h4");
+
+            // Replace <h4> with <div class="menu-title">
+            const sectionTitle = document.createElement("div");
+            sectionTitle.className = "menu-title";
             sectionTitle.textContent = menuTitleText;
+
             colLeft.append(sectionTitle);
+
             const horizontalContainer = document.createElement("div");
             horizontalContainer.className = "main-category-list";
             colLeft.append(horizontalContainer);
@@ -989,7 +1009,7 @@ export default async function decorate(block) {
 }
 
 // Helper function to create navigation structure from text content
-function createNavStructureFromText(nav, currentLang = 'en') {
+function createNavStructureFromText(nav, currentLang = "en") {
   const navText = nav.textContent;
 
   // Create the standard 3-section structure for proper styling

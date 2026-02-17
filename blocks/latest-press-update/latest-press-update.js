@@ -18,9 +18,31 @@ function formatDate(dateString) {
     year: "numeric",
   });
 }
+function getCategoryFromURL() {
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  if (!parts.length) return "";
+
+  let slug = parts[parts.length - 1].toLowerCase();
+
+  // Custom overrides
+  const slugMap = {
+    "blogs": "blog",
+  };
+
+  return slugMap[slug] || slug;
+}
 
 export default async function decorate(block) {
-  const labelText = block.textContent.trim() || "LATEST PRESS UPDATE";
+  const limit = 3;
+  const offset = 0;
+  const category = getCategoryFromURL();
+  let labeltitle = '';
+  if (category === "press-release") {
+    labeltitle = "LATEST PRESS RELEASE";
+  } else if (category === "blog") {
+    labeltitle = "LATEST INSIGHTS";
+  }
+  let labelText = block.textContent.trim() || labeltitle;
   block.innerHTML = "";
   
 
@@ -41,15 +63,13 @@ export default async function decorate(block) {
      Fetch latest press
   ================================ */
   try {
-      const limit = 3;
-      const offset = 0;
-      const category = "press-release";
-
      const apiUrl =
-          `${getApiHost()}/api/v1/web/gmr-api/recent-posts` +
-          `?limit=${encodeURIComponent(limit)}` +
-          `&soffset=${encodeURIComponent(offset)}` +
-          `&category=${encodeURIComponent(category)}`;
+          `${getApiHost()}/api/v1/web/gmr-api/latest-news` +
+          `?category=${encodeURIComponent(category)}`;
+          
+
+    console.log("________________________________________", apiUrl);
+    
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`API error ${res.status}`);
 
@@ -61,9 +81,12 @@ export default async function decorate(block) {
     }
 
     const item = items[0];
+    console.log("_____________________________________________", item.description?.plaintext);
+    
+    
     
     if (!item) {
-      wrapper.innerHTML = "<p>No press updates found.</p>";
+      wrapper.innerHTML = `<p>No ${category} updates found.</p>`;
       return;
     }
 
@@ -87,10 +110,6 @@ export default async function decorate(block) {
           ${item.title || ""}
         </h1>
 
-        <p class="lpu-location">
-          ${item.location || item.city || "Location not specified"}
-        </p>
-
         <div class="lpu-meta">
           <span class="lpu-category badge ${categorySlug}">
             ${slugToTitle(item.subCategory || item.category || "Press")}
@@ -106,6 +125,9 @@ export default async function decorate(block) {
             ${publishDateFormatted}
           </span>
         </div>
+        <p class="lpu-description">
+          ${item.description?.plaintext || "No description available."}
+        </p>
 
         <a
           href="/en/news-update?post=${item.slugUrl}"
@@ -124,7 +146,7 @@ export default async function decorate(block) {
       </div>
     `;
   } catch (err) {
-    console.error("Latest press update error:", err);
+    console.error(`Latest ${category} update error:`, err);
     wrapper.innerHTML = "<p>Error loading press update.</p>";
   }
 }
