@@ -1,7 +1,7 @@
 {
   "definitions": [
     {
-      "title": "Listing Brand",
+      "title": "Brand",
       "id": "listing-brand",
       "plugins": {
         "xwalk": {
