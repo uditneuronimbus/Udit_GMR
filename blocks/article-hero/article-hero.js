@@ -9,11 +9,7 @@ function getCategoryFromURL() {
   let slug = parts[parts.length - 1].toLowerCase();
 
   const slugMap = {
-    "blogs": "blog",
-    "press-releases": "press-release",
     "brand-films-visuals": "press-release",
-    "media-kit": "press-release",
-    "success-stories": "press-release"
   };
 
   return slugMap[slug] || slug;
