@@ -358,10 +358,22 @@ export default async function decorate(block) {
     console.log("Starting main navigation decoration...");
 
     const imageMap = new Map();
+    // Detect current language from URL path
+    // Support both 2-char codes (en, ja) and hyphenated codes (zh-cn, zh-sg)
+    const pathSegments = window.location.pathname.split("/");
+    let currentLang = "en"; // Default
+    for (const segment of pathSegments) {
+      if (/^[a-z]{2}(-[a-z]{2})?$/.test(segment)) {
+        currentLang = segment;
+        break;
+      }
+    }
+
     const navMeta = getMetadata("nav");
+    const englishNavPath = "/en/nav"; // Absolute fallback
     const navPathMain = navMeta
       ? new URL(navMeta, window.location).pathname
-      : "/en/nav";
+      : `/${currentLang}/nav`;
     const isAero = window.location.pathname.startsWith("/aero-gmr/");
     const navPath = isAero ? "/aero-gmr/nav" : navPathMain;
 
@@ -371,9 +383,28 @@ export default async function decorate(block) {
     try {
       fragment = await loadFragment(navPath);
       console.log("Navigation fragment loaded:", fragment ? "Yes" : "No");
+
+      // FALLBACK: If current language fragment fails, try the absolute English one
+      if (!fragment && currentLang !== "en") {
+        console.log(
+          "Language-specific nav failed, falling back to English nav:",
+          englishNavPath,
+        );
+        fragment = await loadFragment(englishNavPath);
+      }
     } catch (error) {
       console.log("Navigation fragment loading failed:", error);
-      fragment = null;
+
+      // Secondary fallback to English on error
+      if (currentLang !== "en") {
+        try {
+          fragment = await loadFragment(englishNavPath);
+        } catch (e) {
+          fragment = null;
+        }
+      } else {
+        fragment = null;
+      }
     }
 
     // Clear the block first
@@ -407,7 +438,7 @@ export default async function decorate(block) {
     if (!hasProperStructure) {
       // We need to create the structure from the text content
       console.log("Creating structure from text content");
-      createNavStructureFromText(nav);
+      createNavStructureFromText(nav, currentLang);
     }
 
     const classes = ["brand", "sections", "tools"];
@@ -443,7 +474,8 @@ export default async function decorate(block) {
       const logoPictures = navBrand.querySelectorAll("picture");
       logoPictures.forEach((picture) => {
         const logoLink = document.createElement("a");
-        logoLink.href = "/en/";
+        // Use absolute URL to prevent duplicate language codes in path
+        logoLink.href = `${window.location.origin}/${currentLang}/`;
         logoLink.setAttribute("aria-label", "GMR Home");
         logoLink.className = "navbar-logo";
 
@@ -512,13 +544,16 @@ export default async function decorate(block) {
           } else {
             // Create navigation items based on typical GMR structure
             const navItems = [
-              { text: "ABOUT US", href: "/en/about-us" },
-              { text: "BUSINESSES", href: "/en/businesses" },
-              { text: "INVESTORS", href: "/en/investors" },
-              { text: "NEWS & INSIGHTS", href: "/en/news" },
-              { text: "CAREERS", href: "/en/careers" },
-              { text: "SUSTAINABILITY", href: "/en/sustainability" },
-              { text: "FOUNDATION", href: "/en/foundation" },
+              { text: "ABOUT US", href: `/${currentLang}/about-us` },
+              { text: "BUSINESSES", href: `/${currentLang}/businesses` },
+              { text: "INVESTORS", href: `/${currentLang}/investors` },
+              { text: "NEWS & INSIGHTS", href: `/${currentLang}/news` },
+              { text: "CAREERS", href: `/${currentLang}/careers` },
+              {
+                text: "SUSTAINABILITY",
+                href: `/${currentLang}/sustainability`,
+              },
+              { text: "FOUNDATION", href: `/${currentLang}/foundation` },
             ];
 
             navItems.forEach((item) => {
@@ -587,6 +622,13 @@ export default async function decorate(block) {
             const mainLinkEl = li.querySelector("a");
             let menuTitleText = mainLinkEl ? mainLinkEl.textContent.trim() : "";
             const customTitleEl = li.querySelector("h4");
+            if (customTitleEl) {
+              const newDiv = document.createElement("div");
+              newDiv.className = "menu-title";
+              newDiv.textContent = customTitleEl.textContent.trim();
+
+              customTitleEl.replaceWith(newDiv); // Replace h4 with new div
+            }
             let descriptionText = "";
             const allPs = li.querySelectorAll(":scope > p");
             allPs.forEach((p) => {
@@ -612,9 +654,14 @@ export default async function decorate(block) {
 
             const colLeft = document.createElement("div");
             colLeft.className = "mega-col mega-left";
-            const sectionTitle = document.createElement("h4");
+
+            // Replace <h4> with <div class="menu-title">
+            const sectionTitle = document.createElement("div");
+            sectionTitle.className = "menu-title";
             sectionTitle.textContent = menuTitleText;
+
             colLeft.append(sectionTitle);
+
             const horizontalContainer = document.createElement("div");
             horizontalContainer.className = "main-category-list";
             colLeft.append(horizontalContainer);
@@ -921,34 +968,66 @@ export default async function decorate(block) {
 
       toggleMenu(nav, navSections, e.matches);
     });
+
+    // FINAL STEP: Rewrite all links within the navigation to preserve the active language
+    const allNavLinks = nav.querySelectorAll("a");
+    allNavLinks.forEach((a) => {
+      const href = a.getAttribute("href");
+      if (href && href.startsWith("/") && !href.startsWith("//")) {
+        // Check if there's already a 2-char language segment
+        const segments = href.split("/");
+        let hasLang = false;
+        let langIndex = -1;
+        for (let i = 0; i < segments.length; i++) {
+          if (segments[i].length === 2 && /^[a-z]{2}$/.test(segments[i])) {
+            hasLang = true;
+            langIndex = i;
+            break;
+          }
+        }
+
+        if (hasLang) {
+          // Replace existing language segment
+          segments[langIndex] = currentLang;
+          a.href = segments.join("/").replace(/\/+/g, "/");
+        } else {
+          // Prepend language segment if not present
+          a.href = `/${currentLang}${href}`.replace(/\/+/g, "/");
+        }
+      }
+    });
   } catch (e) {
     console.error("Navigation Decorate Failed:", e);
+  } finally {
+    // REVEAL PAGE: The header is the most important element to avoid flashing.
+    // By revealing here, we ensure the user sees a complete, localized header.
+    if (window.revealPage) {
+      console.log("Header decorated, triggering revealPage()");
+      window.revealPage();
+    }
   }
 }
 
 // Helper function to create navigation structure from text content
-function createNavStructureFromText(nav) {
+function createNavStructureFromText(nav, currentLang = "en") {
   const navText = nav.textContent;
 
-  // Create the standard structure
+  // Create the standard 3-section structure for proper styling
   const navBrand = document.createElement("div");
   navBrand.className = "nav-brand";
-
   const brandWrapper = document.createElement("div");
   brandWrapper.className = "default-content-wrapper";
-
-  // Create UL with navigation items based on the image you shared
   const ul = document.createElement("ul");
 
-  // Based on your screenshot, these are the navigation items
+  // Language-aware links
   const navItems = [
-    { text: "ABOUT US", href: "/en/about-us" },
-    { text: "BUSINESSES", href: "/en/businesses" },
-    { text: "INVESTORS", href: "/en/investors" },
-    { text: "NEWS & INSIGHTS", href: "/en/news" },
-    { text: "CAREERS", href: "/en/careers" },
-    { text: "SUSTAINABILITY", href: "/en/sustainability" },
-    { text: "FOUNDATION", href: "/en/foundation" },
+    { text: "ABOUT US", href: `/${currentLang}/about-us` },
+    { text: "BUSINESSES", href: `/${currentLang}/businesses` },
+    { text: "INVESTORS", href: `/${currentLang}/investors` },
+    { text: "NEWS & INSIGHTS", href: `/${currentLang}/news` },
+    { text: "CAREERS", href: `/${currentLang}/careers` },
+    { text: "SUSTAINABILITY", href: `/${currentLang}/sustainability` },
+    { text: "FOUNDATION", href: `/${currentLang}/foundation` },
   ];
 
   navItems.forEach((item) => {
@@ -963,7 +1042,21 @@ function createNavStructureFromText(nav) {
   brandWrapper.appendChild(ul);
   navBrand.appendChild(brandWrapper);
 
-  // Clear nav and add structured content
+  const navSections = document.createElement("div");
+  navSections.className = "nav-sections";
+  const sectionsWrapper = document.createElement("div");
+  sectionsWrapper.className = "default-content-wrapper";
+  navSections.appendChild(sectionsWrapper);
+
+  const navTools = document.createElement("div");
+  navTools.className = "nav-tools";
+  const toolsWrapper = document.createElement("div");
+  toolsWrapper.className = "default-content-wrapper";
+  navTools.appendChild(toolsWrapper);
+
+  // Clear nav and add structured content (brand, sections, tools)
   nav.innerHTML = "";
   nav.appendChild(navBrand);
+  nav.appendChild(navSections);
+  nav.appendChild(navTools);
 }

@@ -225,8 +225,40 @@
             "value": "background-pink"
           },
           {
+            "name": "Big Padding Bottom",
+            "value": "big-padding-bottom"
+          },
+          {
+            "name": "Leadership Banner",
+            "value": "leadership-banner"
+          },
+          {
+            "name": "Leadership Message",
+            "value": "leadership-message"
+          },
+          {
+            "name": "Navigation Left",
+            "value": "navigation-left"
+          },
+          {
+            "name": "Navigation-Right",
+            "value": "navigation-right"
+          },
+          {
+            "name": "Sec Grid 3",
+            "value": "Sec-Grid-3"
+          },
+          {
+            "name": "Sec Grid 4",
+            "value": "Sec-Grid-4"
+          },
+          {
             "name": "Minus Margin Top",
             "value": "minus-margin-top"
+          },
+          {
+            "name": "Swiper Slider",
+            "value": "sec-swiper-slider"
           }
         ]
       }
@@ -914,6 +946,47 @@
         "name": "actionLink",
         "label": "Action Link (URL)",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "contact-reachout-list",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "contact-reachout-item",
+    "itemLabel": "heading",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "content",
+        "label": "Content",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Icon"
       }
     ]
   },
@@ -2190,6 +2263,10 @@
     ]
   },
   {
+    "id": "hero-press",
+    "fields": []
+  },
+  {
     "id": "hero",
     "fields": [
       {
@@ -2487,9 +2564,10 @@
         "label": "Slide Description"
       },
       {
-        "component": "image",
-        "name": "slideImage",
-        "label": "Slide Image"
+        "component": "reference",
+        "name": "image",
+        "label": "Holdings Image",
+        "valueType": "string"
       }
     ]
   },
@@ -2890,8 +2968,120 @@
     ]
   },
   {
+    "id": "listing-blog",
+    "fields": []
+  },
+  {
     "id": "listing-press",
     "fields": []
+  },
+  {
+    "id": "listing-stories",
+    "fields": []
+  },
+  {
+    "id": "lottie-animation",
+    "fields": [
+      {
+        "component": "text",
+        "name": "animation",
+        "label": "Animation Filename",
+        "description": "Enter the filename (e.g., mapanimation5) of the JSON stored in lottie-data folder",
+        "valueType": "string",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "media-cards",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Heading",
+        "valueType": "string",
+        "defaultValue": "Media Cards"
+      },
+      {
+        "component": "richtext",
+        "name": "descriptionHead",
+        "label": "Description Head",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "media-cards-item",
+    "itemLabel": "title",
+    "fields": [
+      {
+        "component": "select",
+        "name": "networkType",
+        "label": "Network Type (For Filtering)",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "None",
+            "value": "none"
+          },
+          {
+            "name": "Group Holdings Board",
+            "value": "groupHoldingsBoard"
+          },
+          {
+            "name": "Other Images",
+            "value": "otherImages"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Holdings Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imagealt",
+        "label": "Image-ALT"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaLabel",
+        "label": "Link Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaUrl",
+        "label": "Link URL",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaLabel1",
+        "label": "Link Text1",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaUrl1",
+        "label": "Link URL1",
+        "valueType": "string"
+      }
+    ]
   },
   {
     "id": "media-contact-header",
@@ -3454,6 +3644,48 @@
     ]
   },
   {
+    "id": "photo-gallery-slider",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Section Heading",
+        "valueType": "string",
+        "defaultValue": "Everyday Life at GMR"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Section Description",
+        "valueType": "string",
+        "defaultValue": "At GMR, the countless small moments in our people's workday show the human side of building big things together."
+      }
+    ]
+  },
+  {
+    "id": "photo-gallery-slider-item",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "altText",
+        "label": "Alt Text",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "press-hero",
     "fields": []
   },
@@ -3862,6 +4094,45 @@
         "name": "facebookUrl",
         "label": "Facebook URL",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "story-update-page",
+    "fields": []
+  },
+  {
+    "id": "success-stories-page",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionTitle",
+        "label": "Section Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "sectionDescription",
+        "label": "Section Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionCTA",
+        "label": "Section CTA Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionCTALink",
+        "label": "Section CTA Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "category",
+        "label": "Section Category"
       }
     ]
   },

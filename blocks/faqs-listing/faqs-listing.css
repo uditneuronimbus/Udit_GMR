@@ -1,4 +1,4 @@
-.faq-wrapper {
+ .faq-wrapper {
     max-width: 900px;
     margin: auto;
 }
@@ -11,7 +11,6 @@
     transition: all 0.3s ease;
 }
 
-/* QUESTION */
 .faq-question {
     width: 100%;
     padding: 18px 20px;
@@ -26,7 +25,6 @@
     cursor: pointer;
 }
 
-/* ICON */
 .faq-icon {
     background: orange;
     color: white;
@@ -40,7 +38,6 @@
     transition: transform 0.3s ease;
 }
 
-/* ANSWER */
 .faq-answer {
     max-height: 0;
     overflow: hidden;
@@ -54,12 +51,11 @@
     font-size: 15px;
 }
 
-/* ACTIVE */
 .faq-item.active .faq-answer {
     max-height: 200px;
 }
 
 .faq-item.active .faq-icon {
     transform: rotate(45deg);
-    /* + becomes x */
-}
+} 
+

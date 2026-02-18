@@ -2,7 +2,7 @@
    SECTION BACKGROUND
 =============================== */
 .fraud-tabs-runtime {
-    background: linear-gradient(180deg, #06c 0, #1e3c6b 100%);
+    /* background: linear-gradient(180deg, #06c 0, #1e3c6b 100%); */
     position: relative;
     padding: 60px 0;
     color: var(--white);
@@ -13,7 +13,7 @@
     position: absolute;
     content: "";
     inset: 0;
-    background: url("../../img/listed-bg.svg") no-repeat center;
+    /* background: url("../../img/listed-bg.svg") no-repeat center; */
     background-size: 100%;
     z-index: 1;
 }
@@ -21,6 +21,16 @@
 .fraud-tabs-runtime .container {
     position: relative;
     z-index: 2;
+}
+
+.fraud-tab-pane p {
+    font-weight: 400;
+    font-size: 19px;
+}
+
+.fraud-tab-inside-title {
+    font-weight: 400;
+    font-size: 40px;
 }
 
 
@@ -53,6 +63,7 @@
     color: var(--yellow);
     cursor: pointer;
     transition: all 0.3s ease;
+    border-radius: 5px;
 }
 
 .fraud-tab-btn:hover {
@@ -71,10 +82,11 @@
      TAB CONTENT
   =============================== */
 .fraud-tabs-content {
-    max-width: 1000px;
+    max-width: 1440px;
     margin: 0 auto;
     font-weight: 300;
-    line-height: 1.7;
+    color: var(--black);
+    margin-top: 2rem;
 }
 
 

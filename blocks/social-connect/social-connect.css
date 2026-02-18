@@ -3,19 +3,19 @@
     background-position: center;
     background-repeat: no-repeat;
     border-radius: 1rem;
-    min-width: 4rem;
-    min-height: 4rem;
+    min-width: 3rem;
+    min-height: 3rem;
     display: inline-flex;
     border: solid 2px transparent;
-    transition-duration: 0.3s;
+    transition-duration: 0.3s; background-size: 22px;
 }
 .social-connect-icons .icon:hover {
     border-color: var(--lorange);
 }
 
 .social-connect-title h4{
-    font-size: 30px;
-    color: black;
+    font-size:var(--fs-xlarge);
+    color: var(--black);
 }
 
 .icon-instagram {
@@ -37,7 +37,7 @@
     background-image: url(../../icons/whatsapp-icon.svg);
 }
 .icon-facebook {
-    background-image: url(../../icons/fb-icon.svg);
+    background-image: url(../../icons/fb-icon.svg); background-size: 16px!important;
 }
 @media (max-width:767px){
 .social-connect-title {

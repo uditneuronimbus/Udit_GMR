@@ -97,7 +97,7 @@ button {
     outline-offset: 2px;
 }
 :focus:not(:focus-visible) {
-    outline: none;
+    outline: 0;
 }
 label {
     font-weight: 400;
@@ -107,7 +107,7 @@ iframe {
 }
 b,
 strong {
-    font-weight: 600;
+    font-weight: 700;
 }
 sub,
 sup {
@@ -218,9 +218,12 @@ hr {
 .bg-charcoal {
     background-color: var(--charcoal) !important;
 }
-.bg-sky-blue,
-.baclground-skyblue {
+.baclground-skyblue,
+.bg-sky-blue {
     background-color: var(--sky-blue) !important;
+}
+.background-pink {
+    background-color: var(--lpink) !important;
 }
 .text-blue,
 .text-primary {
@@ -266,6 +269,9 @@ hr {
 .badge.airport-aero-services {
     background-color: var(--blue);
 }
+.badge.other {
+    background-color: var(--black);
+}
 .badge.energy {
     background-color: var(--red);
 }
@@ -298,6 +304,12 @@ hr {
     transition-duration: 0.3s;
     position: relative;
     right: 0;
+}
+.btn-link.download:after {
+    background: url(../../icons/download-yellow.svg) no-repeat center;
+    width: 14px;
+    height: 14px;
+    background-size: 14px;
 }
 .btn-link:before {
     content: "";
@@ -359,11 +371,20 @@ hr {
 .btn-outline-primary:hover,
 .btn-primary:focus,
 .btn-primary:hover,
-.button.primary:hover,
-.button.primary:focus {
+.button.primary:focus,
+.button.primary:hover {
     background-color: var(--white);
     border-color: var(--lorange);
     color: var(--black);
+}
+.btn-check:checked + .btn,
+.btn.active,
+.btn.show,
+.btn:first-child:active,
+:not(.btn-check) + .btn:active {
+    color: var(--black);
+    background-color: var(--white);
+    border-color: var(--lorange);
 }
 .btn-transparent {
     padding: 0;
@@ -485,7 +506,7 @@ hr {
 }
 .swiper-button-next.swiper-button-disabled,
 .swiper-button-prev.swiper-button-disabled {
-    background: 0 0;
+    background: var(--white);
     opacity: 1 !important;
 }
 .swiper-button-next.swiper-button-disabled:before,
@@ -494,10 +515,11 @@ hr {
 }
 .businesses-section.block,
 .container,
-.message-from-leadership,
 .default-section .default-content-wrapper,
 .global-leaders-aviation-wrapper,
-.listed-companies-wrapper {
+.leadership-message,
+.listed-companies-wrapper,
+.message-from-leadership {
     max-width: 1440px;
     width: 100%;
     margin: 0 auto;
@@ -517,7 +539,6 @@ hr {
 .card-ui-one .card-body p.card-desc {
     min-height: 50px;
 }
-/* .page-airports .card-ui-one .card-body p.card-desc { min-height: 50px; } */
 .card-ui-one .card-img,
 .card-ui-three .card-img,
 .card-ui-two .card-img {
@@ -529,6 +550,11 @@ hr {
     padding: 0 0 65%;
     margin-bottom: 0.5rem;
 }
+.sec-grid-2 .card-ui-one .card-img,
+.sec-grid-2 .card-ui-three .card-img,
+.sec-grid-2 .card-ui-two .card-img {
+    padding: 0 0 45%;
+}
 .card-ui-one .card-body {
     padding: 1.25rem;
     font-size: var(--fs-regular);
@@ -536,6 +562,15 @@ hr {
     border-radius: 0.5rem;
     background: var(--white);
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.card-ui-one .card-body * {
+    margin: 0;
+}
+.card-ui-one .card-cta {
+    margin-top: auto;
 }
 .card-ui-one .card-title {
     font-size: var(--fs-medium);
@@ -543,11 +578,15 @@ hr {
 }
 .awards-filter-runtime,
 .default-section,
+.leadership-message .default-content-wrapper,
 .page-corporate-governance .overlay-banner-container,
 .partners-filter-runtime,
-.spacer,
-.press-listing-runtime {
-    padding: 80px 0;
+.press-listing-runtime,
+.spacer {
+    padding: 5rem 0;
+}
+.big-padding-bottom .spacer {
+    padding-bottom: 10rem !important;
 }
 .card-ui-two .card-img {
     border-radius: 0.5rem;
@@ -580,13 +619,17 @@ hr {
 }
 .card-ui-three {
     border: none;
-    background: 0 0;
+    background: var(--charcoal);
     overflow: hidden;
     position: relative;
+    padding: 0 0 86%;
 }
 .card-ui-three .card-img {
-    padding: 0 0 86%;
-    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 .card-ui-three .card-body {
     position: absolute;
@@ -664,7 +707,7 @@ hr {
     margin-bottom: 20px;
     position: sticky;
     z-index: 999 !important;
-    top: 56px;
+    top: 85px;
     background: var(--lgrey);
     padding: 15px 0;
 }
@@ -857,18 +900,29 @@ hr {
 .apply-btn:hover {
     background: var(--charcoal);
 }
+.card-img {
+    overflow: hidden;
+    border: 1px solid var(--lgrey);
+}
 .card-img,
 .card-img-bottom {
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
 }
 .card-img,
 .card-img-top {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
 }
 .card-title {
     line-height: 1.4;
+}
+.card-cta {
+    display: flex;
+    align-items: center;
+}
+.card-cta > div {
+    flex: 1;
 }
 .news-updates .card-title {
     display: -webkit-box;
@@ -879,7 +933,7 @@ hr {
     min-height: 52px;
     line-height: 1.4;
 }
-.card-text {
+.stories-swiper .card-text {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -887,8 +941,12 @@ hr {
     text-overflow: ellipsis;
     min-height: 42px;
 }
-
-/* corporate-governance */
+.card-text {
+    min-height: 42px;
+}
+.page-transportation .key-highlightss-wrapper .spacer {
+    padding-bottom: 160px;
+}
 .page-corporate-governance .default-section.bg-gray {
     padding-bottom: 160px;
 }
@@ -896,15 +954,14 @@ hr {
     padding-top: 0 !important;
     margin-top: -4rem;
 }
-/* corporate-governance */
-/* about gmr impact */
 .gmr-impact .gla-wrapper.spacer {
     padding-bottom: 160px;
 }
-.gmr-impact .gla-wrapper > .container .col-lg-5.col-md-5,
-.gmr-impact .gla-wrapper > .container .col-md-7.col-lg-6 {
+.gmr-impact .gla-wrapper > .container .col-md-5,
+.gmr-impact .gla-wrapper > .container .col-md-7 {
     flex: 0 0 auto;
     width: 100%;
+    margin-left: 0;
 }
 .gmr-impact .gla-wrapper > .container {
     text-align: center;
@@ -922,9 +979,8 @@ hr {
 .gmr-impact .global-leaders-aviation .gla-footer > div {
     background-color: #e0e0e0;
 }
-
 .bg-sky-blue.commitment-cards-container .sec-commitment {
-    background: none;
+    background: 0 0;
 }
 .page-about .commitment-cards-container .sec-commitment {
     margin-top: -4rem;
@@ -980,37 +1036,256 @@ hr {
 .all-business-cards-container .default-content-wrapper .primary:hover {
     background-color: var(--white);
 }
-/* about gmr impact */
-
 .bg-gray.all-business-cards-container .spacer {
     padding-bottom: 160px;
 }
+.pt-0 .spacer {
+    padding-top: 0;
+}
+.leadership-banner .inner-hero-content {
+    position: relative;
+    flex-direction: column-reverse;
+    display: flex;
+}
+.leadership-banner .inner-hero-content .btn-primary,
+.leadership-message .button.primary {
+    margin: 0 0 2rem 0 !important;
+    max-width: 90px;
+    height: 38px;
+    padding: 0 0.8rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--fs-normal);
+}
+.leadership-message .default-content-wrapper {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 3rem;
+    margin-bottom: 3rem;
+}
+.leadership-message .button.primary {
+    margin-bottom: 0 !important;
+    max-width: inherit;
+    display: inline-flex;
+}
+.leadership-banner .inner-hero-content .btn-primary:before,
+.leadership-message .button.primary:before {
+    content: "";
+    width: 15px;
+    height: 11px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("data:image/svg+xml,%3Csvg width='23' height='18' viewBox='0 0 23 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M22.0833 8.75L0.749919 8.75M0.749919 8.75L8.74992 16.75M0.749919 8.75L8.74992 0.749998' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.leadership-message h2 {
+    font-size: var(--fs-xxlarge);
+    margin-bottom: 1.5rem;
+}
+.leadership-message h3 {
+    font-family: var(--font-secondary);
+}
+.leadership-message h1,
+.leadership-message h2,
+.leadership-message h3,
+.leadership-message h4,
+.leadership-message h5,
+.leadership-message h6 {
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+}
+.leadership-message li,
+.leadership-message p {
+    font-size: var(--fs-medium);
+    margin-bottom: 1.5rem;
+}
+.leadership-message.navigation-left .default-content-wrapper,
+.leadership-message.navigation-right .default-content-wrapper {
+    position: relative;
+    border-bottom: none;
+}
+.navigation-left {
+    display: flex;
+    justify-content: flex-start;
+}
+.navigation-right {
+    display: flex;
+    justify-content: flex-end;
+}
+.navigation-left .default-content-wrapper,
+.navigation-right .default-content-wrapper {
+    position: absolute;
+    top: 0;
+    background: var(--lgrey);
+    padding: 16px 20px;
+    border-radius: 10px;
+    width: 350px;
+}
+.navigation-left .default-content-wrapper {
+    left: 125px;
+}
+.navigation-right .default-content-wrapper {
+    right: 100px;
+}
+.navigation-right.leadership-message {
+    margin-top: -177px;
+    margin-bottom: 2rem;
+}
+.navigation-left.leadership-message p.button-container {
+    margin-bottom: 0;
+    opacity: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-125px, 45px);
+}
+.navigation-right.leadership-message p.button-container {
+    margin-bottom: 0;
+    opacity: 1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(100px, 45px);
+}
+.navigation-right.leadership-message p.button-container .button.primary:before {
+    display: none;
+}
+.navigation-right.leadership-message p.button-container .button.primary:after {
+    transform: rotate(180deg);
+    content: "";
+    width: 15px;
+    height: 11px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("data:image/svg+xml,%3Csvg width='23' height='18' viewBox='0 0 23 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M22.0833 8.75L0.749919 8.75M0.749919 8.75L8.74992 16.75M0.749919 8.75L8.74992 0.749998' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.navigation-left.leadership-message p,
+.navigation-right.leadership-message p {
+    font-size: var(--fs-regular);
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
+}
+.navigation-left.leadership-message h4,
+.navigation-right.leadership-message h4 {
+    font-size: var(--fs-medium);
+    margin-bottom: 0.5rem;
+    font-weight: 800;
+    color: var(--black);
+}
+.navigation-left.leadership-message h5,
+.navigation-right.leadership-message h5 {
+    font-size: var(--fs-normal);
+    margin-bottom: 0;
+}
+
+/* education page */
+.background-pink.message-from-leadership-container .message-from-leadership {
+    background: none;
+}
+.background-pink.message-from-leadership-container
+    .message-from-leadership:after {
+    display: none;
+}
+.background-pink.message-from-leadership-container .mfl-card {
+    grid-template-columns: 40% 48%;
+}
+.minus-margin-top.message-from-leadership-container {
+    margin-top: -4rem;
+    padding-top: 4rem;
+}
+@media (min-width: 768px) {
+    .background-pink.message-from-leadership-container .mfl-section-header {
+        margin-bottom: -60px !important;
+    }
+    .background-pink.message-from-leadership-container .swiper {
+        padding-top: 100px;
+    }
+    .background-pink.message-from-leadership-container .mfl-navigation {
+        margin-top: 0;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
+@media (max-width: 767px) {
+    .background-pink.message-from-leadership-container .mfl-card {
+        grid-template-columns: 1fr;
+    }
+}
+/* education page */
 
 @media (max-width: 1300px) {
     .businesses-section.block,
     .container,
-    .message-from-leadership,
     .default-section .default-content-wrapper,
     .global-leaders-aviation-wrapper,
-    .listed-companies-wrapper {
+    .listed-companies-wrapper,
+    .message-from-leadership {
         max-width: 100%;
         padding-left: 1rem;
         padding-right: 1rem;
     }
 }
-
 @media (max-width: 1199px) {
     .businesses-section.block,
     .container,
-    .message-from-leadership,
     .default-section .default-content-wrapper,
     .global-leaders-aviation-wrapper,
-    .listed-companies-wrapper {
+    .leadership-message,
+    .listed-companies-wrapper,
+    .message-from-leadership {
         padding-left: 2rem;
         padding-right: 2rem;
     }
     .page-corporate-governance .banner-overlay-text .col-md-7 {
         width: 75%;
+    }
+    .navigation-left .default-content-wrapper h5,
+    .navigation-right .default-content-wrapper h5 {
+        display: none;
+    }
+    .navigation-left .default-content-wrapper h4,
+    .navigation-right .default-content-wrapper h4,
+    .navigation-left .default-content-wrapper p,
+    .navigation-right .default-content-wrapper p {
+        margin: 0;
+        font-size: var(--fs-small);
+    }
+    .leadership-message .default-content-wrapper {
+        padding: 1rem !important;
+    }
+    .navigation-left .default-content-wrapper,
+    .navigation-right .default-content-wrapper {
+        width: 100%;
+        max-width: 170px;
+    }
+    .navigation-left.leadership-message p.button-container,
+    .navigation-right.leadership-message p.button-container {
+        top: 85px;
+    }
+    .navigation-right.leadership-message {
+        margin-top: -115px;
+    }
+    .navigation-left .default-content-wrapper p.button-container,
+    .navigation-right .default-content-wrapper p.button-container {
+        display: block;
+        transform: none;
+    }
+    .leadership-banner .inner-hero-text p,
+    .navigation-left.leadership-message p.button-container,
+    .navigation-right.leadership-message p.button-container {
+        display: block;
+    }
+    .leadership-message h2 {
+        font-size: var(--fs-xlarge);
+    }
+    .navigation-left .default-content-wrapper {
+        left: 0;
+    }
+    .navigation-right .default-content-wrapper {
+        right: 0;
     }
 }
 @media (max-width: 991px) {
@@ -1035,22 +1310,28 @@ hr {
         font-size: var(--fs-regular);
     }
     .awards-filter-runtime,
+    .big-padding-bottom .spacer,
     .default-section,
+    .leadership-message .default-content-wrapper,
     .page-corporate-governance .overlay-banner-container,
+    .page-transportation .key-highlightss-wrapper .spacer,
     .partners-filter-runtime,
-    .spacer,
-    .press-listing-runtime {
+    .press-listing-runtime,
+    .spacer {
         padding: 60px 0;
+    }
+    .big-padding-bottom .sec-expertise.spacer {
+        padding: 60px 0 100px 0;
     }
     .page-corporate-governance .default-section.bg-gray {
         padding-bottom: 120px;
     }
     .businesses-section.block,
     .container,
-    .message-from-leadership,
     .default-section .default-content-wrapper,
     .global-leaders-aviation-wrapper,
-    .listed-companies-wrapper {
+    .listed-companies-wrapper,
+    .message-from-leadership {
         padding-left: 1rem;
         padding-right: 1rem;
     }
@@ -1069,10 +1350,10 @@ hr {
     }
     .businesses-section.block,
     .container,
-    .message-from-leadership,
     .default-section .default-content-wrapper,
     .global-leaders-aviation-wrapper,
-    .listed-companies-wrapper {
+    .listed-companies-wrapper,
+    .message-from-leadership {
         max-width: 100%;
         padding-left: 16px;
         padding-right: 16px;
@@ -1131,10 +1412,10 @@ hr {
         height: 3rem !important;
         border-radius: 0.5rem;
     }
-    .swiper-button-next:before,
-    .swiper-button-prev:before,
     .swiper-button-next.swiper-button-disabled:before,
-    .swiper-button-prev.swiper-button-disabled:before {
+    .swiper-button-next:before,
+    .swiper-button-prev.swiper-button-disabled:before,
+    .swiper-button-prev:before {
         background-size: 14px;
     }
     .swiper-pagination-bullet {
@@ -1147,12 +1428,19 @@ hr {
         background: var(--blue) !important;
         width: 24px !important;
     }
-
     .sec-desc,
     .sec-desc p {
         font-size: var(--fs-normal);
     }
     .card-ui-one .card-body p.card-desc {
         min-height: inherit;
+    }
+    /*.navigation-left .default-content-wrapper,.navigation-right .default-content-wrapper{position:static;background:0 0;padding:0;border-radius:0;width:100%}
+ .leadership-message p.button-container,.navigation-left .default-content-wrapper h4,.navigation-left .default-content-wrapper h5,.navigation-left .default-content-wrapper p,.navigation-right .default-content-wrapper h4,.navigation-right .default-content-wrapper h5,.navigation-right .default-content-wrapper p{display:none} */
+    .leadership-message {
+        padding: 0;
+    }
+    .pt-0.message-from-leadership-container .mfl-runtime {
+        padding-bottom: 0;
     }
 }

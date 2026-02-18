@@ -1,419 +1,165 @@
-import { COUNTRIES } from './countries.js';
-
 export default function decorate(block) {
-  // Extract configuration from block content (with defaults)
-  const config = {
-    sectionTitle: 'Corporate Office',
-    companyName: 'GMR Group',
-    address: 'New Udaan Bhawan, Opp. Terminal 3, IGI Airport, New Delhi, India - 110037.',
-    phone: '+9111 4253 2600',
-    email: 'info@gmrgroup.in',
-    socialMediaHeading: 'Connect on our official social channels',
-    enquiryLabel: 'Enquiry*',
-    enquiryPlaceholder: 'Select enquiry type',
-    countryLabel: 'Country*',
-    countryPlaceholder: 'Select country',
-    firstNameLabel: 'First Name*',
-    firstNamePlaceholder: 'Enter your first name...',
-    lastNameLabel: 'Last Name',
-    lastNamePlaceholder: 'Enter your last name...',
-    mobileLabel: 'Mobile No.*',
-    mobilePlaceholder: 'Enter your mobile no...',
-    emailLabel: 'Email ID*',
-    emailPlaceholder: 'Enter your email ID...',
-    messageLabel: 'Message*',
-    messagePlaceholder: 'Enter your message...',
-    submitLabel: 'Submit',
-    successMessage: 'Success!',
-    // Google Maps embed URL for New Udaan Bhawan location
-    mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.547!2d77.08755!3d28.55624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1b1b1b1b1b1b%3A0x1b1b1b1b1b1b1b1b!2sNew%20Udaan%20Bhawan!5e0!3m2!1sen!2sin!4v1234567890'
+  const rows = [...block.children];
+  if (!rows.length) return;
+
+  /* ================================
+     1️⃣ Read fields sequentially (Franklin safe)
+  ================================ */
+
+  const getValue = (index) =>
+    rows[index]?.textContent?.trim() || "";
+
+  const getHTML = (index) =>
+    rows[index]?.innerHTML?.trim() || "";
+
+  const data = {
+    sectionTitle: getValue(0),
+    companyName: getValue(1),
+    address: getHTML(2),
+    phone: getValue(3),
+    email: getValue(4),
+    socialTitle: getValue(5),
+    instagramUrl: getValue(6),
+    xUrl: getValue(7),
+    linkedinUrl: getValue(8),
+    youtubeUrl: getValue(9),
+    whatsappUrl: getValue(10),
+    facebookUrl: getValue(11),
+    mapEmbedUrl: getValue(12),
   };
 
-  // Enquiry types
-  const enquiryTypes = [
-    { label: 'General Inquiry', value: 'general' },
-    { label: 'Business Partnership', value: 'business' },
-    { label: 'Career Opportunities', value: 'career' },
-    { label: 'Media & Press', value: 'media' },
-    { label: 'Other', value: 'other' }
-  ];
+  /* ================================
+     2️⃣ Hide authored rows
+  ================================ */
+  rows.forEach((r) => (r.style.display = "none"));
 
-  // Social media links
-  const socialMediaLinks = [
-    { platform: 'linkedin', url: 'https://www.linkedin.com/company/gmr-group', icon: 'in' },
-    { platform: 'facebook', url: 'https://www.facebook.com/GMRGroup', icon: 'f' },
-    { platform: 'youtube', url: 'https://www.youtube.com/user/GMRGroup', icon: '▶' }
-  ];
+  /* ================================
+     3️⃣ Create runtime wrapper
+  ================================ */
 
-  // Generate enquiry options
-  const enquiryOptions = enquiryTypes.map(type =>
-    `<option value="${type.value}">${type.label}</option>`
-  ).join('');
+  const runtime = document.createElement("section");
+  runtime.className = "contact-section";
 
-  // Generate country options
-  const countryOptions = COUNTRIES.map(country =>
-    `<option value="${country.value}">${country.label}</option>`
-  ).join('');
+  const container = document.createElement("div");
+  container.className = "container";
 
-  // Generate social media icons
-  const socialIcons = socialMediaLinks.map(link =>
-    `<a href="${link.url}" target="_blank" rel="noopener noreferrer" class="social-icon social-${link.platform}" aria-label="${link.platform}">
-      <span>${link.icon}</span>
-    </a>`
-  ).join('');
+  const wrapper = document.createElement("div");
+  wrapper.className = "contact-wrapper";
 
-  // Build the contact form HTML
-  block.innerHTML = `
-    <div class="contact-us-container">
-      <!-- Left Section: Corporate Office Info -->
-      <div class="contact-info">
-        <h2>${config.sectionTitle}</h2>
-        <h3>${config.companyName}</h3>
-        
-        <div class="info-item">
-          <span class="icon">📍</span>
-          <p>${config.address}</p>
-        </div>
-        
-        <div class="info-item">
-          <span class="icon">📞</span>
-          <p><a href="tel:${config.phone.replace(/\s/g, '')}">${config.phone}</a></p>
-        </div>
-        
-        <div class="info-item">
-          <span class="icon">✉️</span>
-          <p><a href="mailto:${config.email}">${config.email}</a></p>
-        </div>
-        
-        <div class="social-media">
-          <p>${config.socialMediaHeading}</p>
-          <div class="social-icons">
-            ${socialIcons}
-          </div>
-        </div>
-      </div>
+  /* ================================
+     4️⃣ LEFT SIDE (Office Info)
+  ================================ */
 
-      <!-- Right Section: Contact Form -->
-      <div class="contact-form-wrapper">
-        <form class="contact-form" id="contactForm">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="enquiry">${config.enquiryLabel}</label>
-              <select id="enquiry" name="enquiry" required>
-                <option value="">${config.enquiryPlaceholder}</option>
-                ${enquiryOptions}
-              </select>
-            </div>
-            
-            <div class="form-group">
-              <label for="country">${config.countryLabel}</label>
-              <select id="country" name="country" required>
-                <option value="">${config.countryPlaceholder}</option>
-                ${countryOptions}
-              </select>
-            </div>
-          </div>
+  const left = document.createElement("div");
+  left.className = "contact-left";
 
-          <div class="form-row">
-            <div class="form-group">
-              <label for="firstName">${config.firstNameLabel}</label>
-              <input type="text" id="firstName" name="firstName" placeholder="${config.firstNamePlaceholder}" required />
-            </div>
-            
-            <div class="form-group">
-              <label for="lastName">${config.lastNameLabel}</label>
-              <input type="text" id="lastName" name="lastName" placeholder="${config.lastNamePlaceholder}" />
-            </div>
-          </div>
+  if (data.sectionTitle) {
+    const title = document.createElement("h2");
+    title.className = "contact-title";
+    title.textContent = data.sectionTitle;
+    left.append(title);
+  }
 
-          <div class="form-row">
-            <div class="form-group">
-              <label for="mobile">${config.mobileLabel}</label>
-              <input type="tel" id="mobile" name="mobile" placeholder="${config.mobilePlaceholder}" required />
-            </div>
-            
-            <div class="form-group">
-              <label for="email">${config.emailLabel}</label>
-              <input type="email" id="email" name="email" placeholder="${config.emailPlaceholder}" required />
-            </div>
-          </div>
+  if (data.companyName) {
+    const company = document.createElement("div");
+    company.className = "contact-company";
+    company.textContent = data.companyName;
+    left.append(company);
+  }
 
-          <div class="form-group full-width">
-            <label for="message">${config.messageLabel}</label>
-            <textarea id="message" name="message" placeholder="${config.messagePlaceholder}" rows="5" minlength="4" required></textarea>
-            <small style="color: #666; font-size: 12px;">Minimum 4 characters required</small>
-          </div>
+  if (data.address) {
+    const address = document.createElement("div");
+    address.className = "contact-address";
+    address.innerHTML = data.address;
+    left.append(address);
+  }
 
-          <div class="form-actions">
-            <button type="submit" class="submit-btn">${config.submitLabel}</button>
-          </div>
+  /* phone + email */
+  if (data.phone || data.email) {
+    const meta = document.createElement("div");
+    meta.className = "contact-meta";
 
-          <div class="form-status" style="display: none;"></div>
-        </form>
-      </div>
-    </div>
+    if (data.phone) {
+      const phone = document.createElement("a");
+      phone.href = `tel:${data.phone}`;
+      phone.textContent = data.phone;
+      meta.append(phone);
+    }
 
-    <!-- Map Section -->
-    <div class="map-section">
-      <iframe 
-        src="${config.mapEmbedUrl}" 
-        width="100%" 
-        height="450" 
-        style="border:0;" 
-        allowfullscreen="" 
-        loading="lazy" 
-        referrerpolicy="no-referrer-when-downgrade"
-        title="GMR Group Office Location">
-      </iframe>
-      
-      <!-- Map Info Card Overlay -->
-      <div class="map-info-card">
-        <div class="map-info-header">
-          <div class="map-info-details">
-            <h4>New Udaan Bhawan</h4>
-            <p class="map-address">New Udaan Bhawan, opp. Terminal 3, New Delhi, Delhi 110037</p>
-            <div class="map-rating">
-              <span class="stars">★★★★★</span>
-              <span class="rating-value">4.6</span>
-              <span class="reviews-count">491 reviews</span>
-            </div>
-            <a href="#" class="view-larger-map">View larger map</a>
-          </div>
-          <a href="https://www.google.com/maps/dir/?api=1&destination=New+Udaan+Bhawan,New+Delhi" 
-             target="_blank" 
-             rel="noopener noreferrer" 
-             class="directions-btn">
-            <span class="directions-icon">🧭</span>
-            <span>Directions</span>
-          </a>
-        </div>
-      </div>
-    </div>
+    if (data.email) {
+      const email = document.createElement("a");
+      email.href = `mailto:${data.email}`;
+      email.textContent = data.email;
+      meta.append(email);
+    }
+
+    left.append(meta);
+  }
+
+  /* social links */
+  const socialLinks = [
+    data.linkedinUrl,
+    data.facebookUrl,
+    data.youtubeUrl,
+    data.instagramUrl,
+  ].filter(Boolean);
+
+  if (socialLinks.length) {
+    const social = document.createElement("div");
+    social.className = "contact-social";
+
+    if (data.socialTitle) {
+      const label = document.createElement("p");
+      label.textContent = data.socialTitle;
+      social.append(label);
+    }
+
+    const linksWrap = document.createElement("div");
+    linksWrap.className = "social-links";
+
+    socialLinks.forEach((url) => {
+      const a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.textContent = "•";
+      linksWrap.append(a);
+    });
+
+    social.append(linksWrap);
+    left.append(social);
+  }
+
+  /* ================================
+     5️⃣ RIGHT SIDE FORM
+  ================================ */
+
+  const right = document.createElement("div");
+  right.className = "contact-right";
+
+  right.innerHTML = `
+    Form Here
   `;
 
-  // Form elements
-  const form = block.querySelector('#contactForm');
-  const status = block.querySelector('.form-status');
-  const submitBtn = block.querySelector('.submit-btn');
-  const countrySelect = block.querySelector('#country');
-  const mobileInput = block.querySelector('#mobile');
+  wrapper.append(left, right);
+  container.append(wrapper);
 
-  // Load intl-tel-input library
-  async function loadIntlTelInput() {
-    // Load CSS
-    if (!document.querySelector('link[href*="intl-tel-input"]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css';
-      document.head.appendChild(link);
-    }
+  /* ================================
+     6️⃣ Map (if exists)
+  ================================ */
 
-    // Load JS
-    if (!window.intlTelInput) {
-      await new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js';
-        script.onload = resolve;
-        script.onerror = reject;
-        document.head.appendChild(script);
-      });
-    }
+  if (data.mapEmbedUrl) {
+    const map = document.createElement("div");
+    map.className = "contact-map";
+
+    const iframe = document.createElement("iframe");
+    iframe.src = data.mapEmbedUrl;
+    iframe.loading = "lazy";
+    iframe.setAttribute("allowfullscreen", "");
+
+    map.append(iframe);
+    container.append(map);
   }
 
-  // Initialize intl-tel-input
-  let iti;
-  loadIntlTelInput().then(() => {
-    iti = window.intlTelInput(mobileInput, {
-      initialCountry: 'auto',
-      separateDialCode: true,
-      nationalMode: false,
-      strictMode: true, // Enforce strict validation
-      preferredCountries: ['in', 'us', 'gb', 'ae'],
-      utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js',
-      geoIpLookup: function (callback) {
-        fetch('https://ipapi.co/json/')
-          .then(res => res.json())
-          .then(data => callback(data.country_code))
-          .catch(() => callback('in')); // Default to India
-      },
-      validationNumberType: 'MOBILE' // Only accept mobile numbers
-    });
-
-    // Add real-time validation feedback
-    mobileInput.addEventListener('blur', () => {
-      if (mobileInput.value.trim() && iti && !iti.isValidNumber()) {
-        mobileInput.setCustomValidity('Invalid phone number for selected country');
-        mobileInput.reportValidity();
-      } else {
-        mobileInput.setCustomValidity('');
-      }
-    });
-
-    mobileInput.addEventListener('input', () => {
-      mobileInput.setCustomValidity(''); // Clear error on input
-    });
-
-    // Sync country dropdown with phone input
-    countrySelect.addEventListener('change', () => {
-      const selectedCountry = COUNTRIES.find(c => c.value === countrySelect.value);
-      if (selectedCountry && iti) {
-        const isoCode = selectedCountry.value.toLowerCase();
-        iti.setCountry(isoCode);
-      }
-    });
-
-    // Sync phone input country with dropdown
-    mobileInput.addEventListener('countrychange', () => {
-      const countryData = iti.getSelectedCountryData();
-      const matchingCountry = COUNTRIES.find(c => c.value.toLowerCase() === countryData.iso2);
-      if (matchingCountry) {
-        countrySelect.value = matchingCountry.value;
-      }
-    });
-  }).catch(err => {
-    console.error('Failed to load intl-tel-input:', err);
-  });
-
-  // Form submission handler
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending...';
-    status.style.display = 'none';
-
-    const formData = new FormData(form);
-
-    // Validate phone number using intl-tel-input
-    if (iti && !iti.isValidNumber()) {
-      showError('Please enter a valid phone number for the selected country');
-      submitBtn.disabled = false;
-      submitBtn.textContent = config.submitLabel;
-      return;
-    }
-
-    // Get phone data from intl-tel-input
-    const phoneCode = iti ? `+${iti.getSelectedCountryData().dialCode}` : '+';
-    const mobileNumber = iti ? iti.getNumber(window.intlTelInputUtils.numberFormat.NATIONAL).replace(/\D/g, '') : formData.get('mobile');
-    const fullMobileNumber = iti ? iti.getNumber() : `${phoneCode} ${mobileNumber}`; // For email display
-
-    // Get country full name
-    const selectedCountry = COUNTRIES.find(c => c.value === formData.get('country'));
-    const countryName = selectedCountry ? selectedCountry.label : formData.get('country');
-
-    // Prepare payload for GMR backend API
-    const payload = {
-      enquiryType: formData.get('enquiry'),
-      country: countryName, // Full country name (e.g., "India")
-      country_code: phoneCode, // Separate field for phone code
-      firstName: formData.get('firstName'),
-      lastName: formData.get('lastName') || '',
-      mobileNo: mobileNumber, // Just the number
-      email: formData.get('email'),
-      message: formData.get('message')
-    };
-
-    // Prepare email message for Adobe email service
-    const emailMessage = `
-═══════════════════════════════════════
-📋 NEW CONTACT FORM SUBMISSION
-═══════════════════════════════════════
-
-📌 ENQUIRY TYPE: ${formData.get('enquiry')}
-
-👤 CONTACT DETAILS:
-   Name: ${formData.get('firstName')} ${formData.get('lastName') || ''}
-   Email: ${formData.get('email')}
-   Mobile: ${fullMobileNumber}
-   Country: ${formData.get('country')}
-
-💬 MESSAGE:
-${formData.get('message')}
-
-═══════════════════════════════════════
-    `.trim();
-
-    try {
-      // Call both APIs in parallel
-      const [apiResponse, emailResponse] = await Promise.allSettled([
-        // GMR Backend API
-        fetch('http://13.200.106.168:4000/api/enquiry/save-enquery', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'U2FsdGVkX1+IAunex0zJueoZQpRBfpUm/DSQSMufK69HpTEh4abfdnhz0fQ+jbSmPrqojCZOhYZ6/mvA28aQxw',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        }),
-
-        // Adobe Email Service
-        fetch('https://3842504-emailer-default.adobeioruntime.net/api/v1/web/eds-smtp-mailer/send-mail', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            name: `${formData.get('firstName')} ${formData.get('lastName') || ''}`.trim(),
-            email: formData.get('email'),
-            message: emailMessage
-          })
-        })
-      ]);
-
-      // Check results
-      let apiSuccess = false;
-      let emailSuccess = false;
-
-      // Check GMR API response
-      if (apiResponse.status === 'fulfilled' && apiResponse.value.ok) {
-        const result = await apiResponse.value.json();
-        console.log('✓ Enquiry saved to database:', result);
-        apiSuccess = true;
-      } else {
-        console.error('✗ Failed to save to database:', apiResponse.reason || apiResponse.value?.statusText);
-      }
-
-      // Check Email response
-      if (emailResponse.status === 'fulfilled' && (emailResponse.value.ok || emailResponse.value.status === 200)) {
-        console.log('✓ Email notification sent');
-        emailSuccess = true;
-      } else if (emailResponse.status === 'rejected' && emailResponse.reason?.name === 'TypeError') {
-        // CORS error on email service - likely still sent
-        console.log('✓ Email likely sent (CORS prevented confirmation)');
-        emailSuccess = true;
-      } else {
-        console.error('✗ Failed to send email:', emailResponse.reason || emailResponse.value?.statusText);
-      }
-
-      // Show success if at least one succeeded
-      if (apiSuccess || emailSuccess) {
-        form.innerHTML = `
-          <div style="text-align:center; padding:40px; border:2px solid #28a745; background:#f8fff9; border-radius:8px;">
-            <div style="font-size: 48px; margin-bottom: 16px;">✓</div>
-            <h3 style="color:#28a745; margin:0 0 12px 0;">${config.successMessage}</h3>
-            <p style="margin:0; color:#333;">Your enquiry has been submitted successfully. We'll get back to you soon!</p>
-          </div>
-        `;
-      } else {
-        throw new Error('Both submission methods failed');
-      }
-    } catch (error) {
-      console.error('Submission error:', error);
-
-      // Show error message
-      showError(`Failed to submit enquiry: ${error.message}`);
-      submitBtn.disabled = false;
-      submitBtn.textContent = config.submitLabel;
-    }
-  });
-
-  function showError(message) {
-    status.style.display = 'block';
-    status.style.color = '#dc3545';
-    status.style.padding = '12px';
-    status.style.backgroundColor = '#f8d7da';
-    status.style.border = '1px solid #f5c6cb';
-    status.style.borderRadius = '4px';
-    status.textContent = message;
-  }
+  runtime.append(container);
+  block.append(runtime);
 }

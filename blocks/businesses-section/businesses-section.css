@@ -5,6 +5,7 @@
     width: 100%;
     position: relative;
 }
+
 .businesses-section-wrapper .accordion-item {
     background-color: transparent;
     border: none;
@@ -75,12 +76,16 @@
     padding: 6rem;
     background: var(--white);
     border-radius: 10px;
-    top: -4rem;
+    top: -5rem;
     position: relative;
     z-index: 2;
 }
 .business-accordion-header {
     margin-bottom: 4rem;
+}
+.minus-margin-top.businesses-section-container {
+    padding-top: 15rem;
+    margin-top: -5rem;
 }
 .business-accordion-header h2 {
     font-weight: 400;
@@ -101,7 +106,6 @@
 }
 .business-accordion-header .title {
     position: relative;
-    text-transform: uppercase;
 }
 /* .business-accordion-header .title:after{content:'/';color:var(--blue)} */
 .intro-text {

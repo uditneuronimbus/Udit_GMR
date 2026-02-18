@@ -55,14 +55,19 @@
       "gmr-tabs",
       "fraud-alert-tabs",
       "image-slider",
+      "media-contact-header",
       "integrity-decision",
       "press-release-featured",
       "press-release-listing",
       "career-faqs-list",
+      "contact-reachout-list",
       "image-scroll-card",
       "key-highlight-button",
       "contact-us",
       "media-contact-header"
+      "lottie-animation",
+      "media-cards",
+      "photo-gallery-slider"
     ]
   },
   {
@@ -151,6 +156,12 @@
     "id": "only-common-items",
     "components": [
       "common-card-item"
+    ]
+  },
+  {
+    "id": "only-press-release-items",
+    "components": [
+      "contact-reachout-item"
     ]
   },
   {
@@ -287,6 +298,10 @@
     ]
   },
   {
+    "id": "hero-press",
+    "components": []
+  },
+  {
     "id": "image-scroll-card",
     "components": [
       "image-scroll-card-item"
@@ -357,8 +372,26 @@
     ]
   },
   {
+    "id": "listing-blog",
+    "components": []
+  },
+  {
     "id": "listing-press",
     "components": []
+  },
+  {
+    "id": "listing-stories",
+    "components": []
+  },
+  {
+    "id": "lottie-animation",
+    "components": []
+  },
+  {
+    "id": "media-cards",
+    "components": [
+      "media-cards-item"
+    ]
   },
   {
     "id": "media-contact-header",
@@ -422,6 +455,12 @@
     ]
   },
   {
+    "id": "photo-gallery-slider",
+    "components": [
+      "photo-gallery-slider-item"
+    ]
+  },
+  {
     "id": "press-hero",
     "components": [
       "press-hero"
@@ -457,6 +496,14 @@
   },
   {
     "id": "search-results",
+    "components": []
+  },
+  {
+    "id": "story-update-page",
+    "components": []
+  },
+  {
+    "id": "success-stories-page",
     "components": []
   },
   {

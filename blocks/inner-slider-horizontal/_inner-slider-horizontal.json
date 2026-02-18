@@ -64,9 +64,10 @@
           "label": "Slide Description"
         },
         {
-          "component": "image",
-          "name": "slideImage",
-          "label": "Slide Image"
+          "component": "reference",
+          "name": "image",
+          "label": "Holdings Image",
+          "valueType": "string"
         }
       ]
     }

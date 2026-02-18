@@ -1,26 +1,32 @@
 import { getApiHost } from "../../scripts/api.js";
 import { slugToTitle } from "../../scripts/common.js";
+import { formatDate } from "../../scripts/common.js";
 
+function getCategoryFromURL() {
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  if (!parts.length) return "";
 
+  let slug = parts[parts.length - 1].toLowerCase();
 
-/* ================================
-   Date formatter
-================================ */
-function formatDate(dateString) {
-  if (!dateString) return "";
+  // Custom overrides
+  const slugMap = {
+    "blogs": "blog",
+  };
 
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return "";
-
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
+  return slugMap[slug] || slug;
 }
 
 export default async function decorate(block) {
-  const labelText = block.textContent.trim() || "LATEST PRESS UPDATE";
+  const limit = 3;
+  const offset = 0;
+  const category = getCategoryFromURL();
+  let labeltitle = '';
+  if (category === "press-release") {
+    labeltitle = "LATEST PRESS RELEASE";
+  } else if (category === "blog") {
+    labeltitle = "LATEST INSIGHTS";
+  }
+  let labelText = block.textContent.trim() || labeltitle;
   block.innerHTML = "";
   
 
@@ -41,64 +47,66 @@ export default async function decorate(block) {
      Fetch latest press
   ================================ */
   try {
-      const limit = 3;
-      const offset = 0;
-      const category = "press-release";
-
      const apiUrl =
-          `${getApiHost()}/api/v1/web/gmr-api/recent-posts` +
-          `?limit=${encodeURIComponent(limit)}` +
-          `&soffset=${encodeURIComponent(offset)}` +
-          `&category=${encodeURIComponent(category)}`;
-    const res = await fetch(apiUrl);
-    if (!res.ok) throw new Error(`API error ${res.status}`);
+          `${getApiHost()}/api/v1/web/gmr-api/latest-news` +
+          `?category=${encodeURIComponent(category)}`;
+          
 
-    const json = await res.json();
-    const items = json?.data?.data?.newsList?.items || [];
-    if (!items.length) {
-      block.innerHTML = "<p>No news available.</p>";
-      return;
-    }
-
-    const item = items[0];
-    
+          
+          const res = await fetch(apiUrl);
+          if (!res.ok) throw new Error(`API error ${res.status}`);
+          
+          const json = await res.json();
+          const items = json?.data?.data?.newsList?.items || [];
+          if (!items.length) {
+            block.innerHTML = "<p>No news available.</p>";
+            return;
+          }
+          
+          const item = items[0];
     if (!item) {
-      wrapper.innerHTML = "<p>No press updates found.</p>";
+      wrapper.innerHTML = `<p>No ${category} updates found.</p>`;
       return;
     }
 
-    const publishDateRaw =
-      item.publishDate?.iso ||
-      item.publishDate?.value ||
-      item.publishDate ||
-      "";
+    const publishDateRaw = item.publishMonth + " " + item.publishYear;
 
     const publishDateFormatted = formatDate(publishDateRaw);
+    const categorySlug = (item.subCategory || item.category || "press")
+  .toLowerCase()
+  .replace(/\s+/g, '-')
+  .replace(/[^\w-]/g, '');
 
     wrapper.innerHTML = `
       <div class="lpu-left">
         <span class="lpu-label">${labelText}</span>
 
-        <h2 class="lpu-title">
+        <h1 class="lpu-title">
           ${item.title || ""}
-        </h2>
-
-        <p class="lpu-location">
-          ${item.location || ""}
-        </p>
+        </h1>
 
         <div class="lpu-meta">
-          <span class="lpu-category">
-            ${slugToTitle(item.category || "Press")}
+          <span class="lpu-category badge ${categorySlug}">
+            ${slugToTitle(item.subCategory || item.category || "Press")}
           </span>
+          <span class="meta-separator">|</span>
           <span class="lpu-date">
+            <svg class="icon-calendar" width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.66669 10C1.66669 6.85734 1.66669 5.286 2.643 4.30968C3.61931 3.33337 5.19066 3.33337 8.33335 3.33337H11.6667C14.8094 3.33337 16.3807 3.33337 17.357 4.30968C18.3334 5.286 18.3334 6.85734 18.3334 10V11.6667C18.3334 14.8094 18.3334 16.3808 17.357 17.3571C16.3807 18.3334 14.8094 18.3334 11.6667 18.3334H8.33335C5.19066 18.3334 3.61931 18.3334 2.643 17.3571C1.66669 16.3808 1.66669 14.8094 1.66669 11.6667V10Z" stroke="#333333" stroke-width="1.5"></path>
+            <path d="M5.83331 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+            <path d="M14.1667 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+            <path d="M2.08331 7.5H17.9166" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+            </svg>
             ${publishDateFormatted}
           </span>
         </div>
+        <p class="lpu-description">
+          ${item.description?.plaintext || "No description available."}
+        </p>
 
         <a
           href="/en/news-update?post=${item.slugUrl}"
-          class="lpu-cta"
+          class="btn-link"
         >
           Read More
         </a>
@@ -113,7 +121,7 @@ export default async function decorate(block) {
       </div>
     `;
   } catch (err) {
-    console.error("Latest press update error:", err);
+    console.error(`Latest ${category} update error:`, err);
     wrapper.innerHTML = "<p>Error loading press update.</p>";
   }
 }

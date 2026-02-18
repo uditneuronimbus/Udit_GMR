@@ -1,6 +1,6 @@
 import { loadCSS, loadScript } from "../../scripts/aem.js";
 
-const SWIPER_JS = "../../scripts/swiper-bundle.min.js";
+const SWIPER_JS = "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js";
 
 function isValidRow(row) {
   return (
@@ -62,6 +62,63 @@ function buildHeroNav(swiper, total) {
 
   swiper.on("slideChange", updateActive);
   updateActive();
+}
+
+/* ---------- Quick Links Dropdown ---------- */
+function buildQuickLinks(block) {
+  console.log("Quick links building...");
+
+  /* Make parent relative (needed for absolute position) */
+  block.style.position = "relative";
+
+  const quickLinksWrapper = document.createElement("div");
+  quickLinksWrapper.className = "quick-links-wrapper";
+
+  /* Button */
+  const button = document.createElement("button");
+  button.className = "btn btn-primary quick-links-btn";
+  button.innerHTML = `
+    <span>Quick Links</span>
+    <span class="arrow">
+      <svg width="20" height="20" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-width="2" fill="none" d="m5 15 7-7 7 7"/>
+      </svg>
+    </span>
+  `;
+
+  /* Dropdown */
+  const dropdown = document.createElement("div");
+  dropdown.className = "quick-links-dropdown";
+
+  /* Static Links */
+  const links = [
+    { label: "Investors", url: "/en/investors" },
+    { label: "About GMR", url: "/en/about" },
+    { label: "Foundation", url: "/en/foundation" },
+    { label: "Contact Us", url: "/en/contact" },
+    { label: "Careers", url: "/en/careers" },
+  ];
+
+  links.forEach((link) => {
+    const item = document.createElement("a");
+    item.href = link.url;
+    item.className = "quick-link-item";
+    item.innerHTML = `
+      ${link.label}
+      <span><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+</svg></span>
+    `;
+    dropdown.appendChild(item);
+  });
+
+  /* Toggle dropdown */
+  button.addEventListener("click", () => {
+    dropdown.classList.toggle("open");
+  });
+
+  quickLinksWrapper.append(dropdown, button);
+  block.appendChild(quickLinksWrapper);
 }
 
 export default async function decorate(block) {
@@ -174,4 +231,5 @@ export default async function decorate(block) {
   });
 
   buildHeroNav(swiperInstance, rows.length);
+  buildQuickLinks(block);
 }
