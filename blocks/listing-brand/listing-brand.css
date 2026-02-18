@@ -1,4 +1,4 @@
-.press-release-featured-runtime{padding:0;background:var(--lpink)}
+/* .press-release-featured-runtime{padding:0;background:var(--lpink)}
 .press-release-featured-runtime .featured-wrapper{display:grid;grid-template-columns:1.1fr 0.9fr;align-items:stretch;min-height:420px}
 .press-release-featured-runtime .featured-content{padding:3rem 12rem 3rem 1rem;max-width:740px;display:flex;flex-direction:column;justify-content:center;margin-left:auto}
 .press-release-featured-runtime .featured-label{font-size:var(--fs-normal);font-weight:400;color:var(--royal-blue);text-transform:uppercase;margin-bottom:1.25rem}
@@ -104,4 +104,4 @@
 @media (max-width:576px){
 .press-release-featured-runtime .featured-meta{flex-direction:column;align-items:flex-start;gap:.5rem}
 .press-release-featured-runtime .meta-separator{display:none}
-}
+} */
