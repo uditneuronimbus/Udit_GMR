@@ -10,6 +10,10 @@ function getCategoryFromURL() {
 
   const slugMap = {
     "blogs": "blog",
+    "press-releases": "press-release",
+    "brand-films-visuals": "press-release",
+    "media-kit": "press-release",
+    "success-stories": "press-release"
   };
 
   return slugMap[slug] || slug;
@@ -56,6 +60,7 @@ export default async function decorate(block) {
 
     // Newly Added
     console.log("Full API response:", json);
+    console.log("Full API response:", json);
 
 
     const items = json?.data?.data?.newsList?.items || [];
@@ -63,7 +68,7 @@ export default async function decorate(block) {
     // Newly Added Code
     console.log("Items:", items);
     console.log("Items length:", items.length);
-    
+
 
     if (!items.length) {
       wrapper.innerHTML = "<p>No news available.</p>";
