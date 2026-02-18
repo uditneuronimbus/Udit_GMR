@@ -3087,22 +3087,28 @@
     "id": "media-contact-header",
     "fields": [
       {
-        "component": "text",
-        "name": "heading",
-        "label": "Heading",
-        "valueType": "string"
-      },
-      {
-        "component": "richtext",
-        "name": "description",
-        "label": "Description",
-        "valueType": "string"
+        "component": "container",
+        "name": "properties",
+        "label": "Properties",
+        "fields": [
+          {
+            "component": "text",
+            "name": "heading",
+            "label": "Heading",
+            "valueType": "string"
+          },
+          {
+            "component": "richtext",
+            "name": "description",
+            "label": "Description",
+            "valueType": "string"
+          }
+        ]
       }
     ]
   },
   {
     "id": "media-contact-item",
-    "itemLabel": "heading",
     "fields": [
       {
         "component": "text",
