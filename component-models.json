@@ -2031,6 +2031,20 @@
         "label": "Section Title",
         "valueType": "string",
         "defaultValue": "What Makes GMR Different"
+      },
+      {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "Button Label",
+        "valueType": "string",
+        "comment": "Text shown on the CTA button"
+      },
+      {
+        "component": "text",
+        "name": "buttonLink",
+        "label": "Button Link",
+        "valueType": "string",
+        "comment": "URL or page link for the CTA button"
       }
     ]
   },
@@ -2074,6 +2088,20 @@
         "label": "Card Description (repeated)",
         "valueType": "string",
         "description": "Repeat for each card"
+      },
+      {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "Button Label",
+        "valueType": "string",
+        "comment": "Text shown on the CTA button"
+      },
+      {
+        "component": "text",
+        "name": "buttonLink",
+        "label": "Button Link",
+        "valueType": "string",
+        "comment": "URL or page link for the CTA button"
       }
     ]
   },
