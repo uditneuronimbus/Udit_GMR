@@ -41,8 +41,8 @@ export default function decorate(block) {
    SVG ICONS (AEM SAFE INLINE SVG)
 ================================ */
 
-const SOCIAL_SVGS = {
-  instagram: `
+  const SOCIAL_SVGS = {
+    instagram: `
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
       <rect x="2" y="2" width="20" height="20" rx="6" stroke="currentColor" stroke-width="2"/>
       <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
@@ -50,13 +50,13 @@ const SOCIAL_SVGS = {
     </svg>
   `,
 
-  x: `
+    x: `
     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
       <path d="M18 2H22L14.5 10.5L23 22H16.5L11 14.5L4.5 22H0L8 13L0 2H6.7L11.7 8.5L18 2Z"/>
     </svg>
   `,
 
-  linkedin: `
+    linkedin: `
     
 <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M5.67927 25.3411H0.420321V8.40335H5.67927V25.3411ZM3.04675 6.0938C2.44543 6.09377 1.85757 5.91582 1.35719 5.58235C0.856813 5.24888 0.466294 4.7748 0.234813 4.21983C0.00333172 3.66485 -0.0587601 3.05379 0.0563569 2.4636C0.171474 1.8734 0.458652 1.33047 0.881726 0.903163C1.3048 0.475858 1.84485 0.183292 2.43387 0.0623086C3.02289 -0.0586751 3.63454 -0.00266646 4.19179 0.223281C4.74904 0.449229 5.22698 0.835012 5.56541 1.33205C5.90384 1.82908 6.08764 2.41515 6.09365 3.01643C6.09529 3.82784 5.77577 4.60692 5.20488 5.18351C4.63399 5.76011 3.85813 6.08737 3.04675 6.0938ZM25.3623 25.3411H20.1094V17.0962C20.1094 15.1309 20.0698 12.6111 17.3672 12.6111C14.6646 12.6111 14.2136 14.744 14.2136 16.953V25.3411H8.97297V8.40335H14.0156V10.7129H14.0887C14.5922 9.84827 15.3209 9.13653 16.1972 8.65358C17.0735 8.17064 18.0644 7.93462 19.0643 7.9707C24.3872 7.9707 25.3653 11.4746 25.3653 16.0297L25.3623 25.3411Z" fill="#0172B1"/>
@@ -64,7 +64,7 @@ const SOCIAL_SVGS = {
 
   `,
 
-  youtube: `
+    youtube: `
     
 <svg width="30" height="21" viewBox="0 0 30 21" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M28.4672 3.20519C28.3027 2.58653 27.9787 2.02192 27.5274 1.56788C27.0762 1.11384 26.5136 0.786307 25.8959 0.618064C22.1277 0.164716 18.3337 -0.0396259 14.5385 0.00636802C10.7425 -0.0397424 6.94757 0.1646 3.17845 0.618064C2.56081 0.786307 1.99821 1.11384 1.54696 1.56788C1.09571 2.02192 0.771642 2.58653 0.607207 3.20519C0.188482 5.52942 -0.0145155 7.88737 0.000806621 10.249C-0.0145155 12.6106 0.188482 14.9685 0.607207 17.2927C0.772974 17.9061 1.0982 18.4647 1.54982 18.9117C2.00144 19.3587 2.56336 19.6781 3.17845 19.8375C6.94757 20.291 10.7425 20.4953 14.5385 20.4492C18.3345 20.4953 22.1295 20.291 25.8986 19.8375C26.5137 19.6781 27.0756 19.3587 27.5272 18.9117C27.9788 18.4647 28.3041 17.9061 28.4698 17.2927C28.8886 14.9685 29.0916 12.6106 29.0762 10.249C29.0916 7.88737 28.8859 5.52942 28.4672 3.20519ZM11.5648 14.5706V5.92473L19.1646 10.249L11.5648 14.5706Z" fill="#FF0000"/>
@@ -72,33 +72,33 @@ const SOCIAL_SVGS = {
 
   `,
 
-  whatsapp: `
+    whatsapp: `
     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
       <path d="M20 3.9A11.8 11.8 0 0012.1 1C6 1 1 6 1 12c0 2.1.6 4.1 1.7 5.9L1 23l5.3-1.7A11.9 11.9 0 0012.1 23C18.2 23 23 18 23 12c0-3.2-1.3-6.2-3-8.1zM12.1 21c-1.9 0-3.8-.5-5.4-1.5l-.4-.2-3.1 1 1-3-.3-.5A9.9 9.9 0 1122 12c0 5-4 9-9.9 9zm5.3-7.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2s-.8 1-.9 1.2c-.2.2-.3.2-.6.1-1.7-.8-2.9-1.4-4-3.2-.3-.5.3-.5.8-1.6.1-.2.1-.4 0-.6s-.7-1.6-1-2.2c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4s-1.2 1.1-1.2 2.7 1.2 3.2 1.3 3.4c.2.2 2.3 3.5 5.6 4.9.8.3 1.4.5 1.9.6.8.3 1.5.3 2 .2.6-.1 1.8-.7 2-1.3.3-.7.3-1.2.2-1.3-.1-.2-.3-.2-.6-.4z"/>
     </svg>
   `,
 
-  facebook: `
+    facebook: `
     
 <svg width="20" height="31" viewBox="0 0 20 31" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M16.0196 17.2921L16.8711 11.735H11.5398V8.12799C11.5032 7.71433 11.5598 7.29774 11.7053 6.90881C11.8509 6.51988 12.0817 6.1685 12.3809 5.88047C12.68 5.59245 13.0399 5.3751 13.434 5.24439C13.8282 5.11369 14.2466 5.07294 14.6586 5.12515H17.0999V0.39508C15.6757 0.165061 14.2366 0.0396074 12.794 0.019726C11.8021 -0.0560839 10.8056 0.0872052 9.87521 0.439439C8.94481 0.791672 8.10327 1.34423 7.41022 2.05795C6.71718 2.77167 6.18959 3.62909 5.86485 4.56944C5.54011 5.50979 5.42617 6.51005 5.53109 7.49934V11.735H0.648438V17.2921H5.53109V30.7194H11.5398V17.2921H16.0196Z" fill="#1877F2"/>
 </svg>
   `
-};
+  };
 
   const socialLinks = [
-  { id: "instagram", url: config.instagramUrl },
-  { id: "x", url: config.xUrl },
-  { id: "linkedin", url: config.linkedinUrl },
-  { id: "youtube", url: config.youtubeUrl },
-  { id: "whatsapp", url: config.whatsappUrl },
-  { id: "facebook", url: config.facebookUrl },
-]
-.filter(l => l.url)
-.map(l => ({
-  ...l,
-  icon: SOCIAL_SVGS[l.id] || ""
-}));
+    { id: "instagram", url: config.instagramUrl },
+    { id: "x", url: config.xUrl },
+    { id: "linkedin", url: config.linkedinUrl },
+    { id: "youtube", url: config.youtubeUrl },
+    { id: "whatsapp", url: config.whatsappUrl },
+    { id: "facebook", url: config.facebookUrl },
+  ]
+    .filter(l => l.url)
+    .map(l => ({
+      ...l,
+      icon: SOCIAL_SVGS[l.id] || ""
+    }));
 
 
   const enquiryOptions = [
@@ -130,21 +130,18 @@ const SOCIAL_SVGS = {
           <!-- LEFT SIDE -->
           <div class="contact-left">
 
-            ${
-              config.sectionTitle
-                ? `<h2 class="contact-title">${config.sectionTitle}</h2>`
-                : ""
-            }
+            ${config.sectionTitle
+      ? `<h2 class="contact-title">${config.sectionTitle}</h2>`
+      : ""
+    }
 
-            ${
-              config.companyName
-                ? `<div class="contact-company">${config.companyName}</div>`
-                : ""
-            }
+            ${config.companyName
+      ? `<div class="contact-company">${config.companyName}</div>`
+      : ""
+    }
 
-            ${
-              config.address
-                ? `<div class="contact-address">
+            ${config.address
+      ? `<div class="contact-address">
                 <span>
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M5 8.51464C5 4.9167 8.13401 2 12 2C15.866 2 19 4.9167 19 8.51464C19 12.0844 16.7658 16.2499 13.2801 17.7396C12.4675 18.0868 11.5325 18.0868 10.7199 17.7396C7.23416 16.2499 5 12.0844 5 8.51464Z" stroke="#333333" stroke-width="1.5"/>
@@ -153,17 +150,15 @@ const SOCIAL_SVGS = {
 </svg></span>
                 ${config.address}
                 </div>`
-                : ""
-            }
+      : ""
+    }
 
-            ${
-              config.phone || config.email
-                ? `
+            ${config.phone || config.email
+      ? `
               <div class="contact-meta">
 
-                ${
-                  config.phone
-                    ? `
+                ${config.phone
+        ? `
                   <div class="contact-item">
                     <span>
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -177,12 +172,11 @@ const SOCIAL_SVGS = {
                     </a>
                   </div>
                 `
-                    : ""
-                }
+        : ""
+      }
 
-                ${
-                  config.email
-                    ? `
+                ${config.email
+        ? `
                   <div class="contact-item">
                     <span>
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -197,38 +191,36 @@ const SOCIAL_SVGS = {
                     </a>
                   </div>
                 `
-                    : ""
-                }
+        : ""
+      }
 
               </div>
             `
-                : ""
-            }
+      : ""
+    }
 
-            ${
-              socialLinks.length
-                ? `
+            ${socialLinks.length
+      ? `
               <div class="contact-social">
-                ${
-                  config.socialTitle
-                    ? `<p>${config.socialTitle}</p>`
-                    : ""
-                }
+                ${config.socialTitle
+        ? `<p>${config.socialTitle}</p>`
+        : ""
+      }
                 <div class="social-links">
                   ${socialLinks
-                    .map(
-                      (l) => `
+        .map(
+          (l) => `
                     <a href="${l.url}" target="_blank" aria-label="${l.id}">
                       ${l.icon}
                     </a>
                   `
-                    )
-                    .join("")}
+        )
+        .join("")}
                 </div>
               </div>
             `
-                : ""
-            }
+      : ""
+    }
 
           </div>
 
@@ -287,14 +279,13 @@ const SOCIAL_SVGS = {
       </div>
     </section>
 
-    ${
-      config.mapEmbedUrl
-        ? `
+    ${config.mapEmbedUrl
+      ? `
       <div class="contact-map">
         <iframe src="${config.mapEmbedUrl}" loading="lazy" allowfullscreen></iframe>
       </div>
     `
-        : ""
+      : ""
     }
   `;
 
@@ -357,22 +348,40 @@ const SOCIAL_SVGS = {
   });
 
   form.querySelectorAll("input, select, textarea").forEach((el) => {
+    const getLabel = () => el.closest("div")?.querySelector("label");
+
     el.addEventListener("blur", () => {
-      el.classList.toggle("invalid", !el.checkValidity());
-      if (el === mobileInput && iti && !iti.isValidNumber())
-        el.classList.add("invalid");
+      let isInvalid = !el.checkValidity();
+
+      if (el === mobileInput && iti && !iti.isValidNumber()) {
+        isInvalid = true;
+      }
+
+      el.classList.toggle("invalid", isInvalid);
+
+      const label = getLabel();
+      if (label) label.classList.toggle("error", isInvalid);
     });
 
-    el.addEventListener("input", () => el.classList.remove("invalid"));
+    el.addEventListener("input", () => {
+      el.classList.remove("invalid");
+
+      const label = getLabel();
+      if (label) label.classList.remove("error");
+    });
   });
+
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     if (!form.checkValidity() || (iti && !iti.isValidNumber())) {
-      form.querySelectorAll(":invalid").forEach((i) =>
-        i.classList.add("invalid")
-      );
+      form.querySelectorAll(":invalid").forEach((i) => {
+        i.classList.add("invalid");
+
+        const label = i.closest("div")?.querySelector("label");
+        if (label) label.classList.add("error");
+      });
       if (iti && !iti.isValidNumber()) mobileInput.classList.add("invalid");
       updateStatus("Please correct the highlighted fields.");
       return;

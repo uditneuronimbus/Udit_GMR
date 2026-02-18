@@ -88,7 +88,7 @@
   width: 100%;
   padding: 14px;
   border: 1px solid #ddd;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .contact-form textarea {
@@ -114,6 +114,7 @@
 }
 .contact-right label { font-weight: 600;}
 .error { color:red;}
+.iti { width: 100%; }
 
 /* RESPONSIVE */
 @media (max-width: 992px) {
