@@ -177,7 +177,7 @@ export default function decorate(block) {
       const anySuccess = results.some(r => r.status === 'fulfilled' && (r.value.ok || r.value.status === 200));
 
       if (anySuccess) {
-        form.innerHTML = `<div class="success-box"><h3>${config.successMessage}</h3><p>We'll get back to you soon.</p></div>`;
+        window.location.href = '/en/thankyou';
       } else {
         throw new Error('Service temporarily unavailable.');
       }
