@@ -233,12 +233,21 @@
     .hero-actions .btn {
         min-width: inherit;
     }
-    .hero-nav .swiper-button-prev, .hero-nav .swiper-button-next {
-    width: 2.5rem !important;
-    height: 2.5rem !important;
+
+    .hero-nav .swiper-button-prev,
+    .hero-nav .swiper-button-next {
+        width: 2.5rem !important;
+        height: 2.5rem !important;
     }
 
-    .quick-links-wrapper {
-        display: none !important;
+    .hero-content {
+        padding-top: 2rem;
+        justify-content: flex-start;
     }
+    .hero-nav .container { justify-content: center; }
+    .quick-links-wrapper { bottom: 60px; right: 0; width: 90%; left: 0; margin: auto; }
+    .quick-links-wrapper .btn-primary.quick-links-btn {
+    width: 100%;
+    justify-content: space-between; }
+    .quick-links-dropdown { width: 100%; }
 }
