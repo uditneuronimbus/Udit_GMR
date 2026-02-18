@@ -58,27 +58,6 @@
         },
         {
           "component": "text",
-          "name": "formTitle",
-          "label": "Form Title",
-          "valueType": "string",
-          "defaultValue": "Contact Us"
-        },
-        {
-          "component": "text",
-          "name": "submitLabel",
-          "label": "Submit Button Label",
-          "valueType": "string",
-          "defaultValue": "Submit"
-        },
-        {
-          "component": "text",
-          "name": "successMessage",
-          "label": "Success Message",
-          "valueType": "string",
-          "defaultValue": "Success!"
-        },
-        {
-          "component": "text",
           "name": "mapEmbedUrl",
           "label": "Google Maps Embed URL",
           "valueType": "string"
