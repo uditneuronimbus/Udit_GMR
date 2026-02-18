@@ -4276,6 +4276,13 @@
     },
     {
       "id": "listing-brand",
-      "fields": []
+      "fields": [
+        {
+          "name": "label",
+          "label": "Section Label",
+          "component": "text",
+          "valueType": "string"
+        }
+      ]
     }
 ]
