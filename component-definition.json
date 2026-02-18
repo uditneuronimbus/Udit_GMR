@@ -2352,7 +2352,7 @@
           }
         },
         {
-          "title": "Brand",
+          "title": "Listing Brand",
           "id": "listing-brand",
           "plugins": {
             "xwalk": {
