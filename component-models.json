@@ -4251,5 +4251,45 @@
         "valueType": "string"
       }
     ]
-  }
+  },
+  {
+      "id": "latest-press-update",
+      "fields": [
+        {
+          "name": "label",
+          "label": "Section Label",
+          "component": "text",
+          "valueType": "string"
+        }
+      ]
+    },
+    {
+      "id": "article-hero",
+      "fields": [
+        {
+          "name": "title",
+          "label": "Article Title",
+          "component": "text",
+          "valueType": "string"
+        },
+        {
+          "name": "category",
+          "label": "Category",
+          "component": "text",
+          "valueType": "string"
+        },
+        {
+          "name": "date",
+          "label": "Date",
+          "component": "text",
+          "valueType": "string"
+        },
+        {
+          "name": "video",
+          "label": "Hero Image/Video",
+          "component": "media",
+          "valueType": "string"
+        }
+      ]
+    }
 ]

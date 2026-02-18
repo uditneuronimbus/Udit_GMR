@@ -1,0 +1,98 @@
+import { getApiHost } from "../../scripts/api.js";
+import { slugToTitle } from "../../scripts/common.js";
+import { formatDate } from "../../scripts/common.js";
+
+function getCategoryFromURL() {
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  if (!parts.length) return "";
+
+  let slug = parts[parts.length - 1].toLowerCase();
+
+  const slugMap = {
+    "blogs": "blog",
+  };
+
+  return slugMap[slug] || slug;
+}
+
+export default async function decorate(block) {
+  const category = getCategoryFromURL();
+
+  // JSON label field
+  const labelText = block.textContent.trim() || "FEATURED VIDEO";
+
+  block.innerHTML = "";
+
+  const container = document.createElement("section");
+  container.className = "article-hero";
+
+  container.innerHTML = `
+    <div class="ah-wrapper">
+      <p class="loading">Loading featured content...</p>
+    </div>
+  `;
+
+  block.appendChild(container);
+  const wrapper = container.querySelector(".ah-wrapper");
+
+  try {
+    const apiUrl =
+      `${getApiHost()}/api/v1/web/gmr-api/latest-news` +
+      `?category=${encodeURIComponent(category)}`;
+
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(`API error ${res.status}`);
+
+    const json = await res.json();
+    const items = json?.data?.data?.newsList?.items || [];
+
+    if (!items.length) {
+      wrapper.innerHTML = "<p>No content available.</p>";
+      return;
+    }
+
+    const item = items[0];
+
+    const publishDateRaw =
+      item.publishMonth + " " + item.publishYear;
+
+    const publishDateFormatted = formatDate(publishDateRaw);
+
+    const categoryText = slugToTitle(
+      item.subCategory || item.category || "Press"
+    );
+
+    wrapper.innerHTML = `
+      <div class="ah-header">
+        <span class="ah-label">${labelText}</span>
+
+        <h1 class="ah-title">
+          ${item.title || ""}
+        </h1>
+
+        <div class="ah-meta">
+          <span class="ah-category">
+            ${categoryText}
+          </span>
+
+          <span class="ah-separator">|</span>
+
+          <span class="ah-date">
+            ${publishDateFormatted}
+          </span>
+        </div>
+      </div>
+
+      <div class="ah-media">
+        <img
+          src="${item.cardImage?._publishUrl || ""}"
+          alt="${item.title || ""}"
+          loading="lazy"
+        />
+      </div>
+    `;
+  } catch (err) {
+    console.error(`Article hero error:`, err);
+    wrapper.innerHTML = "<p>Error loading content.</p>";
+  }
+}
