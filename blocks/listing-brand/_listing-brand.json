@@ -33,7 +33,7 @@
   "filters": [
     {
       "id": "listing-brand",
-      "components": []
+      "components": ["text"]
     }
   ]
 }
