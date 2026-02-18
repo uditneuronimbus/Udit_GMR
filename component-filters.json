@@ -68,7 +68,6 @@
       "lottie-animation",
       "media-cards",
       "photo-gallery-slider",
-      "latest-press-update",
       "article-hero"
     ]
   },
@@ -530,9 +529,6 @@
     },
     {
       "id": "article-hero",
-      "components": [
-        "text",
-        "media"
-      ]
+      "components": ["text"]
     }
 ]
