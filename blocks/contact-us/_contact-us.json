@@ -58,6 +58,48 @@
         },
         {
           "component": "text",
+          "name": "socialTitle",
+          "label": "Social Title",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "instagramUrl",
+          "label": "Instagram URL",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "xUrl",
+          "label": "X (Twitter) URL",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "linkedinUrl",
+          "label": "LinkedIn URL",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "youtubeUrl",
+          "label": "YouTube URL",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "whatsappUrl",
+          "label": "WhatsApp URL",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "facebookUrl",
+          "label": "Facebook URL",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
           "name": "mapEmbedUrl",
           "label": "Google Maps Embed URL",
           "valueType": "string"
