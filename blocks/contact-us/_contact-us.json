@@ -58,91 +58,51 @@
         },
         {
           "component": "text",
-          "name": "socialMediaHeading",
-          "label": "Social Media Heading",
-          "valueType": "string",
-          "defaultValue": "Connect on our official social channels"
-        },
-        {
-          "component": "reference",
-          "name": "linkedinIcon",
-          "label": "LinkedIn Icon",
+          "name": "socialTitle",
+          "label": "Social Title",
           "valueType": "string"
         },
         {
           "component": "text",
-          "name": "linkedinIconAlt",
-          "label": "LinkedIn Icon Alt Text",
-          "valueType": "string",
-          "defaultValue": "LinkedIn"
-        },
-        {
-          "component": "reference",
-          "name": "facebookIcon",
-          "label": "Facebook Icon",
+          "name": "instagramUrl",
+          "label": "Instagram URL",
           "valueType": "string"
         },
         {
           "component": "text",
-          "name": "facebookIconAlt",
-          "label": "Facebook Icon Alt Text",
-          "valueType": "string",
-          "defaultValue": "Facebook"
-        },
-        {
-          "component": "reference",
-          "name": "youtubeIcon",
-          "label": "YouTube Icon",
+          "name": "xUrl",
+          "label": "X (Twitter) URL",
           "valueType": "string"
         },
         {
           "component": "text",
-          "name": "youtubeIconAlt",
-          "label": "YouTube Icon Alt Text",
-          "valueType": "string",
-          "defaultValue": "YouTube"
+          "name": "linkedinUrl",
+          "label": "LinkedIn URL",
+          "valueType": "string"
         },
         {
           "component": "text",
-          "name": "mapLocationName",
-          "label": "Map Location Name",
-          "valueType": "string",
-          "defaultValue": "New Udaan Bhawan"
+          "name": "youtubeUrl",
+          "label": "YouTube URL",
+          "valueType": "string"
         },
         {
           "component": "text",
-          "name": "mapAddress",
-          "label": "Map Address",
-          "valueType": "string",
-          "defaultValue": "New Udaan Bhawan, opp. Terminal 3, New Delhi, Delhi 110037"
+          "name": "whatsappUrl",
+          "label": "WhatsApp URL",
+          "valueType": "string"
         },
         {
           "component": "text",
-          "name": "mapRating",
-          "label": "Map Rating",
-          "valueType": "string",
-          "defaultValue": "4.6"
-        },
-        {
-          "component": "text",
-          "name": "mapReviewsCount",
-          "label": "Map Reviews Count",
-          "valueType": "string",
-          "defaultValue": "491 reviews"
+          "name": "facebookUrl",
+          "label": "Facebook URL",
+          "valueType": "string"
         },
         {
           "component": "text",
           "name": "mapEmbedUrl",
           "label": "Google Maps Embed URL",
-          "valueType": "string",
-          "defaultValue": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.547!2d77.08755!3d28.55624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1b1b1b1b1b1b%3A0x1b1b1b1b1b1b1b1b!2sNew%20Udaan%20Bhawan!5e0!3m2!1sen!2sin!4v1234567890"
-        },
-        {
-          "component": "text",
-          "name": "mapDirectionsUrl",
-          "label": "Google Maps Directions URL",
-          "valueType": "string",
-          "defaultValue": "https://www.google.com/maps/dir/?api=1&destination=New+Udaan+Bhawan,New+Delhi"
+          "valueType": "string"
         }
       ]
     }
