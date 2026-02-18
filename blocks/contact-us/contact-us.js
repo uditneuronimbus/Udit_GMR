@@ -245,24 +245,24 @@ export default function decorate(block) {
                 </div>
                 <div class="col-md-6 mb-4">
                   <label class="mb-2">First Name*</label>
-                  <input type="text" id="firstName" name="firstName" placeholder="First Name*" required>
+                  <input type="text" id="firstName" name="firstName" placeholder="Enter your first name..." required>
                 </div>
                 <div class="col-md-6 mb-4">
                   <label class="mb-2">Last Name</label>
-                  <input type="text" id="lastName" name="lastName" placeholder="Last Name">
+                  <input type="text" id="lastName" name="lastName" placeholder="Enter your last name...">
                 </div>
 
                 <div class="col-md-6 mb-4">
                   <label class="mb-2">Mobile No.*</label>
-                  <input type="tel" id="mobile" name="mobile" placeholder="Mobile No.*" required>
+                  <input type="tel" id="mobile" name="mobile" placeholder="Enter your mobile no..." required>
                 </div>
                 <div class="col-md-6 mb-4">
                   <label class="mb-2">Email I’D*</label>
-                  <input type="email" id="email" name="email" placeholder="Email ID*" required>
+                  <input type="email" id="email" name="email" placeholder="Enter your email ID..." required>
                 </div>
                 <div class="col-md-12">
                   <label class="mb-2">Message*</label>
-                  <textarea id="message" name="message" placeholder="Message*" required></textarea>
+                  <textarea id="message" name="message" placeholder="Enter your message..." required></textarea>
                 </div>
                 <div class="col-md-12">
                   <button type="submit" class="btn btn-primary">
