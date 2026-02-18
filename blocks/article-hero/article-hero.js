@@ -46,24 +46,14 @@ export default async function decorate(block) {
 
   try {
     const apiUrl =
-      `${getApiHost()}/api/v1/web/gmr-api/latest-news` +
-      `?category=${encodeURIComponent(category)}`;
+      `${getApiHost()}/api/v1/web/gmr-api/films-latest`;
 
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`API error ${res.status}`);
 
     const json = await res.json();
 
-    // Newly Added
-    console.log("Full API response:", json);
-    console.log("Full API response:", json);
-
-
-    const items = json?.data?.data?.newsList?.items || [];
-
-    // Newly Added Code
-    console.log("Items:", items);
-    console.log("Items length:", items.length);
+    const items = json?.data?.data?.filmsVisualsList?.items || [];
 
 
     if (!items.length) {
