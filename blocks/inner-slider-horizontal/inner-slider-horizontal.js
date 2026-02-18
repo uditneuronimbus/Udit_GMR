@@ -6,6 +6,7 @@
 //   'https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css';
 
 // export default async function decorate(block) {
+
 //   /* ===============================
 //      1️⃣ Prevent Double Execution
 //   =============================== */
@@ -63,33 +64,46 @@
 //   });
 
 //   /* ===============================
-//      6️⃣ Create Slider Markup
+//      6️⃣ Create Wrapper
 //   =============================== */
 //   const wrapper = document.createElement('div');
 //   wrapper.className = 'ish-wrapper';
 
-//   wrapper.innerHTML = `
-//     ${sectionTitle ? `
-//       <div class="ish-header">
-//         <h2 class="ish-title">${sectionTitle}</h2>
-//       </div>
-//     ` : ''}
+//   /* ===============================
+//      7️⃣ Header
+//   =============================== */
+//   if (sectionTitle) {
+//     const header = document.createElement('div');
+//     header.className = 'ish-header';
+//     header.innerHTML = `<h2 class="ish-title">${sectionTitle}</h2>`;
+//     wrapper.appendChild(header);
+//   }
 
+//   /* ===============================
+//      8️⃣ Swiper Container
+//   =============================== */
+//   const sliderContainer = document.createElement('div');
+//   sliderContainer.className = 'ish-slider-container';
+
+//   sliderContainer.innerHTML = `
 //     <div class="swiper ish-swiper">
 //       <div class="swiper-wrapper"></div>
 
-//       <div class="swiper-button-prev"></div>
-//       <div class="swiper-button-next"></div>
-//       <div class="swiper-pagination"></div>
+//       <div class="ish-navigation">
+//         <div class="swiper-button-prev"></div>
+//         <div class="swiper-button-next"></div>
+//       </div>
 //     </div>
 //   `;
 
+//   wrapper.appendChild(sliderContainer);
 //   block.appendChild(wrapper);
 
-//   const swiperWrapper = wrapper.querySelector('.swiper-wrapper');
+//   const swiperWrapper =
+//     sliderContainer.querySelector('.swiper-wrapper');
 
 //   /* ===============================
-//      7️⃣ Build Slides
+//      9️⃣ Build Slides
 //   =============================== */
 //   slidesData.forEach((slide) => {
 //     const slideEl = document.createElement('div');
@@ -117,41 +131,40 @@
 //   });
 
 //   /* ===============================
-//      🚫 Do NOT Init Swiper in Author Mode
+//      🚫 Skip Init in Author Mode
 //   =============================== */
 //   if (isAuthorMode) return;
 
 //   /* ===============================
-//      8️⃣ Load Swiper Properly
+//      🔟 Load Swiper
 //   =============================== */
 //   await loadCSS(SWIPER_CSS);
 //   await loadScript(SWIPER_JS);
 
-//   /* Small delay ensures DOM ready */
 //   await new Promise((resolve) => setTimeout(resolve, 50));
 
 //   /* ===============================
-//      9️⃣ Initialize Swiper
+//      1️⃣1️⃣ Initialize Swiper (VERTICAL)
 //   =============================== */
-//   new window.Swiper(wrapper.querySelector('.ish-swiper'), {
+
+//   const swiperEl = sliderContainer.querySelector('.ish-swiper');
+//   const nextBtn = sliderContainer.querySelector('.swiper-button-next');
+//   const prevBtn = sliderContainer.querySelector('.swiper-button-prev');
+
+//   new window.Swiper(swiperEl, {
+//     direction: 'vertical',
 //     slidesPerView: 1,
-//     spaceBetween: 0,
+//     spaceBetween: 40,
 //     loop: true,
-//     speed: 900,
-//     centeredSlides: false,
+//     speed: 800,
+//     // mousewheel: true,
 
 //     navigation: {
-//       nextEl: wrapper.querySelector('.swiper-button-next'),
-//       prevEl: wrapper.querySelector('.swiper-button-prev'),
-//     },
-
-//     pagination: {
-//       el: wrapper.querySelector('.swiper-pagination'),
-//       clickable: true,
+//       nextEl: nextBtn,
+//       prevEl: prevBtn,
 //     },
 //   });
 // }
-
 
 
 
@@ -237,23 +250,37 @@ export default async function decorate(block) {
   }
 
   /* ===============================
-     8️⃣ Swiper Container (NEW WRAP STRUCTURE)
+     8️⃣ Swiper Container
   =============================== */
   const sliderContainer = document.createElement('div');
   sliderContainer.className = 'ish-slider-container';
 
   sliderContainer.innerHTML = `
-    <div class="swiper ish-swiper">
-      <div class="swiper-wrapper"></div>
+  <div class="swiper ish-swiper">
+    <div class="swiper-wrapper"></div>
 
-      <div class="ish-navigation">
+    <!-- Navigation Wrapper -->
+    <div class="ish-navigation">
+
+      <!-- Timeline (Separate Div) -->
+      <div class="ish-timeline-wrapper">
+        <div class="ish-timeline">
+          <div class="ish-year-top"></div>
+          <div class="ish-dot"></div>
+          <div class="ish-year-bottom"></div>
+        </div>
+      </div>
+
+      <!-- Arrows (Separate Div) -->
+      <div class="ish-arrows-wrapper">
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div>
       </div>
 
-      <div class="swiper-pagination"></div>
     </div>
-  `;
+  </div>
+`;
+
 
   wrapper.appendChild(sliderContainer);
   block.appendChild(wrapper);
@@ -289,9 +316,7 @@ export default async function decorate(block) {
     swiperWrapper.appendChild(slideEl);
   });
 
-  /* ===============================
-     🚫 Skip Init in Author Mode
-  =============================== */
+  /* 🚫 Skip Swiper Init in Author Mode */
   if (isAuthorMode) return;
 
   /* ===============================
@@ -305,23 +330,48 @@ export default async function decorate(block) {
   /* ===============================
      1️⃣1️⃣ Initialize Swiper
   =============================== */
-  new window.Swiper(
-    sliderContainer.querySelector('.ish-swiper'),
-    {
-      slidesPerView: 1,
-      spaceBetween: 40,
-      loop: true,
-      speed: 800,
 
-      navigation: {
-        nextEl: sliderContainer.querySelector('.swiper-button-next'),
-        prevEl: sliderContainer.querySelector('.swiper-button-prev'),
-      },
+  const swiperEl = sliderContainer.querySelector('.ish-swiper');
+  const nextBtn = sliderContainer.querySelector('.swiper-button-next');
+  const prevBtn = sliderContainer.querySelector('.swiper-button-prev');
 
-      pagination: {
-        el: sliderContainer.querySelector('.swiper-pagination'),
-        clickable: true,
-      },
-    }
-  );
+  const swiper = new window.Swiper(swiperEl, {
+    direction: 'vertical',
+    slidesPerView: 1,
+    spaceBetween: 40,
+    loop: true,
+    speed: 800,
+
+    navigation: {
+      nextEl: nextBtn,
+      prevEl: prevBtn,
+    },
+  });
+
+  /* ===============================
+     1️⃣2️⃣ Timeline Year Logic
+     (Only Previous + Next)
+  =============================== */
+
+  const yearTop = sliderContainer.querySelector('.ish-year-top');
+  const yearBottom = sliderContainer.querySelector('.ish-year-bottom');
+
+  function updateTimelineYears() {
+    const total = slidesData.length;
+    const activeIndex = swiper.realIndex;
+
+    const prevIndex = (activeIndex - 1 + total) % total;
+    const nextIndex = (activeIndex + 1) % total;
+
+    yearTop.textContent = slidesData[prevIndex].year;
+    yearBottom.textContent = slidesData[nextIndex].year;
+  }
+
+  // Initial load
+  updateTimelineYears();
+
+  // On slide change
+  swiper.on('slideChange', () => {
+    updateTimelineYears();
+  });
 }
