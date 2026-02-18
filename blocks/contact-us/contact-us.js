@@ -295,7 +295,7 @@ export default function decorate(block) {
 
   const form = block.querySelector("#contactForm");
   const status = block.querySelector(".form-status");
-  const submitBtn = block.querySelector(".btn-submit");
+  const submitBtn = block.querySelector('[type="submit"]');
   const mobileInput = block.querySelector("#mobile");
 
   function updateStatus(msg, isError = true) {
@@ -369,21 +369,56 @@ export default function decorate(block) {
       const label = getLabel();
       if (label) label.classList.remove("error");
     });
+
+    /* For <select> elements, also clear on change */
+    if (el.tagName === "SELECT") {
+      el.addEventListener("change", () => {
+        el.classList.remove("invalid");
+        const label = getLabel();
+        if (label) label.classList.remove("error");
+      });
+    }
+  });
+
+  /* Clear phone error as soon as the user changes the number or country */
+  mobileInput.addEventListener("change", () => {
+    if (iti && iti.isValidNumber()) {
+      mobileInput.classList.remove("invalid");
+      const label = mobileInput.closest("div")?.querySelector("label");
+      if (label) label.classList.remove("error");
+    }
   });
 
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    if (!form.checkValidity() || (iti && !iti.isValidNumber())) {
+    const phoneInvalid = iti && !iti.isValidNumber();
+
+    if (!form.checkValidity() || phoneInvalid) {
+      /* Highlight all native-invalid fields */
       form.querySelectorAll(":invalid").forEach((i) => {
         i.classList.add("invalid");
-
         const label = i.closest("div")?.querySelector("label");
         if (label) label.classList.add("error");
       });
-      if (iti && !iti.isValidNumber()) mobileInput.classList.add("invalid");
-      updateStatus("Please Fill all the highlighted fields.");
+
+      /* Highlight phone field separately (ITI wraps it, so :invalid may miss it) */
+      if (phoneInvalid) {
+        mobileInput.classList.add("invalid");
+        const phoneLabel = mobileInput.closest("div")?.querySelector("label");
+        if (phoneLabel) phoneLabel.classList.add("error");
+      }
+
+      updateStatus("Please fill all the highlighted fields correctly.");
+
+      /* Scroll to the first highlighted field so the user can see it */
+      const firstInvalid = form.querySelector(".invalid");
+      if (firstInvalid) {
+        firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+        firstInvalid.focus({ preventScroll: true });
+      }
+
       return;
     }
 
