@@ -67,7 +67,7 @@
 .inner-hero p {
     font-weight: 300;
     font-size: var(--fs-medium);
-    max-width: 75%;
+    max-width: 85%;
 }
 .inner-hero-play {
     position: relative;
