@@ -38,7 +38,7 @@ export default function decorate(block) {
   ================================ */
 
   const runtime = document.createElement("section");
-  runtime.className = "contact-section";
+  runtime.className = "contact-section spacer pb-0";
 
   const container = document.createElement("div");
   container.className = "container";
@@ -146,20 +146,21 @@ export default function decorate(block) {
   /* ================================
      6️⃣ Map (if exists)
   ================================ */
+  runtime.append(container);
 
   if (data.mapEmbedUrl) {
-    const map = document.createElement("div");
-    map.className = "contact-map";
+  const map = document.createElement("div");
+  map.className = "contact-map";
 
-    const iframe = document.createElement("iframe");
-    iframe.src = data.mapEmbedUrl;
-    iframe.loading = "lazy";
-    iframe.setAttribute("allowfullscreen", "");
+  const iframe = document.createElement("iframe");
+  iframe.src = data.mapEmbedUrl;
+  iframe.loading = "lazy";
+  iframe.setAttribute("allowfullscreen", "");
 
-    map.append(iframe);
-    container.append(map);
-  }
+  map.append(iframe);
 
-  runtime.append(container);
-  block.append(runtime);
+  runtime.append(map); // ✅ outside container
+}
+
+block.append(runtime);
 }
