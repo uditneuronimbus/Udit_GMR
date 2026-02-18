@@ -53,7 +53,17 @@ export default async function decorate(block) {
     if (!res.ok) throw new Error(`API error ${res.status}`);
 
     const json = await res.json();
+
+    // Newly Added
+    console.log("Full API response:", json);
+
+
     const items = json?.data?.data?.newsList?.items || [];
+
+    // Newly Added Code
+    console.log("Items:", items);
+    console.log("Items length:", items.length);
+    
 
     if (!items.length) {
       wrapper.innerHTML = "<p>No news available.</p>";
@@ -61,6 +71,7 @@ export default async function decorate(block) {
     }
 
     const item = items[0];
+
 
     const publishDateRaw =
       item.publishMonth + " " + item.publishYear;
