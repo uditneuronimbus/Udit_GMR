@@ -265,7 +265,7 @@ export default function decorate(block) {
                   <textarea id="message" name="message" placeholder="Message*" required></textarea>
                 </div>
                 <div class="col-md-12">
-                  <button type="submit" class="btn-submit">
+                  <button type="submit" class="btn btn-primary">
                     ${config.submitLabel}
                   </button>
                 </div>

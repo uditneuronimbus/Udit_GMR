@@ -93,16 +93,7 @@
 
 .contact-form textarea {
   min-height: 120px;
-  margin-bottom: 20px;
-}
-
-.btn-submit {
-  background: #f3b24c;
-  border: none;
-  padding: 14px 30px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
+  margin-bottom: 1.5rem; margin-top: 0;
 }
 
 /* MAP */
