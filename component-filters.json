@@ -69,7 +69,8 @@
       "media-cards",
       "photo-gallery-slider",
       "article-hero",
-      "listing-press"
+      "listing-press",
+      "listing-brand"
     ]
   },
   {
@@ -531,5 +532,9 @@
     {
       "id": "article-hero",
       "components": ["text"]
+    },
+    {
+      "id": "listing-brand",
+      "components": []
     }
 ]

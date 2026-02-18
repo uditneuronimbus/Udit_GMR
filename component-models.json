@@ -4273,5 +4273,9 @@
           "valueType": "string"
         }
       ]
+    },
+    {
+      "id": "listing-brand",
+      "fields": []
     }
 ]
