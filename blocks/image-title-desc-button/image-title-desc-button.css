@@ -1,8 +1,11 @@
-.pt-0.image-title-desc-button-container .flat-banner { margin-top: 0; }
+.pt-0.image-title-desc-button-container .flat-banner {
+    margin-top: 0;
+}
 .flat-banner {
     min-height: 100px;
     overflow: hidden;
     padding: 0 0 48%;
+    background-color: #ddd;
     /* margin-top: -4rem; */
 }
 
@@ -34,8 +37,12 @@
 .alignment-center.image-title-desc-button-container .flat-overlay {
     padding: 0 0 10rem;
 }
-.alignment-center.mt-0.image-title-desc-button-container .flat-banner { margin-top: 0; }
-.alignment-center.mt-0.image-title-desc-button-container .flat-overlay { padding: 0 0 4rem; }
+.alignment-center.mt-0.image-title-desc-button-container .flat-banner {
+    margin-top: 0;
+}
+.alignment-center.mt-0.image-title-desc-button-container .flat-overlay {
+    padding: 0 0 4rem;
+}
 
 .flat-overlay {
     background: var(--black);
