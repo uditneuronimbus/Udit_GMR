@@ -1398,6 +1398,8 @@ hr {
 .background-pink.message-from-leadership-container .mfl-card {
     grid-template-columns: 40% 48%;
 }
+.minus-margin-top {
+    margin-top: -4rem; }
 
 .minus-margin-top.message-from-leadership-container {
     margin-top: -4rem;
