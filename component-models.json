@@ -1688,6 +1688,18 @@
       {
         "component": "text",
         "valueType": "string",
+        "name": "titles",
+        "label": "Titles"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "descriptions",
+        "label": "Descriptions"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
         "name": "primaryCtaText",
         "label": "Primary CTA Text"
       },
@@ -1712,8 +1724,8 @@
       {
         "component": "text",
         "valueType": "string",
-        "name": "title",
-        "label": "Title"
+        "name": "titless",
+        "label": "Titles"
       },
       {
         "component": "richtext",
