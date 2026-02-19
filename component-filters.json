@@ -534,6 +534,6 @@
     },
     {
       "id": "listing-brand",
-      "components": ["text"]
+      "fields": []
     }
 ]

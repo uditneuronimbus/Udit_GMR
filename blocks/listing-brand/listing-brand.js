@@ -35,51 +35,7 @@ export default async function decorate(block) {
       <!-- Desktop Layout -->
       <div class="press-layout desktop-layout">
         <aside class="press-filter-panel">
-          <h4>Filter By</h4>
-          
-          <!-- Year -->
-          <div class="filter-group filter-group-collapsible">
-            <button class="filter-toggle active" data-target="year-options">
-              <span>Year - <span class="selected-year">${defaultYear}</span></span>
-              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-            <div class="filter-options" id="year-options">
-              <label class="filter-option active">
-                <input type="radio" name="desktop-year" value="" checked>
-                <span>All Years</span>
-              </label>
-              ${dynamicYears.map(y =>
-                `<label class="filter-option">
-                  <input type="radio" name="desktop-year" value="${y}">
-                  <span>${y}</span>
-                </label>`
-              ).join("")}
-            </div>
-          </div>
-
-          <!-- Month -->
-          <div class="filter-group filter-group-collapsible">
-            <button class="filter-toggle" data-target="month-options">
-              <span>Month</span>
-              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-            <div class="filter-options hidden" id="month-options">
-              <label class="filter-option active">
-                <input type="radio" name="desktop-month" value="" checked>
-                <span>All Months</span>
-              </label>
-              ${dynamicMonths.map(m =>
-                `<label class="filter-option">
-                  <input type="radio" name="desktop-month" value="${m}">
-                  <span>${m}</span>
-                </label>`
-              ).join("")}
-            </div>
-          </div>
+          <h4>Filter By</h4>  
 
           <!-- Category -->
           <div class="filter-group filter-group-collapsible">
@@ -129,7 +85,7 @@ export default async function decorate(block) {
         <div class="press-main">
           <div class="press-header">
             <div class="press-header-info">
-              <h2 class="press-title">All Releases - <span class="selected-summary">All Years</span></h2>
+              <h2 class="press-title">All Releases - <span class="selected-summary">All Categories</span></h2>
               <p class="press-count">Displaying <span class="count-text">Loading...</span></p>
             </div>
             
@@ -163,13 +119,6 @@ export default async function decorate(block) {
       <!-- Mobile Layout -->
       <div class="press-layout mobile-layout">
         <div class="mobile-filter-buttons">
-          <button class="mobile-filter-btn year-btn" data-type="year-month">
-            Year & Month <span class="arrow">
-              <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
-              </svg>
-            </span>
-          </button>
           <button class="mobile-filter-btn category-btn" data-type="category">
             Category <span class="arrow">
               <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -198,28 +147,6 @@ export default async function decorate(block) {
               <button class="close-modal">×</button>
             </div>
             <div class="modal-body">
-              <div class="filter-group year-group" style="display: none;">
-                <label><input type="radio" name="mobile-year" value="" checked> All Years</label>
-                ${dynamicYears.map(y =>
-                  `<label><input type="radio" name="mobile-year" value="${y}"> ${y}</label>`
-                ).join("")}
-              </div>
-              
-              <div class="filter-group month-group" style="display: none;">
-                <label><input type="radio" name="mobile-month" value="" checked> All Months</label>
-                <label><input type="radio" name="mobile-month" value="01"> January</label>
-                <label><input type="radio" name="mobile-month" value="02"> February</label>
-                <label><input type="radio" name="mobile-month" value="03"> March</label>
-                <label><input type="radio" name="mobile-month" value="04"> April</label>
-                <label><input type="radio" name="mobile-month" value="05"> May</label>
-                <label><input type="radio" name="mobile-month" value="06"> June</label>
-                <label><input type="radio" name="mobile-month" value="07"> July</label>
-                <label><input type="radio" name="mobile-month" value="08"> August</label>
-                <label><input type="radio" name="mobile-month" value="09"> September</label>
-                <label><input type="radio" name="mobile-month" value="10"> October</label>
-                <label><input type="radio" name="mobile-month" value="11"> November</label>
-                <label><input type="radio" name="mobile-month" value="12"> December</label>
-              </div>
               
               <div class="filter-group category-group" style="display: none;">
                 <label><input type="radio" name="mobile-subcat" value="" checked> All Categories</label>
@@ -271,17 +198,9 @@ export default async function decorate(block) {
 
   function updateHeader() {
     const parts = [];
-    if (state.year) parts.push(state.year);
-    if (state.month) {
-      // Convert month number to month name
-      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
-                         'July', 'August', 'September', 'October', 'November', 'December'];
-      const monthName = monthNames[parseInt(state.month) - 1] || state.month;
-      parts.push(monthName);
-    }
     if (state.subCategory) parts.push(slugToTitle(state.subCategory));
     if (state.tag) parts.push(state.tag);
-    summaryText.textContent = parts.length ? parts.join(" • ") : "All Years";
+    summaryText.textContent = parts.length ? parts.join(" • ") : "All Categories";
   }
 
   function updateCountDisplay() {
@@ -299,7 +218,7 @@ export default async function decorate(block) {
     const subCategory = item?.subCategory || "";
     const updatedDate = item?.lastUpdated || "";
     const link = item?.slugUrl || "#";
-    const publishDateRaw = item.publishMonth + " " + item.publishYear;  
+    const publishDateRaw = item.publishMonth + " " + item.publishYear;
     const publishDateFormatted = formatDate(publishDateRaw);
     
     // Create badge class from subCategory
@@ -353,39 +272,27 @@ export default async function decorate(block) {
       mobileList.innerHTML = '<div class="loading">Loading...</div>';
       countText.textContent = 'Loading...';
 
-      console.log('Fetching count with filters:', {
-        year: state.year,
-        month: state.month,
-        subCategory: state.subCategory,
-        tag: state.tag,
-        sort: state.sort
-      });
-
       state.totalCount = await fetchApiCount(
-        "press-release",
+        "blog",
         state.subCategory,
         state.year,
         state.month,
         state.tag,
         state.sort
       );
-
-      console.log('Total count returned:', state.totalCount);
 
       state.offset = (state.page - 1) * state.limit;
 
       const items = await fetchApiData(
         state.limit,
         state.offset,
-        "press-release",
+        "blog",
         state.subCategory,
         state.year,
         state.month,
         state.tag,
         state.sort
       );
-
-      console.log('Items returned:', items.length);
 
       if (items.length === 0) {
         desktopList.innerHTML = '<div class="no-results">No results found</div>';
@@ -483,11 +390,7 @@ export default async function decorate(block) {
       let text = btn.textContent.split('<')[0].trim();
       
       switch(type) {
-        case 'year-month':
-          const yearText = state.year || 'Year';
-          const monthText = state.month || 'Month';
-          text = `${yearText} & ${monthText}`;
-          break;
+        
         case 'category':
           text = state.subCategory ? slugToTitle(state.subCategory) : 'Category';
           break;
@@ -509,17 +412,11 @@ export default async function decorate(block) {
     document.body.style.overflow = 'hidden';
     
     // Hide all groups first
-    yearGroup.style.display = 'none';
-    monthGroup.style.display = 'none';
     categoryGroup.style.display = 'none';
     tagGroup.style.display = 'none';
     
     // Show selected group based on button type
     switch(type) {
-      case 'year-month':
-        yearGroup.style.display = 'block';
-        monthGroup.style.display = 'block';
-        break;
       case 'category':
         categoryGroup.style.display = 'block';
         break;
@@ -529,16 +426,6 @@ export default async function decorate(block) {
     }
     
     // Set current values for each group
-    // Year group
-    const yearRadio = yearGroup.querySelector(`input[name="mobile-year"][value="${state.year}"]`);
-    if (yearRadio) yearRadio.checked = true;
-    else yearGroup.querySelector('input[name="mobile-year"][value=""]').checked = true;
-    
-    // Month group
-    const monthRadio = monthGroup.querySelector(`input[name="mobile-month"][value="${state.month}"]`);
-    if (monthRadio) monthRadio.checked = true;
-    else monthGroup.querySelector('input[name="mobile-month"][value=""]').checked = true;
-    
     // Category group
     const catRadio = categoryGroup.querySelector(`input[name="mobile-subcat"][value="${state.subCategory}"]`);
     if (catRadio) catRadio.checked = true;
@@ -557,21 +444,10 @@ export default async function decorate(block) {
 
   function applyMobileFilters() {
     // Get values from all radio groups
-    const selectedYear = yearGroup.querySelector('input[name="mobile-year"]:checked');
-    const selectedMonth = monthGroup.querySelector('input[name="mobile-month"]:checked');
     const selectedCat = categoryGroup.querySelector('input[name="mobile-subcat"]:checked');
     const selectedTag = tagGroup.querySelector('input[name="mobile-tag"]:checked');
     
     // Update state if values changed
-    if (selectedYear && selectedYear.value !== state.year) {
-      state.year = selectedYear.value;
-      state.page = 1;
-    }
-    
-    if (selectedMonth && selectedMonth.value !== state.month) {
-      state.month = selectedMonth.value;
-      state.page = 1;
-    }
     
     if (selectedCat && selectedCat.value !== state.subCategory) {
       state.subCategory = selectedCat.value;
@@ -616,9 +492,6 @@ export default async function decorate(block) {
           r.closest('.filter-option').classList.add('active');
         }
         
-        if (property === 'year') {
-          selectedYearText.textContent = r.value || "All";
-        }
         
         updateHeader();
         renderCards();
@@ -626,8 +499,7 @@ export default async function decorate(block) {
     });
   };
 
-  setupRadioFilters('desktop-year', 'year');
-  setupRadioFilters('desktop-month', 'month');
+  
   setupRadioFilters('desktop-subcat', 'subCategory');
   setupRadioFilters('desktop-tag', 'tag');
 
@@ -714,7 +586,7 @@ export default async function decorate(block) {
 
 /* ================= API Functions ================= */
 
-async function fetchApiData(limit = 10, offset = 0, category = "press-release", subCategory = "", publishyear = "", publishmonth = "", tag = "", orderby = "desc") {
+async function fetchApiData(limit = 10, offset = 0, category = "blog", subCategory = "", publishyear = "", publishmonth = "", tag = "", orderby = "desc") {
   const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/all-news` +
     `?limit=${encodeURIComponent(limit)}` +
     `&offset=${encodeURIComponent(offset)}` +
@@ -725,7 +597,6 @@ async function fetchApiData(limit = 10, offset = 0, category = "press-release", 
     `&tag=${encodeURIComponent(tag.toLowerCase())}` +
     `&orderby=${encodeURIComponent(orderby)}`;
   
-  console.log('📡 Fetching data API:', apiUrl);
     
   const res = await fetch(apiUrl);
   if (!res.ok) throw new Error(`API error ${res.status}`);
@@ -733,12 +604,11 @@ async function fetchApiData(limit = 10, offset = 0, category = "press-release", 
   const json = await res.json();
   const items = json?.data?.data?.newsList?.items || [];
   
-  console.log('✅ Data API returned items:', items.length);
   
   return items;
 }
 
-async function fetchApiCount(category = "press-release", subCategory = "", publishyear = "", publishmonth = "", tag = "", orderby = "desc") {
+async function fetchApiCount(category = "blog", subCategory = "", publishyear = "", publishmonth = "", tag = "", orderby = "desc") {
   const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/all-news` +
     `?limit=10000` +  
     `&offset=0` +
@@ -749,15 +619,12 @@ async function fetchApiCount(category = "press-release", subCategory = "", publi
     `&tag=${encodeURIComponent(tag.toLowerCase())}` +
     `&orderby=${encodeURIComponent(orderby)}`;
   
-  console.log('📊 Fetching count API:', apiUrl);
     
   const res = await fetch(apiUrl);
   if (!res.ok) throw new Error(`API error ${res.status}`);
   
   const json = await res.json();
   const items = json?.data?.data?.newsList?.items || [];
-  
-  console.log('✅ Count API returned:', items.length);
   
   return items.length;
 }

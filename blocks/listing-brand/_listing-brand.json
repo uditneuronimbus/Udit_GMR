@@ -20,20 +20,13 @@
   "models": [
     {
       "id": "listing-brand",
-      "fields": [
-        {
-          "name": "label",
-          "label": "Section Label",
-          "component": "text",
-          "valueType": "string"
-        }
-      ]
+      "fields": []
     }
   ],
   "filters": [
     {
       "id": "listing-brand",
-      "components": ["text"]
+      "components": []
     }
   ]
 }
