@@ -48,14 +48,6 @@ function buildHeroNav(swiper, total) {
   updateActive();
 }
 
-/* ------------------------------------------------------------------ */
-/* Quick Links                                                          */
-/* ------------------------------------------------------------------ */
-
-/**
- * Normalise Target offer into { label, url }[]
- * Target Velocity template returns an array directly.
- */
 function normaliseOffer(offer) {
   if (!offer) return null;
   if (Array.isArray(offer) && offer[0]?.url) return offer;           // [{ label, url }]
@@ -86,12 +78,17 @@ function renderLinks(dropdown, links) {
 async function buildQuickLinks(block) {
   block.style.position = "relative";
 
-  // Fetch from Target — no fallback, no hardcoded links
   const offer = await getTargetOffer(QUICK_LINKS_SCOPE);
-  const links = normaliseOffer(offer);
 
-  // If Target returns nothing (first visit, no profile data yet) — don't render the widget at all
-  if (!links?.length) return;
+  // If Target returns nothing — visitor has no history yet, don't show widget
+  if (!offer) return;
+
+  // Read the actual visited pages from localStorage (already tracked by trackPageVisit)
+  const { getCachedVisitedPages } = await import("../../scripts/target.js");
+  const visited = getCachedVisitedPages();
+  if (!visited?.length) return;
+
+  const links = visited.slice(0, 5);
 
   /* Build widget only after we have real Target data */
   const wrapper = document.createElement("div");
@@ -118,10 +115,6 @@ async function buildQuickLinks(block) {
   wrapper.append(dropdown, button);
   block.appendChild(wrapper);
 }
-
-/* ------------------------------------------------------------------ */
-/* Main decorate                                                        */
-/* ------------------------------------------------------------------ */
 
 export default async function decorate(block) {
   trackPageVisit(); // fire-and-forget, non-blocking

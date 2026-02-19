@@ -45,6 +45,10 @@ function getCurrentPageLabel() {
   return last.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+export function getCachedVisitedPages() {
+  return readVisitedPages();
+}
+
 export async function trackPageVisit() {
   const currentPage = {
     label: getCurrentPageLabel(),
