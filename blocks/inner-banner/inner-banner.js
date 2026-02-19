@@ -79,7 +79,7 @@ export default function decorate(block) {
 
   /* ---------- Left Column ---------- */
   const leftCol = document.createElement("div");
-  leftCol.className = "col-md-6 inner-hero-content";
+  leftCol.className = "col-md-7 inner-hero-content";
 
   const textWrap = document.createElement("div");
   textWrap.className = "inner-hero-text";
