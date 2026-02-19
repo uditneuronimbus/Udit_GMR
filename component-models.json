@@ -3460,7 +3460,7 @@
         "valueType": "string"
       },
       {
-        "component": "dropdown",
+        "component": "select",
         "name": "presenceCategory",
         "label": "Presence Category",
         "valueType": "string",
