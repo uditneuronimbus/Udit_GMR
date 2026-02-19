@@ -153,6 +153,9 @@ export default function decorate(block) {
     noAwardsCard.style.display = 'none';
     noAwardsCard.innerHTML = `
       <div class="award-content text-center">
+        <div class="no-results-icon">
+          <img src="../icons/search-no-result.svg" alt="No results" loading="eager">
+        </div>
         <h3 class="mb-0">No Awards Found</h3>
       </div>
     `;
