@@ -1,15 +1,6 @@
-/**
- * target.js
- * Shared Adobe Target utility for AEM EDS (Web SDK / alloy.js loaded via Adobe Launch)
- */
-
 const MAX_HISTORY = 5;
 const STORAGE_KEY = "gmr_visited_pages";
 const PROFILE_ATTR = "lastVisitedPages";
-
-/* ------------------------------------------------------------------ */
-/* Internal helpers                                                     */
-/* ------------------------------------------------------------------ */
 
 function getAlloy() {
   if (typeof window.alloy !== "function") {
@@ -34,17 +25,19 @@ function writeVisitedPages(pages) {
 }
 
 function getCurrentPageLabel() {
-  const title = document.title?.trim();
-  if (title) return title;
+  if (window.location.search) {
+    const title = document.title?.trim();
+    if (title) return title;
+  }
   const parts = window.location.pathname.replace(/^\/|\/$/g, "").split("/");
-  const last = parts[parts.length - 1] || "Home";
+  const meaningful = parts.filter((p) => !/^[a-z]{2}(-[a-z]{2})?$/.test(p));
+  const last = meaningful[meaningful.length - 1] || "";
   return last.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-/* ------------------------------------------------------------------ */
-/* 1. Build visit history (localStorage only — no alloy call)          */
-/*    Called by scripts.js which merges it into its own sendEvent      */
-/* ------------------------------------------------------------------ */
+function getCurrentPageUrl() {
+  return window.location.pathname + window.location.search;
+}
 
 /**
  * Records the current page into localStorage and returns the
@@ -58,21 +51,28 @@ function getCurrentPageLabel() {
 export function buildVisitHistory() {
   const currentPage = {
     label: getCurrentPageLabel(),
-    url: window.location.pathname,
+    url: getCurrentPageUrl(), // includes ?query for article pages
   };
 
+  // Don't save 404 pages
+  const is404 = currentPage.label.toLowerCase().includes("page not found")
+    || currentPage.label.toLowerCase().includes("not found")
+    || currentPage.label.toLowerCase().includes("404");
+
+  // Don't save the homepage
+  const isHomepage = /^\/[a-z]{2}(\/)?$/.test(currentPage.url) || currentPage.url === "/";
+
   const history = readVisitedPages().filter((p) => p.url !== currentPage.url);
-  history.unshift(currentPage);
+
+  if (!is404 && !isHomepage) {
+    history.unshift(currentPage);
+  }
+
   const trimmed = history.slice(0, MAX_HISTORY);
   writeVisitedPages(trimmed);
 
   return trimmed.map((p) => `${p.label}::${p.url}`).join("|");
 }
-
-/* ------------------------------------------------------------------ */
-/* 2. Read cached visited pages from localStorage                      */
-/*    Called by hero-banner.js to render the quick links               */
-/* ------------------------------------------------------------------ */
 
 /**
  * Returns the locally cached visited pages array.
@@ -81,10 +81,6 @@ export function buildVisitHistory() {
 export function getCachedVisitedPages() {
   return readVisitedPages();
 }
-
-/* ------------------------------------------------------------------ */
-/* 3. Fetch a personalised offer from Target                           */
-/* ------------------------------------------------------------------ */
 
 /**
  * Fetches a JSON offer from Adobe Target for the given decision scope.

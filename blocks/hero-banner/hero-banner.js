@@ -4,10 +4,6 @@ import { getTargetOffer, getCachedVisitedPages } from "../../scripts/target.js";
 const SWIPER_JS = "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js";
 const QUICK_LINKS_SCOPE = "hero-quick-links";
 
-/* ------------------------------------------------------------------ */
-/* Helpers (unchanged)                                                  */
-/* ------------------------------------------------------------------ */
-
 function isValidRow(row) {
   return (
     row.textContent.trim().length > 0 ||
@@ -51,18 +47,11 @@ function buildHeroNav(swiper, total) {
   updateActive();
 }
 
-/* ------------------------------------------------------------------ */
-/* Quick Links                                                          */
-/* ------------------------------------------------------------------ */
-
-/**
- * Normalise Target offer into { label, url }[]
- * Target Velocity template returns an array directly.
- */
+// Quick Links
 function normaliseOffer(offer) {
   if (!offer) return null;
-  if (Array.isArray(offer) && offer[0]?.url) return offer;           // [{ label, url }]
-  if (Array.isArray(offer?.links) && offer.links[0]?.url) return offer.links; // { links: [...] }
+  if (Array.isArray(offer) && offer[0]?.url) return offer;          
+  if (Array.isArray(offer?.links) && offer.links[0]?.url) return offer.links; 
   return null;
 }
 
@@ -86,23 +75,57 @@ function renderLinks(dropdown, links) {
   });
 }
 
+// Hardcoded defaults — shown when user has fewer than 5 visited pages
+const DEFAULT_LINKS = [
+  { label: "Investors",  url: "/en/investors"  },
+  { label: "About GMR",  url: "/en/about"      },
+  { label: "Foundation", url: "/en/foundation" },
+  { label: "Contact Us", url: "/en/contact"    },
+  { label: "Careers",    url: "/en/careers"    },
+];
+
+async function isPageValid(url) {
+  try {
+    const res = await fetch(url, { method: "HEAD" });
+    return res.ok; // true for 200-299, false for 404 etc.
+  } catch {
+    return false;
+  }
+}
+
+async function buildFinalLinks(visited) {
+  // Check all visited pages in parallel
+  const validityChecks = await Promise.all(
+    visited.map(async (p) => ({ ...p, valid: await isPageValid(p.url) }))
+  );
+  const validVisited = validityChecks.filter((p) => p.valid);
+
+  // Fill up to 5 with defaults, skipping any already in visited list
+  const visitedUrls = new Set(validVisited.map((p) => p.url));
+  const defaults = DEFAULT_LINKS.filter((d) => !visitedUrls.has(d.url));
+
+  return [...validVisited, ...defaults].slice(0, 5);
+}
+
 async function buildQuickLinks(block) {
   block.style.position = "relative";
 
-  // Ask Target if this visitor has history (Target returns { type: "visited-pages" } offer
-  // only when the audience rule "lastVisitedPages exists" is met)
+  // Ask Target — returns offer only when visitor qualifies
   const offer = await getTargetOffer(QUICK_LINKS_SCOPE);
+  if (!offer) {
+    // First-time visitor — show all defaults
+    renderQuickLinksWidget(block, DEFAULT_LINKS);
+    return;
+  }
 
-  // If Target returns nothing — visitor has no history yet, don't show widget
-  if (!offer) return;
-
-  // Read the actual visited pages from localStorage (already tracked by trackPageVisit)
+  // Has visit history — build validated 5-link list
   const visited = getCachedVisitedPages();
-  if (!visited?.length) return;
+  const links = await buildFinalLinks(visited);
 
-  const links = visited.slice(0, 5);
+  renderQuickLinksWidget(block, links);
+}
 
-  /* Build widget only after we have real Target data */
+function renderQuickLinksWidget(block, links) {
   const wrapper = document.createElement("div");
   wrapper.className = "quick-links-wrapper";
 
@@ -120,17 +143,12 @@ async function buildQuickLinks(block) {
   const dropdown = document.createElement("div");
   dropdown.className = "quick-links-dropdown";
 
-  renderLinks(dropdown, links.slice(0, 5));
-
+  renderLinks(dropdown, links);
   button.addEventListener("click", () => dropdown.classList.toggle("open"));
 
   wrapper.append(dropdown, button);
   block.appendChild(wrapper);
 }
-
-/* ------------------------------------------------------------------ */
-/* Main decorate                                                        */
-/* ------------------------------------------------------------------ */
 
 export default async function decorate(block) {
   await loadScript(SWIPER_JS);
@@ -222,7 +240,7 @@ export default async function decorate(block) {
   block.classList.add("hero-banner-initialized");
 
   const swiperInstance = new Swiper(swiperEl, {
-    loop: true,
+    loop: rows.length > 1, // loop only works with more than 1 slide
     speed: 3000,
     autoplay: { delay: 5000, disableOnInteraction: false },
   });
