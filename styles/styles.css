@@ -326,6 +326,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .businesses-section.block,.container,.default-section .default-content-wrapper,.global-leaders-aviation-wrapper,.listed-companies-wrapper,.message-from-leadership{padding-left:1rem;padding-right:1rem}
 .global-leaders-aviation-wrapper{padding-left:0;padding-right:0}
 .sec-title,.sec-title h2{font-size:var(--fs-xxlarge)}
+.page-sitemap .default-section.highlight .default-content-wrapper > ul { column-count: 2;}
 }
 @media (max-width:767px){
 .col.w-20{max-width:100%!important}
@@ -349,4 +350,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .card-ui-one .card-body p.card-desc{min-height:inherit}
 .leadership-message{padding:0}
 .pt-0.message-from-leadership-container .mfl-runtime{padding-bottom:0}
+}
+@media (max-width:640px){
+.page-sitemap .default-section.highlight .default-content-wrapper > ul { column-count: 1;}
 }
