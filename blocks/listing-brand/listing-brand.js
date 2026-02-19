@@ -59,27 +59,6 @@ export default async function decorate(block) {
             </div>
           </div>
 
-          <!-- Tags -->
-          <div class="filter-group filter-group-collapsible">
-            <button class="filter-toggle" data-target="tag-options">
-              <span>Tags</span>
-              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-            <div class="filter-options hidden" id="tag-options">
-              <label class="filter-option active">
-                <input type="radio" name="desktop-tag" value="" checked>
-                <span>All Tags</span>
-              </label>
-              ${dynamicTags.map(t =>
-                `<label class="filter-option">
-                  <input type="radio" name="desktop-tag" value="${t}">
-                  <span>${t}</span>
-                </label>`
-              ).join("")}
-            </div>
-          </div>
         </aside>
         
         <div class="press-main">
@@ -121,13 +100,6 @@ export default async function decorate(block) {
         <div class="mobile-filter-buttons">
           <button class="mobile-filter-btn category-btn" data-type="category">
             Category <span class="arrow">
-              <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
-              </svg>
-            </span>
-          </button>
-          <button class="mobile-filter-btn tag-btn" data-type="tag">
-            Tags <span class="arrow">
               <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
               </svg>
@@ -214,31 +186,54 @@ export default async function decorate(block) {
   }
 
   function createCardHTML(item) {
-    const title = item?.title || "Untitled";
-    const subCategory = item?.subCategory || "";
+    const subCategory = item?.subCategory || item?.category || "";
+    
     const updatedDate = item?.lastUpdated || "";
     const link = item?.slugUrl || "#";
-    const publishDateRaw = item.publishMonth + " " + item.publishYear;
-    const publishDateFormatted = formatDate(publishDateRaw);
+
+  const title = item?.metaTitle || item?.title || "Untitled";
+
+  const publishDateRaw =
+    item?.publishDate ||
+    (item.publishMonth + " " + item.publishYear);
+
+  const publishDateFormatted = publishDateRaw
+    ? formatDate(publishDateRaw)
+    : "";
     
     // Create badge class from subCategory
     const badgeClass = subCategory ? subCategory.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '') : '';
+
+    
+    // newly added
+    const videoUrl =
+    item.videoUrl ||
+    item.video?._publishUrl ||
+    "";
+
+    const mediaHTML = videoUrl
+    ? `
+      <video class="card-video" controls>
+        <source src="${videoUrl}" type="video/mp4">
+      </video>
+    `: `
+      <img
+        src="${item.cardImage?._publishUrl || ""}"
+        alt="${item.title || ""}"
+        loading="lazy"
+      />
+    `;
 
     return `
       <article class="press-card">
         <div class="press-card-image">
         <a href="news-update?post=${link}">  
-        <img
-            src="${item.cardImage?._publishUrl || ""}"
-            alt="${item.title || ""}"
-            loading="lazy"
-          />
+        ${mediaHTML}
           </a>
         </div>
+        
 
         <div class="press-card-body">
-          <h3 class="press-card-title"><a href="news-update?post=${link}">${title}</a></h3>
-
           <div class="press-card-meta">
             ${subCategory ? `<span class="badge ${badgeClass}">${slugToTitle(subCategory)}</span>` : ""}
             ${subCategory && publishDateFormatted ? '<span class="meta-separator">|</span>' : ''}
@@ -252,13 +247,7 @@ export default async function decorate(block) {
               ${publishDateFormatted}
             </span>` : ""}
           </div>
-
-          <div class="press-card-footer">
-            <a href="news-update?post=${link}" class="btn-link">
-              READ MORE
-            </a>
-            ${updatedDate ? `<span class="meta-updated">Last Updated : ${updatedDate}</span>` : ""}
-          </div>
+          <h3 class="press-card-title"><a href="news-update?post=${link}">${title}</a></h3>
         </div>
       </article>
     `;
@@ -273,7 +262,6 @@ export default async function decorate(block) {
       countText.textContent = 'Loading...';
 
       state.totalCount = await fetchApiCount(
-        "blog",
         state.subCategory,
         state.year,
         state.month,
@@ -286,7 +274,6 @@ export default async function decorate(block) {
       const items = await fetchApiData(
         state.limit,
         state.offset,
-        "blog",
         state.subCategory,
         state.year,
         state.month,
@@ -586,34 +573,30 @@ export default async function decorate(block) {
 
 /* ================= API Functions ================= */
 
-async function fetchApiData(limit = 10, offset = 0, category = "blog", subCategory = "", publishyear = "", publishmonth = "", tag = "", orderby = "desc") {
-  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/all-news` +
+async function fetchApiData(limit = 10, offset = 0, category = "", publishyear = "", publishmonth = "", tag = "", orderby = "desc") {
+  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/films-list` +
     `?limit=${encodeURIComponent(limit)}` +
     `&offset=${encodeURIComponent(offset)}` +
     `&category=${encodeURIComponent(category)}` +
-    `&subcategory=${encodeURIComponent(subCategory)}` +
     `&publishyear=${encodeURIComponent(publishyear)}` +
     `&publishmonth=${encodeURIComponent(publishmonth.toLowerCase())}` +
     `&tag=${encodeURIComponent(tag.toLowerCase())}` +
     `&orderby=${encodeURIComponent(orderby)}`;
-  
     
-  const res = await fetch(apiUrl);
-  if (!res.ok) throw new Error(`API error ${res.status}`);
-  
-  const json = await res.json();
-  const items = json?.data?.data?.newsList?.items || [];
-  
-  
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(`API error ${res.status}`);
+    
+    const json = await res.json();
+    const items = json?.data?.data?.filmsVisualsList?.items || [];
+    
   return items;
 }
 
-async function fetchApiCount(category = "blog", subCategory = "", publishyear = "", publishmonth = "", tag = "", orderby = "desc") {
-  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/all-news` +
+async function fetchApiCount(category = "", publishyear = "", publishmonth = "", tag = "", orderby = "desc") {
+  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/films-list` +
     `?limit=10000` +  
     `&offset=0` +
     `&category=${encodeURIComponent(category)}` +
-    `&subcategory=${encodeURIComponent(subCategory)}` +
     `&publishyear=${encodeURIComponent(publishyear)}` +
     `&publishmonth=${encodeURIComponent(publishmonth.toLowerCase())}` +
     `&tag=${encodeURIComponent(tag.toLowerCase())}` +
@@ -624,7 +607,7 @@ async function fetchApiCount(category = "blog", subCategory = "", publishyear = 
   if (!res.ok) throw new Error(`API error ${res.status}`);
   
   const json = await res.json();
-  const items = json?.data?.data?.newsList?.items || [];
+  const items = json?.data?.data?.filmsVisualsList?.items || [];
   
   return items.length;
 }

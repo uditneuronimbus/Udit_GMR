@@ -55,7 +55,6 @@ export default async function decorate(block) {
 
     const items = json?.data?.data?.filmsVisualsList?.items || [];
 
-
     if (!items.length) {
       wrapper.innerHTML = "<p>No news available.</p>";
       return;
@@ -63,15 +62,21 @@ export default async function decorate(block) {
 
     const item = items[0];
 
-
     const publishDateRaw =
-      item.publishMonth + " " + item.publishYear;
+        item?.publishDate ||
+        (item?.publishMonth && item?.publishYear
+          ? item.publishMonth + " " + item.publishYear
+          : "");
 
-    const publishDateFormatted = formatDate(publishDateRaw);
+      const publishDateFormatted = publishDateRaw
+        ? formatDate(publishDateRaw)
+        : "";
 
     const categoryText = slugToTitle(
       item.subCategory || item.category || "Press"
     );
+
+    
 
     const videoUrl =
       item.videoUrl ||
@@ -95,6 +100,7 @@ export default async function decorate(block) {
 
           <span class="ah-date">
             ${publishDateFormatted}
+            
           </span>
         </div>
       </div>
