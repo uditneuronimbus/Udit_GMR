@@ -435,10 +435,9 @@
     "components": []
   },
   {
-    "id": "our-presence-filter",
+    "id": "our-presence",
     "components": [
-      "presence-group",
-      "presence-location"
+      "network-location-item"
     ]
   },
   {
