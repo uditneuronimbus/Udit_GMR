@@ -57,6 +57,11 @@
     text-align: left;
     max-width: 650px;
 }
+.alignment-center .airport-overview-headerHead {
+    max-width: 710px;
+    margin: 0 auto;
+    text-align: center;
+}
 @media (min-width: 769px) {
     .load-more-wrap {
         display: none;
