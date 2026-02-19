@@ -350,6 +350,8 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .card-ui-one .card-body p.card-desc{min-height:inherit}
 .leadership-message{padding:0}
 .pt-0.message-from-leadership-container .mfl-runtime{padding-bottom:0}
+.mobile-filter-btn { padding: 8px 12px; font-size: 12px; }
+.mobile-filter-btn .arrow svg { max-width: 15px; }
 }
 @media (max-width:640px){
 .page-sitemap .default-section.highlight .default-content-wrapper > ul { column-count: 1;}

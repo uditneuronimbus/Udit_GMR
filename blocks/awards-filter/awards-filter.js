@@ -1,4 +1,16 @@
 export default function decorate(block) {
+  /* ================================
+   GLOBAL STATE
+================================ */
+
+let CURRENT_YEAR = new Date().getFullYear().toString();
+
+const state = {
+  year: "",
+  category: "all",
+  tempYear: "",
+  tempCategory: "all"
+};
   console.log("Decorating Awards List block");
 
   const children = [...block.children];
@@ -77,7 +89,7 @@ export default function decorate(block) {
         <aside class="awards-filter-panel">
           <h4>${filterPanelTitle}</h4>
           <select class="year-filter">
-            <option value="">All Years</option>
+            
           </select>
           <ul class="category-filter">
             <li data-category="all" class="active">${allAwardsLabel}</li>
@@ -294,15 +306,27 @@ export default function decorate(block) {
   /* ================================
      8️⃣ Populate Filters
   ================================ */
-  const sortedYears = Array.from(years).sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
-  const sortedCategories = Array.from(categories).sort();
+  // Use current year if available, otherwise latest available year
+const sortedYears = Array.from(years)
+  .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+
+// Use current year if exists, otherwise use latest available
+if (!sortedYears.includes(CURRENT_YEAR)) {
+  CURRENT_YEAR = sortedYears[0] || "";
+}
+
+// set initial state
+state.year = CURRENT_YEAR;
+state.tempYear = CURRENT_YEAR;
+
+const sortedCategories = Array.from(categories).sort();
 
   // Desktop Year Filter
   sortedYears.forEach(y => {
     const opt = document.createElement("option");
     opt.value = y;
     opt.textContent = y;
-    if (y === defaultYear) opt.selected = true;
+    if (y === CURRENT_YEAR || y === defaultYear) opt.selected = true;
     yearSelectDesktop.appendChild(opt);
   });
 
@@ -317,7 +341,10 @@ export default function decorate(block) {
   // Mobile Year Filter
   sortedYears.forEach(y => {
     const label = document.createElement("label");
-    label.innerHTML = `<input type="radio" name="year" value="${y}" id="year-${y}"> ${y}`;
+    label.innerHTML = `
+  <input type="radio" name="year" value="${y}" id="year-${y}" 
+  ${y === CURRENT_YEAR ? "checked" : ""}> ${y}
+`;
     yearGroup.appendChild(label);
   });
 
@@ -328,15 +355,7 @@ export default function decorate(block) {
     categoryGroup.appendChild(label);
   });
 
-  /* ================================
-     9️⃣ State Management
-  ================================ */
-  const state = {
-    year: "",
-    category: "all",
-    tempYear: "",
-    tempCategory: "all"
-  };
+ 
 
   /* ================================
      🔟 Filter Functions
@@ -485,12 +504,12 @@ export default function decorate(block) {
     mobileNoAwardsMsg.style.display = "block";
   } else {
     // Set initial state (show all)
-    applyFilter("", "all", cardsDesktop, desktopNoAwardsMsg);
-    applyFilter("", "all", cardsMobile, mobileNoAwardsMsg);
+    applyFilter(state.year, "all", cardsDesktop, desktopNoAwardsMsg);
+applyFilter(state.year, "all", cardsMobile, mobileNoAwardsMsg);
   }
 
   // Initialize desktop UI
-  yearSelectDesktop.value = "";
+  yearSelectDesktop.value = state.year;
   categoryListDesktop.querySelectorAll("li").forEach(li => li.classList.remove("active"));
   categoryListDesktop.querySelector('li[data-category="all"]').classList.add("active");
 
