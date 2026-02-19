@@ -4338,5 +4338,31 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "latest-press-update",
+    "fields": [
+      {
+        "name": "label",
+        "label": "Section Label",
+        "component": "text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "article-hero",
+    "fields": [
+      {
+        "name": "label",
+        "label": "Section Label",
+        "component": "text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "listing-brand",
+    "fields": []
   }
 ]

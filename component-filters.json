@@ -64,9 +64,12 @@
       "image-scroll-card",
       "key-highlight-button",
       "contact-us",
+      "media-contact-header",
       "lottie-animation",
       "media-cards",
-      "photo-gallery-slider"
+      "photo-gallery-slider",
+      "article-hero",
+      "listing-brand"
     ]
   },
   {
@@ -519,5 +522,17 @@
     "components": [
       "value-cards"
     ]
-  }
+  },
+  {
+      "id": "latest-press-update",
+      "components": []
+    },
+    {
+      "id": "article-hero",
+      "components": ["text"]
+    },
+    {
+      "id": "listing-brand",
+      "fields": []
+    }
 ]
