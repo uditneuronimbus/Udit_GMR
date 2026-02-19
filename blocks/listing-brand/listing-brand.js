@@ -3,6 +3,63 @@ import { getApiHost } from "../../scripts/api.js";
 import { slugToTitle } from "../../scripts/common.js";
 import { formatDate } from "../../scripts/common.js";
 
+/* ================================
+   Create Bootstrap Video Modal
+================================ */
+function createVideoModal() {
+  if (document.getElementById("videoModal")) return;
+
+  const modalHTML = `
+    <div class="modal fade" id="videoModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content bg-black">
+          <button type="button"
+            class="btn-close btn-close-white ms-auto m-2"
+            data-bs-dismiss="modal">
+          </button>
+
+          <div class="ratio ratio-16x9">
+            <iframe id="videoIframe" src="" allow="autoplay" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML("beforeend", modalHTML);
+
+  document
+    .getElementById("videoModal")
+    .addEventListener("hidden.bs.modal", () => {
+      document.getElementById("videoIframe").src = "";
+    });
+}
+
+/* ================= YouTube ID ================= */
+function getYouTubeId(url) {
+  if (!url) return "";
+  if (url.includes("watch?v=")) return url.split("watch?v=")[1].split("&")[0];
+  if (url.includes("youtu.be/")) return url.split("youtu.be/")[1].split("?")[0];
+  if (url.includes("embed/")) return url.split("embed/")[1].split("?")[0];
+  return "";
+}
+
+/* ================= Open Video ================= */
+function openVideoModal(url) {
+  const id = getYouTubeId(url);
+  if (!id) return;
+
+  const iframe = document.getElementById("videoIframe");
+  if (iframe) {
+    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+    
+    const modal = document.getElementById("videoModal");
+    if (modal) {
+      new bootstrap.Modal(modal).show();
+    }
+  }
+}
+
 export default async function decorate(block) {
   /* ================= Get Shared Filter Data ================= */
   const data = getSharedData("pressFilters") || {};
@@ -39,13 +96,13 @@ export default async function decorate(block) {
 
           <!-- Category -->
           <div class="filter-group filter-group-collapsible">
-            <button class="filter-toggle" data-target="subcat-options">
+            <button class="filter-toggle active" data-target="subcat-options">
               <span>Business Category</span>
               <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <div class="filter-options hidden" id="subcat-options">
+            <div class="filter-options" id="subcat-options">
               <label class="filter-option active" data-category="all">
                 <input type="radio" name="desktop-subcat" value="" checked>
                 <span>All Categories</span>
@@ -62,12 +119,37 @@ export default async function decorate(block) {
             </div>
           </div>
 
+          <!-- Comment out desktop tag filter since it doesn't exist in HTML -->
+          <!-- <div class="filter-group filter-group-collapsible">
+            <button class="filter-toggle" data-target="tag-options">
+              <span>Tags</span>
+              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="filter-options hidden" id="tag-options">
+              <label class="filter-option active">
+                <input type="radio" name="desktop-tag" value="" checked>
+                <span>All Tags</span>
+              </label>
+              ${dynamicTags
+                .map(
+                  (t) =>
+                    `<label class="filter-option">
+                  <input type="radio" name="desktop-tag" value="${t}">
+                  <span>${t}</span>
+                </label>`,
+                )
+                .join("")}
+            </div>
+          </div> -->
+
         </aside>
         
         <div class="press-main">
           <div class="press-header">
             <div class="press-header-info">
-              <h2 class="press-title">All Releases - <span class="selected-summary">All Categories</span></h2>
+              <h2 class="press-title">All Videos - <span class="selected-summary">All Categories</span></h2>
               <p class="press-count">Displaying <span class="count-text">Loading...</span></p>
             </div>
             
@@ -155,7 +237,6 @@ export default async function decorate(block) {
 
   /* ================= DOM References ================= */
   const summaryText = block.querySelector(".selected-summary");
-  const selectedYearText = block.querySelector(".selected-year");
   const countText = block.querySelector(".count-text");
   const desktopList = block.querySelector(".desktop-layout .press-list");
   const mobileList = block.querySelector(".mobile-layout .press-list");
@@ -174,8 +255,6 @@ export default async function decorate(block) {
   const modalOverlay = block.querySelector(".mobile-filter-overlay");
   const closeModalBtn = block.querySelector(".close-modal");
   const applyBtn = block.querySelector(".apply-btn");
-  const yearGroup = block.querySelector(".year-group");
-  const monthGroup = block.querySelector(".month-group");
   const categoryGroup = block.querySelector(".category-group");
   const tagGroup = block.querySelector(".tag-group");
 
@@ -203,31 +282,46 @@ export default async function decorate(block) {
   function createCardHTML(item) {
     const subCategory = item?.subCategory || item?.category || "";
 
-    const updatedDate = item?.lastUpdated || "";
     const link = item?.slugUrl || "#";
-
     const title = item?.metaTitle || item?.title || "Untitled";
 
     const publishDateRaw =
-      item?.publishDate || item.publishMonth + " " + item.publishYear;
+      item?.publishDate || (item.publishMonth && item.publishYear ? item.publishMonth + " " + item.publishYear : "");
 
     const publishDateFormatted = publishDateRaw
       ? formatDate(publishDateRaw)
       : "";
+
+    // Image source handling
+    let imageSrc = "";
+    if (item.thumbnail?._publishUrl) {
+      imageSrc = item.thumbnail._publishUrl;
+    } else if (item.thumbnail?.url) {
+      imageSrc = item.thumbnail.url;
+    } else if (typeof item.thumbnail === 'string') {
+      imageSrc = item.thumbnail;
+    } else {
+      imageSrc = "https://via.placeholder.com/300x200?text=No+Image";
+    }
 
     // Create badge class from subCategory
     const badgeClass = subCategory
       ? subCategory.toLowerCase().replace(/\s+/g, "-").replace(/&/g, "")
       : "";
 
+    // Add video attribute if exists
+    const videoAttr = item.video ? `data-video="${item.video}"` : "";
+
     return `
   <article class="press-card">
-    <div class="press-card-image">
+    <div class="press-card-image" ${videoAttr} style="${item.video ? 'cursor: pointer;' : ''}">
       <img
-        src="${item.thumbnail?._publishUrl || ""}"
+        src="${imageSrc}"
         alt="${title}"
         loading="lazy"
+        onerror="this.src='https://via.placeholder.com/300x200?text=Image+Not+Found'; this.onerror=null;"
       />
+      ${item.video ? '<div class="play-icon inner-hero-play"></div>' : ''}
     </div>
 
     <div class="press-card-body">
@@ -251,7 +345,6 @@ export default async function decorate(block) {
       <h3 class="press-card-title">
         <a href="news-update?post=${link}">${title}</a>
       </h3>
-      ${item.video}
     </div>
   </article>
 `;
@@ -293,6 +386,10 @@ export default async function decorate(block) {
         const cardsHTML = items.map(createCardHTML).join("");
         desktopList.innerHTML = cardsHTML;
         mobileList.innerHTML = cardsHTML;
+        
+        // Create video modal and attach handlers
+        createVideoModal();
+        attachVideoClickHandlers();
       }
 
       updateCountDisplay();
@@ -305,6 +402,22 @@ export default async function decorate(block) {
       mobileList.innerHTML =
         '<div class="error">Error loading data. Please try again.</div>';
       countText.textContent = "Error";
+    }
+  }
+
+  function attachVideoClickHandlers() {
+    const videoImages = block.querySelectorAll(".press-card-image[data-video]");
+    videoImages.forEach(el => {
+      el.removeEventListener("click", videoClickHandler);
+      el.addEventListener("click", videoClickHandler);
+    });
+  }
+
+  function videoClickHandler(event) {
+    const imageEl = event.currentTarget;
+    const videoUrl = imageEl.dataset.video;
+    if (videoUrl) {
+      openVideoModal(videoUrl);
     }
   }
 
@@ -380,17 +493,10 @@ export default async function decorate(block) {
   function updateMobileFilterButtons() {
     mobileFilterBtns.forEach((btn) => {
       const type = btn.dataset.type;
-      let text = btn.textContent.split("<")[0].trim();
+      let text = "";
 
-      switch (type) {
-        case "category":
-          text = state.subCategory
-            ? slugToTitle(state.subCategory)
-            : "Category";
-          break;
-        case "tag":
-          text = state.tag || "Tags";
-          break;
+      if (type === "category") {
+        text = state.subCategory ? slugToTitle(state.subCategory) : "Category";
       }
 
       btn.innerHTML = `${text} <span class="arrow">
@@ -409,35 +515,21 @@ export default async function decorate(block) {
     categoryGroup.style.display = "none";
     tagGroup.style.display = "none";
 
-    // Show selected group based on button type
-    switch (type) {
-      case "category":
-        categoryGroup.style.display = "block";
-        break;
-      case "tag":
-        tagGroup.style.display = "block";
-        break;
+    // Show selected group
+    if (type === "category") {
+      categoryGroup.style.display = "block";
+      
+      // Set current value
+      const catRadio = categoryGroup.querySelector(
+        `input[name="mobile-subcat"][value="${state.subCategory}"]`,
+      );
+      if (catRadio) {
+        catRadio.checked = true;
+      } else {
+        const allRadio = categoryGroup.querySelector('input[name="mobile-subcat"][value=""]');
+        if (allRadio) allRadio.checked = true;
+      }
     }
-
-    // Set current values for each group
-    // Category group
-    const catRadio = categoryGroup.querySelector(
-      `input[name="mobile-subcat"][value="${state.subCategory}"]`,
-    );
-    if (catRadio) catRadio.checked = true;
-    else
-      categoryGroup.querySelector(
-        'input[name="mobile-subcat"][value=""]',
-      ).checked = true;
-
-    // Tag group
-    const tagRadio = tagGroup.querySelector(
-      `input[name="mobile-tag"][value="${state.tag}"]`,
-    );
-    if (tagRadio) tagRadio.checked = true;
-    else
-      tagGroup.querySelector('input[name="mobile-tag"][value=""]').checked =
-        true;
   }
 
   function closeMobileModal() {
@@ -446,23 +538,12 @@ export default async function decorate(block) {
   }
 
   function applyMobileFilters() {
-    // Get values from all radio groups
     const selectedCat = categoryGroup.querySelector(
       'input[name="mobile-subcat"]:checked',
     );
-    const selectedTag = tagGroup.querySelector(
-      'input[name="mobile-tag"]:checked',
-    );
-
-    // Update state if values changed
 
     if (selectedCat && selectedCat.value !== state.subCategory) {
       state.subCategory = selectedCat.value;
-      state.page = 1;
-    }
-
-    if (selectedTag && selectedTag.value !== state.tag) {
-      state.tag = selectedTag.value;
       state.page = 1;
     }
 
@@ -480,14 +561,17 @@ export default async function decorate(block) {
       e.stopPropagation();
       const targetId = toggle.getAttribute("data-target");
       const options = block.querySelector(`#${targetId}`);
-      toggle.classList.toggle("active");
-      options.classList.toggle("hidden");
+      if (options) {
+        toggle.classList.toggle("active");
+        options.classList.toggle("hidden");
+      }
     });
   });
 
-  // Desktop Radio Filters
+  // Desktop Radio Filters - Only setup for subcat since tag doesn't exist
   const setupRadioFilters = (name, property) => {
-    block.querySelectorAll(`input[name="${name}"]`).forEach((r) => {
+    const radios = block.querySelectorAll(`input[name="${name}"]`);
+    radios.forEach((r) => {
       r.addEventListener("change", () => {
         state[property] = r.value;
         state.page = 1;
@@ -498,7 +582,8 @@ export default async function decorate(block) {
           container
             .querySelectorAll(".filter-option")
             .forEach((opt) => opt.classList.remove("active"));
-          r.closest(".filter-option").classList.add("active");
+          const parentOption = r.closest(".filter-option");
+          if (parentOption) parentOption.classList.add("active");
         }
 
         updateHeader();
@@ -507,30 +592,36 @@ export default async function decorate(block) {
     });
   };
 
+  // Only setup for subCategory since desktop tag filter doesn't exist
   setupRadioFilters("desktop-subcat", "subCategory");
-  setupRadioFilters("desktop-tag", "tag");
+  // Remove or comment out the tag filter setup
+  // setupRadioFilters("desktop-tag", "tag");
 
   // Sort Toggle
-  sortToggle.addEventListener("click", (e) => {
-    e.stopPropagation();
-    sortOptions.classList.toggle("show");
-    sortToggle.classList.toggle("active");
-  });
-
-  // Sort Options
-  block.querySelectorAll('input[name="sort"]').forEach((radio) => {
-    radio.addEventListener("change", () => {
-      state.sort = radio.value;
-      state.page = 1;
-      renderCards();
-      sortOptions.classList.remove("show");
-      sortToggle.classList.remove("active");
+  if (sortToggle && sortOptions) {
+    sortToggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      sortOptions.classList.toggle("show");
+      sortToggle.classList.toggle("active");
     });
-  });
+
+    // Sort Options
+    block.querySelectorAll('input[name="sort"]').forEach((radio) => {
+      radio.addEventListener("change", () => {
+        state.sort = radio.value;
+        state.page = 1;
+        renderCards();
+        sortOptions.classList.remove("show");
+        sortToggle.classList.remove("active");
+      });
+    });
+  }
 
   // Close sort menu when clicking outside
   document.addEventListener("click", (e) => {
-    if (!sortToggle.contains(e.target) && !sortOptions.contains(e.target)) {
+    if (sortToggle && sortOptions && 
+        !sortToggle.contains(e.target) && 
+        !sortOptions.contains(e.target)) {
       sortOptions.classList.remove("show");
       sortToggle.classList.remove("active");
     }
@@ -550,23 +641,33 @@ export default async function decorate(block) {
   });
 
   // Pagination clicks
-  desktopPagination.addEventListener("click", (e) => {
-    const btn = e.target.closest(".page-btn");
-    if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
+  if (desktopPagination) {
+    desktopPagination.addEventListener("click", (e) => {
+      const btn = e.target.closest(".page-btn");
+      if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
 
-    state.page = parseInt(btn.dataset.page, 10);
-    renderCards();
-    desktopList.scrollIntoView({ behavior: "smooth", block: "start" });
-  });
+      state.page = parseInt(btn.dataset.page, 10);
+      renderCards();
+      const desktopLayout = block.querySelector(".desktop-layout");
+      if (desktopLayout) {
+        desktopLayout.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
 
-  mobilePagination.addEventListener("click", (e) => {
-    const btn = e.target.closest(".page-btn");
-    if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
+  if (mobilePagination) {
+    mobilePagination.addEventListener("click", (e) => {
+      const btn = e.target.closest(".page-btn");
+      if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
 
-    state.page = parseInt(btn.dataset.page, 10);
-    renderCards();
-    mobileList.scrollIntoView({ behavior: "smooth", block: "start" });
-  });
+      state.page = parseInt(btn.dataset.page, 10);
+      renderCards();
+      const mobileLayout = block.querySelector(".mobile-layout");
+      if (mobileLayout) {
+        mobileLayout.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
 
   // Mobile Filter Buttons
   mobileFilterBtns.forEach((btn) => {
@@ -576,13 +677,13 @@ export default async function decorate(block) {
   });
 
   // Mobile Modal Events
-  modalOverlay.addEventListener("click", closeMobileModal);
-  closeModalBtn.addEventListener("click", closeMobileModal);
-  applyBtn.addEventListener("click", applyMobileFilters);
+  if (modalOverlay) modalOverlay.addEventListener("click", closeMobileModal);
+  if (closeModalBtn) closeModalBtn.addEventListener("click", closeMobileModal);
+  if (applyBtn) applyBtn.addEventListener("click", applyMobileFilters);
 
   // Escape key to close modal
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && mobileModal.classList.contains("open")) {
+    if (e.key === "Escape" && mobileModal && mobileModal.classList.contains("open")) {
       closeMobileModal();
     }
   });
@@ -602,23 +703,26 @@ async function fetchApiData(
   tag = "",
   orderby = "desc",
 ) {
-  const apiUrl =
-    `${getApiHost()}/api/v1/web/gmr-api/films-list` +
-    `?limit=${encodeURIComponent(limit)}` +
-    `&offset=${encodeURIComponent(offset)}` +
-    `&category=${encodeURIComponent(category)}` +
-    `&publishyear=${encodeURIComponent(publishyear)}` +
-    `&publishmonth=${encodeURIComponent(publishmonth.toLowerCase())}` +
-    `&tag=${encodeURIComponent(tag.toLowerCase())}` +
-    `&orderby=${encodeURIComponent(orderby)}`;
+  try {
+    const apiUrl =
+      `${getApiHost()}/api/v1/web/gmr-api/films-list` +
+      `?limit=${encodeURIComponent(limit)}` +
+      `&offset=${encodeURIComponent(offset)}` +
+      `&category=${encodeURIComponent(category)}` +
+      `&publishyear=${encodeURIComponent(publishyear)}` +
+      `&publishmonth=${encodeURIComponent(publishmonth ? publishmonth.toLowerCase() : "")}` +
+      `&tag=${encodeURIComponent(tag ? tag.toLowerCase() : "")}` +
+      `&orderby=${encodeURIComponent(orderby)}`;
 
-  const res = await fetch(apiUrl);
-  if (!res.ok) throw new Error(`API error ${res.status}`);
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(`API error ${res.status}`);
 
-  const json = await res.json();
-  const items = json?.data?.data?.filmsVisualsList?.items || [];
-
-  return items;
+    const json = await res.json();
+    return json?.data?.data?.filmsVisualsList?.items || [];
+  } catch (error) {
+    console.error("Error in fetchApiData:", error);
+    return [];
+  }
 }
 
 async function fetchApiCount(
@@ -628,21 +732,25 @@ async function fetchApiCount(
   tag = "",
   orderby = "desc",
 ) {
-  const apiUrl =
-    `${getApiHost()}/api/v1/web/gmr-api/films-list` +
-    `?limit=10000` +
-    `&offset=0` +
-    `&category=${encodeURIComponent(category)}` +
-    `&publishyear=${encodeURIComponent(publishyear)}` +
-    `&publishmonth=${encodeURIComponent(publishmonth.toLowerCase())}` +
-    `&tag=${encodeURIComponent(tag.toLowerCase())}` +
-    `&orderby=${encodeURIComponent(orderby)}`;
+  try {
+    const apiUrl =
+      `${getApiHost()}/api/v1/web/gmr-api/films-list` +
+      `?limit=10000` +
+      `&offset=0` +
+      `&category=${encodeURIComponent(category)}` +
+      `&publishyear=${encodeURIComponent(publishyear)}` +
+      `&publishmonth=${encodeURIComponent(publishmonth ? publishmonth.toLowerCase() : "")}` +
+      `&tag=${encodeURIComponent(tag ? tag.toLowerCase() : "")}` +
+      `&orderby=${encodeURIComponent(orderby)}`;
 
-  const res = await fetch(apiUrl);
-  if (!res.ok) throw new Error(`API error ${res.status}`);
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(`API error ${res.status}`);
 
-  const json = await res.json();
-  const items = json?.data?.data?.filmsVisualsList?.items || [];
-
-  return items.length;
+    const json = await res.json();
+    const items = json?.data?.data?.filmsVisualsList?.items || [];
+    return items.length;
+  } catch (error) {
+    console.error("Error in fetchApiCount:", error);
+    return 0;
+  }
 }
