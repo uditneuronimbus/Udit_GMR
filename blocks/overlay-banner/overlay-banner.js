@@ -150,7 +150,7 @@ export default function decorate(block) {
   row.className = "row";
 
   const col = document.createElement("div");
-  col.className = "col-md-7";
+  col.className = "col-lg-7 col-md-8";
 
   /* ---- Title ---- */
   if (titleCell) {
