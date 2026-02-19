@@ -97,7 +97,7 @@ export default function decorate(block) {
   /* ---------- Right Column (Video) ---------- */
   const rightCol = document.createElement("div");
   rightCol.className =
-    "col-md-6 inner-hero-video d-flex align-items-center justify-content-center text-center";
+    "col-md-5 inner-hero-video d-flex align-items-center justify-content-center text-center";
 
   if (videoURL) {
     const playBtn = document.createElement("button");

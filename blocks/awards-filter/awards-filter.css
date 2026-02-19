@@ -1,5 +1,5 @@
 .desktop-layout{display:grid;grid-template-columns:280px 1fr;gap:40px}
-.awards-filter-panel{background:var(--white);padding:24px;border-radius:8px;height:fit-content;position:sticky;top:70px;border:1px solid var(--light-grey)}
+.awards-filter-panel{background:var(--white);padding:24px;border-radius:8px;height:fit-content;position:sticky;top:145px;border:1px solid var(--light-grey)}
 .awards-filter-panel h4{margin:0 0 24px 0;font-size:var(--fs-normal);font-weight:600;color:var(--charcoal)}
 .year-filter{width:100%;padding:10px 12px;margin-bottom:20px;border:none;border-bottom:2px solid var(--light-grey);border-radius:0;background:var(--white);font-size:14px;color:var(--charcoal);cursor:pointer;appearance:none;-webkit-appearance:none;-moz-appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9L12 15L5 9' stroke='%23FAA519' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:20px}
 .year-filter:focus{outline:0;border-color:var(--charcoal)}
