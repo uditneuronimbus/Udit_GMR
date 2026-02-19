@@ -93,16 +93,7 @@
 
 .contact-form textarea {
   min-height: 120px;
-  margin-bottom: 20px;
-}
-
-.btn-submit {
-  background: #f3b24c;
-  border: none;
-  padding: 14px 30px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
+  margin-bottom: 1.5rem; margin-top: 0;
 }
 
 /* MAP */
@@ -113,8 +104,46 @@
   border-radius: 8px;
 }
 .contact-right label { font-weight: 600;}
-.error { color:red;}
+.error { color: red; }
 .iti { width: 100%; }
+
+/* ── Validation highlight ── */
+.contact-form input.invalid,
+.contact-form select.invalid,
+.contact-form textarea.invalid,
+.contact-form .iti.invalid input {
+  border-color: #e53935;
+  background-color: #fff5f5;
+  outline: none;
+  animation: shake 0.35s ease;
+}
+
+/* @keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+} */
+
+/* ── Form status bar ── */
+.form-status {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.form-status.error {
+  background: #fdecea;
+  color: #c62828;
+  border: 1px solid #e53935;
+}
+.form-status.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #43a047;
+}
 
 /* RESPONSIVE */
 @media (max-width: 992px) {

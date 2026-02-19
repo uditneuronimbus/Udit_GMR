@@ -20,6 +20,6 @@
 .gan-map-image { display:block; position: absolute; z-index:1;}
 .gan-wrapper.spacer .col-lg-4.col-md-5 { text-align: center;}
 .gan-wrapper.spacer .col-lg-4.col-md-5 .sec-title.mb-4 { margin-bottom: 1rem!important;}
-.gan-locations { padding: 6rem 0; }
+.gan-locations { padding: 6rem 0 0 0; }
 .gan-map-wrap { padding-top: 1rem; }
 }

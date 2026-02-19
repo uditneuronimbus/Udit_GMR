@@ -79,7 +79,7 @@ export default function decorate(block) {
 
   /* ---------- Left Column ---------- */
   const leftCol = document.createElement("div");
-  leftCol.className = "col-md-6 inner-hero-content";
+  leftCol.className = "col-md-7 inner-hero-content";
 
   const textWrap = document.createElement("div");
   textWrap.className = "inner-hero-text";
@@ -97,7 +97,7 @@ export default function decorate(block) {
   /* ---------- Right Column (Video) ---------- */
   const rightCol = document.createElement("div");
   rightCol.className =
-    "col-md-6 inner-hero-video d-flex align-items-center justify-content-center text-center";
+    "col-md-5 inner-hero-video d-flex align-items-center justify-content-center text-center";
 
   if (videoURL) {
     const playBtn = document.createElement("button");
