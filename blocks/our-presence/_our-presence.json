@@ -10,37 +10,22 @@
             "template": {
               "name": "our-presence",
               "model": "our-presence",
-              "filter": "our-presence-filter"
+              "filter": "our-presence"
             }
           }
         }
       }
     },
     {
-      "title": "Presence Group",
-      "id": "presence-group",
+      "title": "Network Location Item",
+      "id": "network-location-item",
       "plugins": {
         "xwalk": {
           "page": {
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
-              "name": "presence-group",
-              "model": "presence-group"
-            }
-          }
-        }
-      }
-    },
-    {
-      "title": "Presence Location",
-      "id": "presence-location",
-      "plugins": {
-        "xwalk": {
-          "page": {
-            "resourceType": "core/franklin/components/block/v1/block/item",
-            "template": {
-              "name": "presence-location",
-              "model": "presence-location"
+              "name": "network-location-item",
+              "model": "network-location-item"
             }
           }
         }
@@ -53,111 +38,133 @@
       "fields": [
         {
           "component": "text",
-          "name": "sectionHeading",
+          "name": "sectionTitle",
           "label": "Section Heading",
           "valueType": "string",
           "defaultValue": "Our Presence"
         },
         {
-          "component": "reference",
-          "name": "mapBackgroundImageDesktop",
-          "label": "Map Background Image (Desktop)",
-          "valueType": "string"
-        },
-        {
-          "component": "reference",
-          "name": "mapBackgroundImageMobile",
-          "label": "Map Background Image (Mobile)",
-          "valueType": "string"
-        }
-      ]
-    },
-    {
-      "id": "presence-group",
-      "itemLabel": "groupName",
-      "fields": [
-        {
-          "component": "text",
-          "name": "region",
-          "label": "Region (india / international)",
+          "component": "richtext",
+          "name": "sectionDescription",
+          "label": "Description Text",
           "valueType": "string"
         },
         {
           "component": "text",
-          "name": "groupId",
-          "label": "Group ID (e.g. india)",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "groupName",
-          "label": "Group Name (UI Label)",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "isDefault",
-          "label": "Default Selected (yes / no)",
+          "name": "indiaTabLabel",
+          "label": "India Tab Label",
           "valueType": "string",
-          "defaultValue": "no"
+          "defaultValue": "India Presence"
+        },
+        {
+          "component": "text",
+          "name": "internationalTabLabel",
+          "label": "International Tab Label",
+          "valueType": "string",
+          "defaultValue": "International Presence"
+        },
+        {
+          "component": "reference",
+          "name": "mapImage",
+          "label": "Background Map Image",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "imageAlt",
+          "label": "Alt Text"
+        },
+        {
+          "component": "reference",
+          "name": "lottiePath",
+          "label": "Lottie Path",
+          "valueType": "string"
         }
       ]
     },
     {
-      "id": "presence-location",
-      "itemLabel": "locationName",
+      "id": "network-location-item",
+      "itemLabel": "airportName",
       "fields": [
         {
+          "component": "select",
+          "name": "presenceGroup",
+          "label": "1. Presence Group",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "India Presence",
+              "value": "india"
+            },
+            {
+              "name": "International Presence",
+              "value": "international"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "presenceCategory",
+          "label": "2. Sub-Category",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Airports",
+              "value": "airports"
+            },
+            {
+              "name": "Corporate Office",
+              "value": "corporate-office"
+            },
+            {
+              "name": "Energy",
+              "value": "energy"
+            },
+            {
+              "name": "Highways",
+              "value": "highways"
+            },
+            {
+              "name": "Special Investment Region",
+              "value": "sir"
+            },
+            {
+              "name": "Office",
+              "value": "office"
+            }
+          ]
+        },
+        {
           "component": "text",
-          "name": "region",
-          "label": "Region (india / international)",
+          "name": "airportName",
+          "label": "Airport / Location Name",
           "valueType": "string"
         },
         {
           "component": "text",
-          "name": "groupId",
-          "label": "Group ID (must match Presence Group)",
+          "name": "countryName",
+          "label": "Country Name",
+          "valueType": "string"
+        },
+        {
+          "component": "reference",
+          "name": "flagIcon",
+          "label": "Country Flag Icon",
           "valueType": "string"
         },
         {
           "component": "text",
-          "name": "locationName",
-          "label": "Location Name",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "subtext",
-          "label": "Subtext (Yellow Label)",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "topPos",
-          "label": "Top Position (%)",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "leftPos",
-          "label": "Left Position (%)",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "link",
-          "label": "External Link URL",
-          "valueType": "string"
+          "name": "imageAlt",
+          "label": "Alt Text"
         }
       ]
     }
   ],
   "filters": [
     {
-      "id": "our-presence-filter",
+      "id": "our-presence",
       "components": [
-        "presence-group",
-        "presence-location"
+        "network-location-item"
       ]
     }
   ]

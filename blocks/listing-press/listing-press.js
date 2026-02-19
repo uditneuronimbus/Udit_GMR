@@ -670,24 +670,38 @@ export default async function decorate(block) {
     }
   });
 
+  function scrollWithOffset(element, offset = 150) {
+  if (!element) return;
+
+  const top = element.offsetTop - offset;
+
+  window.scrollTo({
+    top: top > 0 ? top : 0,
+    behavior: "smooth"
+  });
+}
+
   // Pagination clicks
-  desktopPagination.addEventListener("click", (e) => {
-    const btn = e.target.closest(".page-btn");
-    if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
+  desktopPagination.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".page-btn");
+  if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
 
-    state.page = parseInt(btn.dataset.page, 10);
-    renderCards();
-    desktopList.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
+  state.page = parseInt(btn.dataset.page, 10);
 
-  mobilePagination.addEventListener("click", (e) => {
-    const btn = e.target.closest(".page-btn");
-    if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
+  await renderCards();
+  scrollWithOffset(desktopList, 300);
+});
 
-    state.page = parseInt(btn.dataset.page, 10);
-    renderCards();
-    mobileList.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
+mobilePagination.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".page-btn");
+  if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
+
+  state.page = parseInt(btn.dataset.page, 10);
+
+  await renderCards();
+  scrollWithOffset(mobileList, 300);
+});
+
 
   // Mobile Filter Buttons
   mobileFilterBtns.forEach(btn => {
