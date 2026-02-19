@@ -33,6 +33,35 @@
     flex-wrap: wrap;
 }
 
+/* ── Tab buttons ── */
+.gan-tabs {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.gan-tab-btn {
+    padding: 8px 20px;
+    border: 2px solid var(--turquoise, #00b8c8);
+    border-radius: 30px;
+    background: transparent;
+    color: var(--white);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s;
+    white-space: nowrap;
+}
+
+.gan-tab-btn:hover,
+.gan-tab-btn.active {
+    background: var(--yellow, #f5c400);
+    border-color: var(--yellow, #f5c400);
+    color: #000;
+}
+
+
 .gan-location {
     border-radius: 12px;
     padding: 8px 16px;
@@ -72,6 +101,32 @@
 .gan-map-image {
     display: none;
 }
+
+/* ── International sub-sections ── */
+.gan-intl-panel {
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.gan-sub-section {
+    width: 100%;
+}
+
+.gan-sub-heading {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--turquoise, #00b8c8);
+    margin-bottom: 0.5rem;
+}
+
+.gan-sub-cards {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
 
 @media (min-width:768px) {
     .gan-lottie {
