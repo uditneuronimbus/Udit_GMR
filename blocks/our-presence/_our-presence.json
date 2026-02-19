@@ -56,27 +56,27 @@
           "valueType": "string",
           "options": [
             {
-              "label": "Airports",
+              "name": "Airports",
               "value": "airports"
             },
             {
-              "label": "Corporate Office",
+              "name": "Corporate Office",
               "value": "corporate-office"
             },
             {
-              "label": "Energy",
+              "name": "Energy",
               "value": "energy"
             },
             {
-              "label": "Highways",
+              "name": "Highways",
               "value": "highways"
             },
             {
-              "label": "Special Investment Region",
+              "name": "Special Investment Region",
               "value": "special-investment-region"
             },
             {
-              "label": "International Presence",
+              "name": "International Presence",
               "value": "international-presence"
             }
           ]
