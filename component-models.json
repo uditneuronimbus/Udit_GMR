@@ -1688,6 +1688,30 @@
       {
         "component": "text",
         "valueType": "string",
+        "name": "primaryCtaText",
+        "label": "Primary CTA Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "primaryCtaLink",
+        "label": "Primary CTA Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "secondaryCtaText",
+        "label": "Secondary CTA Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "secondaryCtaLink",
+        "label": "Secondary CTA Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
         "name": "title",
         "label": "Title"
       },
@@ -1711,9 +1735,9 @@
       },
       {
         "component": "text",
+        "valueType": "string",
         "name": "stockSymbol",
         "label": "Stock API Symbol / IDD",
-        "valueType": "string",
         "required": true
       },
       {

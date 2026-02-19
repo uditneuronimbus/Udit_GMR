@@ -21,29 +21,133 @@
     {
       "id": "gal-investor-overview",
       "fields": [
-        { "component": "text", "valueType": "string", "name": "title", "label": "Title" },
-        { "component": "richtext", "valueType": "string", "name": "description", "label": "Description" },
-        { "component": "text", "valueType": "string", "name": "ctaText", "label": "CTA Text" },
-        { "component": "text", "valueType": "string", "name": "ctaLink", "label": "CTA Link" },
-        { "component": "text", "name": "stockSymbol", "label": "Stock API Symbol / IDD", "valueType": "string", "required": true },
-
-        { "component": "richtext", "valueType": "string", "name": "stat1Text", "label": "Stat Card 1 - Text" },
-        { "component": "reference", "valueType": "string", "name": "stat1Image", "label": "Stat Card 1 - Image" },
-
-        { "component": "richtext", "valueType": "string", "name": "stat2Text", "label": "Stat Card 2 - Text" },
-        { "component": "reference", "valueType": "string", "name": "stat2Image", "label": "Stat Card 2 - Image" },
-
-        { "component": "richtext", "valueType": "string", "name": "stat3Text", "label": "Stat Card 3 - Text" },
-        { "component": "reference", "valueType": "string", "name": "stat3Image", "label": "Stat Card 3 - Image" },
-
-        { "component": "richtext", "valueType": "string", "name": "stat4Text", "label": "Stat Card 4 - Text" },
-        { "component": "reference", "valueType": "string", "name": "stat4Image", "label": "Stat Card 4 - Image" },
-
-        { "component": "richtext", "valueType": "string", "name": "stat5Text", "label": "Stat Card 5 - Text" },
-        { "component": "reference", "valueType": "string", "name": "stat5Image", "label": "Stat Card 5 - Image" },
-
-        { "component": "richtext", "valueType": "string", "name": "stat6Text", "label": "Stat Card 6 - Text" },
-        { "component": "reference", "valueType": "string", "name": "stat6Image", "label": "Stat Card 6 - Image" }
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "primaryCtaText",
+          "label": "Primary CTA Text"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "primaryCtaLink",
+          "label": "Primary CTA Link"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "secondaryCtaText",
+          "label": "Secondary CTA Text"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "secondaryCtaLink",
+          "label": "Secondary CTA Link"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "title",
+          "label": "Title"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "description",
+          "label": "Description"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "ctaText",
+          "label": "CTA Text"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "ctaLink",
+          "label": "CTA Link"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "stockSymbol",
+          "label": "Stock API Symbol / IDD",
+          "required": true
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "stat1Text",
+          "label": "Stat Card 1 - Text"
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "stat1Image",
+          "label": "Stat Card 1 - Image"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "stat2Text",
+          "label": "Stat Card 2 - Text"
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "stat2Image",
+          "label": "Stat Card 2 - Image"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "stat3Text",
+          "label": "Stat Card 3 - Text"
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "stat3Image",
+          "label": "Stat Card 3 - Image"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "stat4Text",
+          "label": "Stat Card 4 - Text"
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "stat4Image",
+          "label": "Stat Card 4 - Image"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "stat5Text",
+          "label": "Stat Card 5 - Text"
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "stat5Image",
+          "label": "Stat Card 5 - Image"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "stat6Text",
+          "label": "Stat Card 6 - Text"
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "stat6Image",
+          "label": "Stat Card 6 - Image"
+        }
       ]
     }
   ],
