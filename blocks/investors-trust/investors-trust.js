@@ -1,4 +1,8 @@
 export default function decorate(block) {
+  const isAuthorMode =
+    document.body.classList.contains('aem-AuthorLayer-Edit') ||
+    window.location.search.includes('wcmmode=edit');
+
   const [
     titleEl,
     descEl,
@@ -14,6 +18,11 @@ export default function decorate(block) {
   const primaryLink = primaryLinkEl?.textContent?.trim() || '#';
   const secondaryText = secondaryTextEl?.textContent?.trim() || '';
   const secondaryLink = secondaryLinkEl?.textContent?.trim() || '#';
+
+  /* ================================
+     AUTHOR MODE SAFE
+  ================================ */
+  if (isAuthorMode) return;
 
   block.innerHTML = '';
 
