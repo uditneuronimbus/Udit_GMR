@@ -45,8 +45,7 @@ export default async function decorate(block) {
   const wrapper = container.querySelector(".ah-wrapper");
 
   try {
-    const apiUrl =
-      `${getApiHost()}/api/v1/web/gmr-api/films-latest`;
+    const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/films-latest`;
 
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`API error ${res.status}`);
@@ -63,25 +62,18 @@ export default async function decorate(block) {
     const item = items[0];
 
     const publishDateRaw =
-        item?.publishDate ||
-        (item?.publishMonth && item?.publishYear
-          ? item.publishMonth + " " + item.publishYear
-          : "");
+      item?.publishDate ||
+      (item?.publishMonth && item?.publishYear
+        ? item.publishMonth + " " + item.publishYear
+        : "");
 
-      const publishDateFormatted = publishDateRaw
-        ? formatDate(publishDateRaw)
-        : "";
+    const publishDateFormatted = publishDateRaw
+      ? formatDate(publishDateRaw)
+      : "";
 
     const categoryText = slugToTitle(
-      item.subCategory || item.category || "Press"
+      item.subCategory || item.category || "Press",
     );
-
-    
-
-    const videoUrl =
-      item.videoUrl ||
-      item.video?._publishUrl ||
-      "";
 
     wrapper.innerHTML = `
       <div class="ah-header">
@@ -106,20 +98,12 @@ export default async function decorate(block) {
       </div>
 
       <div class="ah-media">
-        ${
-          videoUrl
-            ? `
-          <video controls class="ah-video">
-            <source src="${videoUrl}" type="video/mp4">
-          </video>
-        `
-            : `
-          <img
-            src="${item.cardImage?._publishUrl || ""}"
-            alt="${item.title || ""}"
-          />
-        `
-        }
+        <img
+        src="${item.thumbnail?._publishUrl || ""}"
+        alt="${item.title}"
+        loading="lazy"
+      />
+      ${item.video}
       </div>
     `;
   } catch (err) {
