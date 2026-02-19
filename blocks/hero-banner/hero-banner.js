@@ -1,9 +1,12 @@
 import { loadCSS, loadScript } from "../../scripts/aem.js";
-import { trackPageVisit, getTargetOffer } from "../../scripts/target.js";
+import { getTargetOffer, getCachedVisitedPages } from "../../scripts/target.js";
 
 const SWIPER_JS = "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js";
 const QUICK_LINKS_SCOPE = "hero-quick-links";
 
+/* ------------------------------------------------------------------ */
+/* Helpers (unchanged)                                                  */
+/* ------------------------------------------------------------------ */
 
 function isValidRow(row) {
   return (
@@ -48,6 +51,14 @@ function buildHeroNav(swiper, total) {
   updateActive();
 }
 
+/* ------------------------------------------------------------------ */
+/* Quick Links                                                          */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Normalise Target offer into { label, url }[]
+ * Target Velocity template returns an array directly.
+ */
 function normaliseOffer(offer) {
   if (!offer) return null;
   if (Array.isArray(offer) && offer[0]?.url) return offer;           // [{ label, url }]
@@ -78,13 +89,14 @@ function renderLinks(dropdown, links) {
 async function buildQuickLinks(block) {
   block.style.position = "relative";
 
+  // Ask Target if this visitor has history (Target returns { type: "visited-pages" } offer
+  // only when the audience rule "lastVisitedPages exists" is met)
   const offer = await getTargetOffer(QUICK_LINKS_SCOPE);
 
   // If Target returns nothing — visitor has no history yet, don't show widget
   if (!offer) return;
 
   // Read the actual visited pages from localStorage (already tracked by trackPageVisit)
-  const { getCachedVisitedPages } = await import("../../scripts/target.js");
   const visited = getCachedVisitedPages();
   if (!visited?.length) return;
 
@@ -116,9 +128,11 @@ async function buildQuickLinks(block) {
   block.appendChild(wrapper);
 }
 
-export default async function decorate(block) {
-  trackPageVisit(); // fire-and-forget, non-blocking
+/* ------------------------------------------------------------------ */
+/* Main decorate                                                        */
+/* ------------------------------------------------------------------ */
 
+export default async function decorate(block) {
   await loadScript(SWIPER_JS);
 
   const rows = [...block.children].filter(isValidRow);

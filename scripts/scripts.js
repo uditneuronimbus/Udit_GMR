@@ -11,6 +11,7 @@ import {
   loadSections,
   loadCSS,
 } from "./aem.js";
+import { buildVisitHistory, getCachedVisitedPages } from "./target.js";
 
 // --- EARLY LANGUAGE REDIRECT & BHASHINI JUMPSTART (Anti-Flash) ---
 (function handleLanguageInitialization() {
@@ -312,6 +313,7 @@ async function loadEager(doc) {
 async function loadLazy(doc) {
   const main = doc.querySelector("main");
   await loadSections(main);
+  buildVisitHistory();
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
@@ -369,46 +371,6 @@ const onDecoratedElement = (fn) => {
   observer.observe(document.body, { childList: true });
 };
 
-const getAndApplyTargetPropositions = async () => {
-  if (!window.alloy) {
-    console.warn("window.alloy not available");
-    return;
-  }
-
-  try {
-    const isReturning =
-      window.isReturningUser || localStorage.getItem("returning-user");
-
-    const response = await window.alloy("sendEvent", {
-      renderDecisions: false,
-      decisionScopes: ["__view__"],
-      xdm: {
-        eventType: "web.webpagedetails.pageViews",
-        profile: {
-          isReturningUser: !!isReturning,
-        },
-      },
-    });
-
-    const { propositions } = response;
-
-    onDecoratedElement(async () => {
-      await window.alloy("applyPropositions", { propositions });
-
-      setTimeout(() => {
-        window.alloy("sendEvent", {
-          xdm: {
-            eventType: "decisioning.propositionDisplay",
-            profile: { isReturningUser: !!isReturning },
-            _experience: { decisioning: { propositions } },
-          },
-        });
-      }, 1000);
-    });
-  } catch (error) {
-    console.error("Target error:", error);
-  }
-};
 
 /* ===============================
    RETURNING USER FLAG
