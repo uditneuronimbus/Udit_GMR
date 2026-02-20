@@ -50,8 +50,8 @@ function buildHeroNav(swiper, total) {
 // Quick Links
 function normaliseOffer(offer) {
   if (!offer) return null;
-  if (Array.isArray(offer) && offer[0]?.url) return offer;          
-  if (Array.isArray(offer?.links) && offer.links[0]?.url) return offer.links; 
+  if (Array.isArray(offer) && offer[0]?.url) return offer;
+  if (Array.isArray(offer?.links) && offer.links[0]?.url) return offer.links;
   return null;
 }
 
@@ -77,11 +77,11 @@ function renderLinks(dropdown, links) {
 
 // Hardcoded defaults — shown when user has fewer than 5 visited pages
 const DEFAULT_LINKS = [
-  { label: "Investors",  url: "/en/investors"  },
-  { label: "About GMR",  url: "/en/about"      },
+  { label: "Investors", url: "/en/investors" },
+  { label: "About GMR", url: "/en/about" },
   { label: "Foundation", url: "/en/foundation" },
-  { label: "Contact Us", url: "/en/contact"    },
-  { label: "Careers",    url: "/en/careers"    },
+  { label: "Contact Us", url: "/en/contact" },
+  { label: "Careers", url: "/en/careers" },
 ];
 
 async function isPageValid(url) {
@@ -96,7 +96,7 @@ async function isPageValid(url) {
 async function buildFinalLinks(visited) {
   // Check all visited pages in parallel
   const validityChecks = await Promise.all(
-    visited.map(async (p) => ({ ...p, valid: await isPageValid(p.url) }))
+    visited.map(async (p) => ({ ...p, valid: await isPageValid(p.url) })),
   );
   const validVisited = validityChecks.filter((p) => p.valid);
 
@@ -165,8 +165,14 @@ export default async function decorate(block) {
   rows.forEach((row) => {
     const cells = [...row.children];
     const [
-      title, description, bgImage, bgVideo,
-      knowLabel, knowLink, watchLabel, watchLink,
+      title,
+      description,
+      bgImage,
+      bgVideo,
+      knowLabel,
+      knowLink,
+      watchLabel,
+      watchLink,
     ] = cells;
 
     const slide = document.createElement("div");
@@ -242,7 +248,7 @@ export default async function decorate(block) {
   const swiperInstance = new Swiper(swiperEl, {
     loop: rows.length > 1, // loop only works with more than 1 slide
     speed: 3000,
-    autoplay: { delay: 5000, disableOnInteraction: false },
+    // autoplay: { delay: 5000, disableOnInteraction: false },
   });
 
   buildHeroNav(swiperInstance, rows.length);
