@@ -425,6 +425,17 @@
     ]
   },
   {
+    "id": "article-hero",
+    "fields": [
+      {
+        "name": "label",
+        "label": "Section Label",
+        "component": "text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "aviation-infrastructure",
     "fields": [
       {
@@ -2477,6 +2488,63 @@
     ]
   },
   {
+    "id": "impact-stories",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionTitle",
+        "label": "Section Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "sectionDescription",
+        "label": "Section Description"
+      }
+    ]
+  },
+  {
+    "id": "impact-story-item",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Card Image"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaText",
+        "label": "CTA Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaLink",
+        "label": "CTA Link"
+      }
+    ]
+  },
+  {
     "id": "infra-hero-banner",
     "fields": [
       {
@@ -3033,6 +3101,10 @@
   },
   {
     "id": "listing-blog",
+    "fields": []
+  },
+  {
+    "id": "listing-brand",
     "fields": []
   },
   {
@@ -4338,31 +4410,5 @@
         "valueType": "string"
       }
     ]
-  },
-  {
-    "id": "latest-press-update",
-    "fields": [
-      {
-        "name": "label",
-        "label": "Section Label",
-        "component": "text",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "article-hero",
-    "fields": [
-      {
-        "name": "label",
-        "label": "Section Label",
-        "component": "text",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "listing-brand",
-    "fields": []
   }
 ]

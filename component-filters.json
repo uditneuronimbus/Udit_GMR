@@ -64,12 +64,10 @@
       "image-scroll-card",
       "key-highlight-button",
       "contact-us",
-      "media-contact-header",
       "lottie-animation",
       "media-cards",
       "photo-gallery-slider",
-      "article-hero",
-      "listing-brand"
+      "impact-stories"
     ]
   },
   {
@@ -82,6 +80,12 @@
     "id": "all-business-cards",
     "components": [
       "all-business-cards-item"
+    ]
+  },
+  {
+    "id": "article-hero",
+    "components": [
+      "text"
     ]
   },
   {
@@ -316,6 +320,12 @@
     ]
   },
   {
+    "id": "impact-stories",
+    "components": [
+      "impact-story-item"
+    ]
+  },
+  {
     "id": "infra-hero-banner",
     "components": []
   },
@@ -375,6 +385,10 @@
   },
   {
     "id": "listing-blog",
+    "components": []
+  },
+  {
+    "id": "listing-brand",
     "components": []
   },
   {
@@ -522,17 +536,5 @@
     "components": [
       "value-cards"
     ]
-  },
-  {
-      "id": "latest-press-update",
-      "components": []
-    },
-    {
-      "id": "article-hero",
-      "components": ["text"]
-    },
-    {
-      "id": "listing-brand",
-      "fields": []
-    }
+  }
 ]
