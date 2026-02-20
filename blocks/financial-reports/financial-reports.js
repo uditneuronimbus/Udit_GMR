@@ -14,18 +14,19 @@
 //   const sectionTitle =
 //     (configCells[0]?.textContent || '').trim() || 'Financial Reports';
 
-//   /* ✅ AEM-SAFE DESCRIPTION FIX */
-//   let sectionDescriptionHTML = '';
-//   if (configCells[1]) {
-//     const descCell = configCells[1];
-//     const hasText = descCell.textContent
-//       ?.replace(/\u00A0/g, '')
-//       .trim();
+//   /* ===============================
+//      ✅ ROBUST AEM RICHTEXT FIX
+//   =============================== */
+//  /* ===============================
+//    ✅ SIMPLE & SAFE RICHTEXT FIX
+// ================================= */
+// let sectionDescriptionHTML = '';
 
-//     if (hasText) {
-//       sectionDescriptionHTML = descCell.innerHTML;
-//     }
-//   }
+// if (rows[1]) {
+//   sectionDescriptionHTML = rows[1].innerHTML.trim();
+// }
+
+
 
 //   const tab1Text =
 //     (configCells[2]?.textContent || '').trim() || 'GMR Airports Limited';
@@ -175,10 +176,20 @@
 
 
 export default function decorate(block) {
+  const isAuthorMode =
+    document.body.classList.contains('aem-AuthorLayer-Edit') ||
+    window.location.search.includes('wcmmode=edit');
+
+  /* ✅ Prevent double execution */
+  if (block.classList.contains('financial-initialized')) return;
+  block.classList.add('financial-initialized');
+
   const rows = [...block.children];
 
   if (!rows.length) {
-    block.innerHTML = '<p>No content configured.</p>';
+    if (!isAuthorMode) {
+      block.innerHTML = '<p>No content configured.</p>';
+    }
     return;
   }
 
@@ -190,19 +201,10 @@ export default function decorate(block) {
   const sectionTitle =
     (configCells[0]?.textContent || '').trim() || 'Financial Reports';
 
-  /* ===============================
-     ✅ ROBUST AEM RICHTEXT FIX
-  =============================== */
- /* ===============================
-   ✅ SIMPLE & SAFE RICHTEXT FIX
-================================= */
-let sectionDescriptionHTML = '';
-
-if (rows[1]) {
-  sectionDescriptionHTML = rows[1].innerHTML.trim();
-}
-
-
+  let sectionDescriptionHTML = '';
+  if (rows[1]) {
+    sectionDescriptionHTML = rows[1].innerHTML.trim();
+  }
 
   const tab1Text =
     (configCells[2]?.textContent || '').trim() || 'GMR Airports Limited';
@@ -276,10 +278,13 @@ if (rows[1]) {
   companyCards.infra = dedupe(companyCards.infra);
 
   /* ===============================
-     BUILD HTML
+     BUILD RUNTIME UI
   =============================== */
-  block.innerHTML = `
-    <div class="financial-wrapper">
+
+  const container = document.createElement('div');
+  container.className = 'financial-wrapper';
+
+  container.innerHTML = `
       <h2>${sectionTitle}</h2>
 
       ${sectionDescriptionHTML ? `
@@ -302,14 +307,17 @@ if (rows[1]) {
       <div class="financial-cta">
         <a href="${ctaLink}" class="cta-btn">${ctaText}</a>
       </div>
-    </div>
   `;
 
-  const cardsContainer = block.querySelector('.financial-cards');
+  /* ✅ Hide authored content AFTER reading it */
+  rows.forEach(row => {
+    row.style.display = 'none';
+  });
 
-  /* ===============================
-     RENDER CARDS
-  =============================== */
+  block.append(container);
+
+  const cardsContainer = container.querySelector('.financial-cards');
+
   function renderCards(type) {
     const cards = companyCards[type] || [];
 
@@ -322,7 +330,7 @@ if (rows[1]) {
     cardsContainer.innerHTML = cards
       .map(card => `
         <a class="financial-card"
-           href="${card.link}"
+           href="https://investor.gmrpui.com/"
            target="_blank"
            rel="noopener">
           <h3>${card.title}</h3>
@@ -332,14 +340,14 @@ if (rows[1]) {
       .join('');
   }
 
-  /* ===============================
-     INIT + TAB HANDLERS
-  =============================== */
+  /* ✅ Stop JS behaviour in author mode */
+  if (isAuthorMode) return;
+
   renderCards('airport');
 
-  block.querySelectorAll('.tab').forEach(tab => {
+  container.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
-      block.querySelectorAll('.tab')
+      container.querySelectorAll('.tab')
         .forEach(t => t.classList.remove('active'));
 
       tab.classList.add('active');
@@ -347,5 +355,4 @@ if (rows[1]) {
     });
   });
 }
-
 

@@ -281,36 +281,74 @@ export default function decorate(block) {
   const topDescription = rows[1]?.innerHTML?.trim();
 
   const primaryText = rows[2]?.textContent?.trim();
+  const primaryLink = rows[3]?.querySelector('a')?.href;
+
   const secondaryText = rows[4]?.textContent?.trim();
+  const secondaryLink = rows[5]?.querySelector('a')?.href;
 
   /* ===============================
-     FIRST AUTHORED SECTION (GAL)
+     GAL SECTION DATA
   =============================== */
 
-  const companyTitle = rows[6]?.textContent?.trim();
-  const companyDescription = rows[7]?.innerHTML?.trim();
-  const ctaText = rows[8]?.textContent?.trim();
-  const ctaLink = rows[9]?.querySelector('a')?.href;
-  const stockSymbol = rows[10]?.textContent?.trim();
+  const galTitle = rows[6]?.textContent?.trim();
+  const galDescription = rows[7]?.innerHTML?.trim();
+  const galCtaText = rows[8]?.textContent?.trim();
+  const galCtaLink = rows[9]?.querySelector('a')?.href;
+  const galStockSymbol = rows[10]?.textContent?.trim();
 
-  const stats = [];
+  const galStats = [];
   let index = 11;
 
   while (rows[index] && rows[index + 1]) {
+    if (rows[index].dataset?.section === "gpil") break;
+
     const statText = rows[index]?.innerHTML?.trim();
     const statImage = rows[index + 1]?.innerHTML?.trim();
 
-    if (!statText && !statImage) break;
-
-    stats.push(`
-      <div class="gal-stat-card">
-        ${statImage ? `<div class="stat-image">${statImage}</div>` : ''}
-        ${statText ? `<div class="stat-text">${statText}</div>` : ''}
-      </div>
-    `);
+    if (statText || statImage) {
+      galStats.push(`
+        <div class="gal-stat-card">
+          ${statImage ? `<div class="stat-image">${statImage}</div>` : ''}
+          ${statText ? `<div class="stat-text">${statText}</div>` : ''}
+        </div>
+      `);
+    }
 
     index += 2;
   }
+
+  /* ===============================
+     GPIL SECTION DATA
+  =============================== */
+
+  const gpilTitle = rows[index]?.textContent?.trim();
+  const gpilDescription = rows[index + 1]?.innerHTML?.trim();
+  const gpilCtaText = rows[index + 2]?.textContent?.trim();
+  const gpilCtaLink = rows[index + 3]?.querySelector('a')?.href;
+  const gpilStockSymbol = rows[index + 4]?.textContent?.trim();
+
+  const gpilStats = [];
+  let gpilIndex = index + 5;
+
+  while (rows[gpilIndex] && rows[gpilIndex + 1]) {
+    const statText = rows[gpilIndex]?.innerHTML?.trim();
+    const statImage = rows[gpilIndex + 1]?.innerHTML?.trim();
+
+    if (statText || statImage) {
+      gpilStats.push(`
+        <div class="gal-stat-card">
+          ${statImage ? `<div class="stat-image">${statImage}</div>` : ''}
+          ${statText ? `<div class="stat-text">${statText}</div>` : ''}
+        </div>
+      `);
+    }
+
+    gpilIndex += 2;
+  }
+
+  /* ===============================
+     RENDER HTML
+  =============================== */
 
   block.innerHTML = '';
 
@@ -318,6 +356,7 @@ export default function decorate(block) {
   wrapper.className = 'gal-investor-wrapper';
 
   wrapper.innerHTML = `
+
     <div class="investors-trust-wrapper">
       ${topTitle ? `<h2 class="investors-title">${topTitle}</h2>` : ''}
       ${topDescription ? `<div class="investors-desc">${topDescription}</div>` : ''}
@@ -328,33 +367,65 @@ export default function decorate(block) {
       </div>
     </div>
 
-    <!-- FIRST SECTION -->
+    <!-- GAL CONTENT (Default Visible) -->
     <div class="gal-content">
+
       <div class="gal-main">
         <div class="gal-left">
-          ${companyTitle ? `<h3>${companyTitle}</h3>` : ''}
-          ${companyDescription ? `<div class="gal-desc">${companyDescription}</div>` : ''}
-          ${stockSymbol ? `
+          ${galTitle ? `<h3>${galTitle}</h3>` : ''}
+          ${galDescription ? `<div class="gal-desc">${galDescription}</div>` : ''}
+
+          ${galStockSymbol ? `
             <div class="gal-market">
               <div class="market-symbol">
-                <strong>${stockSymbol}</strong>
+                <strong>${galStockSymbol}</strong>
               </div>
             </div>
           ` : ''}
-          ${ctaText && ctaLink
-            ? `<a class="gal-cta" href="${ctaLink}">${ctaText}</a>`
+
+          ${galCtaText && galCtaLink
+            ? `<a class="gal-cta" href="${galCtaLink}">${galCtaText}</a>`
             : ''}
         </div>
 
-        ${stats.length
-          ? `<div class="gal-right">${stats.join('')}</div>`
-          : ''}
+        ${galStats.length ? `
+          <div class="gal-right">
+            ${galStats.join('')}
+          </div>
+        ` : ''}
+
       </div>
+
     </div>
 
-    <!-- SECOND SECTION -->
-    <div class="gpil-content">
-      <!-- Add second authored content here -->
+    <!-- GPIL CONTENT (Initially Hidden) -->
+    <div class="gpil-content" style="display:none;">
+
+      <div class="gal-main">
+        <div class="gal-left">
+          ${gpilTitle ? `<h3>${gpilTitle}</h3>` : ''}
+          ${gpilDescription ? `<div class="gal-desc">${gpilDescription}</div>` : ''}
+
+          ${gpilStockSymbol ? `
+            <div class="gal-market">
+              <div class="market-symbol">
+                <strong>${gpilStockSymbol}</strong>
+              </div>
+            </div>
+          ` : ''}
+
+          ${gpilCtaText && gpilCtaLink
+            ? `<a class="gal-cta" href="${gpilCtaLink}">${gpilCtaText}</a>`
+            : ''}
+        </div>
+
+        ${gpilStats.length ? `
+          <div class="gal-right">
+            ${gpilStats.join('')}
+          </div>
+        ` : ''}
+
+      </div>
 
     </div>
   `;
@@ -370,26 +441,28 @@ export default function decorate(block) {
   const galContent = wrapper.querySelector('.gal-content');
   const gpilContent = wrapper.querySelector('.gpil-content');
 
-  // ✅ FORCE DEFAULT STATE
-  galContent.classList.add('active-section');
-  gpilContent.classList.remove('active-section');
+  if (primaryBtn && secondaryBtn) {
+    primaryBtn.addEventListener('click', () => {
+      primaryBtn.classList.add('active');
+      secondaryBtn.classList.remove('active');
 
-  primaryBtn?.addEventListener('click', () => {
-    primaryBtn.classList.add('active');
-    secondaryBtn?.classList.remove('active');
+      galContent.style.display = 'block';
+      gpilContent.style.display = 'none';
+    });
 
-    galContent.classList.add('active-section');
-    gpilContent.classList.remove('active-section');
-  });
+    secondaryBtn.addEventListener('click', () => {
+      secondaryBtn.classList.add('active');
+      primaryBtn.classList.remove('active');
 
-  secondaryBtn?.addEventListener('click', () => {
-    secondaryBtn.classList.add('active');
-    primaryBtn?.classList.remove('active');
-
-    gpilContent.classList.add('active-section');
-    galContent.classList.remove('active-section');
-  });
+      galContent.style.display = 'none';
+      gpilContent.style.display = 'block';
+    });
+  }
 }
+
+
+
+
 
 
 
