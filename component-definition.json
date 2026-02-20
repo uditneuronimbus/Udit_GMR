@@ -687,7 +687,7 @@
           }
         },
         {
-          "title": "FAQs List",
+          "title": "Career faqs List",
           "id": "career-faqs-list",
           "plugins": {
             "xwalk": {
