@@ -418,7 +418,7 @@ export default function decorate(block) {
        3. Process items
     ================================ */
 
-    const INDIA_KEYS = ["india-airports", "india-corporate-office", "india-energy", "india-highways", "india-sir"];
+    const INDIA_KEYS = ["india-airports", "india-corporate-office", "india-energy", "india-highways", "india-special-investment region"];
     const INTL_KEYS = ["international-airport", "international-office"];
 
     const groups = {};
@@ -429,7 +429,7 @@ export default function decorate(block) {
         "corporate-office": "corporate-office",
         "energy": "energy",
         "highways": "highways",
-        "sir": "sir",
+        "sir": "special-investment-region",
         "office": "office",
     };
 
@@ -491,7 +491,7 @@ export default function decorate(block) {
 
     if (titleText) {
         const h2 = document.createElement("h2");
-        h2.className = "sec-title mb-4";
+        h2.className = "sec-title mb-4 ";
         h2.textContent = titleText;
         leftCol.appendChild(h2);
     }
@@ -522,6 +522,17 @@ export default function decorate(block) {
                 btn.textContent = categoryName
                     .replace("-", " ")
                     .replace(/\b\w/g, l => l.toUpperCase());
+
+                    btn.addEventListener("click", () => {
+    // Remove active from all items
+    document.querySelectorAll(".gan-dd-item").forEach(item => {
+        item.classList.remove("active");
+    });
+
+    // Add active to clicked item
+    btn.classList.add("active");
+});
+
 
                 body.appendChild(btn);
             }
