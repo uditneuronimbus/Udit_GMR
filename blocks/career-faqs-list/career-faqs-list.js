@@ -34,87 +34,108 @@ export default function decorate(block) {
   });
 
 
-  /* ===============================
-     3️⃣ Generate html
-  =============================== */
 
-  const container = document.createElement('div');
-  container.className = 'career-faqs__container';
+/* ===============================
+   3️⃣ Generate html
+================================ */
 
-  if (sectionTitle) {
-    const h2 = document.createElement('h2');
-    h2.className = 'career-faqs__title';
-    h2.textContent = sectionTitle;
-    if (rows[0]) moveInstrumentation(rows[0], h2);
-    container.append(h2);
-  }
+const container = document.createElement('div');
+container.className = 'career-faqs__container';
 
-  if (sectionDescription) {
-    const desc = document.createElement('div');
-    desc.className = 'career-faqs__desc';
-    desc.innerHTML = sectionDescription;
-    if (rows[1]) moveInstrumentation(rows[1], desc);
-    container.append(desc);
-  }
+/* LEFT SIDE WRAPPER */
+const leftWrapper = document.createElement('div');
+leftWrapper.className = 'career-faqs__left';
 
-  const accordion = document.createElement('div');
-  accordion.className = 'career-faqs__accordion';
+/* RIGHT SIDE WRAPPER */
+const rightWrapper = document.createElement('div');
+rightWrapper.className = 'career-faqs__right';
 
-  faqItems.forEach((item) => {
-    const itemDiv = document.createElement('div');
-    itemDiv.className = 'career-faqs__item';
-    if (item.row) moveInstrumentation(item.row, itemDiv);
+/* ---- Title ---- */
+if (sectionTitle) {
+  const h2 = document.createElement('h2');
+  h2.className = 'career-faqs__title';
+  h2.textContent = sectionTitle;
+  if (rows[0]) moveInstrumentation(rows[0], h2);
+  leftWrapper.append(h2);
+}
 
-    itemDiv.innerHTML = `
-      <button class="career-faqs__question" aria-expanded="false">
-        <span>${item.question}</span>
-        <span class="career-faqs__icon">+</span>
-      </button>
-      <div class="career-faqs__answer">
-        ${item.answer}
-      </div>
-    `;
-    accordion.append(itemDiv);
-  });
+/* ---- Description ---- */
+if (sectionDescription) {
+  const desc = document.createElement('div');
+  desc.className = 'career-faqs__desc';
+  desc.innerHTML = sectionDescription;
+  if (rows[1]) moveInstrumentation(rows[1], desc);
+  leftWrapper.append(desc);
+}
 
-  container.append(accordion);
+/* ---- Accordion ---- */
+const accordion = document.createElement('div');
+accordion.className = 'career-faqs__accordion';
 
-  block.innerHTML = '';
-  const section = document.createElement('section');
-  section.className = 'career-faqs';
-  section.append(container);
-  block.append(section);
+faqItems.forEach((item) => {
+  const itemDiv = document.createElement('div');
+  itemDiv.className = 'career-faqs__item';
+  if (item.row) moveInstrumentation(item.row, itemDiv);
+
+  itemDiv.innerHTML = `
+    <button class="career-faqs__question" aria-expanded="false">
+      <span>${item.question}</span>
+      <span class="career-faqs__icon">+</span>
+    </button>
+    <div class="career-faqs__answer">
+      ${item.answer}
+    </div>
+  `;
+
+  accordion.append(itemDiv);
+});
+
+rightWrapper.append(accordion);
+
+/* Append both sides */
+container.append(leftWrapper);
+container.append(rightWrapper);
+
+block.innerHTML = '';
+const section = document.createElement('section');
+section.className = 'career-faqs';
+section.append(container);
+block.append(section);
 
 
-  /* ===============================
-     4️⃣ Accordion Functionality
-  =============================== */
 
-  const items = block.querySelectorAll('.career-faqs__item');
 
-  items.forEach((item) => {
-    const button = item.querySelector('.career-faqs__question');
-    const answer = item.querySelector('.career-faqs__answer');
-    const icon = item.querySelector('.career-faqs__icon');
 
-    button.addEventListener('click', () => {
-      const isOpen = button.getAttribute('aria-expanded') === 'true';
+/* ===============================
+   4️⃣ Accordion Functionality
+================================ */
 
-      // Close all
-      items.forEach((el) => {
-        el.querySelector('.career-faqs__question')
-          .setAttribute('aria-expanded', 'false');
-        el.querySelector('.career-faqs__answer')
-          .classList.remove('is-open');
-        el.querySelector('.career-faqs__icon').textContent = '+';
-      });
+const items = block.querySelectorAll('.career-faqs__item');
 
-      // Open current
-      if (!isOpen) {
-        button.setAttribute('aria-expanded', 'true');
-        answer.classList.add('is-open');
-        icon.textContent = '–';
-      }
+items.forEach((item) => {
+  const button = item.querySelector('.career-faqs__question');
+  const answer = item.querySelector('.career-faqs__answer');
+  const icon = item.querySelector('.career-faqs__icon');
+
+  button.addEventListener('click', () => {
+    const isOpen = item.classList.contains('active');
+
+    // Close all
+    items.forEach((el) => {
+      el.classList.remove('active');
+      el.querySelector('.career-faqs__question')
+        .setAttribute('aria-expanded', 'false');
+      el.querySelector('.career-faqs__icon').textContent = '+';
     });
+
+    // Open current
+    if (!isOpen) {
+      item.classList.add('active');
+      button.setAttribute('aria-expanded', 'true');
+      icon.textContent = '–';
+    }
   });
+});
+
+
 }
