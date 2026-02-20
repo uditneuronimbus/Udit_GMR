@@ -615,6 +615,7 @@
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
+                "container": true,
                 "template": {
                   "name": "csr-engine",
                   "model": "csr-engine",
