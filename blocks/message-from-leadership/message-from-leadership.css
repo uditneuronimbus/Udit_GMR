@@ -128,7 +128,7 @@
 
 .mfl-message p{
   font-weight: 400;
-  font-size: 20px;
+  font-size: var(--fs-large);
   color: var(--black);
 }
 
@@ -241,6 +241,8 @@
     justify-content: center;
     margin-top: 16px;
   }
+  .mfl-message p{ font-size: var(--fs-medium);
+}
 }
 
 /* =====================================================
