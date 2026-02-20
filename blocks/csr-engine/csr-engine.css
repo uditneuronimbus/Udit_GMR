@@ -1,134 +1,19 @@
-/* =============================
-   Section Background
-============================= */
-
-.csr-engine {
-  background: #f5f5f5;
-  padding: 80px 20px;
+.csr-header { text-align: center; max-width: 800px; margin: auto; margin-bottom: 3rem; }
+.csr-logo img{max-height:42px;margin-bottom:1rem}
+.csr-title{ font-family: var(--font-secondary); font-weight: 400; margin-bottom: 1.5rem;}
+.csr-description p, .csr-main-description p { font-size: var(--fs-medium);}
+.csr-content{display:flex;gap:4rem;align-items:center}
+.csr-left,
+.csr-right, .csr-item {
+  flex: 1;
 }
+.csr-left img{width:100%;display:block; border-radius: 8px;}
+.csr-main-description{margin-bottom:3rem}
+.csr-items{display:flex;gap:50px}
+.csr-icon img{width:40px;min-width:40px}
+.csr-item h3{font-family: var(--font-secondary); font-weight: 400;}
+.csr-item-desc{font-size: var(--fs-normal);}
 
-.csr-engine > .csr-header {
-  max-width: 900px;
-  margin: 0 auto 70px;
-  text-align: center;
-}
-
-/* =============================
-   Logo
-============================= */
-
-.csr-logo img {
-  height: 42px;
-  margin-bottom: 12px;
-}
-
-/* =============================
-   Heading (large serif style)
-============================= */
-
-.csr-title {
-  font-size: 44px;
-  font-weight: 400;
-  margin: 12px 0 20px;
-  color: #222;
-  letter-spacing: -0.5px;
-}
-
-/* =============================
-   Description
-============================= */
-
-.csr-description {
-  font-size: 16px;
-  line-height: 1.7;
-  color: #555;
-}
-
-/* =============================
-   Layout
-============================= */
-
-.csr-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 55% 45%;
-  gap: 70px;
-  align-items: start;
-}
-
-/* =============================
-   Left Image
-============================= */
-
-.csr-left img {
-  width: 100%;
-  display: block;
-}
-
-/* =============================
-   Right Content
-============================= */
-
-.csr-main-description {
-  font-size: 16px;
-  line-height: 1.7;
-  color: #444;
-  margin-bottom: 40px;
-}
-
-/* =============================
-   Vision / Mission Items
-============================= */
-
-.csr-items {
-  display: flex;
-  gap: 50px;
-}
-
-/* item layout = icon left + text right */
-.csr-item {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-}
-
-.csr-icon img {
-  width: 40px;
-  min-width: 40px;
-}
-
-/* title */
-.csr-item h3 {
-  font-size: 24px;
-  margin: 0 0 6px;
-  font-weight: 500;
-  color: #222;
-}
-
-/* description */
-.csr-item-desc {
-  font-size: 15px;
-  color: #666;
-  line-height: 1.6;
-}
-
-/* =============================
-   Responsive
-============================= */
-
-@media (max-width: 992px) {
-  .csr-content {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  .csr-items {
-    flex-direction: column;
-    gap: 30px;
-  }
-
-  .csr-title {
-    font-size: 32px;
-  }
+@media (max-width:767px){
+.csr-items, .csr-content{flex-direction:column;gap:30px}
 }

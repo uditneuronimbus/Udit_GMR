@@ -42,6 +42,18 @@ export default function decorate(block) {
     block.removeChild(block.firstChild);
   }
 
+  /* ================= Create wrapper structure ================= */
+  // First wrapper: csr_engine + container
+  const engineWrapper = document.createElement('div');
+  engineWrapper.className = 'csr_engine spacer';
+  
+  // Second wrapper: spacer
+  const spacerWrapper = document.createElement('div');
+  spacerWrapper.className = 'container';
+  
+  // Add spacer to engine wrapper
+  engineWrapper.appendChild(spacerWrapper);
+
   /* ================= Header ================= */
   const header = document.createElement('div');
   header.className = 'csr-header';
@@ -107,7 +119,7 @@ export default function decorate(block) {
 
       if (icon) {
         const iconWrap = document.createElement('div');
-        iconWrap.className = 'csr-icon';
+        iconWrap.className = 'csr-icon mb-3';
         iconWrap.append(icon);
         item.append(iconWrap);
       }
@@ -116,6 +128,7 @@ export default function decorate(block) {
 
       if (itemTitle) {
         const h3 = document.createElement('h3');
+        h3.className = 'mb-3';
         h3.textContent = itemTitle;
         textWrap.append(h3);
       }
@@ -136,6 +149,9 @@ export default function decorate(block) {
 
   content.append(left, right);
   
-  // Add all rendered content to block
-  block.append(header, content);
+  // Add header and content to spacer wrapper
+  spacerWrapper.append(header, content);
+  
+  // Add the engine wrapper (with spacer inside) to the block
+  block.append(engineWrapper);
 }
