@@ -196,10 +196,16 @@ export default async function decorate(block) {
       <article class="news-article">
 
         ${hasTitle ? `
-          <div class="news-title">
-            <h1>${item.title}</h1>
-          </div>
-        ` : ""}
+  <div class="news-title">
+    <h1>${item.title}</h1>
+    ${fixImageSrc(
+      item.description?.html ||
+      item.description?.plaintext ||
+      item.description ||
+      ""
+    )}
+  </div>
+` : ""}
 
         ${hasImage ? `
           <div class="news-card">
@@ -219,6 +225,7 @@ export default async function decorate(block) {
           renderSection(item.implementationTitle, item.implementation?.html),
           renderSection(item.stakeholderMapTitle, item.stakeholderMap?.html),
           renderSection(item.sustainabilityImpactTitle, item.outcomesImpactwhereeverSustainabilityImpact?.html),
+          renderSection(item.lessonsScalableFrameworkTitle, item.lessonsScalableFramework?.html),
         ].join("")}
 
         ${galleryImages.length ? `
