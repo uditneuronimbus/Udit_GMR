@@ -67,7 +67,8 @@
       "lottie-animation",
       "media-cards",
       "photo-gallery-slider",
-      "impact-stories"
+      "impact-stories",
+      "csr-engine"
     ]
   },
   {
@@ -178,6 +179,12 @@
     "id": "corporate-governance",
     "components": [
       "governance-section"
+    ]
+  },
+  {
+    "id": "csr-engine",
+    "components": [
+      "csr-engine-item"
     ]
   },
   {
