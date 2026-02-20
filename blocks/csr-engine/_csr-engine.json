@@ -39,8 +39,8 @@
                 {
                     "component": "reference",
                     "valueType": "string",
-                    "name": "mainImage",
-                    "label": "Main Image"
+                    "name": "logoImage",
+                    "label": "Logo Image"
                 },
                 {
                     "component": "text",
@@ -59,6 +59,24 @@
                     "valueType": "string",
                     "name": "sectionDescription",
                     "label": "Section Description"
+                },
+                {
+                    "component": "reference",
+                    "valueType": "string",
+                    "name": "mainImage",
+                    "label": "Main Image"
+                },
+                {
+                    "component": "text",
+                    "valueType": "string",
+                    "name": "mainImageAlt",
+                    "label": "Main Image Alt Text"
+                },
+                {
+                    "component": "richtext",
+                    "valueType": "string",
+                    "name": "mainImageDescription",
+                    "label": "Main Image Description"
                 }
             ]
         },
