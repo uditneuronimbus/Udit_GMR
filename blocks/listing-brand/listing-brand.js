@@ -121,13 +121,13 @@ export default async function decorate(block) {
 
           <!-- Comment out desktop tag filter since it doesn't exist in HTML -->
           <!-- <div class="filter-group filter-group-collapsible">
-            <button class="filter-toggle" data-target="tag-options">
+            <button class="filter-toggle active" data-target="tag-options">
               <span>Tags</span>
               <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <div class="filter-options hidden" id="tag-options">
+            <div class="filter-options" id="tag-options">
               <label class="filter-option active">
                 <input type="radio" name="desktop-tag" value="" checked>
                 <span>All Tags</span>
@@ -561,10 +561,10 @@ export default async function decorate(block) {
       e.stopPropagation();
       const targetId = toggle.getAttribute("data-target");
       const options = block.querySelector(`#${targetId}`);
-      if (options) {
-        toggle.classList.toggle("active");
-        options.classList.toggle("hidden");
-      }
+      // if (options) {
+      //   toggle.classList.toggle("active");
+      //   options.classList.toggle("hidden");
+      // }
     });
   });
 
@@ -631,11 +631,11 @@ export default async function decorate(block) {
   document.addEventListener("click", (e) => {
     if (!e.target.closest(".filter-group-collapsible")) {
       block.querySelectorAll(".filter-options").forEach((options) => {
-        if (!options.classList.contains("hidden")) {
-          options.classList.add("hidden");
-          const toggle = block.querySelector(`[data-target="${options.id}"]`);
-          if (toggle) toggle.classList.remove("active");
-        }
+        // if (!options.classList.contains("hidden")) {
+        //   options.classList.add("hidden");
+        //   const toggle = block.querySelector(`[data-target="${options.id}"]`);
+        //   if (toggle) toggle.classList.remove("active");
+        // }
       });
     }
   });
