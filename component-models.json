@@ -762,7 +762,7 @@
       {
         "component": "text",
         "name": "sectionTitle",
-        "label": "Section Title (Main Heading)",
+        "label": "Section Title",
         "valueType": "string"
       },
       {
