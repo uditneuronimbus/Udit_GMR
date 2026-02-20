@@ -73,7 +73,7 @@ export default async function decorate(block) {
     if (cells.length < 4) return;
 
     const date = cells[0]?.textContent?.trim() || "";
-    const description = cells[1]?.innerHTML || "";
+    const description = cells[1]?.textContent?.trim() || "";
     const title = cells[2]?.textContent?.trim() || "";
     const subtitle = cells[3]?.textContent?.trim() || "";
 
