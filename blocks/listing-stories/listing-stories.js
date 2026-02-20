@@ -13,7 +13,7 @@ export default async function decorate(block) {
   const dynamicSubCats = data.subCategories || [];
 
   const defaultYear = "All";
-  const limit = 10;
+  const limit = 2;
   
   /* ================= State Management ================= */
   let state = {
@@ -224,7 +224,8 @@ export default async function decorate(block) {
   const modalOverlay = block.querySelector('.mobile-filter-overlay');
   const closeModalBtn = block.querySelector('.close-modal');
   const applyBtn = block.querySelector('.apply-btn');
-  const yearGroup = block.querySelector('.year-group'); 
+  const yearGroup = block.querySelector('.year-group');
+  const monthGroup = block.querySelector('.month-group');
   const categoryGroup = block.querySelector('.category-group');
   const tagGroup = block.querySelector('.tag-group');
 
@@ -233,6 +234,13 @@ export default async function decorate(block) {
   function updateHeader() {
     const parts = [];
     if (state.year) parts.push(state.year);
+    if (state.month) {
+      // Convert month number to month name
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                         'July', 'August', 'September', 'October', 'November', 'December'];
+      const monthName = monthNames[parseInt(state.month) - 1] || state.month;
+      parts.push(monthName);
+    }
     if (state.subCategory) parts.push(slugToTitle(state.subCategory));
     if (state.tag) parts.push(state.tag);
     summaryText.textContent = parts.length ? parts.join(" • ") : "All Years";
@@ -252,9 +260,8 @@ export default async function decorate(block) {
     const title = item?.title || "Untitled";
     const subCategory = item?.subCategory || "";
     const updatedDate = item?.lastUpdated || "";
-    const description = item?.description?.plaintext || "";
     const link = item?.slugUrl || "#";
-    const publishDateRaw = item.publishDate?.iso || item.publishDate?.value || item.publishDate || "";
+    const publishDateRaw = item.publishMonth + " " + item.publishYear;  
     const publishDateFormatted = formatDate(publishDateRaw);
     
     // Create badge class from subCategory
@@ -262,28 +269,38 @@ export default async function decorate(block) {
 
     return `
       <article class="press-card">
-        <div class="press-card-body">
-          <div class="press-card-image">
-          <a href="story-update?post=${link}">  
-          <img
-              src="${item.storyImage?._publishUrl || ""}"
-              alt="${item.title || ""}"
-              loading="lazy"
-            />
-            </a>
-          </div>
+        <div class="press-card-image">
+        <a href="news-update?post=${link}">  
+        <img
+            src="${item.cardImage?._publishUrl || ""}"
+            alt="${item.title || ""}"
+            loading="lazy"
+          />
+          </a>
+        </div>
 
-        
-          <h3 class="press-card-title"><a href="story-update?post=${link}">${title}</a></h3>
+        <div class="press-card-body">
+          <h3 class="press-card-title"><a href="news-update?post=${link}">${title}</a></h3>
 
           <div class="press-card-meta">
-            ${description ? `<p class="press-card-description">${description}</p>` : ""}
+            ${subCategory ? `<span class="badge ${badgeClass}">${slugToTitle(subCategory)}</span>` : ""}
+            ${subCategory && publishDateFormatted ? '<span class="meta-separator">|</span>' : ''}
+            ${publishDateFormatted ? `<span class="meta-date">
+              <svg class="icon-calendar" width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.66669 10C1.66669 6.85734 1.66669 5.286 2.643 4.30968C3.61931 3.33337 5.19066 3.33337 8.33335 3.33337H11.6667C14.8094 3.33337 16.3807 3.33337 17.357 4.30968C18.3334 5.286 18.3334 6.85734 18.3334 10V11.6667C18.3334 14.8094 18.3334 16.3808 17.357 17.3571C16.3807 18.3334 14.8094 18.3334 11.6667 18.3334H8.33335C5.19066 18.3334 3.61931 18.3334 2.643 17.3571C1.66669 16.3808 1.66669 14.8094 1.66669 11.6667V10Z" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M5.83331 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M14.1667 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M2.08331 7.5H17.9166" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              ${publishDateFormatted}
+            </span>` : ""}
           </div>
 
           <div class="press-card-footer">
             <a href="story-update?post=${link}" class="btn-link">
               READ MORE
             </a>
+            ${updatedDate ? `<span class="meta-updated">Last Updated : ${updatedDate}</span>` : ""}
           </div>
         </div>
       </article>
@@ -299,10 +316,9 @@ export default async function decorate(block) {
       countText.textContent = 'Loading...';
 
       state.totalCount = await fetchApiCount(
-        "",
+        state.category,
         state.subCategory,
         state.year,
-        state.month,
         state.tag,
         state.sort
       );
@@ -312,10 +328,12 @@ export default async function decorate(block) {
       const items = await fetchApiData(
         state.limit,
         state.offset,
+        state.subCategory,
+        state.year,
+        state.month,
+        state.tag,
         state.sort
       );
-
-      console.log('Items returned:', items.length);
 
       if (items.length === 0) {
         desktopList.innerHTML = '<div class="no-results">No results found</div>';
@@ -413,9 +431,10 @@ export default async function decorate(block) {
       let text = btn.textContent.split('<')[0].trim();
       
       switch(type) {
-        case 'year':
+        case 'year-month':
           const yearText = state.year || 'Year';
-          text = `${yearText}`;
+          const monthText = state.month || 'Month';
+          text = `${yearText} & ${monthText}`;
           break;
         case 'category':
           text = state.subCategory ? slugToTitle(state.subCategory) : 'Category';
@@ -439,13 +458,15 @@ export default async function decorate(block) {
     
     // Hide all groups first
     yearGroup.style.display = 'none';
+    monthGroup.style.display = 'none';
     categoryGroup.style.display = 'none';
     tagGroup.style.display = 'none';
     
     // Show selected group based on button type
     switch(type) {
-      case 'year':
+      case 'year-month':
         yearGroup.style.display = 'block';
+        monthGroup.style.display = 'block';
         break;
       case 'category':
         categoryGroup.style.display = 'block';
@@ -460,6 +481,11 @@ export default async function decorate(block) {
     const yearRadio = yearGroup.querySelector(`input[name="mobile-year"][value="${state.year}"]`);
     if (yearRadio) yearRadio.checked = true;
     else yearGroup.querySelector('input[name="mobile-year"][value=""]').checked = true;
+    
+    // Month group
+    const monthRadio = monthGroup.querySelector(`input[name="mobile-month"][value="${state.month}"]`);
+    if (monthRadio) monthRadio.checked = true;
+    else monthGroup.querySelector('input[name="mobile-month"][value=""]').checked = true;
     
     // Category group
     const catRadio = categoryGroup.querySelector(`input[name="mobile-subcat"][value="${state.subCategory}"]`);
@@ -480,6 +506,7 @@ export default async function decorate(block) {
   function applyMobileFilters() {
     // Get values from all radio groups
     const selectedYear = yearGroup.querySelector('input[name="mobile-year"]:checked');
+    const selectedMonth = monthGroup.querySelector('input[name="mobile-month"]:checked');
     const selectedCat = categoryGroup.querySelector('input[name="mobile-subcat"]:checked');
     const selectedTag = tagGroup.querySelector('input[name="mobile-tag"]:checked');
     
@@ -489,6 +516,10 @@ export default async function decorate(block) {
       state.page = 1;
     }
     
+    if (selectedMonth && selectedMonth.value !== state.month) {
+      state.month = selectedMonth.value;
+      state.page = 1;
+    }
     
     if (selectedCat && selectedCat.value !== state.subCategory) {
       state.subCategory = selectedCat.value;
@@ -544,6 +575,7 @@ export default async function decorate(block) {
   };
 
   setupRadioFilters('desktop-year', 'year');
+  setupRadioFilters('desktop-month', 'month');
   setupRadioFilters('desktop-subcat', 'subCategory');
   setupRadioFilters('desktop-tag', 'tag');
 
@@ -586,24 +618,38 @@ export default async function decorate(block) {
     }
   });
 
+  function scrollWithOffset(element, offset = 150) {
+  if (!element) return;
+
+  const top = element.offsetTop - offset;
+
+  window.scrollTo({
+    top: top > 0 ? top : 0,
+    behavior: "smooth"
+  });
+}
+
   // Pagination clicks
-  desktopPagination.addEventListener("click", (e) => {
-    const btn = e.target.closest(".page-btn");
-    if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
+  desktopPagination.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".page-btn");
+  if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
 
-    state.page = parseInt(btn.dataset.page, 10);
-    renderCards();
-    desktopList.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
+  state.page = parseInt(btn.dataset.page, 10);
 
-  mobilePagination.addEventListener("click", (e) => {
-    const btn = e.target.closest(".page-btn");
-    if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
+  await renderCards();
+  scrollWithOffset(desktopList, 300);
+});
 
-    state.page = parseInt(btn.dataset.page, 10);
-    renderCards();
-    mobileList.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
+mobilePagination.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".page-btn");
+  if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
+
+  state.page = parseInt(btn.dataset.page, 10);
+
+  await renderCards();
+  scrollWithOffset(mobileList, 300);
+});
+
 
   // Mobile Filter Buttons
   mobileFilterBtns.forEach(btn => {
@@ -630,10 +676,14 @@ export default async function decorate(block) {
 
 /* ================= API Functions ================= */
 
-async function fetchApiData(limit = 10, offset = 0, orderby = "desc") {
+async function fetchApiData(limit = 10, offset = 0, subCategory = "", publishyear = "", publishmonth = "", tag = "", orderby = "desc") {
   const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/success-stories` +
     `?limit=${encodeURIComponent(limit)}` +
     `&offset=${encodeURIComponent(offset)}` +
+    `&subcategory=${encodeURIComponent(subCategory)}` +
+    `&publishyear=${encodeURIComponent(publishyear)}` +
+    `&publishmonth=${encodeURIComponent(publishmonth.toLowerCase())}` +
+    `&tag=${encodeURIComponent(tag.toLowerCase())}` +
     `&orderby=${encodeURIComponent(orderby)}`;
     
   const res = await fetch(apiUrl);
@@ -641,23 +691,23 @@ async function fetchApiData(limit = 10, offset = 0, orderby = "desc") {
   
   const json = await res.json();
   const items = json?.data?.data?.successStoryList?.items || [];
-  
+    
   return items;
 }
 
-async function fetchApiCount( orderby = "desc") {
-  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/success-stories` +
-    `?limit=10000` +  
-    `&offset=0` +
+async function fetchApiCount(category = "", subCategory = "", publishyear = "", tag = "", orderby = "desc") {
+  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/story-count` +
+    `?category=${encodeURIComponent(category)}` +
+    `&subcategory=${encodeURIComponent(subCategory)}` +
+    `&publishyear=${encodeURIComponent(publishyear)}` +
+    `&tag=${encodeURIComponent(tag.toLowerCase())}` +
     `&orderby=${encodeURIComponent(orderby)}`;
-  
-    
+      
   const res = await fetch(apiUrl);
   if (!res.ok) throw new Error(`API error ${res.status}`);
   
   const json = await res.json();
   const items = json?.data?.data?.successStoryList?.items || [];
-  
-  
+    
   return items.length;
 }
