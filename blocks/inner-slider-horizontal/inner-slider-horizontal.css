@@ -16,25 +16,26 @@
    Main Card Wrapper
 ===================================== */
 .inner-slider-horizontal .ish-wrapper {
-  background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08), transparent 40%),
-              linear-gradient(135deg, #0b3f8f 0%, #1a5fb8 60%, #0c4aa6 100%);
+  background: linear-gradient(180deg, #0066CC 0%, #1E3C6B 100%);
   border-radius: 16px;
-  color: #ffffff;
+  color: var(--white);
   position: relative;
   overflow: hidden;
-  width: 1200px;
+  width: 1310px;
   margin: auto;
   margin-bottom: 50px;
   height: 550px;
 }
+.inner-slider-horizontal .ish-wrapper:after {background:url(../../img/sign-fade.png) no-repeat; background-position: bottom right; width:100%;height:80%;background-size:contain; position: absolute; content: ''; bottom:0; right:0; z-index: 1; }
+.inner-slider-horizontal .ish-wrapper .ish-header, .inner-slider-horizontal .ish-wrapper .ish-slider-container { position: relative; z-index: 2;}
 
 /* =====================================
    Section Title
 ===================================== */
 .ish-title {
-  font-size: 30px;
+  font-size: var(--fs-xl);
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--white); opacity: .3;
   padding: 40px 0 0 140px;
 }
 
@@ -42,7 +43,7 @@
    Slide Layout
 ===================================== */
 .ish-slide-card {
-  display: flex;
+  display: flex;     width: 100%;
   align-items: center;
   justify-content: space-between;
   gap: 60px;
@@ -55,15 +56,17 @@
 .ish-slide-content {
   max-width: 480px;
   position: relative;
-  margin-left: 200px; /* aligned with timeline */
+  margin-left: 140px; /* aligned with timeline */
 }
+.ish-slide-content { max-width: 40%;}
+.ish-slide-image { max-width: 50%; }
 
 /* Big Year */
 .ish-slide-year {
-  font-size: 56px;
-  font-weight: 600;
+  font-size: var(--fs-xxl);
+  font-weight: 300;
   margin-bottom: 12px;
-  color: #ffffff;
+  color: var(--white);
 }
 
 /* Title */
