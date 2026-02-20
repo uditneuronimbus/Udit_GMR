@@ -63,11 +63,11 @@ export default async function decorate(block) {
     if (!res.ok) throw new Error(res.status);
 
     const json = await res.json();
-        console.log(json);
+       
     const items = json?.data?.data?.successStoryList?.items || [];
 
     const item = items[0] || null;
-
+ console.log(item);
     if (!item) {
       contentWrapper.innerHTML = "<p>Story not found.</p>";
       return;
@@ -133,6 +133,7 @@ export default async function decorate(block) {
     }
 
              <div>subCategory: ${item.subCategory}</div>
+             <div>description: ${item.description?.plaintext}</div>
              <div>visitUrl: ${item.visitUrl}</div>
              <div>slugUrl: ${item.slugUrl}</div>
             <div>approachStrategyTitle: ${item.approachStrategyTitle}</div>
