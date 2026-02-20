@@ -209,16 +209,16 @@ export default async function decorate(block) {
 
         <!-- Dynamic Sections -->
         ${[
-          renderSection(item.approachStrategyTitle, item.approachStrategy?.html),
-          renderSection(item.contextHistoricalBackdropTitle, item.contextHistoricalBackdrop?.html),
-          renderSection(item.coreProblemStatementTitle, item.coreProblemStatement?.html),
           renderSection(item.executiveSummaryTitle, item.executiveSummary?.html),
-          renderSection(item.globalBenchmarkingInsightsTitle, item.globalBenchmarkingInsights?.html),
-          renderSection(item.implementationTitle, item.implementation?.html),
-          renderSection(item.leadershipPerspectivesTitle, item.leadershipPerspectives?.html),
           renderSection(item.openingNarrativeTitle, item.openingNarrative?.html),
-          renderSection(item.sustainabilityImpactTitle, item.outcomesImpactwhereeverSustainabilityImpact?.html),
+          renderSection(item.coreProblemStatementTitle, item.coreProblemStatement?.html),
+          renderSection(item.contextHistoricalBackdropTitle, item.contextHistoricalBackdrop?.html),
+          renderSection(item.leadershipPerspectivesTitle, item.leadershipPerspectives?.html),
+          renderSection(item.globalBenchmarkingInsightsTitle, item.globalBenchmarkingInsights?.html),
+          renderSection(item.approachStrategyTitle, item.approachStrategy?.html),
+          renderSection(item.implementationTitle, item.implementation?.html),
           renderSection(item.stakeholderMapTitle, item.stakeholderMap?.html),
+          renderSection(item.sustainabilityImpactTitle, item.outcomesImpactwhereeverSustainabilityImpact?.html),
         ].join("")}
 
         ${galleryImages.length ? `
