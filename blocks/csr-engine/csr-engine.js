@@ -1,30 +1,51 @@
 export default function decorate(block) {
   const rows = [...block.children];
-
-  if (rows.length < 6) return;
-
-  /*
-  Expected structure (based on your HTML):
-
-  0 → logo image
-  1 → title
-  2 → subtitle (optional / duplicate title)
-  3 → description
-  4 → main image
-  5 → right description
-  6+ → items (icon + title + desc)
-  */
-
-  const logo = rows[0]?.querySelector('picture');
-  const title = rows[1]?.textContent?.trim();
-  const subtitle = rows[2]?.textContent?.trim();
-  const description = rows[3]?.innerHTML;
-  const mainImage = rows[4]?.querySelector('picture');
-  const rightDescription = rows[5]?.innerHTML;
-
-  const itemRows = rows.slice(6);
+  if (!rows.length) return;
 
   block.innerHTML = '';
+
+  let logo;
+  let title;
+  let description;
+  let mainImage;
+  let rightDescription;
+
+  const items = [];
+
+  /* =============================
+     Detect content automatically
+  ============================== */
+
+  rows.forEach((row) => {
+    const cols = [...row.children];
+
+    // picture only row → image
+    if (cols.length === 1 && cols[0].querySelector('picture')) {
+      if (!logo) logo = cols[0].querySelector('picture');
+      else if (!mainImage) mainImage = cols[0].querySelector('picture');
+      return;
+    }
+
+    // single text row → title / description / right description
+    if (cols.length === 1) {
+      const text = cols[0].textContent.trim();
+
+      if (!title) title = text;
+      else if (!description) description = cols[0].innerHTML;
+      else rightDescription = cols[0].innerHTML;
+
+      return;
+    }
+
+    // 3 column row → item
+    if (cols.length >= 3) {
+      items.push({
+        icon: cols[0].querySelector('picture'),
+        title: cols[1].textContent.trim(),
+        description: cols[2].innerHTML,
+      });
+    }
+  });
 
   /* ================= Header ================= */
 
@@ -32,10 +53,10 @@ export default function decorate(block) {
   header.className = 'csr-header';
 
   if (logo) {
-    const logoWrap = document.createElement('div');
-    logoWrap.className = 'csr-logo';
-    logoWrap.append(logo);
-    header.append(logoWrap);
+    const wrap = document.createElement('div');
+    wrap.className = 'csr-logo';
+    wrap.append(logo);
+    header.append(wrap);
   }
 
   if (title) {
@@ -57,12 +78,10 @@ export default function decorate(block) {
   const content = document.createElement('div');
   content.className = 'csr-content';
 
-  /* ---- Left Image ---- */
   const left = document.createElement('div');
   left.className = 'csr-left';
   if (mainImage) left.append(mainImage);
 
-  /* ---- Right Side ---- */
   const right = document.createElement('div');
   right.className = 'csr-right';
 
@@ -75,50 +94,39 @@ export default function decorate(block) {
 
   /* ================= Items ================= */
 
-  if (itemRows.length) {
-    const itemsWrap = document.createElement('div');
-    itemsWrap.className = 'csr-items';
+  if (items.length) {
+    const wrap = document.createElement('div');
+    wrap.className = 'csr-items';
 
-    itemRows.forEach((row) => {
-      const cols = [...row.children];
+    items.forEach((item) => {
+      const el = document.createElement('div');
+      el.className = 'csr-item';
 
-      const icon = cols[0]?.querySelector('picture');
-      const itemTitle = cols[1]?.textContent?.trim();
-      const itemDesc = cols[2]?.innerHTML;
-
-      const item = document.createElement('div');
-      item.className = 'csr-item';
-
-      if (icon) {
+      if (item.icon) {
         const iconWrap = document.createElement('div');
         iconWrap.className = 'csr-icon';
-        iconWrap.append(icon);
-        item.append(iconWrap);
+        iconWrap.append(item.icon);
+        el.append(iconWrap);
       }
 
       const textWrap = document.createElement('div');
 
-      if (itemTitle) {
-        const h3 = document.createElement('h3');
-        h3.textContent = itemTitle;
-        textWrap.append(h3);
-      }
+      const h3 = document.createElement('h3');
+      h3.textContent = item.title;
+      textWrap.append(h3);
 
-      if (itemDesc) {
-        const d = document.createElement('div');
-        d.className = 'csr-item-desc';
-        d.innerHTML = itemDesc;
-        textWrap.append(d);
-      }
+      const d = document.createElement('div');
+      d.className = 'csr-item-desc';
+      d.innerHTML = item.description;
+      textWrap.append(d);
 
-      item.append(textWrap);
-      itemsWrap.append(item);
+      el.append(textWrap);
+      wrap.append(el);
     });
 
-    right.append(itemsWrap);
+    right.append(wrap);
   }
 
   content.append(left, right);
-
   block.append(header, content);
 }
