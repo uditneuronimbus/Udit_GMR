@@ -1,4 +1,5 @@
 import { getMetadata } from "../../scripts/aem.js";
+import { localizeNavLinks } from "../../scripts/scripts.js";
 import { loadFragment } from "../fragment/fragment.js";
 
 const isDesktop = window.matchMedia("(min-width: 1199px)");
@@ -422,6 +423,9 @@ export default async function decorate(block) {
     nav.setAttribute("aria-expanded", "false");
 
     if (fragment) {
+      // ✅ CRITICAL: Localize all links in the fragment BEFORE processing mega-menu or cloning for mobile
+      localizeNavLinks(fragment, currentLang);
+
       while (fragment.firstElementChild) {
         nav.append(fragment.firstElementChild);
       }
@@ -969,33 +973,9 @@ export default async function decorate(block) {
       toggleMenu(nav, navSections, e.matches);
     });
 
-    // FINAL STEP: Rewrite all links within the navigation to preserve the active language
-    const allNavLinks = nav.querySelectorAll("a");
-    allNavLinks.forEach((a) => {
-      const href = a.getAttribute("href");
-      if (href && href.startsWith("/") && !href.startsWith("//")) {
-        // Check if there's already a 2-char language segment
-        const segments = href.split("/");
-        let hasLang = false;
-        let langIndex = -1;
-        for (let i = 0; i < segments.length; i++) {
-          if (segments[i].length === 2 && /^[a-z]{2}$/.test(segments[i])) {
-            hasLang = true;
-            langIndex = i;
-            break;
-          }
-        }
+    // FINAL STEP: The redundant link rewrite logic has been removed as it's now handled early
+    // and correctly in the decoration process.
 
-        if (hasLang) {
-          // Replace existing language segment
-          segments[langIndex] = currentLang;
-          a.href = segments.join("/").replace(/\/+/g, "/");
-        } else {
-          // Prepend language segment if not present
-          a.href = `/${currentLang}${href}`.replace(/\/+/g, "/");
-        }
-      }
-    });
   } catch (e) {
     console.error("Navigation Decorate Failed:", e);
   } finally {

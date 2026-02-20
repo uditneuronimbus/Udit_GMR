@@ -203,10 +203,12 @@
         "image-scroll-card",
         "key-highlight-button",
         "contact-us",
-        "media-contact-header"
         "lottie-animation",
         "media-cards",
-        "photo-gallery-slider"
+        "photo-gallery-slider",
+        "impact-stories",
+        "csr-engine",
+        "guest-book"
       ]
     }
   ]

@@ -11,6 +11,7 @@ import {
   loadSections,
   loadCSS,
 } from "./aem.js";
+import { buildVisitHistory, getCachedVisitedPages } from "./target.js";
 
 // --- EARLY LANGUAGE REDIRECT & BHASHINI JUMPSTART (Anti-Flash) ---
 (function handleLanguageInitialization() {
@@ -97,17 +98,11 @@ import {
   }, 2000);
 })();
 
-/* ===============================
-   METADATA HELPER
-   =============================== */
 const getMetadata = (name) => {
   const meta = document.querySelector(`meta[name="${name}"]`);
   return meta ? meta.content : null;
 };
 
-/* ===============================
-   PAGE SLUG → BODY CLASS
-   =============================== */
 function addPageSlugClass() {
   const path = window.location.pathname
     .replace(/\/$/, "")
@@ -128,9 +123,6 @@ function addPageSlugClass() {
   }
 }
 
-/* ===============================
-   ATTRIBUTE HELPERS
-   =============================== */
 export function moveAttributes(from, to, attributes) {
   if (!attributes) {
     attributes = [...from.attributes].map(({ nodeName }) => nodeName);
@@ -157,9 +149,42 @@ export function moveInstrumentation(from, to) {
   );
 }
 
-/* ===============================
-   LOAD FONTS
-   =============================== */
+/**
+ * Rewrites internal links within a container to preserve the current language.
+ * @param {Element} container The container element containing links
+ * @param {string} currentLang The current language code
+ */
+export function localizeNavLinks(container, currentLang) {
+  if (!container || !currentLang || currentLang === "en") return;
+  const links = container.querySelectorAll("a");
+  links.forEach((a) => {
+    const href = a.getAttribute("href");
+    if (href && href.startsWith("/") && !href.startsWith("//")) {
+      const segments = href.split("/");
+      let hasLang = false;
+      let langIndex = -1;
+      for (let i = 0; i < segments.length; i++) {
+        // Match 2-char codes (en, ja) and hyphenated codes (zh-sg, zh-cn)
+        if (/^[a-z]{2}(-[a-z]{2})?$/.test(segments[i])) {
+          hasLang = true;
+          langIndex = i;
+          break;
+        }
+      }
+
+      if (hasLang) {
+        // Replace existing language segment
+        segments[langIndex] = currentLang;
+        a.href = segments.join("/").replace(/\/+/g, "/");
+      } else {
+        // Prepend language segment if not present
+        a.href = `/${currentLang}${href}`.replace(/\/+/g, "/");
+      }
+    }
+  });
+}
+
+
 async function loadFonts() {
   await loadCSS(`${window.hlx.codeBasePath}/styles/fonts.css`);
   try {
@@ -171,13 +196,6 @@ async function loadFonts() {
   }
 }
 
-/* ===============================
-   AUTO BLOCKS (BREADCRUMBS)
-   =============================== */
-/**
- * Manual Build + Manual Load for Breadcrumbs
- * Injects INTO the First Section (Hero) to avoid layout shift
- */
 async function buildBreadcrumbs(main) {
   // 1. Skip on Homepage or 404
   if (window.location.pathname === "/" || window.location.pathname === "/404") {
@@ -235,9 +253,6 @@ async function buildBreadcrumbs(main) {
   }
 }
 
-/* ===============================
-   BUILD AUTO BLOCKS
-   =============================== */
 function buildAutoBlocks(main) {
   try {
     // Breadcrumbs are NOT called here to avoid deadlock.
@@ -247,9 +262,6 @@ function buildAutoBlocks(main) {
   }
 }
 
-/* ===============================
-   DECORATE MAIN
-   =============================== */
 export function decorateMain(main) {
   decorateButtons(main);
   decorateIcons(main);
@@ -258,9 +270,6 @@ export function decorateMain(main) {
   decorateBlocks(main);
 }
 
-/* ===============================
-   LOAD EAGER
-   =============================== */
 async function loadEager(doc) {
   // Dynamically set lang attribute based on URL path instead of hardcoding "en"
   // Support both 2-char codes (en, ja) and hyphenated codes (zh-sg, zh-cn)
@@ -306,12 +315,10 @@ async function loadEager(doc) {
   }
 }
 
-/* ===============================
-   LOAD LAZY
-   =============================== */
 async function loadLazy(doc) {
   const main = doc.querySelector("main");
   await loadSections(main);
+  buildVisitHistory();
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
@@ -327,16 +334,10 @@ async function loadLazy(doc) {
   loadFonts();
 }
 
-/* ===============================
-   LOAD DELAYED
-   =============================== */
 function loadDelayed() {
   import("./delayed.js");
 }
 
-/* ===============================
-   ADOBE TARGET
-   =============================== */
 const onDecoratedElement = (fn) => {
   if (
     document.querySelector(
@@ -369,50 +370,6 @@ const onDecoratedElement = (fn) => {
   observer.observe(document.body, { childList: true });
 };
 
-const getAndApplyTargetPropositions = async () => {
-  if (!window.alloy) {
-    console.warn("window.alloy not available");
-    return;
-  }
-
-  try {
-    const isReturning =
-      window.isReturningUser || localStorage.getItem("returning-user");
-
-    const response = await window.alloy("sendEvent", {
-      renderDecisions: false,
-      decisionScopes: ["__view__"],
-      xdm: {
-        eventType: "web.webpagedetails.pageViews",
-        profile: {
-          isReturningUser: !!isReturning,
-        },
-      },
-    });
-
-    const { propositions } = response;
-
-    onDecoratedElement(async () => {
-      await window.alloy("applyPropositions", { propositions });
-
-      setTimeout(() => {
-        window.alloy("sendEvent", {
-          xdm: {
-            eventType: "decisioning.propositionDisplay",
-            profile: { isReturningUser: !!isReturning },
-            _experience: { decisioning: { propositions } },
-          },
-        });
-      }, 1000);
-    });
-  } catch (error) {
-    console.error("Target error:", error);
-  }
-};
-
-/* ===============================
-   RETURNING USER FLAG
-   =============================== */
 const KEY = "returning-user";
 if (!localStorage.getItem(KEY)) {
   localStorage.setItem(KEY, "true");
@@ -420,9 +377,6 @@ if (!localStorage.getItem(KEY)) {
   window.isReturningUser = true;
 }
 
-/* ===============================
-   LOAD PAGE
-   =============================== */
 async function loadPage() {
   await loadEager(document);
   await loadLazy(document);

@@ -64,10 +64,12 @@
       "image-scroll-card",
       "key-highlight-button",
       "contact-us",
-      "media-contact-header"
       "lottie-animation",
       "media-cards",
-      "photo-gallery-slider"
+      "photo-gallery-slider",
+      "impact-stories",
+      "csr-engine",
+      "guest-book"
     ]
   },
   {
@@ -80,6 +82,12 @@
     "id": "all-business-cards",
     "components": [
       "all-business-cards-item"
+    ]
+  },
+  {
+    "id": "article-hero",
+    "components": [
+      "text"
     ]
   },
   {
@@ -172,6 +180,12 @@
     "id": "corporate-governance",
     "components": [
       "governance-section"
+    ]
+  },
+  {
+    "id": "csr-engine",
+    "components": [
+      "csr-engine-item"
     ]
   },
   {
@@ -274,6 +288,12 @@
     ]
   },
   {
+    "id": "guest-book",
+    "components": [
+      "guest-book-item"
+    ]
+  },
+  {
     "id": "header-img",
     "components": [
       "menu-img"
@@ -311,6 +331,12 @@
     "id": "image-slider",
     "components": [
       "image-slider-item"
+    ]
+  },
+  {
+    "id": "impact-stories",
+    "components": [
+      "impact-story-item"
     ]
   },
   {
@@ -376,6 +402,10 @@
     "components": []
   },
   {
+    "id": "listing-brand",
+    "components": []
+  },
+  {
     "id": "listing-press",
     "components": []
   },
@@ -436,10 +466,9 @@
     "components": []
   },
   {
-    "id": "our-presence-filter",
+    "id": "our-presence",
     "components": [
-      "presence-group",
-      "presence-location"
+      "network-location-item"
     ]
   },
   {

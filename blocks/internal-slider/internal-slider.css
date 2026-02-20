@@ -31,6 +31,7 @@
   margin: 0 auto 70px auto;
   position: relative;
   z-index: 2;
+  top: 25px;
 }
 
 .internal-slider-eyebrow {
@@ -81,8 +82,13 @@
   background-image: url(../../img/Groupb.png);
   background-repeat:no-repeat ;
   margin-left: 160px;
+  margin-bottom: 150px;
 }
 
+
+.swiper-pagination {
+  margin-bottom: 55px;
+}
 /* =========================================
    CONTENT CARD (LEFT)
 ========================================= */
@@ -122,6 +128,14 @@
   width: 325px;
 }
 
+.internal-slide.reverse-layout {
+  margin-left: 260px;
+}
+
+.internal-slide.reverse-layout .internal-slide-description {
+  margin-left: -40px;
+}
+
 .internal-slide-index {
   position: absolute;
   right: -45px;
@@ -142,9 +156,7 @@
   box-shadow: 0 25px 50px rgba(0,0,0,0.15);
 }
 
-/* =========================================
-   SWIPER NAVIGATION ARROWS
-========================================= */
+
 .internal-slider-navigation .swiper-button-prev,
 .internal-slider-navigation .swiper-button-next {
   color: #d6a554;
@@ -158,7 +170,6 @@
   font-weight: bold;
 }
 
-/* Position arrows slightly outside */
 .swiper-button-prev {
   left: -60px;
 }
@@ -167,9 +178,6 @@
   right: -60px;
 }
 
-/* =========================================
-   PAGINATION (DOT LINE STYLE)
-========================================= */
 .swiper-pagination {
   bottom: 0 !important;
   display: flex;
@@ -191,7 +199,7 @@
 }
 
 
-/* Default Layout */
+
 .internal-slide {
   display: flex;
   align-items: center;
@@ -199,12 +207,12 @@
   gap: 60px;
 }
 
-/* Reverse for even slides */
+
 .reverse-layout {
   flex-direction: row-reverse;
 }
 
-/* Overlap handling */
+
 .internal-slide-content {
   margin-right: -90px;
 }
@@ -216,10 +224,15 @@
 
 
 .internal-slider-navigation {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 50px;
+ display: flex; gap: 10px; justify-content: space-between; position: absolute; top: 50%; transform: translateY(-50%); z-index: 6; width: 100%; margin: auto; max-width: 1200px; left: 0; right: 0;
+}
+
+.internal-slider-navigation .swiper-button-prev {
+  border: none;
+}
+
+.internal-slider-navigation .swiper-button-next {
+  border: none;
 }
 
 
@@ -248,3 +261,52 @@
     display: none;
   }
 }
+
+
+.swiper-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+
+.internal-bullet {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  background: none !important;
+  width: auto !important;
+  height: auto !important;
+  opacity: 1 !important;
+}
+
+
+.internal-bullet-number {
+  font-size: 12px;
+  margin-bottom: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+
+.swiper-pagination-bullet-active .internal-bullet-number {
+  opacity: 1;
+  font-weight: 600;
+}
+
+
+.internal-bullet-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f4a300; 
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.swiper-pagination-bullet-active .internal-bullet-dot {
+  background: #faa519;
+  transform: scale(1.2);
+}
+
+

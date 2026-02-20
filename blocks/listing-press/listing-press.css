@@ -16,7 +16,7 @@
 .press-listing-runtime .desktop-layout{display:grid;grid-template-columns:280px 1fr;gap:40px}
 .press-listing-runtime .mobile-layout{display:none}
 .press-filter-panel{background:var(--white);padding:24px;border-radius:8px;height:fit-content;position:sticky;top:145px;border:1px solid var(--light-grey)}
-.press-filter-panel h4{margin:0 0 24px 0;font-size:var(--fs-normal);font-weight:600;color:var(--charcoal)}
+.press-filter-panel h4{margin: 0 0 1rem 0;font-size:var(--fs-normal);font-weight:600;color:var(--charcoal)}
 .press-filter-panel .filter-group-collapsible{border-bottom:2px solid var(--light-grey);padding:0}
 .press-filter-panel .filter-group-collapsible:last-child{border-bottom:none}
 .press-filter-panel .filter-toggle{display:flex;justify-content:space-between;align-items:center;width:100%;padding:16px 0;background:0 0;border:none;cursor:pointer;font-size:var(--fs-regular, 1rem);font-weight:var(--fw-medium,500);color:var(--charcoal);text-align:left}

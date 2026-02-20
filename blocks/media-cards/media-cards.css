@@ -1,6 +1,8 @@
 .overview-runtime{padding:80px 0}
 .overview-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0}
 .overview-header-content{max-width:650px}
+.alignment-center.media-cards-container .overview-header-content { text-align: center;}
+.alignment-center.media-cards-container .btn-link.download:after { background: url(../../icons/website-yellow.svg) no-repeat center;     background-size: 16px; }
 .overview-header h2{font-size:var(--fs-xxlarge);margin-bottom:1rem}
 .overview-tabs{display:flex;gap:12px}
 .overview-tab-btn{padding:10px 18px;border-radius:6px;border:1px solid var(--yellow);color:var(--yellow);background:0 0;cursor:pointer;white-space:nowrap}
@@ -14,7 +16,6 @@
 .leadership-message.media-cards-container .card .card-body .card-text { font-size: var(--fs-normal); margin-bottom: .5rem; }
 .leadership-message.media-cards-container .card .card-body .card-cta { position: absolute; bottom: 15px; left: 17px; z-index: 2; }
 .sec-swiper-slider .media-cards-wrapper .swiper-pagination { position:static; margin-top: 1.5rem;}
-.media-cards-container .card-body { padding-bottom: 0;}
 
 @media (max-width:767px){
 .overview-runtime{padding:60px 0}

@@ -7,3 +7,7 @@
 .badge.press-release{background-color:var(--turquoise);color:var(--white)}
 .badge.blog{background-color:var(--royal-blue);color:var(--white)}
 .meta-date{background:url(../../icons/calendar-icon.svg) no-repeat 1rem center;padding-left:3rem;font-weight:var(--fw-semi-bold);font-size:var(--fs-small);opacity:.5;border-left:solid 2px var(--charcoal);line-height:1.4}
+
+.background-pink.news-updates-wrapper .bg-sky-blue {
+    background: transparent;
+}

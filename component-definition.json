@@ -160,6 +160,22 @@
           }
         },
         {
+          "title": "Article Hero",
+          "id": "article-hero",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Article Hero",
+                  "model": "article-hero",
+                  "filter": "article-hero"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Aviation Infrastructures",
           "id": "aviation-infrastructure",
           "plugins": {
@@ -587,6 +603,37 @@
                 "template": {
                   "name": "governance-section",
                   "model": "governance-section"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "CSR Engine",
+          "id": "csr-engine",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "csr-engine",
+                  "model": "csr-engine",
+                  "filter": "csr-engine"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "CSR Engine Item",
+          "id": "csr-engine-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "CSR Engine Item",
+                  "model": "csr-engine-item"
                 }
               }
             }
@@ -1087,6 +1134,37 @@
           }
         },
         {
+          "title": "Guest Book",
+          "id": "guest-book",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "guest-book",
+                  "model": "guest-book",
+                  "filter": "guest-book"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Guest Book Item",
+          "id": "guest-book-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Guest Book Item",
+                  "model": "guest-book-item"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Header Image",
           "id": "header-img",
           "plugins": {
@@ -1312,6 +1390,37 @@
                 "template": {
                   "name": "image-title-desc-button",
                   "model": "image-title-desc-button"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Impact Stories",
+          "id": "impact-stories",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "impact-stories",
+                  "model": "impact-stories",
+                  "filter": "impact-stories"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Impact Story Item",
+          "id": "impact-story-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Impact Story Item",
+                  "model": "impact-story-item"
                 }
               }
             }
@@ -1621,6 +1730,22 @@
           }
         },
         {
+          "title": "Listing Brand",
+          "id": "listing-brand",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "listing-brand",
+                  "model": "listing-brand",
+                  "filter": "listing-brand"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Listing Press",
           "id": "listing-press",
           "plugins": {
@@ -1897,37 +2022,22 @@
                 "template": {
                   "name": "our-presence",
                   "model": "our-presence",
-                  "filter": "our-presence-filter"
+                  "filter": "our-presence"
                 }
               }
             }
           }
         },
         {
-          "title": "Presence Group",
-          "id": "presence-group",
+          "title": "Network Location Item",
+          "id": "network-location-item",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "presence-group",
-                  "model": "presence-group"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Presence Location",
-          "id": "presence-location",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "presence-location",
-                  "model": "presence-location"
+                  "name": "network-location-item",
+                  "model": "network-location-item"
                 }
               }
             }

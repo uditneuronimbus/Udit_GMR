@@ -36,7 +36,7 @@ export default async function decorate(block) {
               </div>
             </div>
 
-            <div class="row cards-row"></div>
+            <div class="row cards-row justify-content-center"></div>
 
           </div>
         </div>
