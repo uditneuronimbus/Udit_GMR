@@ -258,6 +258,7 @@ export default async function decorate(block) {
 
   function createCardHTML(item) {
     const title = item?.title || "Untitled";
+    const description = item?.description?.plaintext || "";
     const subCategory = item?.subCategory || "";
     const updatedDate = item?.lastUpdated || "";
     const link = item?.slugUrl || "#";
@@ -270,7 +271,7 @@ export default async function decorate(block) {
     return `
       <article class="press-card">
         <div class="press-card-image">
-        <a href="news-update?post=${link}">  
+        <a href="story-update?post=${link}">  
         <img
             src="${item.cardImage?._publishUrl || ""}"
             alt="${item.title || ""}"
@@ -280,22 +281,8 @@ export default async function decorate(block) {
         </div>
 
         <div class="press-card-body">
-          <h3 class="press-card-title"><a href="news-update?post=${link}">${title}</a></h3>
-
-          <div class="press-card-meta">
-            ${subCategory ? `<span class="badge ${badgeClass}">${slugToTitle(subCategory)}</span>` : ""}
-            ${subCategory && publishDateFormatted ? '<span class="meta-separator">|</span>' : ''}
-            ${publishDateFormatted ? `<span class="meta-date">
-              <svg class="icon-calendar" width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1.66669 10C1.66669 6.85734 1.66669 5.286 2.643 4.30968C3.61931 3.33337 5.19066 3.33337 8.33335 3.33337H11.6667C14.8094 3.33337 16.3807 3.33337 17.357 4.30968C18.3334 5.286 18.3334 6.85734 18.3334 10V11.6667C18.3334 14.8094 18.3334 16.3808 17.357 17.3571C16.3807 18.3334 14.8094 18.3334 11.6667 18.3334H8.33335C5.19066 18.3334 3.61931 18.3334 2.643 17.3571C1.66669 16.3808 1.66669 14.8094 1.66669 11.6667V10Z" stroke="currentColor" stroke-width="1.5"/>
-                <path d="M5.83331 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M14.1667 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M2.08331 7.5H17.9166" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-              ${publishDateFormatted}
-            </span>` : ""}
-          </div>
-
+          <h3 class="press-card-title"><a href="story-update?post=${link}">${title}</a></h3>
+          <p class= "press-card-description"><a href="story-update?post=${link}">${description}</a></p>
           <div class="press-card-footer">
             <a href="story-update?post=${link}" class="btn-link">
               READ MORE
