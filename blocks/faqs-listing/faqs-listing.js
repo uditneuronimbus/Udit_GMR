@@ -1,59 +1,108 @@
 export default function decorate(block) {
-  let data = {};
+  const isAuthorMode =
+    document.body.classList.contains('aem-AuthorLayer-Edit') ||
+    window.location.search.includes('wcmmode=edit');
 
-  // read json from embedded script OR dataset
-  try {
-    const jsonScript = block.querySelector('script[type="application/json"]');
-    if (jsonScript) {
-      data = JSON.parse(jsonScript.textContent);
-    }
-  } catch (e) {
-    console.error('FAQ JSON parse error', e);
-  }
+  if (isAuthorMode) return;
 
-  const faqs = data?.faqs || [];
+  const rows = [...block.children];
+  if (!rows.length) return;
 
-  block.innerHTML = '';
+  /* ===============================
+     1️⃣ Section Title + Description
+  =============================== */
 
-  const wrapper = document.createElement('div');
-  wrapper.className = 'faq-wrapper';
+  const sectionTitle =
+    rows[0]?.querySelector('h1,h2,h3,h4,h5,h6')?.textContent?.trim() || '';
 
-  faqs.forEach((faq, index) => {
-    const item = document.createElement('div');
-    item.className = 'faq-item';
+  const sectionDescription =
+    rows[0]?.querySelector('p')?.innerHTML || '';
 
-    const header = document.createElement('button');
-    header.className = 'faq-question';
-    header.innerHTML = `
-      <span>${faq.question}</span>
-      <span class="faq-icon">+</span>
-    `;
+  /* ===============================
+     2️⃣ FAQ Items (Rest of rows)
+  =============================== */
 
-    const body = document.createElement('div');
-    body.className = 'faq-answer';
-    body.innerHTML = `<p>${faq.answer}</p>`;
+  const faqItems = rows.slice(1).map((row) => {
+    const question =
+      row.querySelector('h1,h2,h3,h4,h5,h6')?.textContent?.trim() || '';
 
-    header.addEventListener('click', () => {
-      const isOpen = item.classList.contains('active');
+    const answer =
+      row.querySelector('p, div')?.innerHTML || '';
 
-      // close all
-      wrapper.querySelectorAll('.faq-item').forEach(el => {
-        el.classList.remove('active');
-      });
-
-      if (!isOpen) {
-        item.classList.add('active');
-      }
-    });
-
-    item.append(header, body);
-    wrapper.appendChild(item);
+    return { question, answer };
   });
 
-  block.appendChild(wrapper);
+  /* ===============================
+     3️⃣ Generate HTML
+  =============================== */
+
+  block.innerHTML = `
+    <section class="career-faqs">
+      <div class="career-faqs__container">
+
+        ${
+          sectionTitle
+            ? `<h2 class="career-faqs__title">${sectionTitle}</h2>`
+            : ''
+        }
+
+        ${
+          sectionDescription
+            ? `<div class="career-faqs__desc">${sectionDescription}</div>`
+            : ''
+        }
+
+        <div class="career-faqs__accordion">
+          ${faqItems
+            .map(
+              (item, index) => `
+            <div class="career-faqs__item">
+              <button class="career-faqs__question" aria-expanded="false">
+                <span>${item.question}</span>
+                <span class="career-faqs__icon">+</span>
+              </button>
+              <div class="career-faqs__answer">
+                ${item.answer}
+              </div>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+
+      </div>
+    </section>
+  `;
+
+  /* ===============================
+     4️⃣ Accordion Functionality
+  =============================== */
+
+  const items = block.querySelectorAll('.career-faqs__item');
+
+  items.forEach((item) => {
+    const button = item.querySelector('.career-faqs__question');
+    const answer = item.querySelector('.career-faqs__answer');
+    const icon = item.querySelector('.career-faqs__icon');
+
+    button.addEventListener('click', () => {
+      const isOpen = button.getAttribute('aria-expanded') === 'true';
+
+      // Close all
+      items.forEach((el) => {
+        el.querySelector('.career-faqs__question')
+          .setAttribute('aria-expanded', 'false');
+        el.querySelector('.career-faqs__answer')
+          .classList.remove('is-open');
+        el.querySelector('.career-faqs__icon').textContent = '+';
+      });
+
+      // Open current
+      if (!isOpen) {
+        button.setAttribute('aria-expanded', 'true');
+        answer.classList.add('is-open');
+        icon.textContent = '–';
+      }
+    });
+  });
 }
-
-
-
-
-

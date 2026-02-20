@@ -203,16 +203,4 @@
 
 
 
-.gal-content,
-.gpil-content {
-  display: none;
-}
-
-.gal-content.active-section,
-.gpil-content.active-section {
-  display: block;
-}
-
-
-
 
