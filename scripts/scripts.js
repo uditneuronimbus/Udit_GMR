@@ -149,6 +149,42 @@ export function moveInstrumentation(from, to) {
   );
 }
 
+/**
+ * Rewrites internal links within a container to preserve the current language.
+ * @param {Element} container The container element containing links
+ * @param {string} currentLang The current language code
+ */
+export function localizeNavLinks(container, currentLang) {
+  if (!container || !currentLang || currentLang === "en") return;
+  const links = container.querySelectorAll("a");
+  links.forEach((a) => {
+    const href = a.getAttribute("href");
+    if (href && href.startsWith("/") && !href.startsWith("//")) {
+      const segments = href.split("/");
+      let hasLang = false;
+      let langIndex = -1;
+      for (let i = 0; i < segments.length; i++) {
+        // Match 2-char codes (en, ja) and hyphenated codes (zh-sg, zh-cn)
+        if (/^[a-z]{2}(-[a-z]{2})?$/.test(segments[i])) {
+          hasLang = true;
+          langIndex = i;
+          break;
+        }
+      }
+
+      if (hasLang) {
+        // Replace existing language segment
+        segments[langIndex] = currentLang;
+        a.href = segments.join("/").replace(/\/+/g, "/");
+      } else {
+        // Prepend language segment if not present
+        a.href = `/${currentLang}${href}`.replace(/\/+/g, "/");
+      }
+    }
+  });
+}
+
+
 async function loadFonts() {
   await loadCSS(`${window.hlx.codeBasePath}/styles/fonts.css`);
   try {
