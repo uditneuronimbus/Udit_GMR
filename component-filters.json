@@ -136,7 +136,7 @@
   {
     "id": "career-faqs-list",
     "components": [
-      "faqs-item"
+      "career-faqs-item"
     ]
   },
   {

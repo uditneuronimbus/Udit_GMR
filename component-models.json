@@ -774,13 +774,13 @@
     ]
   },
   {
-    "id": "faqs-item",
+    "id": "career-faqs-item",
     "itemLabel": "question",
     "fields": [
       {
         "component": "text",
         "name": "question",
-        "label": "Faqs Question",
+        "label": "FAQ Question",
         "valueType": "string"
       },
       {
