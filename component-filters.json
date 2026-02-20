@@ -199,9 +199,9 @@
     ]
   },
   {
-    "id": "only-career-faqs-items",
+    "id": "career-faqs-list",
     "components": [
-      "career-faqs-item"
+      "faqs-item"
     ]
   },
   {

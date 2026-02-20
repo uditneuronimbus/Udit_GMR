@@ -1407,8 +1407,7 @@
         "component": "text",
         "name": "sectionTitle",
         "label": "Section Title (Main Heading)",
-        "valueType": "string",
-        "defaultValue": "Everything you Need to Know"
+        "valueType": "string"
       },
       {
         "component": "richtext",
@@ -1419,12 +1418,12 @@
     ]
   },
   {
-    "id": "career-faqs-item",
+    "id": "faqs-item",
     "itemLabel": "title",
     "fields": [
       {
         "component": "text",
-        "name": "title",
+        "name": "question",
         "label": "Faqs Question",
         "valueType": "string"
       },
