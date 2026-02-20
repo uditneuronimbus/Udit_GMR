@@ -757,6 +757,41 @@
     ]
   },
   {
+    "id": "career-faqs-list",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "sectionDescription",
+        "label": "Section Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "career-faqs-item",
+    "itemLabel": "question",
+    "fields": [
+      {
+        "component": "text",
+        "name": "question",
+        "label": "FAQ Question",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "answer",
+        "label": "Answer",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "careers-highlight",
     "fields": [
       {
@@ -1397,41 +1432,6 @@
             "value": "governance"
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "career-faqs-list",
-    "fields": [
-      {
-        "component": "text",
-        "name": "sectionTitle",
-        "label": "Section Title (Main Heading)",
-        "valueType": "string"
-      },
-      {
-        "component": "richtext",
-        "name": "sectionDescription",
-        "label": "Section Description",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "faqs-item",
-    "itemLabel": "title",
-    "fields": [
-      {
-        "component": "text",
-        "name": "question",
-        "label": "Faqs Question",
-        "valueType": "string"
-      },
-      {
-        "component": "richtext",
-        "name": "answer",
-        "label": "Answer",
-        "valueType": "string"
       }
     ]
   },

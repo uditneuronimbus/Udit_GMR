@@ -134,6 +134,12 @@
     ]
   },
   {
+    "id": "career-faqs-list",
+    "components": [
+      "career-faqs-item"
+    ]
+  },
+  {
     "id": "carousel",
     "components": [
       "slide"
@@ -196,12 +202,6 @@
     "id": "factsheet",
     "components": [
       "factsheet-item"
-    ]
-  },
-  {
-    "id": "career-faqs-list",
-    "components": [
-      "faqs-item"
     ]
   },
   {
