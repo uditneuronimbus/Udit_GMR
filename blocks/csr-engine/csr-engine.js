@@ -5,14 +5,13 @@ export default function decorate(block) {
 
   /*
   Expected structure (based on your HTML):
-
   0 → logo image
   1 → title
   2 → subtitle (optional / duplicate title)
   3 → description
   4 → main image
   5 → right description
-  6+ → items (icon + title + desc)
+  6+ → items (csr-engine-item components)
   */
 
   const logo = rows[0]?.querySelector('picture');
@@ -27,7 +26,6 @@ export default function decorate(block) {
   block.innerHTML = '';
 
   /* ================= Header ================= */
-
   const header = document.createElement('div');
   header.className = 'csr-header';
 
@@ -53,7 +51,6 @@ export default function decorate(block) {
   }
 
   /* ================= Layout ================= */
-
   const content = document.createElement('div');
   content.className = 'csr-content';
 
@@ -73,21 +70,41 @@ export default function decorate(block) {
     right.append(rdesc);
   }
 
-  /* ================= Items ================= */
-
+  /* ================= Items Container ================= */
   if (itemRows.length) {
     const itemsWrap = document.createElement('div');
     itemsWrap.className = 'csr-items';
 
     itemRows.forEach((row) => {
+      // Check if this row is a csr-engine-item component
+      const isComponentItem = row.classList?.contains('csr-engine-item') || 
+                             row.dataset?.component === 'csr-engine-item';
+      
       const cols = [...row.children];
 
-      const icon = cols[0]?.querySelector('picture');
-      const itemTitle = cols[1]?.textContent?.trim();
-      const itemDesc = cols[2]?.innerHTML;
+      // Try to extract data from different possible structures
+      let icon = cols[0]?.querySelector('picture');
+      let itemTitle = cols[1]?.textContent?.trim();
+      let itemDesc = cols[2]?.innerHTML;
+
+      // If this is a component item, it might have a different structure
+      if (isComponentItem && cols.length === 1) {
+        // The component might be wrapped in a single div with its own structure
+        const componentContent = cols[0];
+        const componentCols = [...componentContent.children];
+        icon = componentCols[0]?.querySelector('picture') || componentCols[0]?.querySelector('.csr-icon picture');
+        itemTitle = componentCols[1]?.textContent?.trim() || componentCols[0]?.querySelector('.csr-title')?.textContent;
+        itemDesc = componentCols[2]?.innerHTML || componentCols[0]?.querySelector('.csr-description')?.innerHTML;
+      }
 
       const item = document.createElement('div');
       item.className = 'csr-item';
+      
+      // Preserve component identification for Universal Editor
+      if (isComponentItem) {
+        item.classList.add('csr-engine-item');
+        item.setAttribute('data-component', 'csr-engine-item');
+      }
 
       if (icon) {
         const iconWrap = document.createElement('div');
@@ -100,6 +117,7 @@ export default function decorate(block) {
 
       if (itemTitle) {
         const h3 = document.createElement('h3');
+        h3.className = 'csr-item-title';
         h3.textContent = itemTitle;
         textWrap.append(h3);
       }
@@ -111,7 +129,11 @@ export default function decorate(block) {
         textWrap.append(d);
       }
 
-      item.append(textWrap);
+      // Only add textWrap if it has content
+      if (textWrap.children.length > 0) {
+        item.append(textWrap);
+      }
+
       itemsWrap.append(item);
     });
 
@@ -120,5 +142,16 @@ export default function decorate(block) {
 
   content.append(left, right);
 
+  // Assemble the block
   block.append(header, content);
+  
+  // Add data attributes for Universal Editor recognition
+  block.classList.add('csr-engine');
+  block.setAttribute('data-component', 'csr-engine');
+  
+  // Mark the items container for the Universal Editor
+  const itemsContainer = block.querySelector('.csr-items');
+  if (itemsContainer) {
+    itemsContainer.setAttribute('data-container', 'csr-engine-items');
+  }
 }
