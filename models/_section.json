@@ -207,7 +207,8 @@
         "media-cards",
         "photo-gallery-slider",
         "impact-stories",
-        "csr-engine"
+        "csr-engine",
+        "guest-book"
       ]
     }
   ]

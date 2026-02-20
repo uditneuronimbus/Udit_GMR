@@ -68,7 +68,8 @@
       "media-cards",
       "photo-gallery-slider",
       "impact-stories",
-      "csr-engine"
+      "csr-engine",
+      "guest-book"
     ]
   },
   {
@@ -284,6 +285,12 @@
     "id": "gmr-tabs",
     "components": [
       "gmr-tabs-item"
+    ]
+  },
+  {
+    "id": "guest-book",
+    "components": [
+      "guest-book-item"
     ]
   },
   {
