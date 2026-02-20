@@ -258,6 +258,7 @@ export default async function decorate(block) {
 
   function createCardHTML(item) {
     const title = item?.title || "Untitled";
+    const description = item?.description?.plaintext || "";
     const subCategory = item?.subCategory || "";
     const updatedDate = item?.lastUpdated || "";
     const link = item?.slugUrl || "#";
@@ -270,7 +271,7 @@ export default async function decorate(block) {
     return `
       <article class="press-card">
         <div class="press-card-image">
-        <a href="news-update?post=${link}">  
+        <a href="story-update?post=${link}">  
         <img
             src="${item.cardImage?._publishUrl || ""}"
             alt="${item.title || ""}"
@@ -280,8 +281,8 @@ export default async function decorate(block) {
         </div>
 
         <div class="press-card-body">
-          <h3 class="press-card-title"><a href="news-update?post=${link}">${title}</a></h3>
-
+          <h3 class="press-card-title"><a href="story-update?post=${link}">${title}</a></h3>
+          <p class= "press-card-description"><a href="story-update?post=${link}">${description}</a></p>
           <div class="press-card-footer">
             <a href="story-update?post=${link}" class="btn-link">
               READ MORE
