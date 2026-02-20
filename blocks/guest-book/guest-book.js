@@ -84,7 +84,15 @@ export default async function decorate(block) {
       <div class="gBook-card">
 
         <div class="gBook-date">
-          ${date}
+          <span class="icon">
+<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.66675 9.99967C1.66675 6.85698 1.66675 5.28563 2.64306 4.30932C3.61937 3.33301 5.19072 3.33301 8.33341 3.33301H11.6667C14.8094 3.33301 16.3808 3.33301 17.3571 4.30932C18.3334 5.28563 18.3334 6.85698 18.3334 9.99967V11.6663C18.3334 14.809 18.3334 16.3804 17.3571 17.3567C16.3808 18.333 14.8094 18.333 11.6667 18.333H8.33341C5.19072 18.333 3.61937 18.333 2.64306 17.3567C1.66675 16.3804 1.66675 14.809 1.66675 11.6663V9.99967Z" stroke="#333333" stroke-width="1.5"/>
+<path d="M5.83325 3.33301V2.08301" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M14.1667 3.33301V2.08301" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M2.08325 7.5H17.9166" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
+</span>
+          <span>${date}</span>
         </div>
 
         <div class="gBook-desc">
