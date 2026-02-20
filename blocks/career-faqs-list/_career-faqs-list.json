@@ -1,7 +1,7 @@
 {
   "definitions": [
     {
-      "title": "FAQs List",
+      "title": "Career FAQs List",
       "id": "career-faqs-list",
       "plugins": {
         "xwalk": {
@@ -10,7 +10,7 @@
             "template": {
               "name": "career-faqs-list",
               "model": "career-faqs-list",
-              "filter": "only-career-faqs-items"
+              "filter": "career-faqs-list"
             }
           }
         }
@@ -24,7 +24,7 @@
           "page": {
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
-              "name": "career-faqs-item",
+              "name": "Career FAQs Item",
               "model": "career-faqs-item"
             }
           }
@@ -40,8 +40,7 @@
           "component": "text",
           "name": "sectionTitle",
           "label": "Section Title (Main Heading)",
-          "valueType": "string",
-          "defaultValue": "Everything you Need to Know"
+          "valueType": "string"
         },
         {
           "component": "richtext",
@@ -53,12 +52,12 @@
     },
     {
       "id": "career-faqs-item",
-      "itemLabel": "title",
+      "itemLabel": "question",
       "fields": [
         {
           "component": "text",
-          "name": "title",
-          "label": "Faqs Question",
+          "name": "question",
+          "label": "FAQ Question",
           "valueType": "string"
         },
         {
@@ -72,7 +71,7 @@
   ],
   "filters": [
     {
-      "id": "only-career-faqs-items",
+      "id": "career-faqs-list",
       "components": [
         "career-faqs-item"
       ]
