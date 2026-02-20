@@ -22,6 +22,14 @@
 .awards-author-note p{margin:8px 0;font-size:var(--fs-regular)}
 .awards-author-note strong{color:var(--blue)}
 .awards-filter-runtime+*{display:none}
+
+.awards-filter-container.alignment-center .default-content-wrapper { background-color: var(--lgrey); text-align: center; padding-top: 5rem;  }
+.awards-filter-container.alignment-center .default-content-wrapper h2 { font-weight: var(--fw-regular); }
+.awards-filter-container.alignment-center .default-content-wrapper p { font-size: var(--fs-medium); color: var(--charcoal); margin-bottom: 0; }
+.awards-filter-container.alignment-center .default-content-wrapper h2, .awards-filter-container.alignment-center .default-content-wrapper p { max-width: 755px; margin: auto;}
+
+
+
 @media (max-width:1199px){
 .award-card { flex-direction: column;}
 .award-img { flex: 0 0 100%; }
