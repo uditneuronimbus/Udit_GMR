@@ -6,6 +6,32 @@ const PUBLISH_DOMAIN =
   "https://publish-p168597-e1803019.adobeaemcloud.com";
 
 /* ================================
+   Swiper Loader
+================================ */
+const SWIPER_JS =
+  "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js";
+const SWIPER_CSS =
+  "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css";
+
+function loadScript(src) {
+  return new Promise((resolve) => {
+    if (document.querySelector(`script[src="${src}"]`)) return resolve();
+    const s = document.createElement("script");
+    s.src = src;
+    s.onload = resolve;
+    document.body.appendChild(s);
+  });
+}
+
+function loadCSS(href) {
+  if (document.querySelector(`link[href="${href}"]`)) return;
+  const l = document.createElement("link");
+  l.rel = "stylesheet";
+  l.href = href;
+  document.head.appendChild(l);
+}
+
+/* ================================
    Fix DAM image paths
 ================================ */
 function fixImageSrc(html) {
@@ -17,11 +43,28 @@ function fixImageSrc(html) {
   );
 }
 
+/* ================================
+   Dynamic Section Renderer (NEW)
+================================ */
+function renderSection(title, content) {
+  if (!title && !content) return "";
+
+  return `
+    <div class="section column">
+      <div class="row">
+        <div class="col-md-5">
+          ${title ? `<h2>${title}</h2>` : ""}
+        </div>
+        <div class="col-md-7">
+          ${fixImageSrc(content || "")}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 export default async function decorate(block) {
   const slug = getSlugFromURL();
-  
-  const currentUrl = window.location.href;
-
   block.innerHTML = "";
 
   if (!slug) {
@@ -38,34 +81,22 @@ export default async function decorate(block) {
         <p class="loading">Loading article...</p>
       </div>
     </div>
-
-   
   `;
 
   block.appendChild(container);
 
   const contentWrapper = container.querySelector(".news-detail-wrapper");
 
-    
-
-  /* ================================
-     Fetch news detail
-  ================================ */
   try {
     const apiUrl =
-        `${getApiHost()}/api/v1/web/gmr-api/story-details` +
-        `?slugUrl=${encodeURIComponent(slug)}`;
+      `${getApiHost()}/api/v1/web/gmr-api/story-details` +
+      `?slugUrl=${encodeURIComponent(slug)}`;
 
-    console.log("________________________", apiUrl);
-    
     const res = await fetch(apiUrl);
-
     if (!res.ok) throw new Error(res.status);
 
     const json = await res.json();
-        console.log(json);
     const items = json?.data?.data?.successStoryList?.items || [];
-
     const item = items[0] || null;
 
     if (!item) {
@@ -104,83 +135,133 @@ export default async function decorate(block) {
 
     const hasTitle = !!item.title;
     const hasImage = !!item.cardImage?._publishUrl;
-   // const hasContent = !!item.description?.html;
+
+    /* ================================
+       Collect Gallery Images
+    ================================ */
+    const galleryImages = [
+      item.image1?._publishUrl,
+      item.image2?._publishUrl,
+      item.image3?._publishUrl,
+      item.image4?._publishUrl,
+      item.image5?._publishUrl,
+      item.image6?._publishUrl,
+      item.image7?._publishUrl,
+      item.image8?._publishUrl,
+      item.image9?._publishUrl,
+      item.image10?._publishUrl,
+    ].filter(Boolean);
+
+    /* ================================
+       Banner Images
+    ================================ */
+    const bannerDesktop =
+      item.bannerDesktop?._publishUrl || "../../img/press-desk.jpg";
+    const bannerMobile =
+      item.bannerMobile?._publishUrl || "../../img/press-mob.jpg";
 
     /* ================================
        Render page
     ================================ */
     contentWrapper.innerHTML = `
+      <div class="press-hero-wrapper">
+        <section class="press-banner">
+          <div class="press-hero-media">
+            <picture class="d-none d-md-block">
+              <img src="${bannerDesktop}" width="1920" height="550">
+            </picture>
+            <picture class="d-block d-md-none">
+              <img src="${bannerMobile}" width="640" height="965">
+            </picture>
+          </div>
+
+          <div class="press-hero-content">
+            <div class="container">
+              <button class="btn-primary btn-sm btn back-btn">Back</button>
+
+              <div class="press-hero-title">
+                ${item.title || "News Title"}
+              </div>
+
+              <div class="press-hero-meta">
+                ${item.subCategory ? `<span>${item.subCategory}</span>` : ""}
+                ${publishDateFormatted ? `<span>${publishDateFormatted}</span>` : ""}
+                ${item.location ? `<span>${item.location}</span>` : ""}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
 
       <article class="news-article">
 
-    ${
-      hasTitle
-        ? `<div class="news-title">
-             <h1>${item.title}</h1>
-           </div>`
-        : ""
-    }
+        ${hasTitle ? `
+          <div class="news-title">
+            <h1>${item.title}</h1>
+          </div>
+        ` : ""}
 
-    ${
-      hasImage
-        ? `<div class="news-card">
-             <img
-               src="${item.cardImage._publishUrl}"
-               alt="${item.title || "News image"}"
-             />
-           </div>`
-        : ""
-    }
+        ${hasImage ? `
+          <div class="news-card">
+            <img src="${item.cardImage._publishUrl}" alt="${item.title || ""}"/>
+          </div>
+        ` : ""}
 
-             <div>subCategory: ${item.subCategory}</div>
-             <div>visitUrl: ${item.visitUrl}</div>
-             <div>slugUrl: ${item.slugUrl}</div>
-            <div>approachStrategyTitle: ${item.approachStrategyTitle}</div>
-            <div>approachStrategy: ${item.approachStrategy?.html}</div>
-            <div>contextHistoricalBackdropTitle: ${item.contextHistoricalBackdropTitle}</div>
-            <div>contextHistoricalBackdrop: ${item.contextHistoricalBackdrop?.html}</div>
-            <div>coreProblemStatementTitle: ${item.coreProblemStatementTitle}</div>
-            <div>coreProblemStatement: ${item.coreProblemStatement?.html}</div>
-            <div>executiveSummaryTitle: ${item.executiveSummaryTitle}</div>
-            <div>executiveSummary: ${item.executiveSummary?.html}</div>
-            <div>globalBenchmarkingInsightsTitle: ${item.globalBenchmarkingInsightsTitle}</div>
-            <div>globalBenchmarkingInsights: ${item.globalBenchmarkingInsights?.html}</div>
-            <div>implementationTitle: ${item.implementationTitle}</div>
-            <div>implementation: ${item.implementation?.html}</div>
-            <div>leadershipPerspectivesTitle: ${item.leadershipPerspectivesTitle}</div>
-            <div>leadershipPerspectives: ${item.leadershipPerspectives?.html}</div>
-            <div>openingNarrativeTitle: ${item.openingNarrativeTitle}</div>
-            <div>openingNarrative: ${item.openingNarrative?.html}</div>
-            <div>sustainabilityImpactTitle: ${item.sustainabilityImpactTitle}</div>
-            <div>outcomesImpactwhereeverSustainabilityImpact: ${item.outcomesImpactwhereeverSustainabilityImpact?.html}</div>
-            <div>stakeholderMapTitle: ${item.stakeholderMapTitle}</div>
-            <div>stakeholderMap: ${item.stakeholderMap?.html}</div>
-            <div>stakeholderMapTitle: ${item.stakeholderMapTitle}</div>
-            <div>stakeholderMap: ${item.stakeholderMap?.html}</div>
-            <div>Image 1: ${item.image1?._publishUrl}</div>
-            <div>Image 2: ${item.image2?._publishUrl}</div>
-            <div>Image 3: ${item.image3?._publishUrl}</div>
-            <div>Image 4: ${item.image4?._publishUrl}</div>
-            <div>Image 5: ${item.image5?._publishUrl}</div>
-            <div>Image 6: ${item.image6?._publishUrl}</div>
-            <div>Image 7: ${item.image7?._publishUrl}</div>
-            <div>Image 8: ${item.image8?._publishUrl}</div>
-            <div>Image 9: ${item.image9?._publishUrl}</div>
-            <div>Image 10: ${item.image10?._publishUrl}</div>
+        <!-- Dynamic Sections -->
+        ${[
+          renderSection(item.approachStrategyTitle, item.approachStrategy?.html),
+          renderSection(item.contextHistoricalBackdropTitle, item.contextHistoricalBackdrop?.html),
+          renderSection(item.coreProblemStatementTitle, item.coreProblemStatement?.html),
+          renderSection(item.executiveSummaryTitle, item.executiveSummary?.html),
+          renderSection(item.globalBenchmarkingInsightsTitle, item.globalBenchmarkingInsights?.html),
+          renderSection(item.implementationTitle, item.implementation?.html),
+          renderSection(item.leadershipPerspectivesTitle, item.leadershipPerspectives?.html),
+          renderSection(item.openingNarrativeTitle, item.openingNarrative?.html),
+          renderSection(item.sustainabilityImpactTitle, item.outcomesImpactwhereeverSustainabilityImpact?.html),
+          renderSection(item.stakeholderMapTitle, item.stakeholderMap?.html),
+        ].join("")}
 
+        ${galleryImages.length ? `
+          <div class="news-gallery swiper">
+            <div class="swiper-wrapper">
+              ${galleryImages.map(img => `
+                <div class="swiper-slide">
+                  <img src="${img}" alt="Gallery image"/>
+                </div>
+              `).join("")}
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+          </div>
+        ` : ""}
 
-  </article>
+      </article>
     `;
 
     /* ================================
-       Events
+       Back Button
     ================================ */
-
     container.querySelectorAll(".back-btn").forEach((btn) => {
       btn.addEventListener("click", () => history.back());
     });
 
+    /* ================================
+       Init Swiper
+    ================================ */
+    if (galleryImages.length) {
+      loadCSS(SWIPER_CSS);
+      await loadScript(SWIPER_JS);
 
+      new Swiper(".news-gallery", {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    }
   } catch (err) {
     console.error("News detail error:", err);
     contentWrapper.innerHTML = "<p>Error loading article.</p>";
