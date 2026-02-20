@@ -2,9 +2,6 @@ export default function decorate(block) {
   const rows = [...block.children];
   if (rows.length < 6) return;
 
-  // Hide original authored rows (keep them for Universal Editor)
-  rows.forEach((row) => (row.style.display = "none"));
-
   /*
   Expected structure (based on your HTML):
   0 → logo image
@@ -25,9 +22,25 @@ export default function decorate(block) {
 
   const itemRows = rows.slice(6);
 
-  /* ================= Create new rendered section ================= */
-  const renderedSection = document.createElement('div');
-  renderedSection.className = 'csr-rendered';
+  /* ================= Create a hidden editor structure ================= */
+  // This will hold the component structure for the Universal Editor
+  const editorStructure = document.createElement('div');
+  editorStructure.className = 'csr-editor-structure';
+  editorStructure.setAttribute('aria-hidden', 'true');
+  editorStructure.style.display = 'none';
+  
+  // Move original rows to editor structure
+  rows.forEach((row) => {
+    editorStructure.appendChild(row.cloneNode(true));
+  });
+  
+  block.appendChild(editorStructure);
+
+  /* ================= Clear block for rendering ================= */
+  // Remove all original children except our editor structure
+  while (block.children.length > 1) {
+    block.removeChild(block.firstChild);
+  }
 
   /* ================= Header ================= */
   const header = document.createElement('div');
@@ -36,7 +49,7 @@ export default function decorate(block) {
   if (logo) {
     const logoWrap = document.createElement('div');
     logoWrap.className = 'csr-logo';
-    logoWrap.append(logo.cloneNode(true)); // Clone to preserve original
+    logoWrap.append(logo);
     header.append(logoWrap);
   }
 
@@ -61,7 +74,7 @@ export default function decorate(block) {
   /* ---- Left Image ---- */
   const left = document.createElement('div');
   left.className = 'csr-left';
-  if (mainImage) left.append(mainImage.cloneNode(true));
+  if (mainImage) left.append(mainImage);
 
   /* ---- Right Side ---- */
   const right = document.createElement('div');
@@ -79,12 +92,7 @@ export default function decorate(block) {
     const itemsWrap = document.createElement('div');
     itemsWrap.className = 'csr-items';
 
-    itemRows.forEach((row, index) => {
-      // Preserve component identification for Universal Editor
-      if (!row.classList.contains('csr-engine-item')) {
-        row.classList.add('csr-engine-item');
-      }
-      
+    itemRows.forEach((row) => {
       const cols = [...row.children];
 
       const icon = cols[0]?.querySelector('picture');
@@ -94,23 +102,20 @@ export default function decorate(block) {
       const item = document.createElement('div');
       item.className = 'csr-item';
       
-      // Add data attributes to help with editing
-      item.setAttribute('data-component', 'csr-engine-item');
-      item.setAttribute('data-index', index);
+      // Add class for styling but NOT for component identification
+      // This prevents the editor from seeing it as a separate component
 
       if (icon) {
         const iconWrap = document.createElement('div');
         iconWrap.className = 'csr-icon';
-        iconWrap.append(icon.cloneNode(true));
+        iconWrap.append(icon);
         item.append(iconWrap);
       }
 
       const textWrap = document.createElement('div');
-      textWrap.className = 'csr-item-text';
 
       if (itemTitle) {
         const h3 = document.createElement('h3');
-        h3.className = 'csr-item-title';
         h3.textContent = itemTitle;
         textWrap.append(h3);
       }
@@ -122,10 +127,7 @@ export default function decorate(block) {
         textWrap.append(d);
       }
 
-      if (textWrap.children.length > 0) {
-        item.append(textWrap);
-      }
-
+      item.append(textWrap);
       itemsWrap.append(item);
     });
 
@@ -133,11 +135,7 @@ export default function decorate(block) {
   }
 
   content.append(left, right);
-  renderedSection.append(header, content);
-
-  // Add the rendered section after the original block content
-  block.after(renderedSection);
-
-  // Add a class to identify the block type (optional)
-  block.classList.add('csr-engine-container');
+  
+  // Add all rendered content to block
+  block.append(header, content);
 }
