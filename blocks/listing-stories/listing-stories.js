@@ -13,7 +13,7 @@ export default async function decorate(block) {
   const dynamicSubCats = data.subCategories || [];
 
   const defaultYear = "All";
-  const limit = 2;
+  const limit = 10;
   
   /* ================= State Management ================= */
   let state = {
