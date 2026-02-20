@@ -1,0 +1,69 @@
+/* section */
+.guestbook-sec {
+  padding: 80px 0;
+}
+
+.guestbook-title {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+/* card */
+.gBook-card {
+  background: #f3f4f6;
+  border-radius: 14px;
+  padding: 40px 30px;
+  height: 100%;
+  position: relative;
+}
+
+/* quote icon effect */
+.gBook-card::before {
+  content: "“";
+  font-size: 120px;
+  color: rgba(0,0,0,0.05);
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-family: serif;
+}
+
+/* date */
+.gBook-date {
+  text-align: right;
+  font-size: 14px;
+  color: #7a7a7a;
+  margin-bottom: 20px;
+}
+
+/* description */
+.gBook-desc {
+  font-size: 18px;
+  line-height: 1.7;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+/* name */
+.gBook-name {
+  color: #0b4ea2;
+  font-size: 22px;
+  margin: 0;
+}
+
+.gBook-role {
+  display: block;
+  font-size: 16px;
+  color: #555;
+  font-weight: 400;
+  margin-top: 6px;
+}
+
+/* swiper nav */
+.guestbook-nav {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 30px;
+}
