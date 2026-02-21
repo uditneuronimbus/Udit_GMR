@@ -37,6 +37,11 @@
             "id": "business-enablers",
             "fields": [
                 {
+                    "component": "aem-content",
+                    "name": "reference",
+                    "label": "Reference"
+                },
+                {
                     "component": "text",
                     "name": "title",
                     "label": "Section Title",
