@@ -75,17 +75,18 @@
                     "component": "select",
                     "name": "type",
                     "label": "Component Type",
+                    "valueType": "string",
                     "options": [
                         {
-                            "label": "Image Title Desc Button",
+                            "name": "Image Title Desc Button",
                             "value": "image-title-desc-button"
                         },
                         {
-                            "label": "Overlay Banner",
+                            "name": "Overlay Banner",
                             "value": "overlay-banner"
                         },
                         {
-                            "label": "Our Capabilities",
+                            "name": "Our Capabilities",
                             "value": "capabilities"
                         }
                     ]
