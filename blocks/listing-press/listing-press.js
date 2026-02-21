@@ -194,67 +194,49 @@ export default async function decorate(block) {
           <div class="mobile-filter-overlay"></div>
           <div class="mobile-filter-content">
             <div class="modal-header">
-              <h3>Select Filter</h3>
+              <h3>Filter by Category</h3>
               <button class="close-modal">×</button>
             </div>
             <div class="modal-body">
-              <div class="filter-group year-month-group" style="display: none;">
-                <h4>Year</h4>
-                <label class="filter-option">
-                  <input type="radio" name="mobile-year" value="" checked>
-                  <span>All Years</span>
-                </label>
+              <div class="filter-group year-group" style="display: none;">
+                <label><input type="radio" name="mobile-year" value="" checked> All Years</label>
                 ${dynamicYears.map(y =>
-                  `<label class="filter-option">
-                    <input type="radio" name="mobile-year" value="${y}">
-                    <span>${y}</span>
-                  </label>`
-                ).join("")}
-                
-                <h4>Month</h4>
-                <label class="filter-option">
-                  <input type="radio" name="mobile-month" value="" checked>
-                  <span>All Months</span>
-                </label>
-                ${dynamicMonths.map(m =>
-                  `<label class="filter-option">
-                    <input type="radio" name="mobile-month" value="${m}">
-                    <span>${m}</span>
-                  </label>`
+                  `<label><input type="radio" name="mobile-year" value="${y}"> ${y}</label>`
                 ).join("")}
               </div>
               
+              <div class="filter-group month-group" style="display: none;">
+                <label><input type="radio" name="mobile-month" value="" checked> All Months</label>
+                <label><input type="radio" name="mobile-month" value="01"> January</label>
+                <label><input type="radio" name="mobile-month" value="02"> February</label>
+                <label><input type="radio" name="mobile-month" value="03"> March</label>
+                <label><input type="radio" name="mobile-month" value="04"> April</label>
+                <label><input type="radio" name="mobile-month" value="05"> May</label>
+                <label><input type="radio" name="mobile-month" value="06"> June</label>
+                <label><input type="radio" name="mobile-month" value="07"> July</label>
+                <label><input type="radio" name="mobile-month" value="08"> August</label>
+                <label><input type="radio" name="mobile-month" value="09"> September</label>
+                <label><input type="radio" name="mobile-month" value="10"> October</label>
+                <label><input type="radio" name="mobile-month" value="11"> November</label>
+                <label><input type="radio" name="mobile-month" value="12"> December</label>
+              </div>
+              
               <div class="filter-group category-group" style="display: none;">
-                <h4>Business Category</h4>
-                <label class="filter-option">
-                  <input type="radio" name="mobile-subcat" value="" checked>
-                  <span>All Categories</span>
-                </label>
+                <label><input type="radio" name="mobile-subcat" value="" checked> All Categories</label>
                 ${dynamicSubCats.map(s =>
-                  `<label class="filter-option">
-                    <input type="radio" name="mobile-subcat" value="${s}">
-                    <span>${s}</span>
-                  </label>`
+                  `<label><input type="radio" name="mobile-subcat" value="${s}"> ${s}</label>`
                 ).join("")}
               </div>
               
               <div class="filter-group tag-group" style="display: none;">
-                <h4>Tags</h4>
-                <label class="filter-option">
-                  <input type="radio" name="mobile-tag" value="" checked>
-                  <span>All Tags</span>
-                </label>
+                <label><input type="radio" name="mobile-tag" value="" checked> All Tags</label>
                 ${dynamicTags.map(t =>
-                  `<label class="filter-option">
-                    <input type="radio" name="mobile-tag" value="${t}">
-                    <span>${t}</span>
-                  </label>`
+                  `<label><input type="radio" name="mobile-tag" value="${t}"> ${t}</label>`
                 ).join("")}
               </div>
             </div>
-            <div class="modal-footer">
-              <button class="btn-secondary cancel-btn">Cancel</button>
-              <button class="btn-primary apply-btn">Apply Filters</button>
+            <div class="apply-filter-btn">
+              <button class="apply-btn">Apply</button>
             </div>
           </div>
         </div>
@@ -279,9 +261,9 @@ export default async function decorate(block) {
   const mobileModal = block.querySelector('.mobile-filter-modal');
   const modalOverlay = block.querySelector('.mobile-filter-overlay');
   const closeModalBtn = block.querySelector('.close-modal');
-  const cancelBtn = block.querySelector('.cancel-btn');
   const applyBtn = block.querySelector('.apply-btn');
-  const yearMonthGroup = block.querySelector('.year-month-group');
+  const yearGroup = block.querySelector('.year-group');
+  const monthGroup = block.querySelector('.month-group');
   const categoryGroup = block.querySelector('.category-group');
   const tagGroup = block.querySelector('.tag-group');
 
@@ -290,7 +272,13 @@ export default async function decorate(block) {
   function updateHeader() {
     const parts = [];
     if (state.year) parts.push(state.year);
-    if (state.month) parts.push(state.month);
+    if (state.month) {
+      // Convert month number to month name
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                         'July', 'August', 'September', 'October', 'November', 'December'];
+      const monthName = monthNames[parseInt(state.month) - 1] || state.month;
+      parts.push(monthName);
+    }
     if (state.subCategory) parts.push(slugToTitle(state.subCategory));
     if (state.tag) parts.push(state.tag);
     summaryText.textContent = parts.length ? parts.join(" • ") : "All Years";
@@ -311,7 +299,7 @@ export default async function decorate(block) {
     const subCategory = item?.subCategory || "";
     const updatedDate = item?.lastUpdated || "";
     const link = item?.slugUrl || "#";
-    const publishDateRaw = item.publishDate?.iso || item.publishDate?.value || item.publishDate || "";
+    const publishDateRaw = item.publishMonth + " " + item.publishYear;  
     const publishDateFormatted = formatDate(publishDateRaw);
     
     // Create badge class from subCategory
@@ -320,15 +308,17 @@ export default async function decorate(block) {
     return `
       <article class="press-card">
         <div class="press-card-image">
-          <img
+        <a href="news-update?post=${link}">  
+        <img
             src="${item.cardImage?._publishUrl || ""}"
             alt="${item.title || ""}"
             loading="lazy"
           />
+          </a>
         </div>
 
         <div class="press-card-body">
-          <h3 class="press-card-title">${title}</h3>
+          <h3 class="press-card-title"><a href="news-update?post=${link}">${title}</a></h3>
 
           <div class="press-card-meta">
             ${subCategory ? `<span class="badge ${badgeClass}">${slugToTitle(subCategory)}</span>` : ""}
@@ -519,45 +509,45 @@ export default async function decorate(block) {
     document.body.style.overflow = 'hidden';
     
     // Hide all groups first
-    yearMonthGroup.style.display = 'none';
+    yearGroup.style.display = 'none';
+    monthGroup.style.display = 'none';
     categoryGroup.style.display = 'none';
     tagGroup.style.display = 'none';
     
-    // Show selected group and update modal title
-    const modalTitle = mobileModal.querySelector('.modal-header h3');
+    // Show selected group based on button type
     switch(type) {
       case 'year-month':
-        yearMonthGroup.style.display = 'block';
-        modalTitle.textContent = 'Filter by Year & Month';
-        
-        // Set current values
-        const yearRadio = yearMonthGroup.querySelector(`input[name="mobile-year"][value="${state.year}"]`);
-        if (yearRadio) yearRadio.checked = true;
-        else yearMonthGroup.querySelector('input[name="mobile-year"][value=""]').checked = true;
-        
-        const monthRadio = yearMonthGroup.querySelector(`input[name="mobile-month"][value="${state.month}"]`);
-        if (monthRadio) monthRadio.checked = true;
-        else yearMonthGroup.querySelector('input[name="mobile-month"][value=""]').checked = true;
+        yearGroup.style.display = 'block';
+        monthGroup.style.display = 'block';
         break;
-        
       case 'category':
         categoryGroup.style.display = 'block';
-        modalTitle.textContent = 'Filter by Category';
-        
-        const catRadio = categoryGroup.querySelector(`input[name="mobile-subcat"][value="${state.subCategory}"]`);
-        if (catRadio) catRadio.checked = true;
-        else categoryGroup.querySelector('input[name="mobile-subcat"][value=""]').checked = true;
         break;
-        
       case 'tag':
         tagGroup.style.display = 'block';
-        modalTitle.textContent = 'Filter by Tags';
-        
-        const tagRadio = tagGroup.querySelector(`input[name="mobile-tag"][value="${state.tag}"]`);
-        if (tagRadio) tagRadio.checked = true;
-        else tagGroup.querySelector('input[name="mobile-tag"][value=""]').checked = true;
         break;
     }
+    
+    // Set current values for each group
+    // Year group
+    const yearRadio = yearGroup.querySelector(`input[name="mobile-year"][value="${state.year}"]`);
+    if (yearRadio) yearRadio.checked = true;
+    else yearGroup.querySelector('input[name="mobile-year"][value=""]').checked = true;
+    
+    // Month group
+    const monthRadio = monthGroup.querySelector(`input[name="mobile-month"][value="${state.month}"]`);
+    if (monthRadio) monthRadio.checked = true;
+    else monthGroup.querySelector('input[name="mobile-month"][value=""]').checked = true;
+    
+    // Category group
+    const catRadio = categoryGroup.querySelector(`input[name="mobile-subcat"][value="${state.subCategory}"]`);
+    if (catRadio) catRadio.checked = true;
+    else categoryGroup.querySelector('input[name="mobile-subcat"][value=""]').checked = true;
+    
+    // Tag group
+    const tagRadio = tagGroup.querySelector(`input[name="mobile-tag"][value="${state.tag}"]`);
+    if (tagRadio) tagRadio.checked = true;
+    else tagGroup.querySelector('input[name="mobile-tag"][value=""]').checked = true;
   }
 
   function closeMobileModal() {
@@ -566,35 +556,31 @@ export default async function decorate(block) {
   }
 
   function applyMobileFilters() {
-    if (yearMonthGroup.style.display !== 'none') {
-      const selectedYear = yearMonthGroup.querySelector('input[name="mobile-year"]:checked');
-      const selectedMonth = yearMonthGroup.querySelector('input[name="mobile-month"]:checked');
-      
-      if (selectedYear && selectedYear.value !== state.year) {
-        state.year = selectedYear.value;
-        state.page = 1;
-      }
-      
-      if (selectedMonth && selectedMonth.value !== state.month) {
-        state.month = selectedMonth.value;
-        state.page = 1;
-      }
+    // Get values from all radio groups
+    const selectedYear = yearGroup.querySelector('input[name="mobile-year"]:checked');
+    const selectedMonth = monthGroup.querySelector('input[name="mobile-month"]:checked');
+    const selectedCat = categoryGroup.querySelector('input[name="mobile-subcat"]:checked');
+    const selectedTag = tagGroup.querySelector('input[name="mobile-tag"]:checked');
+    
+    // Update state if values changed
+    if (selectedYear && selectedYear.value !== state.year) {
+      state.year = selectedYear.value;
+      state.page = 1;
     }
     
-    if (categoryGroup.style.display !== 'none') {
-      const selectedCat = categoryGroup.querySelector('input[name="mobile-subcat"]:checked');
-      if (selectedCat && selectedCat.value !== state.subCategory) {
-        state.subCategory = selectedCat.value;
-        state.page = 1;
-      }
+    if (selectedMonth && selectedMonth.value !== state.month) {
+      state.month = selectedMonth.value;
+      state.page = 1;
     }
     
-    if (tagGroup.style.display !== 'none') {
-      const selectedTag = tagGroup.querySelector('input[name="mobile-tag"]:checked');
-      if (selectedTag && selectedTag.value !== state.tag) {
-        state.tag = selectedTag.value;
-        state.page = 1;
-      }
+    if (selectedCat && selectedCat.value !== state.subCategory) {
+      state.subCategory = selectedCat.value;
+      state.page = 1;
+    }
+    
+    if (selectedTag && selectedTag.value !== state.tag) {
+      state.tag = selectedTag.value;
+      state.page = 1;
     }
     
     closeMobileModal();
@@ -684,24 +670,38 @@ export default async function decorate(block) {
     }
   });
 
+  function scrollWithOffset(element, offset = 150) {
+  if (!element) return;
+
+  const top = element.offsetTop - offset;
+
+  window.scrollTo({
+    top: top > 0 ? top : 0,
+    behavior: "smooth"
+  });
+}
+
   // Pagination clicks
-  desktopPagination.addEventListener("click", (e) => {
-    const btn = e.target.closest(".page-btn");
-    if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
+  desktopPagination.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".page-btn");
+  if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
 
-    state.page = parseInt(btn.dataset.page, 10);
-    renderCards();
-    desktopList.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
+  state.page = parseInt(btn.dataset.page, 10);
 
-  mobilePagination.addEventListener("click", (e) => {
-    const btn = e.target.closest(".page-btn");
-    if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
+  await renderCards();
+  scrollWithOffset(desktopList, 300);
+});
 
-    state.page = parseInt(btn.dataset.page, 10);
-    renderCards();
-    mobileList.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
+mobilePagination.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".page-btn");
+  if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
+
+  state.page = parseInt(btn.dataset.page, 10);
+
+  await renderCards();
+  scrollWithOffset(mobileList, 300);
+});
+
 
   // Mobile Filter Buttons
   mobileFilterBtns.forEach(btn => {
@@ -713,7 +713,6 @@ export default async function decorate(block) {
   // Mobile Modal Events
   modalOverlay.addEventListener('click', closeMobileModal);
   closeModalBtn.addEventListener('click', closeMobileModal);
-  cancelBtn.addEventListener('click', closeMobileModal);
   applyBtn.addEventListener('click', applyMobileFilters);
 
   // Escape key to close modal

@@ -1,26 +1,32 @@
 import { getApiHost } from "../../scripts/api.js";
 import { slugToTitle } from "../../scripts/common.js";
+import { formatDate } from "../../scripts/common.js";
 
+function getCategoryFromURL() {
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  if (!parts.length) return "";
 
+  let slug = parts[parts.length - 1].toLowerCase();
 
-/* ================================
-   Date formatter
-================================ */
-function formatDate(dateString) {
-  if (!dateString) return "";
+  // Custom overrides
+  const slugMap = {
+    "blogs": "blog",
+  };
 
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return "";
-
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
+  return slugMap[slug] || slug;
 }
 
 export default async function decorate(block) {
-  const labelText = block.textContent.trim() || "LATEST PRESS UPDATE";
+  const limit = 3;
+  const offset = 0;
+  const category = getCategoryFromURL();
+  let labeltitle = '';
+  if (category === "press-release") {
+    labeltitle = "LATEST PRESS RELEASE";
+  } else if (category === "blog") {
+    labeltitle = "LATEST INSIGHTS";
+  }
+  let labelText = block.textContent.trim() || labeltitle;
   block.innerHTML = "";
   
 
@@ -41,37 +47,29 @@ export default async function decorate(block) {
      Fetch latest press
   ================================ */
   try {
-      const limit = 3;
-      const offset = 0;
-      const category = "press-release";
-
      const apiUrl =
-          `${getApiHost()}/api/v1/web/gmr-api/recent-posts` +
-          `?limit=${encodeURIComponent(limit)}` +
-          `&soffset=${encodeURIComponent(offset)}` +
-          `&category=${encodeURIComponent(category)}`;
-    const res = await fetch(apiUrl);
-    if (!res.ok) throw new Error(`API error ${res.status}`);
+          `${getApiHost()}/api/v1/web/gmr-api/latest-news` +
+          `?category=${encodeURIComponent(category)}`;
+          
 
-    const json = await res.json();
-    const items = json?.data?.data?.newsList?.items || [];
-    if (!items.length) {
-      block.innerHTML = "<p>No news available.</p>";
-      return;
-    }
-
-    const item = items[0];
-    
+          
+          const res = await fetch(apiUrl);
+          if (!res.ok) throw new Error(`API error ${res.status}`);
+          
+          const json = await res.json();
+          const items = json?.data?.data?.newsList?.items || [];
+          if (!items.length) {
+            block.innerHTML = "<p>No news available.</p>";
+            return;
+          }
+          
+          const item = items[0];
     if (!item) {
-      wrapper.innerHTML = "<p>No press updates found.</p>";
+      wrapper.innerHTML = `<p>No ${category} updates found.</p>`;
       return;
     }
 
-    const publishDateRaw =
-      item.publishDate?.iso ||
-      item.publishDate?.value ||
-      item.publishDate ||
-      "";
+    const publishDateRaw = item.publishMonth + " " + item.publishYear;
 
     const publishDateFormatted = formatDate(publishDateRaw);
     const categorySlug = (item.subCategory || item.category || "press")
@@ -86,10 +84,6 @@ export default async function decorate(block) {
         <h1 class="lpu-title">
           ${item.title || ""}
         </h1>
-
-        <p class="lpu-location">
-          ${item.location || item.city || "Location not specified"}
-        </p>
 
         <div class="lpu-meta">
           <span class="lpu-category badge ${categorySlug}">
@@ -106,6 +100,9 @@ export default async function decorate(block) {
             ${publishDateFormatted}
           </span>
         </div>
+        <p class="lpu-description">
+          ${item.description?.plaintext || "No description available."}
+        </p>
 
         <a
           href="/en/news-update?post=${item.slugUrl}"
@@ -124,7 +121,7 @@ export default async function decorate(block) {
       </div>
     `;
   } catch (err) {
-    console.error("Latest press update error:", err);
+    console.error(`Latest ${category} update error:`, err);
     wrapper.innerHTML = "<p>Error loading press update.</p>";
   }
 }

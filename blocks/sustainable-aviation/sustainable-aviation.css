@@ -35,6 +35,10 @@ display: block;
   margin-bottom: 64px;
 }
 
+.sa-title strong {
+  font-weight: 600;
+}
+
 .sa-header h2 {
   font-size: 48px;
   font-weight: 400;
@@ -74,7 +78,7 @@ display: block;
 }
 
 .sa-card-content {
-  padding: 20px 37px 30px;
+  padding: 20px 61px 10px;
   background-color: var(--white );
   /* min-height: 230px; */
 }
@@ -132,5 +136,16 @@ display: block;
     grid-column: 1 / -1;      
     max-width: 50%;           
     justify-self: center;     
+  }
+}
+
+/* ================================
+   Center last card if total is odd (Desktop only)
+================================ */
+@media (min-width: 993px) {
+  .sa-items > .sa-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;   /* Take full row */
+    max-width: 50%;        /* Same width as one card */
+    justify-self: center;  /* Center it */
   }
 }

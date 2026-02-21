@@ -29,7 +29,7 @@
 
 .block.financial-reports .tab {
   padding: 12px 32px;
-  border-radius: 50px;         /* More pill-like, matches many modern tabs */
+  border-radius: 8px;         /* More pill-like, matches many modern tabs */
   border: 2px solid #FAA519;   /* Consistent orange accent */
   background: transparent;
   cursor: pointer;
@@ -98,7 +98,7 @@
   padding: 16px 48px;
   background: #FAA519;
   color: #000;
-  border-radius: 50px;         /* Pill shape for modern CTA */
+  border-radius: 8px;         /* Pill shape for modern CTA */
   font-weight: 700;
   font-size: 18px;
   text-decoration: none;

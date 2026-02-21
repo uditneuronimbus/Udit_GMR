@@ -1,119 +1,472 @@
+// export default function decorate(block) {
+//   const isAuthorMode =
+//     document.body.classList.contains('aem-AuthorLayer-Edit') ||
+//     window.location.search.includes('wcmmode=edit');
+
+//   if (isAuthorMode) return;
+
+//   const rows = [...block.children];
+//   if (!rows.length) return;
+
+//   /* ===============================
+//      TOP SECTION
+//   =============================== */
+
+//   const topTitle = rows[0]?.textContent?.trim();
+//   const topDescription = rows[1]?.innerHTML?.trim();
+
+//   const primaryText = rows[2]?.textContent?.trim();
+//   const primaryLink = rows[3]?.querySelector('a')?.href;
+
+//   const secondaryText = rows[4]?.textContent?.trim();
+//   const secondaryLink = rows[5]?.querySelector('a')?.href;
+
+//   /* ===============================
+//      LEFT SECTION
+//   =============================== */
+
+//   const companyTitle = rows[6]?.textContent?.trim();
+//   const companyDescription = rows[7]?.innerHTML?.trim();
+
+//   const ctaText = rows[8]?.textContent?.trim();
+//   const ctaLink = rows[9]?.querySelector('a')?.href;
+
+//   const stockSymbol = rows[10]?.textContent?.trim();
+
+//   /* ===============================
+//      STAT CARDS (Dynamic — no fixed 6)
+//   =============================== */
+
+//   const stats = [];
+//   let index = 11;
+
+//   while (rows[index] || rows[index + 1]) {
+//     const statText = rows[index]?.innerHTML?.trim();
+//     const statImage = rows[index + 1]?.innerHTML?.trim();
+
+//     if (statText || statImage) {
+//       stats.push(`
+//         <div class="gal-stat-card">
+//           ${statImage ? `<div class="stat-image">${statImage}</div>` : ''}
+//           ${statText ? `<div class="stat-text">${statText}</div>` : ''}
+//         </div>
+//       `);
+//     }
+
+//     index += 2;
+//   }
+
+//   /* ===============================
+//      BUILD STRUCTURE
+//   =============================== */
+
+//   block.innerHTML = '';
+
+//   const wrapper = document.createElement('div');
+//   wrapper.className = 'gal-investor-wrapper';
+
+//   wrapper.innerHTML = `
+
+//     ${topTitle || topDescription || primaryText || secondaryText ? `
+//       <div class="investors-trust-wrapper">
+//         ${topTitle ? `<h2 class="investors-title">${topTitle}</h2>` : ''}
+//         ${topDescription ? `<div class="investors-desc">${topDescription}</div>` : ''}
+
+//         ${(primaryText && primaryLink) || (secondaryText && secondaryLink) ? `
+//           <div class="investors-cta">
+//             ${primaryText && primaryLink
+//               ? `<a class="cta primary" href="${primaryLink}">${primaryText}</a>`
+//               : ''}
+//             ${secondaryText && secondaryLink
+//               ? `<a class="cta secondary" href="${secondaryLink}">${secondaryText}</a>`
+//               : ''}
+//           </div>
+//         ` : ''}
+//       </div>
+//     ` : ''}
+
+//     ${(companyTitle || companyDescription || stockSymbol || ctaText || stats.length) ? `
+//       <div class="gal-main">
+
+//         <div class="gal-left">
+//           ${companyTitle ? `<h3>${companyTitle}</h3>` : ''}
+//           ${companyDescription ? `<div class="gal-desc">${companyDescription}</div>` : ''}
+
+//           ${stockSymbol ? `
+//             <div class="gal-market">
+//               <div class="market-symbol">
+//                 <strong>${stockSymbol}</strong>
+//               </div>
+//             </div>
+//           ` : ''}
+
+//           ${ctaText && ctaLink
+//             ? `<a class="gal-cta" href="${ctaLink}">${ctaText}</a>`
+//             : ''}
+//         </div>
+
+//         ${stats.length ? `
+//           <div class="gal-right">
+//             ${stats.join('')}
+//           </div>
+//         ` : ''}
+
+//       </div>
+//     ` : ''}
+
+//   `;
+
+//   block.appendChild(wrapper);
+// }
+
+
+
+// export default function decorate(block) {
+//   const isAuthorMode =
+//     document.body.classList.contains('aem-AuthorLayer-Edit') ||
+//     window.location.search.includes('wcmmode=edit');
+
+//   if (isAuthorMode) return;
+
+//   const rows = [...block.children];
+//   if (!rows.length) return;
+
+//   /* ===============================
+//      TOP SECTION
+//   =============================== */
+
+//   const topTitle = rows[0]?.textContent?.trim();
+//   const topDescription = rows[1]?.innerHTML?.trim();
+
+//   const primaryText = rows[2]?.textContent?.trim();
+//   const primaryLink = rows[3]?.querySelector('a')?.href;
+
+//   const secondaryText = rows[4]?.textContent?.trim();
+//   const secondaryLink = rows[5]?.querySelector('a')?.href;
+
+//   /* ===============================
+//      GAL SECTION DATA
+//   =============================== */
+
+//   const companyTitle = rows[6]?.textContent?.trim();
+//   const companyDescription = rows[7]?.innerHTML?.trim();
+//   const ctaText = rows[8]?.textContent?.trim();
+//   const ctaLink = rows[9]?.querySelector('a')?.href;
+//   const stockSymbol = rows[10]?.textContent?.trim();
+
+//   /* ===============================
+//      STAT CARDS
+//   =============================== */
+
+//   const stats = [];
+//   let index = 11;
+
+//   while (rows[index] || rows[index + 1]) {
+//     const statText = rows[index]?.innerHTML?.trim();
+//     const statImage = rows[index + 1]?.innerHTML?.trim();
+
+//     if (statText || statImage) {
+//       stats.push(`
+//         <div class="gal-stat-card">
+//           ${statImage ? `<div class="stat-image">${statImage}</div>` : ''}
+//           ${statText ? `<div class="stat-text">${statText}</div>` : ''}
+//         </div>
+//       `);
+//     }
+
+//     index += 2;
+//   }
+
+//   block.innerHTML = '';
+
+//   const wrapper = document.createElement('div');
+//   wrapper.className = 'gal-investor-wrapper';
+
+//   wrapper.innerHTML = `
+
+//     <div class="investors-trust-wrapper">
+//       ${topTitle ? `<h2 class="investors-title">${topTitle}</h2>` : ''}
+//       ${topDescription ? `<div class="investors-desc">${topDescription}</div>` : ''}
+
+//       <div class="investors-cta">
+//         ${primaryText ? `<button class="cta primary active">${primaryText}</button>` : ''}
+//         ${secondaryText ? `<button class="cta secondary">${secondaryText}</button>` : ''}
+//       </div>
+//     </div>
+
+//     <!-- GAL CONTENT (Default Visible) -->
+//     <div class="gal-content">
+
+//       <div class="gal-main">
+//         <div class="gal-left">
+//           ${companyTitle ? `<h3>${companyTitle}</h3>` : ''}
+//           ${companyDescription ? `<div class="gal-desc">${companyDescription}</div>` : ''}
+
+//           ${stockSymbol ? `
+//             <div class="gal-market">
+//               <div class="market-symbol">
+//                 <strong>${stockSymbol}</strong>
+//               </div>
+//             </div>
+//           ` : ''}
+
+//           ${ctaText && ctaLink
+//             ? `<a class="gal-cta" href="${ctaLink}">${ctaText}</a>`
+//             : ''}
+//         </div>
+
+//         ${stats.length ? `
+//           <div class="gal-right">
+//             ${stats.join('')}
+//           </div>
+//         ` : ''}
+//       </div>
+
+//     </div>
+
+//     <!-- GPIL CONTENT (Initially Hidden) -->
+//     <div class="gpil-content" style="display:none;">
+//       <!-- You can author separate GPIL rows later if needed -->
+//     </div>
+
+//   `;
+
+//   block.appendChild(wrapper);
+
+//   /* ===============================
+//      TOGGLE FUNCTIONALITY
+//   =============================== */
+
+//   const primaryBtn = wrapper.querySelector('.cta.primary');
+//   const secondaryBtn = wrapper.querySelector('.cta.secondary');
+//   const galContent = wrapper.querySelector('.gal-content');
+//   const gpilContent = wrapper.querySelector('.gpil-content');
+
+//   if (primaryBtn && secondaryBtn) {
+//     primaryBtn.addEventListener('click', () => {
+//       primaryBtn.classList.add('active');
+//       secondaryBtn.classList.remove('active');
+
+//       galContent.style.display = 'block';
+//       gpilContent.style.display = 'none';
+//     });
+
+//     secondaryBtn.addEventListener('click', () => {
+//       secondaryBtn.classList.add('active');
+//       primaryBtn.classList.remove('active');
+
+//       galContent.style.display = 'none';
+//       gpilContent.style.display = 'block';
+//     });
+//   }
+// }
+
+
+
 export default function decorate(block) {
-  const rows = [...block.children].filter(
-    (row) => row.children.length && row.textContent.trim()
-  );
+  const isAuthorMode =
+    document.body.classList.contains('aem-AuthorLayer-Edit') ||
+    window.location.search.includes('wcmmode=edit');
 
-  if (!rows.length) {
-    block.innerHTML = '<p>No content configured.</p>';
-    return;
-  }
+  if (isAuthorMode) return;
 
-  let cursor = 0;
+  const rows = [...block.children];
+  if (!rows.length) return;
 
-  // TITLE
-  const title = rows[cursor]?.children[0]?.textContent.trim() || 'Investor Relations';
-  cursor++;
+  /* ===============================
+     TOP SECTION
+  =============================== */
 
-  // DESCRIPTION (optional)
-  let description = '';
-  if (rows[cursor] && rows[cursor].children.length === 1) {
-    description = rows[cursor].innerHTML.trim();
-    cursor++;
-  }
+  const topTitle = rows[0]?.textContent?.trim();
+  const topDescription = rows[1]?.innerHTML?.trim();
 
-  // ──────────────────────────────────────────────
-  // MARKET SECTION ─ only if ≥ 2 single-cell rows
-  // ──────────────────────────────────────────────
-  let marketTitle = '';
-  let marketDate = '';
-  let marketContent = '';
+  const primaryText = rows[2]?.textContent?.trim();
+  const primaryLink = rows[3]?.querySelector('a')?.href;
 
-  if (
-    cursor < rows.length &&
-    rows[cursor].children.length === 1 &&
-    cursor + 1 < rows.length &&
-    rows[cursor + 1].children.length === 1 &&
-    !rows[cursor].querySelector('a') &&
-    !rows[cursor + 1].querySelector('a')
-  ) {
-    marketTitle = rows[cursor].textContent.trim();
-    cursor++;
+  const secondaryText = rows[4]?.textContent?.trim();
+  const secondaryLink = rows[5]?.querySelector('a')?.href;
 
-    marketDate = rows[cursor].textContent.trim();
-    cursor++;
+  /* ===============================
+     GAL SECTION DATA
+  =============================== */
 
-    if (
-      cursor < rows.length &&
-      rows[cursor].children.length === 1 &&
-      !rows[cursor].querySelector('a')
-    ) {
-      marketContent = rows[cursor].innerHTML.trim();
-      cursor++;
+  const galTitle = rows[6]?.textContent?.trim();
+  const galDescription = rows[7]?.innerHTML?.trim();
+  const galCtaText = rows[8]?.textContent?.trim();
+  const galCtaLink = rows[9]?.querySelector('a')?.href;
+  const galStockSymbol = rows[10]?.textContent?.trim();
+
+  const galStats = [];
+  let index = 11;
+
+  while (rows[index] && rows[index + 1]) {
+    if (rows[index].dataset?.section === "gpil") break;
+
+    const statText = rows[index]?.innerHTML?.trim();
+    const statImage = rows[index + 1]?.innerHTML?.trim();
+
+    if (statText || statImage) {
+      galStats.push(`
+        <div class="gal-stat-card">
+          ${statImage ? `<div class="stat-image">${statImage}</div>` : ''}
+          ${statText ? `<div class="stat-text">${statText}</div>` : ''}
+        </div>
+      `);
     }
+
+    index += 2;
   }
 
-  // CTA
-  let ctaText = '';
-  let ctaLink = '#';
+  /* ===============================
+     GPIL SECTION DATA
+  =============================== */
 
-  if (rows[cursor]) {
-    const cells = [...rows[cursor].children];
-    const hasLink = rows[cursor].querySelector('a');
+  const gpilTitle = rows[index]?.textContent?.trim();
+  const gpilDescription = rows[index + 1]?.innerHTML?.trim();
+  const gpilCtaText = rows[index + 2]?.textContent?.trim();
+  const gpilCtaLink = rows[index + 3]?.querySelector('a')?.href;
+  const gpilStockSymbol = rows[index + 4]?.textContent?.trim();
 
-    if (cells.length >= 2 || hasLink) {
-      ctaText = cells[0]?.textContent.trim() || '';
-      ctaLink =
-        cells[1]?.querySelector('a')?.href ||
-        hasLink?.href ||
-        cells[1]?.textContent.trim() ||
-        '#';
-      cursor++;
+  const gpilStats = [];
+  let gpilIndex = index + 5;
+
+  while (rows[gpilIndex] && rows[gpilIndex + 1]) {
+    const statText = rows[gpilIndex]?.innerHTML?.trim();
+    const statImage = rows[gpilIndex + 1]?.innerHTML?.trim();
+
+    if (statText || statImage) {
+      gpilStats.push(`
+        <div class="gal-stat-card">
+          ${statImage ? `<div class="stat-image">${statImage}</div>` : ''}
+          ${statText ? `<div class="stat-text">${statText}</div>` : ''}
+        </div>
+      `);
     }
+
+    gpilIndex += 2;
   }
 
-  // STATS
-  const stats = [];
-  for (let i = cursor; i < rows.length && stats.length < 6; i++) {
-    const html = rows[i].innerHTML.trim();
-    if (html) stats.push(html);
-  }
+  /* ===============================
+     RENDER HTML
+  =============================== */
 
-  // BUILD DOM (unchanged)
   block.innerHTML = '';
 
   const wrapper = document.createElement('div');
   wrapper.className = 'gal-investor-wrapper';
 
   wrapper.innerHTML = `
-    <div class="gal-left">
-      <h2>${title}</h2>
 
-      ${description ? `<div class="gal-desc">${description}</div>` : ''}
+    <div class="investors-trust-wrapper">
+      ${topTitle ? `<h2 class="investors-title">${topTitle}</h2>` : ''}
+      ${topDescription ? `<div class="investors-desc">${topDescription}</div>` : ''}
 
-      ${(marketTitle || marketDate || marketContent) ? `
-        <div class="gal-market">
-          <div class="market-header">
-            ${marketTitle ? `<span class="market-title">${marketTitle}</span>` : ''}
-            ${marketDate ? `<span class="market-date">${marketDate}</span>` : ''}
-          </div>
-          ${marketContent ? `<div class="market-body">${marketContent}</div>` : ''}
-        </div>
-      ` : ''}
-
-      ${ctaText ? `<a class="gal-cta" href="${ctaLink}">${ctaText}</a>` : ''}
+      <div class="investors-cta">
+        ${primaryText ? `<button class="cta primary active">${primaryText}</button>` : ''}
+        ${secondaryText ? `<button class="cta secondary">${secondaryText}</button>` : ''}
+      </div>
     </div>
 
-    <div class="gal-right">
-      ${stats.map(stat => `
-        <div class="gal-stat-card">${stat}</div>
-      `).join('')}
+    <!-- GAL CONTENT (Default Visible) -->
+    <div class="gal-content">
 
-      ${Array(Math.max(0, 6 - stats.length))
-        .fill('')
-        .map(() => `<div class="gal-stat-card gal-stat-placeholder"></div>`)
-        .join('')}
+      <div class="gal-main">
+        <div class="gal-left">
+          ${galTitle ? `<h3>${galTitle}</h3>` : ''}
+          ${galDescription ? `<div class="gal-desc">${galDescription}</div>` : ''}
+
+          ${galStockSymbol ? `
+            <div class="gal-market">
+              <div class="market-symbol">
+                <strong>${galStockSymbol}</strong>
+              </div>
+            </div>
+          ` : ''}
+
+          ${galCtaText && galCtaLink
+            ? `<a class="gal-cta" href="${galCtaLink}">${galCtaText}</a>`
+            : ''}
+        </div>
+
+        ${galStats.length ? `
+          <div class="gal-right">
+            ${galStats.join('')}
+          </div>
+        ` : ''}
+
+      </div>
+
+    </div>
+
+    <!-- GPIL CONTENT (Initially Hidden) -->
+    <div class="gpil-content" style="display:none;">
+
+      <div class="gal-main">
+        <div class="gal-left">
+          ${gpilTitle ? `<h3>${gpilTitle}</h3>` : ''}
+          ${gpilDescription ? `<div class="gal-desc">${gpilDescription}</div>` : ''}
+
+          ${gpilStockSymbol ? `
+            <div class="gal-market">
+              <div class="market-symbol">
+                <strong>${gpilStockSymbol}</strong>
+              </div>
+            </div>
+          ` : ''}
+
+          ${gpilCtaText && gpilCtaLink
+            ? `<a class="gal-cta" href="${gpilCtaLink}">${gpilCtaText}</a>`
+            : ''}
+        </div>
+
+        ${gpilStats.length ? `
+          <div class="gal-right">
+            ${gpilStats.join('')}
+          </div>
+        ` : ''}
+
+      </div>
+
     </div>
   `;
 
   block.appendChild(wrapper);
+
+  /* ===============================
+     TOGGLE FUNCTIONALITY
+  =============================== */
+
+  const primaryBtn = wrapper.querySelector('.cta.primary');
+  const secondaryBtn = wrapper.querySelector('.cta.secondary');
+  const galContent = wrapper.querySelector('.gal-content');
+  const gpilContent = wrapper.querySelector('.gpil-content');
+
+  if (primaryBtn && secondaryBtn) {
+    primaryBtn.addEventListener('click', () => {
+      primaryBtn.classList.add('active');
+      secondaryBtn.classList.remove('active');
+
+      galContent.style.display = 'block';
+      gpilContent.style.display = 'none';
+    });
+
+    secondaryBtn.addEventListener('click', () => {
+      secondaryBtn.classList.add('active');
+      primaryBtn.classList.remove('active');
+
+      galContent.style.display = 'none';
+      gpilContent.style.display = 'block';
+    });
+  }
 }
+
+
+
+
+
+
+
+
+
+
+

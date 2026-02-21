@@ -31,7 +31,7 @@
     border-radius: 0.5rem;
     padding: 1.5rem;
     font-size: var(--fs-medium);
-    flex-grow: 1;
+    flex-grow: 1; min-height: 102px;
 }
 /* Image */
 .award-media {

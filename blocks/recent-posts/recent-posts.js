@@ -1,16 +1,6 @@
 import { getApiHost } from "../../scripts/api.js";
 import { getNewsDetail } from "../../scripts/news-api.js";
-
-function formatDate(dateString) {
-  if (!dateString) return "";
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
+import { formatDate } from "../../scripts/common.js";
 
 function slugToTitle(str) {
   return str
@@ -59,7 +49,7 @@ export default async function decorate(block) {
       `&soffset=${encodeURIComponent(offset)}` +
       `&category=${encodeURIComponent(category)}` +
       `&slugUrl=${encodeURIComponent(slugUrl)}`;
-
+    
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`API error ${res.status}`);
 
@@ -70,14 +60,10 @@ export default async function decorate(block) {
       cardsWrapper.innerHTML = "<p>No related news found.</p>";
       return;
     }
-
+    
     // Render news cards
     items.forEach((item) => {
-      const publishDateRaw =
-        item.publishDate?.iso ||
-        item.publishDate?.value ||
-        item.publishDate ||
-        "";
+      const publishDateRaw = item.publishMonth + " " + item.publishYear;
       
       const publishDateFormatted = formatDate(publishDateRaw);
       

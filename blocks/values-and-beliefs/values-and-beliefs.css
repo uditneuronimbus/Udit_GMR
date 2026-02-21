@@ -11,27 +11,18 @@
    WRAPPER & SECTION
 ================================ */
 .values-and-beliefs-wrapper {
-  margin-bottom: 64px;
-  background: var(--light-grey);
+  background: var(--lgrey);
 }
 
 .values-and-beliefs .block {
   background-color: var(--lgrey) !important;
 }
 
-.values-section {
+/* .values-section {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px 64px;
-}
-
-.values-title {
-  text-align: center;
-  font-size: 36px;
-  font-weight: 700;
-  margin-bottom: 40px;
-  color: #000;
-}
+} */
 
 /* ===============================
    GRID
@@ -190,7 +181,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .values-cards {
     grid-template-columns: 1fr;
   }
@@ -199,9 +190,14 @@
     font-size: 26px;
   }
 
-  .value-card-image {
-    margin-bottom: 48px;
+  .value-card-overlay {
+    font-size: 18px;
+    font-weight: 600;
   }
+
+  /* .value-card-image {
+    margin-bottom: 48px;
+  } */
 }
 
 /* ===============================
@@ -218,4 +214,41 @@
   .values-cards:has(> .value-card:nth-child(7)) > .value-card {
     flex: 0 0 260px;
   }
+}
+
+
+
+/* ===============================
+   SCROLL ONLY WHEN ACTIVE
+================================ */
+
+/* Default: no scroll */
+.value-card-content {
+  overflow: hidden;
+}
+
+/* When active → enable scroll */
+.value-card.active .value-card-content {
+  overflow-y: auto;
+  max-height: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--lorange) transparent;
+}
+
+/* Webkit Scrollbar */
+.value-card.active .value-card-content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.value-card.active .value-card-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.value-card.active .value-card-content::-webkit-scrollbar-thumb {
+  background-color: var(--lorange);
+  border-radius: 10px;
+}
+
+.value-card.active .value-card-content::-webkit-scrollbar-thumb:hover {
+  background-color: var(--lorange);
 }

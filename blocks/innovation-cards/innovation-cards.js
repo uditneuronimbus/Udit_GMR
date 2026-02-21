@@ -1,6 +1,6 @@
 import { loadScript } from "../../scripts/aem.js";
 
-const SWIPER_JS = "../../scripts/swiper-bundle.min.js";
+const SWIPER_JS = "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js";
 
 export default async function decorate(block) {
   const rows = [...block.children];
@@ -28,7 +28,7 @@ export default async function decorate(block) {
   runtime.innerHTML = `
     <section class="sec-innovation spacer">
       <div class="container">
-        <div class="my-5 ps-5 ms-5">
+        <div class="mb-5 ps-5 ms-5">
           <div class="row">
             <div class="col-xl-6 col-lg-8 text-md-start text-center">
               <h2 class="sec-title text-primary">${sectionTitle}</h2>

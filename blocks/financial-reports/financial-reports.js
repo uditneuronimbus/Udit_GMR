@@ -1,40 +1,70 @@
 // export default function decorate(block) {
 //   const rows = [...block.children];
 
-//   if (rows.length === 0) {
+//   if (!rows.length) {
 //     block.innerHTML = '<p>No content configured.</p>';
 //     return;
 //   }
 
-//   // First row = config
+//   /* ===============================
+//      CONFIG ROW
+//   =============================== */
 //   const configCells = [...rows[0].children];
 
-//   const sectionTitle = (configCells[0]?.textContent || '').trim() || 'Financial Reports';
+//   const sectionTitle =
+//     (configCells[0]?.textContent || '').trim() || 'Financial Reports';
 
-//   // Description: take raw innerHTML to preserve formatting
-//   let sectionDescriptionHTML = '';
-//   if (configCells[1]) {
-//     sectionDescriptionHTML = configCells[1].innerHTML.trim();
-//   }
+//   /* ===============================
+//      ✅ ROBUST AEM RICHTEXT FIX
+//   =============================== */
+//  /* ===============================
+//    ✅ SIMPLE & SAFE RICHTEXT FIX
+// ================================= */
+// let sectionDescriptionHTML = '';
 
-//   const tab1Text = (configCells[2]?.textContent || '').trim() || 'GMR Airports Limited';
-//   const tab2Text = (configCells[3]?.textContent || '').trim() || 'GMR Power & Urban Infra Ltd.';
-//   const ctaText  = (configCells[4]?.textContent || '').trim() || 'View All Reports';
-//   const ctaLink  = (configCells[5]?.textContent || '').trim() || '#';
+// if (rows[1]) {
+//   sectionDescriptionHTML = rows[1].innerHTML.trim();
+// }
 
-//   // Collect cards from remaining rows
-//   const companyCards = { airport: [], infra: [] };
+
+
+//   const tab1Text =
+//     (configCells[2]?.textContent || '').trim() || 'GMR Airports Limited';
+
+//   const tab2Text =
+//     (configCells[3]?.textContent || '').trim() ||
+//     'GMR Power & Urban Infra Ltd.';
+
+//   const ctaText =
+//     (configCells[4]?.textContent || '').trim() || 'View All Reports';
+
+//   const ctaLink =
+//     (configCells[5]?.textContent || '').trim() || '#';
+
+//   /* ===============================
+//      COLLECT CARDS
+//   =============================== */
+//   const companyCards = {
+//     airport: [],
+//     infra: [],
+//   };
 
 //   for (let i = 1; i < rows.length; i++) {
 //     const cells = [...rows[i].children];
 //     if (cells.length < 2) continue;
 
-//     const companyCell = (cells[0]?.textContent || '').trim().toLowerCase();
-//     const isInfra = companyCell.includes('infra') || companyCell.includes('power') || companyCell.includes('urban') || companyCell.includes('gpuil') || companyCell.includes('pui');
+//     const companyCell =
+//       (cells[0]?.textContent || '').trim().toLowerCase();
+
+//     const isInfra =
+//       companyCell.includes('infra') ||
+//       companyCell.includes('power') ||
+//       companyCell.includes('urban') ||
+//       companyCell.includes('gpuil') ||
+//       companyCell.includes('pui');
 
 //     const companyKey = isInfra ? 'infra' : 'airport';
 
-//     // Parse up to 3 cards per row (title + link pairs)
 //     for (let j = 0; j < 3; j++) {
 //       const titleCell = cells[1 + j * 2];
 //       const linkCell = cells[2 + j * 2];
@@ -42,19 +72,20 @@
 //       const title = (titleCell?.textContent || '').trim();
 //       let link = (linkCell?.textContent || '').trim();
 
-//       // If link cell has <a>, get href instead of text
 //       const aTag = linkCell?.querySelector('a');
-//       if (aTag) {
-//         link = aTag.href || '#';
+//       if (aTag?.href) {
+//         link = aTag.href;
 //       }
 
-//       if (title && link !== '#') {  // require both title and valid link
+//       if (title && link && link !== '#') {
 //         companyCards[companyKey].push({ title, link });
 //       }
 //     }
 //   }
 
-//   // Deduplicate
+//   /* ===============================
+//      DEDUPE
+//   =============================== */
 //   const dedupe = (arr) => {
 //     const seen = new Set();
 //     return arr.filter(item => {
@@ -68,7 +99,9 @@
 //   companyCards.airport = dedupe(companyCards.airport);
 //   companyCards.infra = dedupe(companyCards.infra);
 
-//   // Build main structure
+//   /* ===============================
+//      BUILD HTML
+//   =============================== */
 //   block.innerHTML = `
 //     <div class="financial-wrapper">
 //       <h2>${sectionTitle}</h2>
@@ -79,9 +112,13 @@
 //         </div>
 //       ` : ''}
 
-//       <div class="financial-tabs">
-//         <button class="tab active" data-company="airport">${tab1Text}</button>
-//         <button class="tab" data-company="infra">${tab2Text}</button>
+//       <div class="financial-tabs" role="tablist">
+//         <button class="tab active" role="tab" data-company="airport">
+//           ${tab1Text}
+//         </button>
+//         <button class="tab" role="tab" data-company="infra">
+//           ${tab2Text}
+//         </button>
 //       </div>
 
 //       <div class="financial-cards"></div>
@@ -94,44 +131,65 @@
 
 //   const cardsContainer = block.querySelector('.financial-cards');
 
+//   /* ===============================
+//      RENDER CARDS
+//   =============================== */
 //   function renderCards(type) {
 //     const cards = companyCards[type] || [];
-//     if (cards.length === 0) {
-//       cardsContainer.innerHTML = '<p class="no-reports">No reports available for this company yet.</p>';
+
+//     if (!cards.length) {
+//       cardsContainer.innerHTML =
+//         '<p class="no-reports">No reports available for this company yet.</p>';
 //       return;
 //     }
 
-//     cardsContainer.innerHTML = cards.map(card => `
-//       <a class="financial-card" href="${card.link}" target="_blank" rel="noopener">
-//         <h3>${card.title}</h3>
-//         <span>VIEW NOW ></span>
-//       </a>
-//     `).join('');
+//     cardsContainer.innerHTML = cards
+//       .map(card => `
+//         <a class="financial-card"
+//            href="${card.link}"
+//            target="_blank"
+//            rel="noopener">
+//           <h3>${card.title}</h3>
+//           <span>VIEW NOW &gt;</span>
+//         </a>
+//       `)
+//       .join('');
 //   }
 
-//   // Initial render
+//   /* ===============================
+//      INIT + TAB HANDLERS
+//   =============================== */
 //   renderCards('airport');
 
-//   // Tab switching
 //   block.querySelectorAll('.tab').forEach(tab => {
 //     tab.addEventListener('click', () => {
-//       block.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+//       block.querySelectorAll('.tab')
+//         .forEach(t => t.classList.remove('active'));
+
 //       tab.classList.add('active');
 //       renderCards(tab.dataset.company);
 //     });
 //   });
-
-//   // Optional: debug helper (remove in production)
-//   // console.log('Airport cards:', companyCards.airport);
-//   // console.log('Infra cards:', companyCards.infra);
 // }
 
 
+
+
 export default function decorate(block) {
+  const isAuthorMode =
+    document.body.classList.contains('aem-AuthorLayer-Edit') ||
+    window.location.search.includes('wcmmode=edit');
+
+  /* ✅ Prevent double execution */
+  if (block.classList.contains('financial-initialized')) return;
+  block.classList.add('financial-initialized');
+
   const rows = [...block.children];
 
   if (!rows.length) {
-    block.innerHTML = '<p>No content configured.</p>';
+    if (!isAuthorMode) {
+      block.innerHTML = '<p>No content configured.</p>';
+    }
     return;
   }
 
@@ -143,17 +201,9 @@ export default function decorate(block) {
   const sectionTitle =
     (configCells[0]?.textContent || '').trim() || 'Financial Reports';
 
-  /* ✅ AEM-SAFE DESCRIPTION FIX */
   let sectionDescriptionHTML = '';
-  if (configCells[1]) {
-    const descCell = configCells[1];
-    const hasText = descCell.textContent
-      ?.replace(/\u00A0/g, '')
-      .trim();
-
-    if (hasText) {
-      sectionDescriptionHTML = descCell.innerHTML;
-    }
+  if (rows[1]) {
+    sectionDescriptionHTML = rows[1].innerHTML.trim();
   }
 
   const tab1Text =
@@ -228,10 +278,13 @@ export default function decorate(block) {
   companyCards.infra = dedupe(companyCards.infra);
 
   /* ===============================
-     BUILD HTML
+     BUILD RUNTIME UI
   =============================== */
-  block.innerHTML = `
-    <div class="financial-wrapper">
+
+  const container = document.createElement('div');
+  container.className = 'financial-wrapper';
+
+  container.innerHTML = `
       <h2>${sectionTitle}</h2>
 
       ${sectionDescriptionHTML ? `
@@ -254,14 +307,17 @@ export default function decorate(block) {
       <div class="financial-cta">
         <a href="${ctaLink}" class="cta-btn">${ctaText}</a>
       </div>
-    </div>
   `;
 
-  const cardsContainer = block.querySelector('.financial-cards');
+  /* ✅ Hide authored content AFTER reading it */
+  rows.forEach(row => {
+    row.style.display = 'none';
+  });
 
-  /* ===============================
-     RENDER CARDS
-  =============================== */
+  block.append(container);
+
+  const cardsContainer = container.querySelector('.financial-cards');
+
   function renderCards(type) {
     const cards = companyCards[type] || [];
 
@@ -274,7 +330,7 @@ export default function decorate(block) {
     cardsContainer.innerHTML = cards
       .map(card => `
         <a class="financial-card"
-           href="${card.link}"
+           href="https://investor.gmrpui.com/"
            target="_blank"
            rel="noopener">
           <h3>${card.title}</h3>
@@ -284,14 +340,14 @@ export default function decorate(block) {
       .join('');
   }
 
-  /* ===============================
-     INIT + TAB HANDLERS
-  =============================== */
+  /* ✅ Stop JS behaviour in author mode */
+  if (isAuthorMode) return;
+
   renderCards('airport');
 
-  block.querySelectorAll('.tab').forEach(tab => {
+  container.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
-      block.querySelectorAll('.tab')
+      container.querySelectorAll('.tab')
         .forEach(t => t.classList.remove('active'));
 
       tab.classList.add('active');
@@ -299,3 +355,4 @@ export default function decorate(block) {
     });
   });
 }
+

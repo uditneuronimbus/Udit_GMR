@@ -58,24 +58,45 @@
         },
         {
           "component": "text",
-          "name": "formTitle",
-          "label": "Form Title",
-          "valueType": "string",
-          "defaultValue": "Contact Us"
+          "name": "socialTitle",
+          "label": "Social Title",
+          "valueType": "string"
         },
         {
           "component": "text",
-          "name": "submitLabel",
-          "label": "Submit Button Label",
-          "valueType": "string",
-          "defaultValue": "Submit"
+          "name": "instagramUrl",
+          "label": "Instagram URL",
+          "valueType": "string"
         },
         {
           "component": "text",
-          "name": "successMessage",
-          "label": "Success Message",
-          "valueType": "string",
-          "defaultValue": "Success!"
+          "name": "xUrl",
+          "label": "X (Twitter) URL",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "linkedinUrl",
+          "label": "LinkedIn URL",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "youtubeUrl",
+          "label": "YouTube URL",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "whatsappUrl",
+          "label": "WhatsApp URL",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "facebookUrl",
+          "label": "Facebook URL",
+          "valueType": "string"
         },
         {
           "component": "text",

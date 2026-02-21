@@ -20,7 +20,7 @@
 /* Tabs */
 .aviation-tabs-list {
     display: flex;
-    gap: 40px;
+    gap: 1.5rem;
     list-style: none;
     margin: 0;
     padding: 16px 0;
@@ -154,5 +154,5 @@
     .aviation-dropdown .aviation-dropdown-btn {
         margin-bottom: 1rem;
     }
-    .aviation-services-header-container { top: 59px; }
+    .aviation-services-header-container { top: 79px; }
 }

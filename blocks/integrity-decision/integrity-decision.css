@@ -10,6 +10,9 @@
 .integrity-cards .card-title { margin-bottom: 8px; }
 .integrity-cards .card-desc p { font-size: var(--fs-normal); margin-bottom: 0; }
 .integrity-card { position: relative; }
+.card-action .btn-link { color: var(--white); }
+.card-action .btn-link::before { background-color: var(--white); }
+.card-action .btn-link:after { background:url(../../icons/arrow-right-white.svg) no-repeat center;background-size:100%; }
 
 @media (max-width:767px){
 .integrity-cards{grid-template-columns:repeat(1,1fr);gap:24px}

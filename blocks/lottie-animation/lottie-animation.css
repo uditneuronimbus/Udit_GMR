@@ -1,12 +1,10 @@
 /* Lottie Animation Component - Enhanced Authoring Experience */
 
 .lottie-animation-block {
-    max-width: 1200px;
-    margin: 2rem auto;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin: 0 auto;
     overflow: hidden;
+    position: relative;
 }
 
 /* Info Panel */
@@ -88,13 +86,16 @@
 
 /* Animation Container */
 .lottie-animation-container {
-    background: #f8f9fa;
-    padding: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 400px;
     position: relative;
+    width: 100%;
+    height: auto; min-height: 700px;
+}
+.lottie-animation-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 60%;
 }
 
 .lottie-animation-container svg,
@@ -111,7 +112,6 @@
     padding: 4rem 2rem;
     color: #6c757d;
     font-size: 16px;
-    background: #f8f9fa;
     border-radius: 8px;
 }
 
@@ -258,7 +258,7 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .lottie-animation-block {
         margin: 1rem;
         border-radius: 4px;
@@ -295,7 +295,6 @@
     }
 
     .lottie-animation-container {
-        padding: 1rem;
         min-height: 300px;
     }
 
@@ -308,6 +307,7 @@
         width: 100%;
         justify-content: center;
     }
+    .lottie-animation-wrapper { display:none;}
 }
 
 /* Print styles */

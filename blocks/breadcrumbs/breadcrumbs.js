@@ -84,7 +84,20 @@ function buildFromUrl(currentUrl) {
   const path = new URL(currentUrl).pathname.replace(/\/$/, "");
   const segments = path.replace(".html", "").split("/").filter(Boolean);
 
-  const HIDDEN_SEGMENTS = ["en", "hi", "content"];
+  // Hide language codes and system segments from breadcrumbs
+  // Support both 2-char codes (en, hi) and hyphenated codes (zh-cn, zh-sg)
+  const HIDDEN_SEGMENTS = [
+    "en",
+    "hi",
+    "ja",
+    "id",
+    "fr",
+    "es",
+    "el",
+    "zh-cn",
+    "zh-sg",
+    "content",
+  ];
   let accumPath = "";
 
   segments.forEach((segment, index) => {
@@ -114,7 +127,10 @@ export default async function decorate(block) {
      ----------------------------------------- */
   const path = window.location.pathname.replace(/\/$/, "");
 
-  const isHome = path === "" || path === "/" || /^\/[a-z]{2}$/.test(path); // /en, /hi, etc.
+  // Check if current page is homepage
+  // Support both 2-char codes (/en, /hi) and hyphenated codes (/zh-cn, /zh-sg)
+  const isHome =
+    path === "" || path === "/" || /^\/[a-z]{2}(-[a-z]{2})?$/.test(path);
 
   if (isHome) {
     block.innerHTML = "";

@@ -1,22 +1,6 @@
 import { getNewsDetail } from "../../scripts/news-api.js";
+import { formatDate } from "../../scripts/common.js";
 
-// const PUBLISH_DOMAIN = "https://publish-p168597-e1803019.adobeaemcloud.com";
-
-/* ================================
-   Date formatter
-================================ */
-function formatDate(dateString) {
-  if (!dateString) return "";
-
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return "";
-
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
 function slugToTitle(str) {
   return str
     .split('-')
@@ -79,11 +63,7 @@ function buildHeroNav(swiper, total) {
    Build Hero
 ================================ */
 function buildPressHero(item) {
-  const publishDate =
-    item.publishDate?.iso ||
-    item.publishDate?.value ||
-    item.publishDate ||
-    "";
+  const publishDate = item.publishMonth + " " + item.publishYear;
   const publishDateFormatted = formatDate(publishDate);
   const lastUpdated =
     item.lastUpdatedDate?.iso ||
@@ -199,28 +179,16 @@ export default async function decorate(block) {
   const contentWrapper = container.querySelector(".news-detail-wrapper");
 
   try {
-    // const apiUrl =
-    //   `${getApiHost()}/api/v1/web/gmr-api/news-details` +
-    //   `?slugUrl=${encodeURIComponent(slug)}`;
-
-    // const res = await fetch(apiUrl);
-    // if (!res.ok) throw new Error(`API error ${res.status}`);
-
-    // const json = await res.json();
     const item = await getNewsDetail();
 
     if (!item) {
       contentWrapper.innerHTML = "<p>News not found.</p>";
       return;
     }
-    console.log("_____________________________", item);
-    
 
     /* Inject Hero */
     const hero = buildPressHero(item);
     block.prepend(hero);
-    buildHeroNav(swiper, swiper.slides.length);
-
 
     /* Render article body */
     contentWrapper.innerHTML = `

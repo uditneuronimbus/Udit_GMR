@@ -11,7 +11,7 @@
 ===================================================== */
 .mfl-runtime {
   padding: 80px 0;
-  background: #ffffff;
+  background: var(--white);
 }
 
 .mfl-container {
@@ -128,7 +128,7 @@
 
 .mfl-message p{
   font-weight: 400;
-  font-size: 20px;
+  font-size: var(--fs-large);
   color: var(--black);
 }
 
@@ -211,7 +211,7 @@
 /* =====================================================
    MOBILE
 ===================================================== */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .mfl-runtime {
     padding: 60px 0;
   }
@@ -241,6 +241,8 @@
     justify-content: center;
     margin-top: 16px;
   }
+  .mfl-message p{ font-size: var(--fs-medium);
+}
 }
 
 /* =====================================================

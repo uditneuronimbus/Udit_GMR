@@ -225,8 +225,40 @@
             "value": "background-pink"
           },
           {
+            "name": "Big Padding Bottom",
+            "value": "big-padding-bottom"
+          },
+          {
+            "name": "Leadership Banner",
+            "value": "leadership-banner"
+          },
+          {
+            "name": "Leadership Message",
+            "value": "leadership-message"
+          },
+          {
+            "name": "Navigation Left",
+            "value": "navigation-left"
+          },
+          {
+            "name": "Navigation-Right",
+            "value": "navigation-right"
+          },
+          {
+            "name": "Sec Grid 3",
+            "value": "Sec-Grid-3"
+          },
+          {
+            "name": "Sec Grid 4",
+            "value": "Sec-Grid-4"
+          },
+          {
             "name": "Minus Margin Top",
             "value": "minus-margin-top"
+          },
+          {
+            "name": "Swiper Slider",
+            "value": "sec-swiper-slider"
           }
         ]
       }
@@ -388,6 +420,17 @@
         "component": "richtext",
         "name": "cardDescription",
         "label": "Card Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "article-hero",
+    "fields": [
+      {
+        "name": "label",
+        "label": "Section Label",
+        "component": "text",
         "valueType": "string"
       }
     ]
@@ -714,6 +757,41 @@
     ]
   },
   {
+    "id": "career-faqs-list",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "sectionDescription",
+        "label": "Section Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "career-faqs-item",
+    "itemLabel": "question",
+    "fields": [
+      {
+        "component": "text",
+        "name": "question",
+        "label": "FAQ Question",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "answer",
+        "label": "Answer",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "careers-highlight",
     "fields": [
       {
@@ -949,6 +1027,12 @@
         "name": "content",
         "label": "Content",
         "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Icon"
       }
     ]
   },
@@ -992,24 +1076,45 @@
       },
       {
         "component": "text",
-        "name": "formTitle",
-        "label": "Form Title",
-        "valueType": "string",
-        "defaultValue": "Contact Us"
+        "name": "socialTitle",
+        "label": "Social Title",
+        "valueType": "string"
       },
       {
         "component": "text",
-        "name": "submitLabel",
-        "label": "Submit Button Label",
-        "valueType": "string",
-        "defaultValue": "Submit"
+        "name": "instagramUrl",
+        "label": "Instagram URL",
+        "valueType": "string"
       },
       {
         "component": "text",
-        "name": "successMessage",
-        "label": "Success Message",
-        "valueType": "string",
-        "defaultValue": "Success!"
+        "name": "xUrl",
+        "label": "X (Twitter) URL",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "linkedinUrl",
+        "label": "LinkedIn URL",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "youtubeUrl",
+        "label": "YouTube URL",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "whatsappUrl",
+        "label": "WhatsApp URL",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "facebookUrl",
+        "label": "Facebook URL",
+        "valueType": "string"
       },
       {
         "component": "text",
@@ -1190,6 +1295,82 @@
     ]
   },
   {
+    "id": "csr-engine",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "logoImage",
+        "label": "Logo Image"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "logoAlt",
+        "label": "Logo Alt Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionTitle",
+        "label": "Section Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "sectionDescription",
+        "label": "Section Description"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "mainImage",
+        "label": "Main Image"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "mainImageAlt",
+        "label": "Main Image Alt Text"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "mainImageDescription",
+        "label": "Main Image Description"
+      }
+    ]
+  },
+  {
+    "id": "csr-engine-item",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "icon",
+        "label": "Icon (SVG or Class Name)"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "iconAlt",
+        "label": "Icon Alt Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      }
+    ]
+  },
+  {
     "id": "document-preview",
     "fields": [
       {
@@ -1251,42 +1432,6 @@
             "value": "governance"
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "career-faqs-list",
-    "fields": [
-      {
-        "component": "text",
-        "name": "sectionTitle",
-        "label": "Section Title (Main Heading)",
-        "valueType": "string",
-        "defaultValue": "Everything you Need to Know"
-      },
-      {
-        "component": "richtext",
-        "name": "sectionDescription",
-        "label": "Section Description",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "career-faqs-item",
-    "itemLabel": "title",
-    "fields": [
-      {
-        "component": "text",
-        "name": "title",
-        "label": "Faqs Question",
-        "valueType": "string"
-      },
-      {
-        "component": "richtext",
-        "name": "answer",
-        "label": "Answer",
-        "valueType": "string"
       }
     ]
   },
@@ -1629,8 +1774,44 @@
       {
         "component": "text",
         "valueType": "string",
-        "name": "title",
-        "label": "Title"
+        "name": "titles",
+        "label": "Titles"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "descriptions",
+        "label": "Descriptions"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "primaryCtaText",
+        "label": "Primary CTA Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "primaryCtaLink",
+        "label": "Primary CTA Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "secondaryCtaText",
+        "label": "Secondary CTA Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "secondaryCtaLink",
+        "label": "Secondary CTA Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "titless",
+        "label": "Titles"
       },
       {
         "component": "richtext",
@@ -1652,9 +1833,9 @@
       },
       {
         "component": "text",
+        "valueType": "string",
         "name": "stockSymbol",
         "label": "Stock API Symbol / IDD",
-        "valueType": "string",
         "required": true
       },
       {
@@ -1972,6 +2153,20 @@
         "label": "Section Title",
         "valueType": "string",
         "defaultValue": "What Makes GMR Different"
+      },
+      {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "Button Label",
+        "valueType": "string",
+        "comment": "Text shown on the CTA button"
+      },
+      {
+        "component": "text",
+        "name": "buttonLink",
+        "label": "Button Link",
+        "valueType": "string",
+        "comment": "URL or page link for the CTA button"
       }
     ]
   },
@@ -2015,6 +2210,60 @@
         "label": "Card Description (repeated)",
         "valueType": "string",
         "description": "Repeat for each card"
+      },
+      {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "Button Label",
+        "valueType": "string",
+        "comment": "Text shown on the CTA button"
+      },
+      {
+        "component": "text",
+        "name": "buttonLink",
+        "label": "Button Link",
+        "valueType": "string",
+        "comment": "URL or page link for the CTA button"
+      }
+    ]
+  },
+  {
+    "id": "guest-book",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionTitle",
+        "label": "Section Title"
+      }
+    ]
+  },
+  {
+    "id": "guest-book-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "date",
+        "label": "Date"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title (Name)"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "subtitle",
+        "label": "Subtitle (Designation / Organization)"
       }
     ]
   },
@@ -2204,6 +2453,10 @@
     ]
   },
   {
+    "id": "hero-press",
+    "fields": []
+  },
+  {
     "id": "hero",
     "fields": [
       {
@@ -2346,6 +2599,63 @@
         "name": "buttonUrl",
         "label": "Button Link (URL)",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "impact-stories",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionTitle",
+        "label": "Section Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "sectionDescription",
+        "label": "Section Description"
+      }
+    ]
+  },
+  {
+    "id": "impact-story-item",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Card Image"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaText",
+        "label": "CTA Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaLink",
+        "label": "CTA Link"
       }
     ]
   },
@@ -2501,9 +2811,10 @@
         "label": "Slide Description"
       },
       {
-        "component": "image",
-        "name": "slideImage",
-        "label": "Slide Image"
+        "component": "reference",
+        "name": "image",
+        "label": "Holdings Image",
+        "valueType": "string"
       }
     ]
   },
@@ -2536,6 +2847,12 @@
       {
         "component": "text",
         "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
         "name": "title",
         "label": "Card Title"
       },
@@ -2550,6 +2867,12 @@
         "valueType": "string",
         "name": "ctaText",
         "label": "CTA Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaLink",
+        "label": "CTA Link"
       }
     ]
   },
@@ -2590,6 +2913,18 @@
         "valueType": "string",
         "name": "description",
         "label": "Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaText",
+        "label": "CTA Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaLink",
+        "label": "CTA Link"
       }
     ]
   },
@@ -2904,30 +3239,91 @@
     ]
   },
   {
+    "id": "listing-blog",
+    "fields": []
+  },
+  {
+    "id": "listing-brand",
+    "fields": []
+  },
+  {
     "id": "listing-press",
+    "fields": []
+  },
+  {
+    "id": "listing-stories",
     "fields": []
   },
   {
     "id": "lottie-animation",
     "fields": [
       {
-        "component": "aem-content",
+        "component": "text",
         "name": "animation",
-        "label": "Animation JSON Files",
-        "description": "Select the Lottie animation JSON file from DAM",
+        "label": "Animation Filename",
+        "description": "Enter the filename (e.g., mapanimation5) of the JSON stored in lottie-data folder",
         "valueType": "string",
-        "required": true,
-        "rootPath": "/content/dam/gmr/animations"
+        "required": true
       }
     ]
   },
   {
-    "id": "media-contact-header",
+    "id": "media-cards",
     "fields": [
       {
         "component": "text",
-        "name": "heading",
-        "label": "Heading",
+        "name": "sectionTitle",
+        "label": "Section Heading",
+        "valueType": "string",
+        "defaultValue": "Media Cards"
+      },
+      {
+        "component": "richtext",
+        "name": "descriptionHead",
+        "label": "Description Head",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "media-cards-item",
+    "itemLabel": "title",
+    "fields": [
+      {
+        "component": "select",
+        "name": "networkType",
+        "label": "Network Type (For Filtering)",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "None",
+            "value": "none"
+          },
+          {
+            "name": "Group Holdings Board",
+            "value": "groupHoldingsBoard"
+          },
+          {
+            "name": "Other Images",
+            "value": "otherImages"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Holdings Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imagealt",
+        "label": "Image-ALT"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
         "valueType": "string"
       },
       {
@@ -2935,12 +3331,59 @@
         "name": "description",
         "label": "Description",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaLabel",
+        "label": "Link Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaUrl",
+        "label": "Link URL",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaLabel1",
+        "label": "Link Text1",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaUrl1",
+        "label": "Link URL1",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "media-contact-header",
+    "fields": [
+      {
+        "component": "container",
+        "name": "properties",
+        "label": "Properties",
+        "fields": [
+          {
+            "component": "text",
+            "name": "heading",
+            "label": "Heading",
+            "valueType": "string"
+          },
+          {
+            "component": "richtext",
+            "name": "description",
+            "label": "Description",
+            "valueType": "string"
+          }
+        ]
       }
     ]
   },
   {
     "id": "media-contact-item",
-    "itemLabel": "heading",
     "fields": [
       {
         "component": "text",
@@ -3224,105 +3667,175 @@
     ]
   },
   {
+    "id": "our-capabilities",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "desktopImage",
+        "label": "Desktop Image",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "mobileImage",
+        "label": "Mobile Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "Button Label",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "buttonLink",
+        "label": "Button Link",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "our-presence",
     "fields": [
       {
         "component": "text",
-        "name": "sectionHeading",
+        "name": "sectionTitle",
         "label": "Section Heading",
         "valueType": "string",
         "defaultValue": "Our Presence"
       },
       {
-        "component": "reference",
-        "name": "mapBackgroundImageDesktop",
-        "label": "Map Background Image (Desktop)",
-        "valueType": "string"
-      },
-      {
-        "component": "reference",
-        "name": "mapBackgroundImageMobile",
-        "label": "Map Background Image (Mobile)",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "presence-group",
-    "itemLabel": "groupName",
-    "fields": [
-      {
-        "component": "text",
-        "name": "region",
-        "label": "Region (india / international)",
+        "component": "richtext",
+        "name": "sectionDescription",
+        "label": "Description Text",
         "valueType": "string"
       },
       {
         "component": "text",
-        "name": "groupId",
-        "label": "Group ID (e.g. india)",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "groupName",
-        "label": "Group Name (UI Label)",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "isDefault",
-        "label": "Default Selected (yes / no)",
+        "name": "indiaTabLabel",
+        "label": "India Tab Label",
         "valueType": "string",
-        "defaultValue": "no"
+        "defaultValue": "India Presence"
+      },
+      {
+        "component": "text",
+        "name": "internationalTabLabel",
+        "label": "International Tab Label",
+        "valueType": "string",
+        "defaultValue": "International Presence"
+      },
+      {
+        "component": "reference",
+        "name": "mapImage",
+        "label": "Background Map Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text"
+      },
+      {
+        "component": "reference",
+        "name": "lottiePath",
+        "label": "Lottie Path",
+        "valueType": "string"
       }
     ]
   },
   {
-    "id": "presence-location",
-    "itemLabel": "locationName",
+    "id": "network-location-item",
+    "itemLabel": "airportName",
     "fields": [
       {
+        "component": "select",
+        "name": "presenceGroup",
+        "label": "1. Presence Group",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "India Presence",
+            "value": "india"
+          },
+          {
+            "name": "International Presence",
+            "value": "international"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "presenceCategory",
+        "label": "2. Sub-Category",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Airports",
+            "value": "airports"
+          },
+          {
+            "name": "Corporate Office",
+            "value": "corporate-office"
+          },
+          {
+            "name": "Energy",
+            "value": "energy"
+          },
+          {
+            "name": "Highways",
+            "value": "highways"
+          },
+          {
+            "name": "Special Investment Region",
+            "value": "sir"
+          },
+          {
+            "name": "Office",
+            "value": "office"
+          }
+        ]
+      },
+      {
         "component": "text",
-        "name": "region",
-        "label": "Region (india / international)",
+        "name": "airportName",
+        "label": "Airport / Location Name",
         "valueType": "string"
       },
       {
         "component": "text",
-        "name": "groupId",
-        "label": "Group ID (must match Presence Group)",
+        "name": "countryName",
+        "label": "Country Name",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "flagIcon",
+        "label": "Country Flag Icon",
         "valueType": "string"
       },
       {
         "component": "text",
-        "name": "locationName",
-        "label": "Location Name",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "subtext",
-        "label": "Subtext (Yellow Label)",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "topPos",
-        "label": "Top Position (%)",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "leftPos",
-        "label": "Left Position (%)",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "link",
-        "label": "External Link URL",
-        "valueType": "string"
+        "name": "imageAlt",
+        "label": "Alt Text"
       }
     ]
   },
@@ -3471,6 +3984,74 @@
         "component": "text",
         "name": "link",
         "label": "Detail Page URL",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "photo-gallery-slider",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Section Heading",
+        "valueType": "string",
+        "defaultValue": "Everyday Life at GMR"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Section Description",
+        "valueType": "string",
+        "defaultValue": "At GMR, the countless small moments in our people's workday show the human side of building big things together."
+      }
+    ]
+  },
+  {
+    "id": "photo-gallery-slider-item",
+    "fields": [
+      {
+        "component": "select",
+        "name": "gallerykType",
+        "label": "Gallery Type (For Filtering)",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "None",
+            "value": "none"
+          },
+          {
+            "name": "All Photos",
+            "value": "allPhotos"
+          },
+          {
+            "name": "All Videos",
+            "value": "allVideos"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "altText",
+        "label": "Alt Text",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "videoUrl",
+        "label": "Video URL",
         "valueType": "string"
       }
     ]
@@ -3884,6 +4465,45 @@
         "name": "facebookUrl",
         "label": "Facebook URL",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "story-update-page",
+    "fields": []
+  },
+  {
+    "id": "success-stories-page",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionTitle",
+        "label": "Section Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "sectionDescription",
+        "label": "Section Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionCTA",
+        "label": "Section CTA Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionCTALink",
+        "label": "Section CTA Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "category",
+        "label": "Section Category"
       }
     ]
   },

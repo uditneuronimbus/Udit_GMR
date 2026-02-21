@@ -19,6 +19,7 @@
     z-index: 1;
     pointer-events: none;
 }
+.bg-sky-blue.commitment-cards-container .sec-commitment:before { display:none; }
 .sec-commitment .container {
     position: relative;
     z-index: 2;
@@ -60,6 +61,23 @@
     color: var(--blue);
     font-weight: 400;
 }
+.alignment-center.commitment-cards-container .default-content-wrapper {
+    text-align: center;
+    padding-top: 5rem; width: 94%;
+    max-width: 755px; margin: auto;
+}
+.alignment-center.commitment-cards-container .default-content-wrapper h2 {
+    font-weight: var(--fw-regular);
+}
+.alignment-center.commitment-cards-container .default-content-wrapper p {
+    font-size: var(--fs-medium);
+    color: var(--charcoal);
+}
+@media (max-width: 991px) {
+    .alignment-center.commitment-cards-container .default-content-wrapper {
+    padding-top: 60px;
+}
+}
 @media (max-width: 767.5px) {
     .sec-commitment {
         background: url(../../img/bg-outline-mob.jpg) no-repeat bottom left
@@ -82,5 +100,8 @@
     }
     .sec-commitment .col-md-6.comm-card:last-child {
         margin-bottom: 0 !important;
+    }
+        .alignment-center.commitment-cards-container .default-content-wrapper p {
+        font-size: var(--fs-normal);
     }
 }

@@ -565,7 +565,7 @@ export default function decorate(block) {
           ${cardData.imageUrl ? `<img src="${cardData.imageUrl}" alt="${cardData.title}" loading="lazy">` : ''}
         </div>
         <div class="press-card-body">
-          <h3 class="press-card-title">${cardData.title}</h3>
+          <h3 class="press-card-title"><a href="${cardData.ctaLink}">${cardData.title}</a></h3>
           <div class="press-card-meta">
             ${cardData.category ? `<span class="badge ${badgeClass}">${cardData.category.charAt(0).toUpperCase() + cardData.category.slice(1)}</span>` : ''}
             ${cardData.category ? '<span class="meta-separator">|</span>' : ''}

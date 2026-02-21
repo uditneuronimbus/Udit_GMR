@@ -63,7 +63,14 @@
       "contact-reachout-list",
       "image-scroll-card",
       "key-highlight-button",
-      "lottie-animation"
+      "contact-us",
+      "lottie-animation",
+      "media-cards",
+      "photo-gallery-slider",
+      "impact-stories",
+      "csr-engine",
+      "guest-book",
+      "innovation-cards"
     ]
   },
   {
@@ -76,6 +83,12 @@
     "id": "all-business-cards",
     "components": [
       "all-business-cards-item"
+    ]
+  },
+  {
+    "id": "article-hero",
+    "components": [
+      "text"
     ]
   },
   {
@@ -119,6 +132,12 @@
     "id": "cards",
     "components": [
       "card"
+    ]
+  },
+  {
+    "id": "career-faqs-list",
+    "components": [
+      "career-faqs-item"
     ]
   },
   {
@@ -171,6 +190,12 @@
     ]
   },
   {
+    "id": "csr-engine",
+    "components": [
+      "csr-engine-item"
+    ]
+  },
+  {
     "id": "document-preview",
     "components": []
   },
@@ -178,12 +203,6 @@
     "id": "factsheet",
     "components": [
       "factsheet-item"
-    ]
-  },
-  {
-    "id": "only-career-faqs-items",
-    "components": [
-      "career-faqs-item"
     ]
   },
   {
@@ -270,6 +289,12 @@
     ]
   },
   {
+    "id": "guest-book",
+    "components": [
+      "guest-book-item"
+    ]
+  },
+  {
     "id": "header-img",
     "components": [
       "menu-img"
@@ -294,6 +319,10 @@
     ]
   },
   {
+    "id": "hero-press",
+    "components": []
+  },
+  {
     "id": "image-scroll-card",
     "components": [
       "image-scroll-card-item"
@@ -303,6 +332,12 @@
     "id": "image-slider",
     "components": [
       "image-slider-item"
+    ]
+  },
+  {
+    "id": "impact-stories",
+    "components": [
+      "impact-story-item"
     ]
   },
   {
@@ -364,12 +399,30 @@
     ]
   },
   {
+    "id": "listing-blog",
+    "components": []
+  },
+  {
+    "id": "listing-brand",
+    "components": []
+  },
+  {
     "id": "listing-press",
+    "components": []
+  },
+  {
+    "id": "listing-stories",
     "components": []
   },
   {
     "id": "lottie-animation",
     "components": []
+  },
+  {
+    "id": "media-cards",
+    "components": [
+      "media-cards-item"
+    ]
   },
   {
     "id": "media-contact-header",
@@ -414,10 +467,13 @@
     "components": []
   },
   {
-    "id": "our-presence-filter",
+    "id": "our-capabilities",
+    "components": []
+  },
+  {
+    "id": "our-presence",
     "components": [
-      "presence-group",
-      "presence-location"
+      "network-location-item"
     ]
   },
   {
@@ -430,6 +486,12 @@
     "id": "only-partners-items",
     "components": [
       "partner-listing-item"
+    ]
+  },
+  {
+    "id": "photo-gallery-slider",
+    "components": [
+      "photo-gallery-slider-item"
     ]
   },
   {
@@ -468,6 +530,14 @@
   },
   {
     "id": "search-results",
+    "components": []
+  },
+  {
+    "id": "story-update-page",
+    "components": []
+  },
+  {
+    "id": "success-stories-page",
     "components": []
   },
   {
