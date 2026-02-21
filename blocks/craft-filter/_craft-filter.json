@@ -62,24 +62,24 @@
                     "valueType": "string",
                     "options": [
                         {
-                            "name": "Airports",
-                            "value": "airports"
+                            "name": "Shopping Bags",
+                            "value": "shopping-bags"
                         },
                         {
-                            "name": "Energy",
-                            "value": "energy"
+                            "name": "Lunch Bags",
+                            "value": "lunch-bags"
                         },
                         {
-                            "name": "Transportation",
-                            "value": "Transportation "
+                            "name": "Sling Bags and Purses",
+                            "value": "sling-bags"
                         },
                         {
-                            "name": "GMR Varalakshmi Foundation",
-                            "value": "foundation"
+                            "name": "Home Decor",
+                            "value": "home-decor"
                         },
                         {
-                            "name": "EPC",
-                            "value": "epc"
+                            "name": "Office Supplies",
+                            "value": "office-supplies"
                         }
                     ]
                 },

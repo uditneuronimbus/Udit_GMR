@@ -120,11 +120,11 @@ export default function decorate(block) {
        6️⃣ Data Collection & Card Building
     ================================ */
     const categoryMapping = {
-        "airports": "Airports",
-        "energy": "Energy",
-        "transportation": "Transportation",
-        "foundation": "GMR Varalakshmi Foundation",
-        "epc": "EPC"
+        "shopping-bags": "Shopping Bags",
+        "lunch-bags": "Lunch Bags",
+        "sling-bags": "Sling Bags and Purses",
+        "home-decor": "Home Decor",
+        "office-supplies": "Office Supplies"
     };
 
     const categorySlugToName = {};
