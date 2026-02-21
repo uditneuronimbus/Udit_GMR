@@ -1,7 +1,7 @@
 import { moveInstrumentation } from "../../scripts/scripts.js";
-import capDecorator from "../our-capabilities/our-capabilities.js";
-import itdbDecorator from "../image-title-desc-button/image-title-desc-button.js";
-import obDecorator from "../overlay-banner/overlay-banner.js";
+import { loadCSS } from "../../scripts/aem.js";
+import cgDecorator from "../corporate-governance/corporate-governance.js";
+import abcDecorator from "../all-business-cards/all-business-cards.js";
 
 /**
  * Business Enablers Decorator
@@ -72,7 +72,7 @@ export default async function decorate(block) {
   const itemsData = itemRows.map(row => {
     const cells = [...row.children];
     return {
-      type: cells[0]?.textContent?.trim() || "capabilities",
+      type: cells[0]?.textContent?.trim() || "corporate-governance",
       title: cells[1],
       description: cells[2],
       desktopImage: cells[3],
@@ -84,13 +84,17 @@ export default async function decorate(block) {
     };
   });
 
+  // Pre-load CSS for mapped components
+  loadCSS("/blocks/corporate-governance/corporate-governance.css");
+  loadCSS("/blocks/all-business-cards/all-business-cards.css");
+
   [0, 1, 2].forEach(index => {
     const data = itemsData[index];
     const panel = document.createElement("div");
     panel.className = `business-enablers-panel ${index === 0 ? "active" : ""}`;
     panel.id = `enabler-panel-${index}`;
 
-    if (data) {
+    if (data && data.type !== "Select an option...") {
       executeMappedDecorator(panel, data);
       moveInstrumentation(data.originalRow, panel);
     } else {
@@ -123,48 +127,47 @@ export default async function decorate(block) {
    * Helper to execute actual decorators
    */
   function executeMappedDecorator(targetEl, data) {
-    const { type, title, description, desktopImage, mobileImage, imageAlt, buttonLabel, buttonLink } = data;
+    const { type, title, description, desktopImage, imageAlt } = data;
 
     // Create a "Fake Block" that looks like what the target expects
     const fakeBlock = document.createElement("div");
     fakeBlock.className = type;
 
-    if (type === "image-title-desc-button") {
-      // 7 rows expected: DesktopImg, MobileImg, Alt, Title, Desc, BtnText, BtnLink
+    if (type === "corporate-governance") {
+      // corporate-governance expects: 
+      // 1. Intro paragraphs (richtext)
+      // 2. Section subtitle (text)
+      // 3. Desktop image (reference)
+      // 4. Alt text (text)
+      // Followed by section items if any, but we map fields to the header part
+
       fakeBlock.append(
-        desktopImage.cloneNode(true),
-        mobileImage.cloneNode(true),
-        imageAlt.cloneNode(true),
-        title.cloneNode(true),
         description.cloneNode(true),
-        buttonLabel.cloneNode(true),
-        buttonLink.cloneNode(true)
-      );
-      itdbDecorator(fakeBlock);
-    } else if (type === "overlay-banner") {
-      // 5-7 rows: DesktopImg, Title, Desc, BtnLabel, BtnUrl, MobileImg, Alt
-      fakeBlock.append(
-        desktopImage.cloneNode(true),
         title.cloneNode(true),
-        description.cloneNode(true),
-        buttonLabel.cloneNode(true),
-        buttonLink.cloneNode(true),
-        mobileImage.cloneNode(true),
+        desktopImage.cloneNode(true),
         imageAlt.cloneNode(true)
       );
-      obDecorator(fakeBlock);
-    } else {
-      // capabilities: Title, Desc, DesktopImg, MobileImg, Alt, BtnLabel, BtnLink
+      cgDecorator(fakeBlock);
+    } else if (type === "all-business-cards") {
+      // all-business-cards expects:
+      // 1. Section Heading (text)
+      // 2. Card Description (richtext)
+      // 3... Card Items: [Image, Alt, Title, Description]
+
+      const cardRow = document.createElement("div");
+      cardRow.append(
+        desktopImage.cloneNode(true),
+        imageAlt.cloneNode(true),
+        title.cloneNode(true),
+        description.cloneNode(true)
+      );
+
       fakeBlock.append(
         title.cloneNode(true),
         description.cloneNode(true),
-        desktopImage.cloneNode(true),
-        mobileImage.cloneNode(true),
-        imageAlt.cloneNode(true),
-        buttonLabel.cloneNode(true),
-        buttonLink.cloneNode(true)
+        cardRow
       );
-      capDecorator(fakeBlock);
+      abcDecorator(fakeBlock);
     }
 
     targetEl.append(fakeBlock);

@@ -78,16 +78,12 @@
                     "valueType": "string",
                     "options": [
                         {
-                            "name": "Image Title Desc Button",
-                            "value": "image-title-desc-button"
+                            "name": "Corporate Governance",
+                            "value": "corporate-governance"
                         },
                         {
-                            "name": "Overlay Banner",
-                            "value": "overlay-banner"
-                        },
-                        {
-                            "name": "Our Capabilities",
-                            "value": "capabilities"
+                            "name": "All Business Cards",
+                            "value": "all-business-cards"
                         }
                     ]
                 },
