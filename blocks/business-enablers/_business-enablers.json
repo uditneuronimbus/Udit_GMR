@@ -89,14 +89,68 @@
                 },
                 {
                     "component": "text",
+                    "name": "cgSectionSubtitle",
+                    "label": "CG Section Subtitle",
+                    "valueType": "string"
+                },
+                {
+                    "component": "richtext",
+                    "name": "cgIntroMainText",
+                    "label": "CG Intro Paragraphs",
+                    "valueType": "string"
+                },
+                {
+                    "component": "reference",
+                    "name": "cgDesktopImage",
+                    "label": "CG Desktop Image",
+                    "valueType": "string"
+                },
+                {
+                    "component": "text",
+                    "name": "cgImageAlt",
+                    "label": "CG Image Alt",
+                    "valueType": "string"
+                },
+                {
+                    "component": "text",
+                    "name": "abcSectionTitle",
+                    "label": "ABC Section Heading",
+                    "valueType": "string"
+                },
+                {
+                    "component": "richtext",
+                    "name": "abcCardDescription",
+                    "label": "ABC Card Description",
+                    "valueType": "string"
+                },
+                {
+                    "component": "text",
+                    "name": "abcCardTitle",
+                    "label": "ABC Card Title",
+                    "valueType": "string"
+                },
+                {
+                    "component": "reference",
+                    "name": "abcCardImage",
+                    "label": "ABC Card Image",
+                    "valueType": "string"
+                },
+                {
+                    "component": "text",
+                    "name": "abcImageAlt",
+                    "label": "ABC Image Alt",
+                    "valueType": "string"
+                },
+                {
+                    "component": "text",
                     "name": "tabTitle",
-                    "label": "Internal Title",
+                    "label": "Internal Title (Deprecated)",
                     "valueType": "string"
                 },
                 {
                     "component": "richtext",
                     "name": "tabDescription",
-                    "label": "Internal Description/Content",
+                    "label": "Internal Description (Deprecated)",
                     "valueType": "string"
                 },
                 {

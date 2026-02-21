@@ -10,7 +10,7 @@ import abcDecorator from "../all-business-cards/all-business-cards.js";
 export default async function decorate(block) {
   const rows = [...block.children];
 
-  // 1. Identification: First 5 rows are "Global" metadata for the whole block
+  // Global Metadata (First 5 rows)
   const [titleRow, descriptionRow, t1Row, t2Row, t3Row, ...itemRows] = rows;
 
   const titleText = titleRow?.textContent?.trim() || "";
@@ -21,13 +21,12 @@ export default async function decorate(block) {
     t3Row?.textContent?.trim() || "Tab 3",
   ];
 
-  // Clear immediately to prevent raw display
   block.innerHTML = "";
 
   const container = document.createElement("div");
   container.className = "business-enablers-container container";
 
-  // 1. Intro Section (Top of the whole Business Enablers block)
+  // 1. Intro Section
   const intro = document.createElement("div");
   intro.className = "business-enablers-intro text-center mb-5";
 
@@ -65,29 +64,32 @@ export default async function decorate(block) {
   });
   container.append(tabsNav);
 
-  // 3. Panels
+  // 3. Panels Container
   const panelsContainer = document.createElement("div");
   panelsContainer.className = "business-enablers-panels";
 
-  // Parse items
+  // Parse items with the new 17-cell structure
   const itemsData = [0, 1, 2].map(index => {
     const row = itemRows[index];
     if (!row) return null;
     const cells = [...row.children];
+
     return {
       type: cells[0]?.textContent?.trim() || "",
-      tabTitle: cells[1],
-      tabDescription: cells[2],
-      desktopImage: cells[3],
-      mobileImage: cells[4],
-      imageAlt: cells[5],
-      buttonLabel: cells[6],
-      buttonLink: cells[7],
+      // Target specific fields
+      cgSubtitle: cells[1],
+      cgIntro: cells[2],
+      cgImage: cells[3],
+      cgAlt: cells[4],
+      abcTitle: cells[5],
+      abcDesc: cells[6],
+      abcCardTitle: cells[7],
+      abcCardImage: cells[8],
+      abcCardAlt: cells[9],
       originalRow: row
     };
   });
 
-  // Load CSS for targets
   loadCSS("/blocks/corporate-governance/corporate-governance.css");
   loadCSS("/blocks/all-business-cards/all-business-cards.css");
 
@@ -118,7 +120,6 @@ export default async function decorate(block) {
       const targetId = btn.dataset.tabId;
       btns.forEach((b) => b.classList.remove("active"));
       panels.forEach((p) => p.classList.remove("active"));
-
       btn.classList.add("active");
       const targetPanel = panelsContainer.querySelector(`#enabler-panel-${targetId}`);
       if (targetPanel) targetPanel.classList.add("active");
@@ -128,25 +129,25 @@ export default async function decorate(block) {
   /**
    * Helper to create a standard Franklin row-cell structure
    */
-  function createRow(contentNode) {
+  function createRow(...contentNodes) {
     const row = document.createElement("div");
-    const cell = document.createElement("div");
-    if (contentNode && contentNode.cloneNode) {
-      // Re-wrap in 'p' if it's plain text, as Franklin decorators often expect 'p'
-      if (contentNode.children.length === 0 && contentNode.textContent.trim()) {
-        const p = document.createElement("p");
-        p.textContent = contentNode.textContent.trim();
-        cell.append(p);
+    contentNodes.forEach(node => {
+      const cell = document.createElement("div");
+      if (node && node.cloneNode) {
+        if (node.children.length === 0 && node.textContent.trim()) {
+          const p = document.createElement("p");
+          p.textContent = node.textContent.trim();
+          cell.append(p);
+        } else {
+          cell.append(node.cloneNode(true));
+        }
       } else {
-        cell.append(contentNode.cloneNode(true));
+        const p = document.createElement("p");
+        p.innerHTML = "&nbsp;";
+        cell.append(p);
       }
-    } else {
-      // Empty cell but must exist
-      const p = document.createElement("p");
-      p.innerHTML = "&nbsp;";
-      cell.append(p);
-    }
-    row.append(cell);
+      row.append(cell);
+    });
     return row;
   }
 
@@ -154,40 +155,28 @@ export default async function decorate(block) {
    * Helper to execute actual decorators
    */
   async function executeMappedDecorator(targetEl, data) {
-    const { type, tabTitle, tabDescription, desktopImage, imageAlt } = data;
+    const { type, cgSubtitle, cgIntro, cgImage, cgAlt, abcTitle, abcDesc, abcCardTitle, abcCardImage, abcCardAlt } = data;
 
     const fakeBlock = document.createElement("div");
     fakeBlock.className = type;
 
     if (type === "corporate-governance") {
-      // corporate-governance.js expects:
-      // Row 1: Introparagraphs (richtext)
-      // Row 2: Section subtitle (text)
-      // Row 3: Desktop image (reference)
-      // Row 4: Alt text (text)
+      // corporate-governance.js: Intro, Subtitle, DesktopImg, Alt
       fakeBlock.append(
-        createRow(tabDescription),
-        createRow(tabTitle),
-        createRow(desktopImage),
-        createRow(imageAlt)
+        createRow(cgIntro),
+        createRow(cgSubtitle),
+        createRow(cgImage),
+        createRow(cgAlt)
       );
       cgDecorator(fakeBlock);
     } else if (type === "all-business-cards") {
-      // all-business-cards.js expects:
-      // Row 1: Section Heading (text)
-      // Row 2: Card Description (richtext)
-      // Row 3... Card Rows: [Image, Alt, Title, Description]
-      const cardRow = document.createElement("div");
-      // Multi-cell row
-      [desktopImage, imageAlt, tabTitle, tabDescription].forEach(node => {
-        const cell = document.createElement("div");
-        if (node) cell.append(node.cloneNode(true));
-        cardRow.append(cell);
-      });
+      // all-business-cards.js: SectionHeading, CardDescription, CardRows...
+      // CardRow: [Image, Alt, Title, Description]
+      const cardRow = createRow(abcCardImage, abcCardAlt, abcCardTitle, abcDesc);
 
       fakeBlock.append(
-        createRow(tabTitle),
-        createRow(tabDescription),
+        createRow(abcTitle),
+        createRow(abcDesc),
         cardRow
       );
       await abcDecorator(fakeBlock);
