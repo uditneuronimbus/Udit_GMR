@@ -1,7 +1,5 @@
 import { moveInstrumentation } from "../../scripts/scripts.js";
 import { loadCSS } from "../../scripts/aem.js";
-import cgDecorator from "../corporate-governance/corporate-governance.js";
-import abcDecorator from "../all-business-cards/all-business-cards.js";
 
 /**
  * Business Enablers Decorator
@@ -10,8 +8,14 @@ import abcDecorator from "../all-business-cards/all-business-cards.js";
 export default async function decorate(block) {
   const rows = [...block.children];
 
-  // Metadata: Title, Description, Tab1Label, Tab2Label, Tab3Label
-  const [titleRow, descriptionRow, t1Row, t2Row, t3Row, ...itemRows] = rows;
+  // Robustly identify metadata vs items
+  // Total of 5 metadata fields: title, description, tab1Label, tab2Label, tab3Label
+  // But Franklin might not render all if empty. We'll take the first 5 rows as metadata.
+  const metadataRowCount = 5;
+  const metadataRows = rows.slice(0, metadataRowCount);
+  const itemRows = rows.slice(metadataRowCount);
+
+  const [titleRow, descriptionRow, t1Row, t2Row, t3Row] = metadataRows;
 
   const titleText = titleRow?.textContent?.trim() || "";
   const descriptionHTML = descriptionRow?.children[0]?.innerHTML || descriptionRow?.innerHTML || "";
@@ -30,7 +34,7 @@ export default async function decorate(block) {
   const intro = document.createElement("div");
   intro.className = "business-enablers-intro text-center mb-5";
 
-  if (titleRow) {
+  if (titleText && titleText !== "Select an option...") {
     const h2 = document.createElement("h2");
     h2.className = "business-enablers-title";
     h2.textContent = titleText;
@@ -38,7 +42,7 @@ export default async function decorate(block) {
     intro.append(h2);
   }
 
-  if (descriptionRow) {
+  if (descriptionHTML && descriptionHTML !== "<div></div>") {
     const desc = document.createElement("div");
     desc.className = "business-enablers-description";
     desc.innerHTML = descriptionHTML;
@@ -68,11 +72,24 @@ export default async function decorate(block) {
   const panelsContainer = document.createElement("div");
   panelsContainer.className = "business-enablers-panels";
 
+  // Pre-fetch decorators dynamically to be safe
+  let cgDecorator, abcDecorator;
+  try {
+    const [cgMod, abcMod] = await Promise.all([
+      import("../corporate-governance/corporate-governance.js"),
+      import("../all-business-cards/all-business-cards.js")
+    ]);
+    cgDecorator = cgMod.default;
+    abcDecorator = abcMod.default;
+  } catch (e) {
+    console.error("Failed to load component decorators", e);
+  }
+
   // Parse items
   const itemsData = itemRows.map(row => {
     const cells = [...row.children];
     return {
-      type: cells[0]?.textContent?.trim() || "corporate-governance",
+      type: cells[0]?.textContent?.trim() || "",
       title: cells[1],
       description: cells[2],
       desktopImage: cells[3],
@@ -84,7 +101,7 @@ export default async function decorate(block) {
     };
   });
 
-  // Pre-load CSS for mapped components
+  // Pre-load CSS
   loadCSS("/blocks/corporate-governance/corporate-governance.css");
   loadCSS("/blocks/all-business-cards/all-business-cards.css");
 
@@ -94,11 +111,11 @@ export default async function decorate(block) {
     panel.className = `business-enablers-panel ${index === 0 ? "active" : ""}`;
     panel.id = `enabler-panel-${index}`;
 
-    if (data && data.type !== "Select an option...") {
-      executeMappedDecorator(panel, data);
+    if (data && data.type && data.type !== "Select an option...") {
+      executeMappedDecorator(panel, data, cgDecorator, abcDecorator);
       moveInstrumentation(data.originalRow, panel);
     } else {
-      panel.innerHTML = `<p class="text-center text-muted">Please author content for Tab ${index + 1}</p>`;
+      panel.innerHTML = `<div class="placeholder-content">Please author a <b>Business Enablers Item</b> for Tab ${index + 1} and select a <b>Component Type</b>.</div>`;
     }
 
     panelsContainer.append(panel);
@@ -124,50 +141,46 @@ export default async function decorate(block) {
   });
 
   /**
-   * Helper to execute actual decorators
+   * Helper to execute actual decorators with safety checks
    */
-  function executeMappedDecorator(targetEl, data) {
-    const { type, title, description, desktopImage, imageAlt } = data;
+  async function executeMappedDecorator(targetEl, data, cgDec, abcDec) {
+    const { type, title, description, desktopImage, mobileImage, imageAlt, buttonLabel, buttonLink } = data;
 
-    // Create a "Fake Block" that looks like what the target expects
     const fakeBlock = document.createElement("div");
     fakeBlock.className = type;
 
+    // Helper to safely clone nodes
+    const getSafe = (node) => (node && node.cloneNode) ? node.cloneNode(true) : document.createElement("div");
+
     if (type === "corporate-governance") {
-      // corporate-governance expects: 
-      // 1. Intro paragraphs (richtext)
-      // 2. Section subtitle (text)
-      // 3. Desktop image (reference)
-      // 4. Alt text (text)
-      // Followed by section items if any, but we map fields to the header part
-
+      if (!cgDec) return;
+      // Expects: Intro, Subtitle, DesktopImg, Alt
       fakeBlock.append(
-        description.cloneNode(true),
-        title.cloneNode(true),
-        desktopImage.cloneNode(true),
-        imageAlt.cloneNode(true)
+        getSafe(description),
+        getSafe(title),
+        getSafe(desktopImage),
+        getSafe(imageAlt)
       );
-      cgDecorator(fakeBlock);
+      cgDec(fakeBlock);
     } else if (type === "all-business-cards") {
-      // all-business-cards expects:
-      // 1. Section Heading (text)
-      // 2. Card Description (richtext)
-      // 3... Card Items: [Image, Alt, Title, Description]
-
+      if (!abcDec) return;
+      // Expects: SectionTitle, SectionDesc, CardRows...
       const cardRow = document.createElement("div");
       cardRow.append(
-        desktopImage.cloneNode(true),
-        imageAlt.cloneNode(true),
-        title.cloneNode(true),
-        description.cloneNode(true)
+        getSafe(desktopImage),
+        getSafe(imageAlt),
+        getSafe(title),
+        getSafe(description),
+        document.createElement("div"), // extra cells just in case
+        document.createElement("div")
       );
 
       fakeBlock.append(
-        title.cloneNode(true),
-        description.cloneNode(true),
+        getSafe(title),
+        getSafe(description),
         cardRow
       );
-      abcDecorator(fakeBlock);
+      await abcDec(fakeBlock);
     }
 
     targetEl.append(fakeBlock);
