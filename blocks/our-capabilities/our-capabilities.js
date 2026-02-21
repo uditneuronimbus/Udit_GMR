@@ -30,7 +30,7 @@ export default function decorate(block) {
 
     // Content Column
     const contentCol = document.createElement("div");
-    contentCol.className = "col-lg-6 our-capabilities-content";
+    contentCol.className = "col-md-7 text-center mx-auto mb-5 our-capabilities-content";
 
     if (title) {
         const h2 = document.createElement("h2");
@@ -46,17 +46,9 @@ export default function decorate(block) {
         contentCol.append(desc);
     }
 
-    if (buttonLabel) {
-        const cta = document.createElement("a");
-        cta.className = "btn btn-primary our-capabilities-cta";
-        cta.href = buttonLink;
-        cta.textContent = buttonLabel;
-        contentCol.append(cta);
-    }
-
     // Image Column
     const imageCol = document.createElement("div");
-    imageCol.className = "col-lg-6 our-capabilities-image-wrap";
+    imageCol.className = "col-md-7 text-center mx-auto mb-5 our-capabilities-image-wrap";
 
     if (desktopPicture || mobilePicture) {
         const pictureWrap = document.createElement("div");
@@ -80,6 +72,21 @@ export default function decorate(block) {
 
     row.append(contentCol, imageCol);
     container.append(row);
+
+    // ✅ CTA moved BELOW image
+    if (buttonLabel) {
+        const ctaWrap = document.createElement("div");
+        ctaWrap.className = "text-center mb-5";
+
+        const cta = document.createElement("a");
+        cta.className = "btn btn-primary our-capabilities-cta";
+        cta.href = buttonLink;
+        cta.textContent = buttonLabel;
+
+        ctaWrap.append(cta);
+        container.append(ctaWrap);
+    }
+
     block.append(container);
 
     function applyAltText(pictureEl, alt) {
