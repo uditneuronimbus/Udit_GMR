@@ -759,6 +759,12 @@
         "valueType": "string"
       },
       {
+        "component": "reference",
+        "name": "mobileImage",
+        "label": "Mobile Image",
+        "valueType": "string"
+      },
+      {
         "component": "text",
         "name": "imageAlt",
         "label": "Image Alt Text",
