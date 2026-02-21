@@ -128,12 +128,6 @@
     ]
   },
   {
-    "id": "business-enablers",
-    "components": [
-      "business-enablers-item"
-    ]
-  },
-  {
     "id": "businesses-section",
     "components": [
       "business-item"
