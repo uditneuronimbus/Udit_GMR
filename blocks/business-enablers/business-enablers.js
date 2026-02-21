@@ -1,21 +1,17 @@
 import { moveInstrumentation } from "../../scripts/scripts.js";
 import { loadCSS } from "../../scripts/aem.js";
+import cgDecorator from "../corporate-governance/corporate-governance.js";
+import abcDecorator from "../all-business-cards/all-business-cards.js";
 
 /**
  * Business Enablers Decorator
- * Executes actual decorators of other components inside tab panels.
+ * Maps authored content into existing component decorators.
  */
 export default async function decorate(block) {
   const rows = [...block.children];
 
-  // Robustly identify metadata vs items
-  // Total of 5 metadata fields: title, description, tab1Label, tab2Label, tab3Label
-  // But Franklin might not render all if empty. We'll take the first 5 rows as metadata.
-  const metadataRowCount = 5;
-  const metadataRows = rows.slice(0, metadataRowCount);
-  const itemRows = rows.slice(metadataRowCount);
-
-  const [titleRow, descriptionRow, t1Row, t2Row, t3Row] = metadataRows;
+  // 1. Identification: First 5 rows are "Global" metadata for the whole block
+  const [titleRow, descriptionRow, t1Row, t2Row, t3Row, ...itemRows] = rows;
 
   const titleText = titleRow?.textContent?.trim() || "";
   const descriptionHTML = descriptionRow?.children[0]?.innerHTML || descriptionRow?.innerHTML || "";
@@ -25,12 +21,13 @@ export default async function decorate(block) {
     t3Row?.textContent?.trim() || "Tab 3",
   ];
 
+  // Clear immediately to prevent raw display
   block.innerHTML = "";
 
   const container = document.createElement("div");
   container.className = "business-enablers-container container";
 
-  // 1. Intro Section
+  // 1. Intro Section (Top of the whole Business Enablers block)
   const intro = document.createElement("div");
   intro.className = "business-enablers-intro text-center mb-5";
 
@@ -72,26 +69,15 @@ export default async function decorate(block) {
   const panelsContainer = document.createElement("div");
   panelsContainer.className = "business-enablers-panels";
 
-  // Pre-fetch decorators dynamically to be safe
-  let cgDecorator, abcDecorator;
-  try {
-    const [cgMod, abcMod] = await Promise.all([
-      import("../corporate-governance/corporate-governance.js"),
-      import("../all-business-cards/all-business-cards.js")
-    ]);
-    cgDecorator = cgMod.default;
-    abcDecorator = abcMod.default;
-  } catch (e) {
-    console.error("Failed to load component decorators", e);
-  }
-
   // Parse items
-  const itemsData = itemRows.map(row => {
+  const itemsData = [0, 1, 2].map(index => {
+    const row = itemRows[index];
+    if (!row) return null;
     const cells = [...row.children];
     return {
       type: cells[0]?.textContent?.trim() || "",
-      title: cells[1],
-      description: cells[2],
+      tabTitle: cells[1],
+      tabDescription: cells[2],
       desktopImage: cells[3],
       mobileImage: cells[4],
       imageAlt: cells[5],
@@ -101,21 +87,20 @@ export default async function decorate(block) {
     };
   });
 
-  // Pre-load CSS
+  // Load CSS for targets
   loadCSS("/blocks/corporate-governance/corporate-governance.css");
   loadCSS("/blocks/all-business-cards/all-business-cards.css");
 
-  [0, 1, 2].forEach(index => {
-    const data = itemsData[index];
+  itemsData.forEach((data, index) => {
     const panel = document.createElement("div");
     panel.className = `business-enablers-panel ${index === 0 ? "active" : ""}`;
     panel.id = `enabler-panel-${index}`;
 
     if (data && data.type && data.type !== "Select an option...") {
-      executeMappedDecorator(panel, data, cgDecorator, abcDecorator);
+      executeMappedDecorator(panel, data);
       moveInstrumentation(data.originalRow, panel);
     } else {
-      panel.innerHTML = `<div class="placeholder-content">Please author a <b>Business Enablers Item</b> for Tab ${index + 1} and select a <b>Component Type</b>.</div>`;
+      panel.innerHTML = `<div class="placeholder-content">Please author <b>"Business Enablers Item"</b> ${index + 1} and select a <b>"Component Type"</b>.</div>`;
     }
 
     panelsContainer.append(panel);
@@ -141,46 +126,71 @@ export default async function decorate(block) {
   });
 
   /**
-   * Helper to execute actual decorators with safety checks
+   * Helper to create a standard Franklin row-cell structure
    */
-  async function executeMappedDecorator(targetEl, data, cgDec, abcDec) {
-    const { type, title, description, desktopImage, mobileImage, imageAlt, buttonLabel, buttonLink } = data;
+  function createRow(contentNode) {
+    const row = document.createElement("div");
+    const cell = document.createElement("div");
+    if (contentNode && contentNode.cloneNode) {
+      // Re-wrap in 'p' if it's plain text, as Franklin decorators often expect 'p'
+      if (contentNode.children.length === 0 && contentNode.textContent.trim()) {
+        const p = document.createElement("p");
+        p.textContent = contentNode.textContent.trim();
+        cell.append(p);
+      } else {
+        cell.append(contentNode.cloneNode(true));
+      }
+    } else {
+      // Empty cell but must exist
+      const p = document.createElement("p");
+      p.innerHTML = "&nbsp;";
+      cell.append(p);
+    }
+    row.append(cell);
+    return row;
+  }
+
+  /**
+   * Helper to execute actual decorators
+   */
+  async function executeMappedDecorator(targetEl, data) {
+    const { type, tabTitle, tabDescription, desktopImage, imageAlt } = data;
 
     const fakeBlock = document.createElement("div");
     fakeBlock.className = type;
 
-    // Helper to safely clone nodes
-    const getSafe = (node) => (node && node.cloneNode) ? node.cloneNode(true) : document.createElement("div");
-
     if (type === "corporate-governance") {
-      if (!cgDec) return;
-      // Expects: Intro, Subtitle, DesktopImg, Alt
+      // corporate-governance.js expects:
+      // Row 1: Introparagraphs (richtext)
+      // Row 2: Section subtitle (text)
+      // Row 3: Desktop image (reference)
+      // Row 4: Alt text (text)
       fakeBlock.append(
-        getSafe(description),
-        getSafe(title),
-        getSafe(desktopImage),
-        getSafe(imageAlt)
+        createRow(tabDescription),
+        createRow(tabTitle),
+        createRow(desktopImage),
+        createRow(imageAlt)
       );
-      cgDec(fakeBlock);
+      cgDecorator(fakeBlock);
     } else if (type === "all-business-cards") {
-      if (!abcDec) return;
-      // Expects: SectionTitle, SectionDesc, CardRows...
+      // all-business-cards.js expects:
+      // Row 1: Section Heading (text)
+      // Row 2: Card Description (richtext)
+      // Row 3... Card Rows: [Image, Alt, Title, Description]
       const cardRow = document.createElement("div");
-      cardRow.append(
-        getSafe(desktopImage),
-        getSafe(imageAlt),
-        getSafe(title),
-        getSafe(description),
-        document.createElement("div"), // extra cells just in case
-        document.createElement("div")
-      );
+      // Multi-cell row
+      [desktopImage, imageAlt, tabTitle, tabDescription].forEach(node => {
+        const cell = document.createElement("div");
+        if (node) cell.append(node.cloneNode(true));
+        cardRow.append(cell);
+      });
 
       fakeBlock.append(
-        getSafe(title),
-        getSafe(description),
+        createRow(tabTitle),
+        createRow(tabDescription),
         cardRow
       );
-      await abcDec(fakeBlock);
+      await abcDecorator(fakeBlock);
     }
 
     targetEl.append(fakeBlock);
