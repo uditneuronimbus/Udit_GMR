@@ -668,6 +668,163 @@
     "fields": []
   },
   {
+    "id": "business-enablers",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "reference",
+        "label": "Reference"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Section Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Section Description",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "tab1Label",
+        "label": "Tab 1 Button Label",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "tab2Label",
+        "label": "Tab 2 Button Label",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "tab3Label",
+        "label": "Tab 3 Button Label",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "business-enablers-item",
+    "fields": [
+      {
+        "component": "select",
+        "name": "type",
+        "label": "Component Type",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Corporate Governance",
+            "value": "corporate-governance"
+          },
+          {
+            "name": "All Business Cards",
+            "value": "all-business-cards"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "cgSectionSubtitle",
+        "label": "CG Section Subtitle",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "cgIntroMainText",
+        "label": "CG Intro Paragraphs",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "cgDesktopImage",
+        "label": "CG Desktop Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "cgImageAlt",
+        "label": "CG Image Alt",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "abcSectionTitle",
+        "label": "ABC Section Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "abcCardDescription",
+        "label": "ABC Card Description",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "abcCardTitle",
+        "label": "ABC Card Title",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "abcCardImage",
+        "label": "ABC Card Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "abcImageAlt",
+        "label": "ABC Image Alt",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "tabTitle",
+        "label": "Internal Title (Deprecated)",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "tabDescription",
+        "label": "Internal Description (Deprecated)",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "desktopImage",
+        "label": "Desktop Image",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "mobileImage",
+        "label": "Mobile Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Image Alt",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "CTA Label",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "buttonLink",
+        "label": "CTA Link",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "businesses-section",
     "fields": [
       {
@@ -734,6 +891,52 @@
         "valueType": "string",
         "name": "ctaLink",
         "label": "CTA Link"
+      }
+    ]
+  },
+  {
+    "id": "cards-and-image",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Section Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Section Description",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Main Image",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "mobileImage",
+        "label": "Mobile Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "cards-and-image-item",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "content",
+        "label": "Card Content",
+        "valueType": "string"
       }
     ]
   },
@@ -1297,6 +1500,87 @@
         "component": "text",
         "name": "point6",
         "label": "Point 6 (Optional)"
+      }
+    ]
+  },
+  {
+    "id": "craft-filter",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title (Main Heading)",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "filterPanelTitle",
+        "label": "Filter Sidebar Title",
+        "valueType": "string",
+        "defaultValue": "Filter by Year and Category"
+      }
+    ]
+  },
+  {
+    "id": "craft-listing-item",
+    "itemLabel": "title",
+    "fields": [
+      {
+        "component": "select",
+        "name": "itemType",
+        "label": "Item Category",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Shopping Bags",
+            "value": "shopping-bags"
+          },
+          {
+            "name": "Lunch Bags",
+            "value": "lunch-bags"
+          },
+          {
+            "name": "Sling Bags and Purses",
+            "value": "sling-bags"
+          },
+          {
+            "name": "Home Decor",
+            "value": "home-decor"
+          },
+          {
+            "name": "Office Supplies",
+            "value": "office-supplies"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Craft Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title / Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "link",
+        "label": "Detail Page URL",
+        "valueType": "string"
       }
     ]
   },
@@ -2489,6 +2773,29 @@
     ]
   },
   {
+    "id": "image-richtext",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "content",
+        "label": "Richtext Content",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "image-scroll-card",
     "fields": [
       {
@@ -3669,6 +3976,53 @@
         "valueType": "string",
         "name": "image",
         "label": "Image (Shown Below Content)"
+      }
+    ]
+  },
+  {
+    "id": "our-capabilities",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "desktopImage",
+        "label": "Desktop Image",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "mobileImage",
+        "label": "Mobile Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "Button Label",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "buttonLink",
+        "label": "Button Link",
+        "valueType": "string"
       }
     ]
   },

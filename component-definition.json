@@ -330,6 +330,37 @@
           }
         },
         {
+          "title": "Business Enablers",
+          "id": "business-enablers",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Business Enablers",
+                  "model": "business-enablers",
+                  "filter": "business-enablers"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Business Enablers Item",
+          "id": "business-enablers-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Business Enablers Item",
+                  "model": "business-enablers-item"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Businesses Section",
           "id": "businesses-section",
           "plugins": {
@@ -355,6 +386,37 @@
                 "template": {
                   "name": "business-item",
                   "model": "business-item"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Cards and Image",
+          "id": "cards-and-image",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Cards and Image",
+                  "model": "cards-and-image",
+                  "filter": "cards-and-image"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Cards and Image Item",
+          "id": "cards-and-image-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Cards and Image Item",
+                  "model": "cards-and-image-item"
                 }
               }
             }
@@ -634,6 +696,37 @@
                 "template": {
                   "name": "governance-section",
                   "model": "governance-section"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Craft Filter",
+          "id": "craft-filter",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "craft-filter",
+                  "model": "craft-filter",
+                  "filter": "only-craft-items"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Craft Listing Item",
+          "id": "craft-listing-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "craft-listing-item",
+                  "model": "craft-listing-item"
                 }
               }
             }
@@ -1313,6 +1406,22 @@
                 "template": {
                   "name": "Hero",
                   "model": "hero"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Image Richtext",
+          "id": "image-richtext",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Image Richtext",
+                  "model": "image-richtext",
+                  "filter": "image-richtext"
                 }
               }
             }
@@ -2007,6 +2116,22 @@
                   "name": "Our Approach",
                   "model": "our-approach",
                   "filter": "our-approach"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Our Capabilities",
+          "id": "our-capabilities",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Our Capabilities",
+                  "model": "our-capabilities",
+                  "filter": "our-capabilities"
                 }
               }
             }

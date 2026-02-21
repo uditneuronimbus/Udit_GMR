@@ -49,7 +49,7 @@
       "corporate-governance",
       "header",
       "partners-filter",
-      "awards-filter",
+      "craft-filter",
       "breadcrumbs",
       "message-from-leadership",
       "gmr-tabs",
@@ -70,7 +70,12 @@
       "impact-stories",
       "csr-engine",
       "guest-book",
-      "innovation-cards"
+      "innovation-cards",
+      "business-cards-slider",
+      "our-capabilities",
+      "cards-and-image",
+      "image-richtext",
+      "business-enablers"
     ]
   },
   {
@@ -123,9 +128,21 @@
     ]
   },
   {
+    "id": "business-enablers",
+    "components": [
+      "business-enablers-item"
+    ]
+  },
+  {
     "id": "businesses-section",
     "components": [
       "business-item"
+    ]
+  },
+  {
+    "id": "cards-and-image",
+    "components": [
+      "cards-and-image-item"
     ]
   },
   {
@@ -187,6 +204,12 @@
     "id": "corporate-governance",
     "components": [
       "governance-section"
+    ]
+  },
+  {
+    "id": "only-craft-items",
+    "components": [
+      "craft-listing-item"
     ]
   },
   {
@@ -320,6 +343,10 @@
   },
   {
     "id": "hero-press",
+    "components": []
+  },
+  {
+    "id": "image-richtext",
     "components": []
   },
   {
@@ -464,6 +491,10 @@
   },
   {
     "id": "our-approach",
+    "components": []
+  },
+  {
+    "id": "our-capabilities",
     "components": []
   },
   {
