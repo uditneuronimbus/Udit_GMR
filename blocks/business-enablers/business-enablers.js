@@ -1,10 +1,13 @@
 import { moveInstrumentation } from "../../scripts/scripts.js";
+import capDecorator from "../our-capabilities/our-capabilities.js";
+import itdbDecorator from "../image-title-desc-button/image-title-desc-button.js";
+import obDecorator from "../overlay-banner/overlay-banner.js";
 
 /**
  * Business Enablers Decorator
- * Maps authored items to specific component designs.
+ * Executes actual decorators of other components inside tab panels.
  */
-export default function decorate(block) {
+export default async function decorate(block) {
   const rows = [...block.children];
 
   // Metadata: Title, Description, Tab1Label, Tab2Label, Tab3Label
@@ -70,13 +73,13 @@ export default function decorate(block) {
     const cells = [...row.children];
     return {
       type: cells[0]?.textContent?.trim() || "capabilities",
-      title: cells[1]?.textContent?.trim() || "",
-      contentHTML: cells[2]?.children[0]?.innerHTML || cells[2]?.innerHTML || "",
-      desktopPic: cells[3]?.querySelector("picture"),
-      mobilePic: cells[4]?.querySelector("picture"),
-      imageAlt: cells[5]?.textContent?.trim() || "",
-      btnLabel: cells[6]?.textContent?.trim() || "",
-      btnLink: cells[7]?.textContent?.trim() || "#",
+      title: cells[1],
+      description: cells[2],
+      desktopImage: cells[3],
+      mobileImage: cells[4],
+      imageAlt: cells[5],
+      buttonLabel: cells[6],
+      buttonLink: cells[7],
       originalRow: row
     };
   });
@@ -88,7 +91,7 @@ export default function decorate(block) {
     panel.id = `enabler-panel-${index}`;
 
     if (data) {
-      renderMappedComponent(panel, data);
+      executeMappedDecorator(panel, data);
       moveInstrumentation(data.originalRow, panel);
     } else {
       panel.innerHTML = `<p class="text-center text-muted">Please author content for Tab ${index + 1}</p>`;
@@ -117,109 +120,53 @@ export default function decorate(block) {
   });
 
   /**
-   * Helper to render based on user type
+   * Helper to execute actual decorators
    */
-  function renderMappedComponent(targetEl, data) {
-    const { type, title, contentHTML, desktopPic, mobilePic, imageAlt, btnLabel, btnLink } = data;
-    const finalAlt = imageAlt || title || "Banner Image";
+  function executeMappedDecorator(targetEl, data) {
+    const { type, title, description, desktopImage, mobileImage, imageAlt, buttonLabel, buttonLink } = data;
+
+    // Create a "Fake Block" that looks like what the target expects
+    const fakeBlock = document.createElement("div");
+    fakeBlock.className = type;
 
     if (type === "image-title-desc-button") {
-      // Structure of 'image-title-desc-button'
-      targetEl.innerHTML = `
-        <section class="flat-banner position-relative">
-          <div class="flat-bg-wrap"></div>
-          <div class="flat-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-end">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-8 mx-auto text-center text-white">
-                  <h2 class="flat-title mb-4">${title}</h2>
-                  <div class="flat-desc mb-4">${contentHTML}</div>
-                  ${btnLabel ? `<a class="btn btn-primary" href="${btnLink}">${btnLabel}</a>` : ""}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      `;
-      const bgWrap = targetEl.querySelector(".flat-bg-wrap");
-      if (desktopPic) {
-        const d = desktopPic.cloneNode(true);
-        const img = d.querySelector("img");
-        if (img) {
-          img.className = "flat-bg";
-          img.alt = finalAlt;
-        }
-        if (mobilePic) {
-          const mSource = mobilePic.querySelector("source")?.cloneNode(true);
-          if (mSource) d.prepend(mSource);
-        }
-        bgWrap.append(d);
-      }
+      // 7 rows expected: DesktopImg, MobileImg, Alt, Title, Desc, BtnText, BtnLink
+      fakeBlock.append(
+        desktopImage.cloneNode(true),
+        mobileImage.cloneNode(true),
+        imageAlt.cloneNode(true),
+        title.cloneNode(true),
+        description.cloneNode(true),
+        buttonLabel.cloneNode(true),
+        buttonLink.cloneNode(true)
+      );
+      itdbDecorator(fakeBlock);
     } else if (type === "overlay-banner") {
-      // Structure of 'overlay-banner'
-      targetEl.innerHTML = `
-        <div class="banner-overlay">
-          <div class="banner-overlay-img-wrap"></div>
-          <div class="banner-overlay-text">
-            <div class="row">
-              <div class="col-lg-7 col-md-8">
-                <h2 class="sec-title mb-4">${title}</h2>
-                <div class="sec-desc mb-4">${contentHTML}</div>
-                ${btnLabel ? `<a class="btn btn-primary btn-lg" href="${btnLink}">${btnLabel}</a>` : ""}
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-      const imgWrap = targetEl.querySelector(".banner-overlay-img-wrap");
-      if (desktopPic) {
-        const d = desktopPic.cloneNode(true);
-        const img = d.querySelector("img");
-        if (img) {
-          img.className = "banner-overlay-img";
-          img.alt = finalAlt;
-        }
-        if (mobilePic) {
-          const m = mobilePic.cloneNode(true);
-          const mImg = m.querySelector("img");
-          if (mImg) {
-            mImg.className = "banner-overlay-img mobile-only";
-            mImg.alt = finalAlt;
-          }
-          d.classList.add("desktop-only");
-          imgWrap.append(m);
-        }
-        imgWrap.append(d);
-      }
+      // 5-7 rows: DesktopImg, Title, Desc, BtnLabel, BtnUrl, MobileImg, Alt
+      fakeBlock.append(
+        desktopImage.cloneNode(true),
+        title.cloneNode(true),
+        description.cloneNode(true),
+        buttonLabel.cloneNode(true),
+        buttonLink.cloneNode(true),
+        mobileImage.cloneNode(true),
+        imageAlt.cloneNode(true)
+      );
+      obDecorator(fakeBlock);
     } else {
-      // Fallback: Our Capabilities
-      targetEl.innerHTML = `
-        <div class="our-capabilities-container">
-          <div class="row align-items-center">
-            <div class="col-lg-6 our-capabilities-content">
-              <h2 class="our-capabilities-title">${title}</h2>
-              <div class="our-capabilities-description">${contentHTML}</div>
-              ${btnLabel ? `<a class="btn btn-primary our-capabilities-cta" href="${btnLink}">${btnLabel}</a>` : ""}
-            </div>
-            <div class="col-lg-6 our-capabilities-image-wrap">
-              <div class="our-capabilities-pic-target"></div>
-            </div>
-          </div>
-        </div>
-      `;
-      const picTarget = targetEl.querySelector(".our-capabilities-pic-target");
-      if (desktopPic) {
-        const d = desktopPic.cloneNode(true);
-        if (d.querySelector("img")) d.querySelector("img").alt = finalAlt;
-        d.classList.add("d-none", "d-md-block");
-        picTarget.append(d);
-      }
-      if (mobilePic) {
-        const m = mobilePic.cloneNode(true);
-        if (m.querySelector("img")) m.querySelector("img").alt = finalAlt;
-        m.classList.add("d-block", "d-md-none");
-        picTarget.append(m);
-      }
+      // capabilities: Title, Desc, DesktopImg, MobileImg, Alt, BtnLabel, BtnLink
+      fakeBlock.append(
+        title.cloneNode(true),
+        description.cloneNode(true),
+        desktopImage.cloneNode(true),
+        mobileImage.cloneNode(true),
+        imageAlt.cloneNode(true),
+        buttonLabel.cloneNode(true),
+        buttonLink.cloneNode(true)
+      );
+      capDecorator(fakeBlock);
     }
+
+    targetEl.append(fakeBlock);
   }
 }
