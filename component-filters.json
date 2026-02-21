@@ -75,7 +75,8 @@
       "our-capabilities",
       "cards-and-image",
       "image-richtext",
-      "business-enablers"
+      "business-enablers",
+      "business-tabs"
     ]
   },
   {
@@ -125,12 +126,6 @@
     "id": "awards-recognitions",
     "components": [
       "award-item"
-    ]
-  },
-  {
-    "id": "business-enablers",
-    "components": [
-      "business-enablers-item"
     ]
   },
   {
