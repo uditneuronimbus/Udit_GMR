@@ -54,8 +54,8 @@
 }
 
 .leader-name {
-    font-size: var(--fs-xxlarge);
-    font-weight: 600;
+    font-size: var(--fs-xlarge);
+    font-weight: 500;
     margin: 0 0 8px;
     color: var(--black);
 }
