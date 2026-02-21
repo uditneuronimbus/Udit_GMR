@@ -703,6 +703,41 @@
     ]
   },
   {
+    "id": "business-tabs",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Section Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Section Description",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "tab1Label",
+        "label": "Tab 1 Button Label",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "tab2Label",
+        "label": "Tab 2 Button Label",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "tab3Label",
+        "label": "Tab 3 Button Label",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "businesses-section",
     "fields": [
       {
