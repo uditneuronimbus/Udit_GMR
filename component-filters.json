@@ -72,7 +72,8 @@
       "guest-book",
       "innovation-cards",
       "business-cards-slider",
-      "our-capabilities"
+      "our-capabilities",
+      "cards-and-image"
     ]
   },
   {
@@ -128,6 +129,12 @@
     "id": "businesses-section",
     "components": [
       "business-item"
+    ]
+  },
+  {
+    "id": "cards-and-image",
+    "components": [
+      "cards-and-image-item"
     ]
   },
   {
