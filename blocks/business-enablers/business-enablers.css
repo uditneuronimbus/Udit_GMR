@@ -65,3 +65,33 @@
         transform: translateY(0);
     }
 }
+
+/* Nested Component Spacing Overrides */
+.business-enablers-panel .sec-corporate-governance,
+.business-enablers-panel .sec-expertise {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.business-enablers-panel .sec-corporate-governance.spacer,
+.business-enablers-panel .sec-expertise.spacer {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Hide nested titles if redundant */
+.business-enablers-panel .cg-header,
+.business-enablers-panel .sec-expertise .text-center.mb-3,
+.business-enablers-panel .sec-expertise .text-center.mb-4 {
+    display: none !important;
+}
+
+/* Ensure Corporate Governance sections look good in tabs */
+.business-enablers-panel .cg-sections {
+    padding-top: 20px;
+}
+
+/* Swiper height Fix for All Business Cards in Tabs */
+.business-enablers-panel .expertise-swiper {
+    min-height: 300px;
+}
