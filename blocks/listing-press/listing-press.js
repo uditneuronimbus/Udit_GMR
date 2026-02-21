@@ -353,14 +353,6 @@ export default async function decorate(block) {
       mobileList.innerHTML = '<div class="loading">Loading...</div>';
       countText.textContent = 'Loading...';
 
-      console.log('Fetching count with filters:', {
-        year: state.year,
-        month: state.month,
-        subCategory: state.subCategory,
-        tag: state.tag,
-        sort: state.sort
-      });
-
       state.totalCount = await fetchApiCount(
         "press-release",
         state.subCategory,
@@ -369,8 +361,6 @@ export default async function decorate(block) {
         state.tag,
         state.sort
       );
-
-      console.log('Total count returned:', state.totalCount);
 
       state.offset = (state.page - 1) * state.limit;
 
@@ -384,8 +374,6 @@ export default async function decorate(block) {
         state.tag,
         state.sort
       );
-
-      console.log('Items returned:', items.length);
 
       if (items.length === 0) {
         desktopList.innerHTML = '<div class="no-results">No results found</div>';
@@ -738,40 +726,30 @@ async function fetchApiData(limit = 10, offset = 0, category = "press-release", 
     `&publishmonth=${encodeURIComponent(publishmonth.toLowerCase())}` +
     `&tag=${encodeURIComponent(tag.toLowerCase())}` +
     `&orderby=${encodeURIComponent(orderby)}`;
-  
-  console.log('📡 Fetching data API:', apiUrl);
-    
+      
   const res = await fetch(apiUrl);
   if (!res.ok) throw new Error(`API error ${res.status}`);
   
   const json = await res.json();
   const items = json?.data?.data?.newsList?.items || [];
-  
-  console.log('✅ Data API returned items:', items.length);
-  
+    
   return items;
 }
 
 async function fetchApiCount(category = "press-release", subCategory = "", publishyear = "", publishmonth = "", tag = "", orderby = "desc") {
-  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/all-news` +
-    `?limit=10000` +  
-    `&offset=0` +
-    `&category=${encodeURIComponent(category)}` +
+  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/news-count` +
+    `?category=${encodeURIComponent(category)}` +
     `&subcategory=${encodeURIComponent(subCategory)}` +
     `&publishyear=${encodeURIComponent(publishyear)}` +
     `&publishmonth=${encodeURIComponent(publishmonth.toLowerCase())}` +
     `&tag=${encodeURIComponent(tag.toLowerCase())}` +
     `&orderby=${encodeURIComponent(orderby)}`;
-  
-  console.log('📊 Fetching count API:', apiUrl);
-    
+        
   const res = await fetch(apiUrl);
   if (!res.ok) throw new Error(`API error ${res.status}`);
   
   const json = await res.json();
   const items = json?.data?.data?.newsList?.items || [];
-  
-  console.log('✅ Count API returned:', items.length);
-  
+    
   return items.length;
 }

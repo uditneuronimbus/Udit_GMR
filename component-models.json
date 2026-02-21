@@ -1236,6 +1236,12 @@
         "valueType": "string",
         "name": "image",
         "label": "Icon"
+      },
+      {
+        "component": "text",
+        "name": "iconLink",
+        "label": "Icon Link",
+        "valueType": "string"
       }
     ]
   },

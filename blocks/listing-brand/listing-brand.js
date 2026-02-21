@@ -52,7 +52,7 @@ function openVideoModal(url) {
   const iframe = document.getElementById("videoIframe");
   if (iframe) {
     iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
-    
+
     const modal = document.getElementById("videoModal");
     if (modal) {
       new bootstrap.Modal(modal).show();
@@ -108,14 +108,14 @@ export default async function decorate(block) {
                 <span>All Categories</span>
               </label>
               ${dynamicSubCats
-                .map(
-                  (s) =>
-                    `<label class="filter-option">
+      .map(
+        (s) =>
+          `<label class="filter-option">
                   <input type="radio" name="desktop-subcat" value="${s}">
                   <span>${s}</span>
                 </label>`,
-                )
-                .join("")}
+      )
+      .join("")}
             </div>
           </div>
 
@@ -133,14 +133,14 @@ export default async function decorate(block) {
                 <span>All Tags</span>
               </label>
               ${dynamicTags
-                .map(
-                  (t) =>
-                    `<label class="filter-option">
+      .map(
+        (t) =>
+          `<label class="filter-option">
                   <input type="radio" name="desktop-tag" value="${t}">
                   <span>${t}</span>
                 </label>`,
-                )
-                .join("")}
+      )
+      .join("")}
             </div>
           </div> -->
 
@@ -208,21 +208,21 @@ export default async function decorate(block) {
               <div class="filter-group category-group" style="display: none;">
                 <label><input type="radio" name="mobile-subcat" value="" checked> All Categories</label>
                 ${dynamicSubCats
-                  .map(
-                    (s) =>
-                      `<label><input type="radio" name="mobile-subcat" value="${s}"> ${s}</label>`,
-                  )
-                  .join("")}
+      .map(
+        (s) =>
+          `<label><input type="radio" name="mobile-subcat" value="${s}"> ${s}</label>`,
+      )
+      .join("")}
               </div>
               
               <div class="filter-group tag-group" style="display: none;">
                 <label><input type="radio" name="mobile-tag" value="" checked> All Tags</label>
                 ${dynamicTags
-                  .map(
-                    (t) =>
-                      `<label><input type="radio" name="mobile-tag" value="${t}"> ${t}</label>`,
-                  )
-                  .join("")}
+      .map(
+        (t) =>
+          `<label><input type="radio" name="mobile-tag" value="${t}"> ${t}</label>`,
+      )
+      .join("")}
               </div>
             </div>
             <div class="apply-filter-btn">
@@ -282,7 +282,6 @@ export default async function decorate(block) {
   function createCardHTML(item) {
     const subCategory = item?.subCategory || item?.category || "";
 
-    const link = item?.slugUrl || "#";
     const title = item?.metaTitle || item?.title || "Untitled";
 
     const publishDateRaw =
@@ -328,9 +327,8 @@ export default async function decorate(block) {
       <div class="press-card-meta">
         ${subCategory ? `<span class="badge ${badgeClass}">${slugToTitle(subCategory)}</span>` : ""}
         ${subCategory && publishDateFormatted ? '<span class="meta-separator">|</span>' : ""}
-        ${
-          publishDateFormatted
-            ? `<span class="meta-date">
+        ${publishDateFormatted
+        ? `<span class="meta-date">
           <svg class="icon-calendar" width="14" height="14" viewBox="0 0 20 20" fill="none">
             <path d="M1.66669 10C1.66669 6.85734 1.66669 5.286 2.643 4.30968C3.61931 3.33337 5.19066 3.33337 8.33335 3.33337H11.6667C14.8094 3.33337 16.3807 3.33337 17.357 4.30968C18.3334 5.286 18.3334 6.85734 18.3334 10V11.6667C18.3334 14.8094 18.3334 16.3808 17.357 17.3571C16.3807 18.3334 14.8094 18.3334 11.6667 18.3334H8.33335C5.19066 18.3334 3.61931 18.3334 2.643 17.3571C1.66669 16.3808 1.66669 14.8094 1.66669 11.6667V10Z" stroke="currentColor" stroke-width="1.5"/>
             <path d="M5.83331 3.33337V2.08337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -339,11 +337,11 @@ export default async function decorate(block) {
           </svg>
           ${publishDateFormatted}
         </span>`
-            : ""
-        }
+        : ""
+      }
       </div>
       <h3 class="press-card-title">
-        <a href="news-update?post=${link}">${title}</a>
+        ${title}
       </h3>
     </div>
   </article>
@@ -386,7 +384,7 @@ export default async function decorate(block) {
         const cardsHTML = items.map(createCardHTML).join("");
         desktopList.innerHTML = cardsHTML;
         mobileList.innerHTML = cardsHTML;
-        
+
         // Create video modal and attach handlers
         createVideoModal();
         attachVideoClickHandlers();
@@ -518,7 +516,7 @@ export default async function decorate(block) {
     // Show selected group
     if (type === "category") {
       categoryGroup.style.display = "block";
-      
+
       // Set current value
       const catRadio = categoryGroup.querySelector(
         `input[name="mobile-subcat"][value="${state.subCategory}"]`,
@@ -619,9 +617,9 @@ export default async function decorate(block) {
 
   // Close sort menu when clicking outside
   document.addEventListener("click", (e) => {
-    if (sortToggle && sortOptions && 
-        !sortToggle.contains(e.target) && 
-        !sortOptions.contains(e.target)) {
+    if (sortToggle && sortOptions &&
+      !sortToggle.contains(e.target) &&
+      !sortOptions.contains(e.target)) {
       sortOptions.classList.remove("show");
       sortToggle.classList.remove("active");
     }
@@ -694,15 +692,7 @@ export default async function decorate(block) {
 
 /* ================= API Functions ================= */
 
-async function fetchApiData(
-  limit = 6,
-  offset = 0,
-  category = "",
-  publishyear = "",
-  publishmonth = "",
-  tag = "",
-  orderby = "desc",
-) {
+async function fetchApiData(limit = 6, offset = 0, category = "", publishyear = "", publishmonth = "", tag = "", orderby = "desc",) {
   try {
     const apiUrl =
       `${getApiHost()}/api/v1/web/gmr-api/films-list` +
@@ -725,23 +715,14 @@ async function fetchApiData(
   }
 }
 
-async function fetchApiCount(
-  category = "",
-  publishyear = "",
-  publishmonth = "",
-  tag = "",
-  orderby = "desc",
-) {
+async function fetchApiCount(category = "", publishyear = "", publishmonth = "", tag = "") {
   try {
     const apiUrl =
-      `${getApiHost()}/api/v1/web/gmr-api/films-list` +
-      `?limit=10000` +
-      `&offset=0` +
-      `&category=${encodeURIComponent(category)}` +
+      `${getApiHost()}/api/v1/web/gmr-api/films-count` +
+      `?category=${encodeURIComponent(category)}` +
       `&publishyear=${encodeURIComponent(publishyear)}` +
       `&publishmonth=${encodeURIComponent(publishmonth ? publishmonth.toLowerCase() : "")}` +
-      `&tag=${encodeURIComponent(tag ? tag.toLowerCase() : "")}` +
-      `&orderby=${encodeURIComponent(orderby)}`;
+      `&tag=${encodeURIComponent(tag ? tag.toLowerCase() : "")}`;
 
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`API error ${res.status}`);
