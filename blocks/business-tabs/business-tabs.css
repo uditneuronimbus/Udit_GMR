@@ -33,8 +33,15 @@
     border-color: #333;
 }
 
-.business-tabs-btn:hover:not(.active) {
-    background-color: #fcefd4;
+.business-tabs-nav {
+    position: relative;
+    z-index: 10;
+}
+
+.business-tabs-panels {
+    margin-top: 100px !important;
+    position: relative;
+    z-index: 1;
 }
 
 .business-tabs-panel {
