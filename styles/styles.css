@@ -338,6 +338,10 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
         margin-bottom: 3rem !important;
 }
 
+.background-pink.news-updates-container .sec-news.bg-sky-blue { background-color: transparent!important;}
+.page-media-resources .integrity-card .card-title { font-weight: 400;}
+
+
 @media (min-width:768px){
 .background-pink.message-from-leadership-container .mfl-section-header{margin-bottom:-60px!important}
 .background-pink.message-from-leadership-container .swiper{padding-top:100px}

@@ -2913,6 +2913,18 @@
         "valueType": "string",
         "name": "description",
         "label": "Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaText",
+        "label": "CTA Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaLink",
+        "label": "CTA Link"
       }
     ]
   },
