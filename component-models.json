@@ -668,6 +668,107 @@
     "fields": []
   },
   {
+    "id": "business-enablers",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Section Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Section Description",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "tab1Label",
+        "label": "Tab 1 Button Label",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "tab2Label",
+        "label": "Tab 2 Button Label",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "tab3Label",
+        "label": "Tab 3 Button Label",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "business-enablers-item",
+    "fields": [
+      {
+        "component": "select",
+        "name": "type",
+        "label": "Component Type",
+        "options": [
+          {
+            "label": "Our Capabilities",
+            "value": "capabilities"
+          },
+          {
+            "label": "Cards and Image",
+            "value": "cards"
+          },
+          {
+            "label": "Image Richtext",
+            "value": "richtext"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "tabTitle",
+        "label": "Internal Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "tabDescription",
+        "label": "Internal Description/Content",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "desktopImage",
+        "label": "Desktop Image",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "mobileImage",
+        "label": "Mobile Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Image Alt",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "CTA Label",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "buttonLink",
+        "label": "CTA Link",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "businesses-section",
     "fields": [
       {
