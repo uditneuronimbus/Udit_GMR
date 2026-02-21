@@ -65,7 +65,7 @@ export default function decorate(block) {
 
       // ✅ If iconLink exists → wrap with anchor
       iconHTML = iconLink
-        ? `<a href="${iconLink}" target="_blank" rel="noopener noreferrer">${imageTag}</a>`
+        ? `<a class="simg" href="${iconLink}" target="_blank" rel="noopener noreferrer">${imageTag}</a>`
         : imageTag;
     } else {
       const text = iconCell.textContent.trim();
