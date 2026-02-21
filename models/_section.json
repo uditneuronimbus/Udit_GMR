@@ -188,7 +188,7 @@
         "corporate-governance",
         "header",
         "partners-filter",
-        "awards-filter",
+        "craft-filter",
         "breadcrumbs",
         "message-from-leadership",
         "gmr-tabs",
@@ -214,7 +214,8 @@
         "our-capabilities",
         "cards-and-image",
         "image-richtext",
-        "business-enablers"
+        "business-enablers",
+        "business-tabs"
       ]
     }
   ]

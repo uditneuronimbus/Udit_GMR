@@ -703,64 +703,36 @@
     ]
   },
   {
-    "id": "business-enablers-item",
+    "id": "business-tabs",
     "fields": [
       {
-        "component": "select",
-        "name": "type",
-        "label": "Component Type",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Corporate Governance",
-            "value": "corporate-governance"
-          },
-          {
-            "name": "All Business Cards",
-            "value": "all-business-cards"
-          }
-        ]
-      },
-      {
         "component": "text",
-        "name": "tabTitle",
-        "label": "Internal Title",
+        "name": "title",
+        "label": "Section Title",
         "valueType": "string"
       },
       {
         "component": "richtext",
-        "name": "tabDescription",
-        "label": "Internal Description/Content",
-        "valueType": "string"
-      },
-      {
-        "component": "reference",
-        "name": "desktopImage",
-        "label": "Desktop Image",
-        "valueType": "string"
-      },
-      {
-        "component": "reference",
-        "name": "mobileImage",
-        "label": "Mobile Image",
+        "name": "description",
+        "label": "Section Description",
         "valueType": "string"
       },
       {
         "component": "text",
-        "name": "imageAlt",
-        "label": "Image Alt",
+        "name": "tab1Label",
+        "label": "Tab 1 Button Label",
         "valueType": "string"
       },
       {
         "component": "text",
-        "name": "buttonLabel",
-        "label": "CTA Label",
+        "name": "tab2Label",
+        "label": "Tab 2 Button Label",
         "valueType": "string"
       },
       {
         "component": "text",
-        "name": "buttonLink",
-        "label": "CTA Link",
+        "name": "tab3Label",
+        "label": "Tab 3 Button Label",
         "valueType": "string"
       }
     ]
@@ -1177,6 +1149,12 @@
         "valueType": "string",
         "name": "image",
         "label": "Icon"
+      },
+      {
+        "component": "text",
+        "name": "iconLink",
+        "label": "Icon Link",
+        "valueType": "string"
       }
     ]
   },
@@ -1435,6 +1413,87 @@
         "component": "text",
         "name": "point6",
         "label": "Point 6 (Optional)"
+      }
+    ]
+  },
+  {
+    "id": "craft-filter",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title (Main Heading)",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "filterPanelTitle",
+        "label": "Filter Sidebar Title",
+        "valueType": "string",
+        "defaultValue": "Filter by Year and Category"
+      }
+    ]
+  },
+  {
+    "id": "craft-listing-item",
+    "itemLabel": "title",
+    "fields": [
+      {
+        "component": "select",
+        "name": "itemType",
+        "label": "Item Category",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Shopping Bags",
+            "value": "shopping-bags"
+          },
+          {
+            "name": "Lunch Bags",
+            "value": "lunch-bags"
+          },
+          {
+            "name": "Sling Bags and Purses",
+            "value": "sling-bags"
+          },
+          {
+            "name": "Home Decor",
+            "value": "home-decor"
+          },
+          {
+            "name": "Office Supplies",
+            "value": "office-supplies"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Craft Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title / Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "link",
+        "label": "Detail Page URL",
+        "valueType": "string"
       }
     ]
   },
