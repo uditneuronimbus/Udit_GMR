@@ -609,10 +609,8 @@ async function fetchApiData(limit = 10, offset = 0, category = "blog", subCatego
 }
 
 async function fetchApiCount(category = "blog", subCategory = "", publishyear = "", publishmonth = "", tag = "", orderby = "desc") {
-  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/all-news` +
-    `?limit=10000` +  
-    `&offset=0` +
-    `&category=${encodeURIComponent(category)}` +
+  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/news-count` +
+    `?category=${encodeURIComponent(category)}` +
     `&subcategory=${encodeURIComponent(subCategory)}` +
     `&publishyear=${encodeURIComponent(publishyear)}` +
     `&publishmonth=${encodeURIComponent(publishmonth.toLowerCase())}` +
