@@ -1,5 +1,6 @@
 import { moveInstrumentation } from "../../scripts/scripts.js";
 import { loadCSS } from "../../scripts/aem.js";
+import { loadFragment } from "../fragment/fragment.js";
 import cgDecorator from "../corporate-governance/corporate-governance.js";
 import abcDecorator from "../all-business-cards/all-business-cards.js";
 
@@ -10,9 +11,10 @@ import abcDecorator from "../all-business-cards/all-business-cards.js";
 export default async function decorate(block) {
   const rows = [...block.children];
 
-  // Global Metadata (First 5 rows)
-  const [titleRow, descriptionRow, t1Row, t2Row, t3Row, ...itemRows] = rows;
+  // Global Metadata (First 6 rows now: reference, title, description, t1, t2, t3)
+  const [refRow, titleRow, descriptionRow, t1Row, t2Row, t3Row, ...itemRows] = rows;
 
+  const fragmentPath = refRow?.textContent?.trim() || "";
   const titleText = titleRow?.textContent?.trim() || "";
   const descriptionHTML = descriptionRow?.children[0]?.innerHTML || descriptionRow?.innerHTML || "";
   const tabBtnLabels = [
@@ -25,6 +27,17 @@ export default async function decorate(block) {
 
   const container = document.createElement("div");
   container.className = "business-enablers-container container";
+
+  // 0. Load Fragment if exists
+  if (fragmentPath && fragmentPath.startsWith("/")) {
+    const fragmentContainer = document.createElement("div");
+    fragmentContainer.className = "business-enablers-fragment mb-4";
+    const fragment = await loadFragment(fragmentPath);
+    if (fragment) {
+      fragmentContainer.append(...fragment.childNodes);
+      container.append(fragmentContainer);
+    }
+  }
 
   // 1. Intro Section
   const intro = document.createElement("div");
