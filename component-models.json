@@ -2529,6 +2529,29 @@
     ]
   },
   {
+    "id": "image-richtext",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "content",
+        "label": "Richtext Content",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "image-scroll-card",
     "fields": [
       {
