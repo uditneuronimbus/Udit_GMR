@@ -52,6 +52,12 @@
 .partner-description{font-size:var(--fs-regular)}
 .partner-link a{font-size:var(--fs-regular)}
 }
+@media (max-width:767px){
+.partners-filter-container.alignment-left .default-content-wrapper { width: 100%; max-width: 100%; padding-top: 3rem; }
+.partners-filter-container.alignment-left .default-content-wrapper h2, .partners-filter-container.alignment-left .default-content-wrapper p { position: static; text-align: center; width: 94%; margin: auto; }
+.partners-filter-container.alignment-left .default-content-wrapper h2 {margin-bottom: 1rem !important;}
+
+}
 @media (max-width:640px){
 .partners-list{grid-template-columns:1fr}
 }

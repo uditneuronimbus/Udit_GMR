@@ -757,6 +757,41 @@
     ]
   },
   {
+    "id": "career-faqs-list",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "sectionDescription",
+        "label": "Section Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "career-faqs-item",
+    "itemLabel": "question",
+    "fields": [
+      {
+        "component": "text",
+        "name": "question",
+        "label": "FAQ Question",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "answer",
+        "label": "Answer",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "careers-highlight",
     "fields": [
       {
@@ -998,6 +1033,12 @@
         "valueType": "string",
         "name": "image",
         "label": "Icon"
+      },
+      {
+        "component": "text",
+        "name": "iconLink",
+        "label": "Icon Link",
+        "valueType": "string"
       }
     ]
   },
@@ -1397,42 +1438,6 @@
             "value": "governance"
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "career-faqs-list",
-    "fields": [
-      {
-        "component": "text",
-        "name": "sectionTitle",
-        "label": "Section Title (Main Heading)",
-        "valueType": "string",
-        "defaultValue": "Everything you Need to Know"
-      },
-      {
-        "component": "richtext",
-        "name": "sectionDescription",
-        "label": "Section Description",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "career-faqs-item",
-    "itemLabel": "title",
-    "fields": [
-      {
-        "component": "text",
-        "name": "title",
-        "label": "Faqs Question",
-        "valueType": "string"
-      },
-      {
-        "component": "richtext",
-        "name": "answer",
-        "label": "Answer",
-        "valueType": "string"
       }
     ]
   },
@@ -2848,6 +2853,12 @@
       {
         "component": "text",
         "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
         "name": "title",
         "label": "Card Title"
       },
@@ -2862,6 +2873,12 @@
         "valueType": "string",
         "name": "ctaText",
         "label": "CTA Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaLink",
+        "label": "CTA Link"
       }
     ]
   },
@@ -2902,6 +2919,18 @@
         "valueType": "string",
         "name": "description",
         "label": "Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaText",
+        "label": "CTA Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaLink",
+        "label": "CTA Link"
       }
     ]
   },
@@ -3941,6 +3970,26 @@
     "id": "photo-gallery-slider-item",
     "fields": [
       {
+        "component": "select",
+        "name": "gallerykType",
+        "label": "Gallery Type (For Filtering)",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "None",
+            "value": "none"
+          },
+          {
+            "name": "All Photos",
+            "value": "allPhotos"
+          },
+          {
+            "name": "All Videos",
+            "value": "allVideos"
+          }
+        ]
+      },
+      {
         "component": "reference",
         "name": "image",
         "label": "Image",
@@ -3956,6 +4005,12 @@
         "component": "richtext",
         "name": "description",
         "label": "Description",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "videoUrl",
+        "label": "Video URL",
         "valueType": "string"
       }
     ]

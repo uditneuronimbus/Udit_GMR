@@ -119,7 +119,8 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .badge.sports{background-color:var(--turquoise)}
 .badge.transport-urban-infrastructure{background-color:var(--orange)}
 .badge.foundation{background-color:var(--green)}
-.btn-link{color:var(--lorange);text-transform:uppercase;display:inline-flex;text-decoration:none;font-weight:var(--fw-semi-bold);align-items:center;gap:.75rem;position:relative;padding:.5rem 0}
+.btn-link{color:var(--lorange); border: none;
+    background: none; text-transform:uppercase;display:inline-flex;text-decoration:none;font-weight:var(--fw-semi-bold);align-items:center;gap:.75rem;position:relative;padding:.5rem 0}
 .btn-link:after{content:"";background:url(../../icons/arrow-right-yellow.svg) no-repeat center;background-size:100%;width:6px;height:14px;transition-duration:.3s;position:relative;right:0}
 .btn-link.download:after{background:url(../../icons/download-yellow.svg) no-repeat center;width:14px;height:14px;background-size:14px}
 .btn-link:before{content:"";position:absolute;bottom:.25rem;left:0;width:100%;height:1px;background-color:var(--yellow);transform:scaleX(0);transform-origin:right;transition:transform .6s cubic-bezier(.19, 1, .22, 1)}
@@ -337,6 +338,12 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
         margin-bottom: 3rem !important;
 }
 
+.background-pink.news-updates-container .sec-news.bg-sky-blue { background-color: transparent!important;}
+.page-media-resources .integrity-card .card-title { font-weight: 400;}
+
+.page-amulya-crafts .gmr-tabs-nav.text-center { display:none;}
+
+
 @media (min-width:768px){
 .background-pink.message-from-leadership-container .mfl-section-header{margin-bottom:-60px!important}
 .background-pink.message-from-leadership-container .swiper{padding-top:100px}
@@ -383,7 +390,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .global-leaders-aviation-wrapper{padding-left:0;padding-right:0}
 .entry-container .title,.entry-container h2,.entry-container h2 p{font-size:var(--fs-xlarge)}
 .h1,h1{font-size:var(--fs-xxlarge)}
-.h2,h2{font-size:var(--fs-large)}
+.h2,h2{font-size:var(--fs-xlarge)}
 .h3,h3{font-size:var(--fs-medium)}
 .h4,h4{font-size:var(--fs-normal)}
 .h5,h5,p{font-size:var(--fs-regular)}

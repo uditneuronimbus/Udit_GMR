@@ -30,44 +30,63 @@ export default function decorate(block) {
   
   if (rows.length) {
     itemsHTML = rows.map((itemRow) => {
-      const children = [...itemRow.children];
-      if (!children.length) return '';
+  const children = [...itemRow.children];
+  if (!children.length) return '';
 
-      const heading = children[0]?.textContent?.trim() || '';
-      const contentHTML = children[1]?.innerHTML || '';
-      const iconCell = children[2];
-      
-      // Create icon HTML
-      let iconHTML = '';
-      if (iconCell) {
-        const img = iconCell.querySelector('img');
-        const link = iconCell.querySelector('a');
-        
-        if (img) {
-          iconHTML = `<img src="${img.src}" alt="${img.alt || 'Icon'}" loading="lazy">`;
-        } else if (link) {
-          iconHTML = `<img src="${link.href}" alt="Icon" loading="lazy">`;
-        } else {
-          const text = iconCell.textContent.trim();
-          if (text) {
-            iconHTML = `<span class="contact-reachout-icon ${text}" data-icon="${text}"></span>`;
-          }
-        }
+  const heading = children[0]?.textContent?.trim() || '';
+  const contentHTML = children[1]?.innerHTML || '';
+  const iconCell = children[2];
+  const iconLinkCell = children[3]; // ✅ NEW FIELD (iconLink)
+
+  // Get icon link value
+  const iconLink =
+    iconLinkCell?.querySelector('a')?.href ||
+    iconLinkCell?.textContent?.trim() ||
+    '';
+
+  let iconHTML = '';
+
+  if (iconCell) {
+    const img = iconCell.querySelector('img');
+    const link = iconCell.querySelector('a');
+
+    let imageSrc = '';
+    let imageAlt = 'Icon';
+
+    if (img) {
+      imageSrc = img.src;
+      imageAlt = img.alt || 'Icon';
+    } else if (link) {
+      imageSrc = link.href;
+    }
+
+    if (imageSrc) {
+      const imageTag = `<img src="${imageSrc}" alt="${imageAlt}" loading="lazy">`;
+
+      // ✅ If iconLink exists → wrap with anchor
+      iconHTML = iconLink
+        ? `<a class="simg" href="${iconLink}" target="_blank" rel="noopener noreferrer">${imageTag}</a>`
+        : imageTag;
+    } else {
+      const text = iconCell.textContent.trim();
+      if (text) {
+        iconHTML = `<span class="contact-reachout-icon ${text}" data-icon="${text}"></span>`;
       }
+    }
+  }
 
-      // Build item HTML
-      return `
-        <div class="contact-reachout-item">
-          <div class="contact-reachout-item-content-wrapper">
-            ${heading ? `<h3 class="contact-reachout-item-heading">${heading}</h3>` : ''}
-            <div class="contact-reachout-item-content">
-              ${iconHTML ? `<div class="contact-reachout-item-icon">${iconHTML}</div>` : ''}
-              ${contentHTML || ''}
-            </div>
-          </div>
+  return `
+    <div class="contact-reachout-item">
+      <div class="contact-reachout-item-content-wrapper">
+        ${heading ? `<h3 class="contact-reachout-item-heading">${heading}</h3>` : ''}
+        <div class="contact-reachout-item-content">
+          ${iconHTML ? `<div class="contact-reachout-item-icon">${iconHTML}</div>` : ''}
+          ${contentHTML || ''}
         </div>
-      `;
-    }).filter(Boolean).join('');
+      </div>
+    </div>
+  `;
+}).filter(Boolean).join('');
   }
 
   /* ===============================

@@ -53,11 +53,11 @@ export default function decorate(block) {
   section.innerHTML = `
     <h2 class="leadership-title">${sectionTitle}</h2>
 
-    <div class="leadership-grid">
+    <div class="leadership-grid row justify-content-center">
       ${cards
         .map(
           (card) => `
-        <article class="leader-card">
+        <article class="leader-card col-md-4 mb-4">
           <div class="leader-image">
             ${card.image}
           </div>
@@ -65,9 +65,11 @@ export default function decorate(block) {
           <div class="leader-content">
             <h3 class="leader-name">${card.title}</h3>
             <div class="leader-role">${card.subtitle}</div>
-            <a href="${card.actionLink}" class="leader-link">
-              ${card.actionText} <span>›</span>
+            <div class="cta">
+            <a href="${card.actionLink}" class="btn-link">
+              ${card.actionText}
             </a>
+            </div>
           </div>
         </article>
       `
