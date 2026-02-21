@@ -2,7 +2,7 @@ import { moveInstrumentation } from "../../scripts/scripts.js";
 
 /**
  * Business Enablers Decorator
- * Simplified version with only Title, Description and Tab Labels.
+ * Captures subsequent blocks in the same section and places them into tabs.
  */
 export default async function decorate(block) {
   const rows = [...block.children];
@@ -13,10 +13,10 @@ export default async function decorate(block) {
   const titleText = titleRow?.textContent?.trim() || "";
   const descriptionHTML = descriptionRow?.children[0]?.innerHTML || descriptionRow?.innerHTML || "";
   const tabBtnLabels = [
-    t1Row?.textContent?.trim() || "Tab 1",
-    t2Row?.textContent?.trim() || "Tab 2",
-    t3Row?.textContent?.trim() || "Tab 3",
-  ];
+    t1Row?.textContent?.trim(),
+    t2Row?.textContent?.trim(),
+    t3Row?.textContent?.trim(),
+  ].filter(Boolean); // Only use labels that actually have text
 
   block.innerHTML = "";
 
@@ -52,7 +52,10 @@ export default async function decorate(block) {
     const btn = document.createElement("button");
     btn.className = `btn business-enablers-btn ${i === 0 ? "active" : ""}`;
     btn.textContent = label;
-    btn.dataset.tabId = i;
+
+    // Map Tab 3 (index 2) to open Panel 1 (Tab 2)
+    const tabId = i === 2 ? 1 : i;
+    btn.dataset.tabId = tabId;
 
     const labelMetadataRow = [t1Row, t2Row, t3Row][i];
     if (labelMetadataRow) moveInstrumentation(labelMetadataRow, btn);
@@ -61,16 +64,56 @@ export default async function decorate(block) {
   });
   container.append(tabsNav);
 
+  // 3. Panels Container
+  const panelsContainer = document.createElement("div");
+  panelsContainer.className = "business-enablers-panels";
+  container.append(panelsContainer);
+
   block.append(container);
 
-  // 4. Tab Mechanics
-  const btns = tabsNav.querySelectorAll(".business-enablers-btn");
+  // 4. Capture Siblings (Wait for next tick to ensure section is populated)
+  setTimeout(() => {
+    const wrapper = block.parentElement;
+    if (!wrapper || !wrapper.classList.contains('business-enablers-wrapper')) return;
 
-  btns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      btns.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      // Panel logic removed as items were deleted
+    const section = wrapper.parentElement;
+    if (!section) return;
+
+    // Filter out metadata elements and find siblings AFTER this wrapper
+    const sectionSiblings = [...section.children];
+    const startIndex = sectionSiblings.indexOf(wrapper);
+    const followingSiblings = sectionSiblings.slice(startIndex + 1);
+
+    // Only create unique panels (Tab 1 and Tab 2)
+    [0, 1].forEach((i) => {
+      const panel = document.createElement("div");
+      panel.className = `business-enablers-panel ${i === 0 ? "active" : ""}`;
+      panel.id = `enabler-panel-${i}`;
+
+      const sibling = followingSiblings[i];
+      if (sibling) {
+        panel.append(sibling);
+      } else {
+        panel.innerHTML = `<div class="placeholder-content">Please add a <b>Fragment</b> or <b>Block</b> as component ${i + 1} after this Business Enablers block.</div>`;
+      }
+      panelsContainer.append(panel);
     });
+  }, 0);
+
+  // 5. Tab Mechanics
+  tabsNav.addEventListener("click", (e) => {
+    const btn = e.target.closest(".business-enablers-btn");
+    if (!btn) return;
+
+    const targetId = btn.dataset.tabId;
+    const btns = tabsNav.querySelectorAll(".business-enablers-btn");
+    const panels = panelsContainer.querySelectorAll(".business-enablers-panel");
+
+    btns.forEach((b) => b.classList.remove("active"));
+    panels.forEach((p) => p.classList.remove("active"));
+
+    btn.classList.add("active");
+    const targetPanel = panelsContainer.querySelector(`#enabler-panel-${targetId}`);
+    if (targetPanel) targetPanel.classList.add("active");
   });
 }

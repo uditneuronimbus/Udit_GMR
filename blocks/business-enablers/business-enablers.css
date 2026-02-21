@@ -79,12 +79,27 @@
     margin-bottom: 0 !important;
 }
 
-/* Hide nested titles if redundant */
-.business-enablers-panel .cg-header,
+.business-enablers-panel .fragment-wrapper {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Hide nested titles/intros if redundant, but KEEP the images */
+.business-enablers-panel .cg-intro,
+.business-enablers-panel .cg-subtitle,
+.business-enablers-panel .sec-expertise .sec-title,
+.business-enablers-panel .sec-expertise .sec-desc,
 .business-enablers-panel .sec-expertise .text-center.mb-3,
 .business-enablers-panel .sec-expertise .text-center.mb-4 {
     display: none !important;
 }
+
+/* Ensure images always show */
+.business-enablers-panel .cg-hero-image,
+.business-enablers-panel .card-img {
+    display: block !important;
+}
+
 
 /* Ensure Corporate Governance sections look good in tabs */
 .business-enablers-panel .cg-sections {
