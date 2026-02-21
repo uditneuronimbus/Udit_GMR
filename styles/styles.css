@@ -341,6 +341,9 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .background-pink.news-updates-container .sec-news.bg-sky-blue { background-color: transparent!important;}
 .page-media-resources .integrity-card .card-title { font-weight: 400;}
 
+.page-amulya-crafts .gmr-tabs-nav.text-center { display:none;}
+.page-amulya-crafts .contact-reachout-item-icon {position: static; text-align: center; max-width: 150px; margin: auto; }
+
 
 @media (min-width:768px){
 .background-pink.message-from-leadership-container .mfl-section-header{margin-bottom:-60px!important}
