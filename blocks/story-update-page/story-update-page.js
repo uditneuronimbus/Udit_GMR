@@ -50,13 +50,15 @@ function renderSection(title, content) {
   if (!title && !content) return "";
 
   return `
-    <div class="section column">
-      <div class="row">
-        <div class="col-md-5">
-          ${title ? `<h2>${title}</h2>` : ""}
-        </div>
-        <div class="col-md-7">
-          ${fixImageSrc(content || "")}
+    <div class="section spacer column">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-5">
+            ${title ? `<h2 class="sticky">${title}</h2>` : ""}
+          </div>
+          <div class="col-md-7">
+            ${fixImageSrc(content || "")}
+          </div>
         </div>
       </div>
     </div>
@@ -73,14 +75,12 @@ export default async function decorate(block) {
   }
 
   const container = document.createElement("section");
-  container.className = "news-detail spacer";
+  container.className = "news-detail";
 
   container.innerHTML = `
-    <div class="container">
       <div class="news-detail-wrapper">
         <p class="loading">Loading article...</p>
       </div>
-    </div>
   `;
 
   block.appendChild(container);
@@ -156,16 +156,18 @@ export default async function decorate(block) {
        Banner Images
     ================================ */
     const bannerDesktop =
-      item.bannerDesktop?._publishUrl || "../../img/press-desk.jpg";
+      item.bannerDesktop?._publishUrl || "../../img/media_desk.webp";
     const bannerMobile =
-      item.bannerMobile?._publishUrl || "../../img/press-mob.jpg";
+      item.bannerMobile?._publishUrl || "../../img/media_mob.webp";
 
     /* ================================
        Render page
     ================================ */
     contentWrapper.innerHTML = `
       <div class="press-hero-wrapper">
+      <div class="press-hero block">
         <section class="press-banner">
+
           <div class="press-hero-media">
             <picture class="d-none d-md-block">
               <img src="${bannerDesktop}" width="1920" height="550">
@@ -177,25 +179,42 @@ export default async function decorate(block) {
 
           <div class="press-hero-content">
             <div class="container">
-              <button class="btn-primary btn-sm btn back-btn">Back</button>
+              <button class="btn-primary btn-sm btn" onclick="history.back()">
+          <svg width="23" height="18" viewBox="0 0 23 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.0833 8.75L0.749919 8.75M0.749919 8.75L8.74992 16.75M0.749919 8.75L8.74992 0.749998" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M22.0833 8.75L0.749919 8.75M0.749919 8.75L8.74992 16.75M0.749919 8.75L8.74992 0.749998" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg> Back
+        </button>
 
               <div class="press-hero-title">
-                ${item.title || "News Title"}
+                <h1>${item.title}</h1>
+    <p>${fixImageSrc(
+      item.description?.html ||
+      item.description?.plaintext ||
+      item.description ||
+      ""
+    )}</p>
               </div>
 
               <div class="press-hero-meta">
-                ${item.subCategory ? `<span>${item.subCategory}</span>` : ""}
-                ${publishDateFormatted ? `<span>${publishDateFormatted}</span>` : ""}
-                ${item.location ? `<span>${item.location}</span>` : ""}
+                ${item.subCategory ? `<span class="press-hero-tag badge ${item.subCategory || ""}">${item.subCategory}</span>` : ""}
+                <span class="sep">|</span>
+                ${publishDateFormatted ? `<span><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.6665 9.99998C1.6665 6.85728 1.6665 5.28593 2.64281 4.30962C3.61913 3.33331 5.19047 3.33331 8.33317 3.33331H11.6665C14.8092 3.33331 16.3805 3.33331 17.3569 4.30962C18.3332 5.28593 18.3332 6.85728 18.3332 9.99998V11.6666C18.3332 14.8093 18.3332 16.3807 17.3569 17.357C16.3805 18.3333 14.8092 18.3333 11.6665 18.3333H8.33317C5.19047 18.3333 3.61913 18.3333 2.64281 17.357C1.6665 16.3807 1.6665 14.8093 1.6665 11.6666V9.99998Z" stroke="white" stroke-width="1.5"></path>
+<path d="M5.8335 3.33331V2.08331" stroke="white" stroke-width="1.5" stroke-linecap="round"></path>
+<path d="M14.1665 3.33331V2.08331" stroke="white" stroke-width="1.5" stroke-linecap="round"></path>
+<path d="M2.0835 7.5H17.9168" stroke="white" stroke-width="1.5" stroke-linecap="round"></path>
+</svg> ${publishDateFormatted}</span>` : ""}
               </div>
             </div>
           </div>
         </section>
       </div>
+      </div>
 
       <article class="news-article">
 
-        ${hasTitle ? `
+        <!--${hasTitle ? `
   <div class="news-title">
     <h1>${item.title}</h1>
     ${fixImageSrc(
@@ -211,7 +230,7 @@ export default async function decorate(block) {
           <div class="news-card">
             <img src="${item.cardImage._publishUrl}" alt="${item.title || ""}"/>
           </div>
-        ` : ""}
+        ` : ""}-->
 
         <!-- Dynamic Sections -->
         ${[
@@ -237,8 +256,10 @@ export default async function decorate(block) {
                 </div>
               `).join("")}
             </div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
+            <div class="swiperPagination">
+              <div class="swiper-button-prev"></div>
+              <div class="swiper-button-next"></div>
+            </div>
           </div>
         ` : ""}
 
