@@ -1493,6 +1493,87 @@
     ]
   },
   {
+    "id": "craft-filter",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Section Title (Main Heading)",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "filterPanelTitle",
+        "label": "Filter Sidebar Title",
+        "valueType": "string",
+        "defaultValue": "Filter by Year and Category"
+      }
+    ]
+  },
+  {
+    "id": "craft-listing-item",
+    "itemLabel": "title",
+    "fields": [
+      {
+        "component": "select",
+        "name": "itemType",
+        "label": "Item Category",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Airports",
+            "value": "airports"
+          },
+          {
+            "name": "Energy",
+            "value": "energy"
+          },
+          {
+            "name": "Transportation",
+            "value": "Transportation "
+          },
+          {
+            "name": "GMR Varalakshmi Foundation",
+            "value": "foundation"
+          },
+          {
+            "name": "EPC",
+            "value": "epc"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Craft Image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt1",
+        "label": "Alt-Text"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title / Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "link",
+        "label": "Detail Page URL",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "csr-engine",
     "fields": [
       {
