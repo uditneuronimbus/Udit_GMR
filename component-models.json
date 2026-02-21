@@ -3964,6 +3964,26 @@
     "id": "photo-gallery-slider-item",
     "fields": [
       {
+        "component": "select",
+        "name": "gallerykType",
+        "label": "Gallery Type (For Filtering)",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "None",
+            "value": "none"
+          },
+          {
+            "name": "All Photos",
+            "value": "allPhotos"
+          },
+          {
+            "name": "All Videos",
+            "value": "allVideos"
+          }
+        ]
+      },
+      {
         "component": "reference",
         "name": "image",
         "label": "Image",
@@ -3979,6 +3999,12 @@
         "component": "richtext",
         "name": "description",
         "label": "Description",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "videoUrl",
+        "label": "Video URL",
         "valueType": "string"
       }
     ]
