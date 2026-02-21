@@ -1,5 +1,5 @@
 .csr-header { text-align: center; max-width: 800px; margin: auto; margin-bottom: 3rem; }
-.csr-logo img{max-height:42px;margin-bottom:1rem}
+.csr-logo img{max-height:42px;margin-bottom:1rem;width: auto;}
 .csr-title{ font-family: var(--font-secondary); font-weight: 400; margin-bottom: 1.5rem;}
 .csr-description p, .csr-main-description p { font-size: var(--fs-medium);}
 .csr-content{display:flex;gap:4rem;align-items:center}
@@ -16,4 +16,9 @@
 
 @media (max-width:767px){
 .csr-items, .csr-content{flex-direction:column;gap:30px}
+}
+
+
+.page-gpms-overview .csr-content {
+flex-direction: row-reverse;
 }
