@@ -71,7 +71,7 @@ export default async function decorate(block) {
      3️⃣ Build cards (shared markup)
      ------------------------------- */
   function createCard(obj) {
-    const { picture, title, desc, cta } = obj;
+    const { picture, title, desc, cta, ctaLink } = obj;
 
     return `
       <div class="card card-overlay">
@@ -83,7 +83,7 @@ export default async function decorate(block) {
           <h3 class="card-title">${title}</h3>
           <p class="card-desc">${desc}</p>
           <div class="card-cta">
-            <a href="#" class="btn-link">${cta}</a>
+            <a href="${ctaLink || "#"}" class="btn-link">${cta}</a>
           </div>
         </div>
       </div>
@@ -99,6 +99,7 @@ export default async function decorate(block) {
       title: cells[1]?.textContent?.trim() || "",
       desc: cells[2]?.textContent?.trim() || "",
       cta: cells[3]?.textContent?.trim() || "READ MORE",
+      ctaLink: cells[4]?.textContent?.trim() || "#",
     };
   });
 
