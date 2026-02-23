@@ -85,10 +85,10 @@ export default function decorate(block) {
   ================================= */
 
   const wrapper = document.createElement("div");
-  wrapper.className = "gwt-wrapper";
+  wrapper.className = " spacer";
 
   const container = document.createElement("div");
-  container.className = "gwt-container";
+  container.className = "container";
 
   /* ===== TOP SECTION ===== */
 
@@ -102,13 +102,13 @@ export default function decorate(block) {
 
   if (titleRow) {
     titleRow.remove();
-    titleRow.className = "gwt-title";
+    titleRow.className = "sec-title";
     content.appendChild(titleRow);
   }
 
   if (descRow) {
     descRow.remove();
-    descRow.className = "gwt-description";
+    descRow.className = "gwt-description fs-md";
     content.appendChild(descRow);
   }
 
@@ -119,7 +119,7 @@ export default function decorate(block) {
     const link = ctaLinkRow.querySelector("a")?.getAttribute("href") || "#";
 
     const btn = document.createElement("a");
-    btn.className = "gwt-cta";
+    btn.className = "btn btn-primary";
     btn.href = link;
     btn.textContent = label;
 
