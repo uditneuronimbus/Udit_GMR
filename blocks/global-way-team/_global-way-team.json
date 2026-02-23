@@ -172,6 +172,12 @@
                     "label": "Member 8 Name"
                 },
                 {
+                    "component": "reference",
+                    "name": "member9-image",
+                    "label": "Member 9 Image",
+                    "valueType": "string"
+                },
+                {
                     "component": "text",
                     "name": "member9-name",
                     "label": "Member 9 Name"
