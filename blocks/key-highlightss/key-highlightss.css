@@ -28,4 +28,7 @@
     .sec-key.spacer {
         padding-bottom: 120px
     }
+    .bg-white.key-highlightss-container .sec-key.spacer {
+        padding-bottom: 60px
+    }
 }
