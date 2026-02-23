@@ -17,15 +17,15 @@
       }
     },
     {
-      "title": "Network Location Item",
-      "id": "network-location-item",
+      "title": "Networks Item",
+      "id": "networks-item",
       "plugins": {
         "xwalk": {
           "page": {
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
-              "name": "network-location-item",
-              "model": "network-location-item"
+              "name": "networks-item",
+              "model": "networks-item"
             }
           }
         }
@@ -83,7 +83,7 @@
       ]
     },
     {
-      "id": "network-location-item",
+      "id": "networks-item",
       "itemLabel": "airportName",
       "fields": [
         {
@@ -164,7 +164,7 @@
     {
       "id": "our-presence",
       "components": [
-        "network-location-item"
+        "networks-item"
       ]
     }
   ]

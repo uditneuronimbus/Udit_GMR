@@ -495,7 +495,7 @@
   {
     "id": "our-presence",
     "components": [
-      "network-location-item"
+      "networks-item"
     ]
   },
   {
