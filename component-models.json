@@ -3989,7 +3989,7 @@
     ]
   },
   {
-    "id": "network-location-item",
+    "id": "networks-item",
     "itemLabel": "airportName",
     "fields": [
       {

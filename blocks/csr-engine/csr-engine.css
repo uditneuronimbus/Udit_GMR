@@ -18,7 +18,10 @@
 .csr-items, .csr-content{flex-direction:column;gap:30px}
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 60582749ae49f46a5e12917d0bfefa5f4d6c3c01
 .page-gpms-overview .csr-content {
 flex-direction: row-reverse;
 }

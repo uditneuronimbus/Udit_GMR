@@ -2153,15 +2153,15 @@
           }
         },
         {
-          "title": "Network Location Item",
-          "id": "network-location-item",
+          "title": "Networks Item",
+          "id": "networks-item",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "network-location-item",
-                  "model": "network-location-item"
+                  "name": "networks-item",
+                  "model": "networks-item"
                 }
               }
             }
