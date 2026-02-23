@@ -1136,7 +1136,7 @@ hr {
     right: 100px;
 }
 .navigation-right.leadership-message {
-    margin-top: -177px;
+    margin-top: -158px;
     margin-bottom: 2rem;
 }
 .navigation-left.leadership-message p.button-container {
@@ -1439,6 +1439,11 @@ hr {
     right: 0.25rem;
 }
 
+@media (min-width: 1200px) {
+    .leadership-message.navigation-left .default-content-wrapper,
+.leadership-message.navigation-right .default-content-wrapper { min-height: 130px;
+}
+}
 @media (min-width: 768px) {
     .background-pink.message-from-leadership-container .mfl-section-header {
         margin-bottom: -60px !important;
