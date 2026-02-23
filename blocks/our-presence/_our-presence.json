@@ -17,15 +17,15 @@
       }
     },
     {
-      "title": "Network Location Item",
-      "id": "network-location-item",
+      "title": "Network Location Items",
+      "id": "network-location-items",
       "plugins": {
         "xwalk": {
           "page": {
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
-              "name": "network-location-item",
-              "model": "network-location-item"
+              "name": "network-location-items",
+              "model": "network-location-items"
             }
           }
         }
@@ -164,7 +164,7 @@
     {
       "id": "our-presence",
       "components": [
-        "network-location-item"
+        "network-location-items"
       ]
     }
   ]
