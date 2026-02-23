@@ -83,7 +83,7 @@
       ]
     },
     {
-      "id": "network-location-item",
+      "id": "network-location-items",
       "itemLabel": "airportName",
       "fields": [
         {
