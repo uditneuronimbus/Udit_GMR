@@ -2137,6 +2137,37 @@
           }
         },
         {
+          "title": "Our Presence",
+          "id": "our-presence",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "our-presence",
+                  "model": "our-presence",
+                  "filter": "our-presence"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Network Location Item",
+          "id": "network-location-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "network-location-item",
+                  "model": "network-location-item"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Overlay Banner",
           "id": "overlay-banner",
           "plugins": {

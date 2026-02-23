@@ -493,6 +493,12 @@
     "components": []
   },
   {
+    "id": "our-presence",
+    "components": [
+      "network-location-item"
+    ]
+  },
+  {
     "id": "page-tabs",
     "components": [
       "page-tab-item"
