@@ -156,7 +156,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .swiper-button-prev:before{-webkit-transform:scaleX(-1);transform:scaleX(-1)}
 .swiper-button-next.swiper-button-disabled,.swiper-button-prev.swiper-button-disabled{background:var(--white);opacity:1!important}
 .swiper-button-next.swiper-button-disabled:before,.swiper-button-prev.swiper-button-disabled:before{background:url(../../icons/nav-arrow-yellow.svg) no-repeat center}
-.businesses-section.block,.container,.default-section .default-content-wrapper,.global-leaders-aviation-wrapper,.leadership-message,.listed-companies-wrapper,.message-from-leadership{max-width:1440px;width:100%;margin:0 auto;padding-left:4rem;padding-right:4rem}
+.businesses-section.block,.container,.default-section .default-content-wrapper,.global-leaders-aviation-wrapper,.leadership-message,.listed-companies-wrapper,.message-from-leadership,.job-fraud-sec .default-content-wrapper {max-width:1440px;width:100%;margin:0 auto;padding-left:4rem;padding-right:4rem}
 .card{border-radius:.5rem;border-color:var(--light-grey);transition-duration:.3s}
 .card-ui-one{border:none;background:0 0;height:100%}
 .card-ui-one .card-body p.card-desc{min-height:50px}
@@ -344,6 +344,44 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 
 .page-amulya-crafts .gmr-tabs-nav.text-center { display:none;}
 
+.page-careers .awards-recognitions-container { padding-bottom: 80px;}
+.bg-white.innovation-cards-container .sec-innovation, .bg-white.key-highlightss-container .sec-key { background-color:transparent; }
+.alignment-center.innovation-cards-container .col-xl-6.col-lg-8.text-md-start.text-center { width: 100%; text-align: center !important; }
+.alignment-center.innovation-cards-container .text-primary { color: var(--black) !important; }
+
+@media screen and (min-width: 768px) {
+    .page-careers .bg-white.key-highlightss-container.sec-grid-2 .key-col { width: 50%!important; }
+}
+.job-fraud-sec { position: relative; background-color: var(--lpink); padding: 2rem 0; }
+.job-fraud-sec .default-content-wrapper { position: relative; display: flex; align-items: center; justify-content: space-between; }
+.job-fraud-sec .default-content-wrapper::before {
+  content: "";
+  position: absolute;
+  left: 65px;
+  top: 4px;
+  width: 24px;
+  height: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  /* change icon color */
+  color: var(--royal-blue); /* change as needed */
+}
+.job-fraud-sec .default-content-wrapper p strong {
+    font-weight: 600;
+}
+.job-fraud-sec .default-content-wrapper p {
+    margin: 0; padding-left: 35px;
+}
+.job-fraud-sec .default-content-wrapper .button{color:var(--lorange); border: none;
+    background: none; display:inline-flex;text-decoration:none;font-weight:var(--fw-semi-bold);align-items:center;gap:.75rem;position:relative;padding:.5rem 0}
+.job-fraud-sec .default-content-wrapper .button:after{content:"";background:url(../../icons/arrow-right-yellow.svg) no-repeat center;background-size:100%;width:6px;height:14px;transition-duration:.3s;position:relative;right:0}
+.job-fraud-sec .default-content-wrapper .button.download:after{background:url(../../icons/download-yellow.svg) no-repeat center;width:14px;height:14px;background-size:14px}
+.job-fraud-sec .default-content-wrapper .button:before{content:"";position:absolute;bottom:.25rem;left:0;width:100%;height:1px;background-color:var(--yellow);transform:scaleX(0);transform-origin:right;transition:transform .6s cubic-bezier(.19, 1, .22, 1)}
+.job-fraud-sec .default-content-wrapper .button:focus,.job-fraud-sec .default-content-wrapper .button:hover{color:var(--lorange)}
+.job-fraud-sec .default-content-wrapper .button:hover:before{transform:scaleX(1);transform-origin:left}
+.job-fraud-sec .default-content-wrapper .button:hover:after{right:.25rem}
 
 @media (min-width:768px){
 .background-pink.message-from-leadership-container .mfl-section-header{margin-bottom:-60px!important}
@@ -380,7 +418,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .awards-filter-runtime,.big-padding-bottom .spacer,.default-section,.leadership-message .default-content-wrapper,.page-corporate-governance .overlay-banner-container,.page-transportation .key-highlightss-wrapper .spacer,.partners-filter-runtime,.press-listing-runtime,.spacer{padding:60px 0}
 .big-padding-bottom .sec-expertise.spacer{padding:60px 0 100px 0}
 .page-corporate-governance .default-section.bg-gray{padding-bottom:120px}
-.businesses-section.block,.container,.default-section .default-content-wrapper,.global-leaders-aviation-wrapper,.listed-companies-wrapper,.message-from-leadership{padding-left:1rem;padding-right:1rem}
+.businesses-section.block,.container,.default-section .default-content-wrapper,.global-leaders-aviation-wrapper,.listed-companies-wrapper,.message-from-leadership,.job-fraud-sec .default-content-wrapper{padding-left:1rem;padding-right:1rem}
 .global-leaders-aviation-wrapper{padding-left:0;padding-right:0}
 .sec-title,.sec-title h2{font-size:var(--fs-xxlarge)}
 .page-sitemap .default-section.highlight .default-content-wrapper > ul { column-count: 2;}

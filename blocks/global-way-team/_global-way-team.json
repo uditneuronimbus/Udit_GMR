@@ -62,6 +62,18 @@
                     "defaultValue": "<p>GMR Group is a leading Global infrastructure conglomerate with interests in Airports, Energy, Transportation and Urban Infrastructure.</p>"
                 },
                 {
+                "component": "text",
+                "name": "linkLabel",
+                "label": "Link Text / Button Label",
+                "valueType": "string"
+                },
+                {
+                "component": "text",
+                "name": "linknUrl",
+                "label": "Link URL / Button Link",
+                "valueType": "string"
+                },
+                {
                     "component": "text",
                     "name": "footerTag",
                     "label": "Footer Tag (e.g. FY 2025-26)",
@@ -158,6 +170,11 @@
                     "component": "text",
                     "name": "member8-name",
                     "label": "Member 8 Name"
+                },
+                {
+                    "component": "text",
+                    "name": "member9-name",
+                    "label": "Member 9 Name"
                 }
             ]
         },
