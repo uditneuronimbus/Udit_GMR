@@ -85,4 +85,8 @@
         opacity: 1;
         height: auto;
     }
+    .sec-innovation.spacer .mb-5.ps-5.ms-5 {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
 }

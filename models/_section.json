@@ -137,6 +137,10 @@
             {
               "name": "Swiper Slider",
               "value": "sec-swiper-slider"
+            },
+            {
+              "name": "Job Fraud",
+              "value": "job-fraud-sec"
             }
           ]
         }
@@ -215,7 +219,8 @@
         "cards-and-image",
         "image-richtext",
         "business-enablers",
-        "business-tabs"
+        "business-tabs",
+        "global-way-team"
       ]
     }
   ]
