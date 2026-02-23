@@ -3,7 +3,7 @@
 .aviation-tabs-wrap{display:flex;align-items:center;justify-content:space-between;gap:24px}
 .aviation-tabs-scroll-wrap{display:flex;align-items:center;gap:10px;width:100%}
 .aviation-tabs-scroll{overflow:hidden;flex:1}
-.aviation-tabs-list{display:flex;gap:1.5rem;list-style:none;margin:0;padding:16px 0;white-space:nowrap}
+.aviation-tabs-list{display:flex; gap:1.5rem;list-style:none;margin:0;padding:16px 0;white-space:nowrap}
 .aviation-tabs-list li{position:relative}
 .aviation-tabs-list a{display:inline-block;padding-bottom:4px;font-size:var(--fs-normal);font-weight:400;text-decoration:none;color:var(--yellow);white-space:nowrap;transition:color .3s ease}
 .aviation-tabs-list a:hover{color:var(--blue)}

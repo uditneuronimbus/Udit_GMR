@@ -138,8 +138,8 @@ if (scrollContainer && leftArrow && rightArrow) {
     }
 
     /* show/hide based on position */
-    leftArrow.style.display = scrollLeft > 10 ? "flex" : "none";
-    rightArrow.style.display = scrollLeft < maxScroll - 10 ? "flex" : "none";
+    leftArrow.style.display = scrollLeft > 0 ? "flex" : "none";
+    rightArrow.style.display = scrollLeft < maxScroll - 0 ? "flex" : "none";
   };
 
   leftArrow.addEventListener("click", () => {
