@@ -162,6 +162,7 @@ block.innerHTML = `
       const parts = window.location.pathname.split("/").filter(Boolean);
       const lang = parts[0] || "en";
       const { hits } = await algoliaIndex.search(q, {
+        filters: `lang:${lang}`,
         hitsPerPage: 10,
         attributesToRetrieve: [
           "title",

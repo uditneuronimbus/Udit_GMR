@@ -183,7 +183,10 @@ export default async function decorate(block) {
     showLoader();
 
     try {
+      const parts = window.location.pathname.split("/").filter(Boolean);
+      const region = parts[0] || "en";
       const { hits } = await index.search(q, {
+        filters: `region:${region}`,
         hitsPerPage: 10,
         attributesToSnippet: ["content:35", "description:25"],
         snippetEllipsisText: "...",
@@ -247,6 +250,7 @@ export default async function decorate(block) {
     const lang = window.location.pathname.split("/").filter(Boolean)[0] || "en";
 
     const { hits } = await index.search(query, {
+      filters: `region:${lang}`,
       hitsPerPage: 20,
       attributesToSnippet: ["content:40"],
       snippetEllipsisText: "...",
