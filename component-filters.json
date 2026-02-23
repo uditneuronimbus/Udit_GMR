@@ -289,6 +289,12 @@
     ]
   },
   {
+    "id": "global-way-team",
+    "components": [
+      "global-way-team-item"
+    ]
+  },
+  {
     "id": "gmr-buisness-brand",
     "components": [
       "gmr-buisness-item"
