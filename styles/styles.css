@@ -167,7 +167,8 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .card-ui-one .card-cta{margin-top:auto}
 .card-ui-one .card-title{font-size:var(--fs-medium);font-weight:var(--fw-semi-bold)}
 .awards-filter-runtime,.default-section,.leadership-message .default-content-wrapper,.page-corporate-governance .overlay-banner-container,.partners-filter-runtime,.press-listing-runtime,.spacer{padding:5rem 0}
-.big-padding-bottom .spacer{padding-bottom:10rem!important}
+.big-padding-bottom .spacer {padding-bottom:10rem!important}
+.big-padding-bottom.success-stories-container{padding-bottom:4rem!important}
 .card-ui-two .card-img{border-radius:.5rem;padding:0 0 70%;margin-bottom:1rem}
 .card-ui-one .card-img img,.card-ui-three .card-img img,.card-ui-two .card-img img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition-duration:.3s}
 .card-ui-two .card-body{padding:0;font-size:var(--fs-regular);color:var(--charcoal)}

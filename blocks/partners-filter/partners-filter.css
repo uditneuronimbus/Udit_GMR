@@ -38,6 +38,7 @@
 
 @media (max-width:1400px){
 .partner-content h3 { font-size: var(--fs-normal); font-weight: 500;}
+.partners-filter-container.alignment-left .default-content-wrapper { max-width: 1240px; }
 }
 @media (max-width:1199px){
 .partners-list{grid-template-columns:repeat(2,1fr)}
