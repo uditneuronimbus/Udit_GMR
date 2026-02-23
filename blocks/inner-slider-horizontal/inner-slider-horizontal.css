@@ -210,7 +210,7 @@
 /* =====================================
    Responsive
 ===================================== */
-@media (max-width: 1024px) {
+/* @media (max-width: 1024px) {
 
   .inner-slider-horizontal .ish-wrapper {
     width: 100%;
@@ -242,5 +242,175 @@
   .ish-slide-image img {
     width: 100%;
     max-width: 420px;
+  }
+} */
+
+
+
+
+/* =====================================
+   Mobile View (Updated Proper Design)
+===================================== */
+@media (max-width: 768px) {
+
+  .ish-swiper {
+    /* height: auto; */
+  }
+
+  .inner-slider-horizontal .ish-wrapper {
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+
+  .inner-slider-horizontal .ish-wrapper:after {
+    display: none;
+  }
+
+  /* Title */
+  .ish-title {
+    font-size: 18px;
+    padding: 0 0 20px 0;
+    text-align: left;
+    opacity: 0.6;
+  }
+
+  /* Slide Layout - STACK */
+  .ish-slide-card {
+    flex-direction: column;
+    gap: 20px;
+    padding: 0;
+    text-align: left;
+  }
+
+  /* Image First */
+  .ish-slide-image {
+    max-width: 100%;
+    order: 1;
+  }
+
+  .ish-slide-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+  }
+
+  /* Content Below Image */
+  .ish-slide-content {
+    max-width: 100%;
+    margin-left: 0;
+    order: 2;
+  }
+
+  .ish-slide-year {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .ish-slide-title {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .ish-slide-description {
+    font-size: 14px;
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+
+  /* =============================
+     HORIZONTAL TIMELINE
+  ============================= */
+
+  .ish-navigation {
+    position: relative;
+    left: 0;
+    top: auto;
+    transform: none;
+    width: 100%;
+    margin-top: 20px;
+    justify-content: center;
+  }
+
+  .ish-timeline {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  /* Remove vertical line */
+  .ish-timeline::before {
+    display: none;
+  }
+
+  /* Add horizontal line */
+  .ish-timeline-wrapper {
+    width: 100%;
+    position: relative;
+    padding: 20px 0;
+  }
+
+  .ish-timeline-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-50%);
+  }
+
+  .ish-year-top,
+  .ish-year-bottom {
+    font-size: 12px;
+    opacity: 0.5;
+  }
+
+  .ish-dot {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* =============================
+     ARROWS BELOW TIMELINE
+  ============================= */
+
+  .ish-arrows-wrapper {
+    flex-direction: row;
+    justify-content: center;
+    gap: 16px;
+    margin: 20px 0 0 0;
+  }
+
+  .ish-arrows-wrapper .swiper-button-prev,
+  .ish-arrows-wrapper .swiper-button-next {
+    transform: none;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: transparent;
+    border: 1px solid #ffc83d;
+  }
+
+  .swiper-button-next {
+    background: #ffc83d;
+  }
+
+  .swiper-button-next::after {
+    color: #0b3f8f;
+  }
+
+  .swiper-button-prev::after {
+    color: #ffc83d;
   }
 }
