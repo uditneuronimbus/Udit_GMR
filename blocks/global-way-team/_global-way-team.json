@@ -123,8 +123,8 @@
                 },
                 {
                     "component": "text",
-                    "name": "member6-name",
-                    "label": "Member 6 Name"
+                    "name": "member5-name",
+                    "label": "Member 5 Name"
                 },
                 {
                     "component": "reference",
@@ -134,8 +134,8 @@
                 },
                 {
                     "component": "text",
-                    "name": "member7-name",
-                    "label": "Member 7 Name"
+                    "name": "member6-name",
+                    "label": "Member 6 Name"
                 },
                 {
                     "component": "reference",
@@ -145,14 +145,19 @@
                 },
                 {
                     "component": "text",
-                    "name": "member8-name",
-                    "label": "Member 8 Name"
+                    "name": "member7-name",
+                    "label": "Member 7 Name"
                 },
                 {
                     "component": "reference",
                     "name": "member8-image",
                     "label": "Member 8 Image",
                     "valueType": "string"
+                },
+                {
+                    "component": "text",
+                    "name": "member8-name",
+                    "label": "Member 8 Name"
                 }
             ]
         },
