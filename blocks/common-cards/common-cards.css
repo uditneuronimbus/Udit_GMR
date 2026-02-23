@@ -49,8 +49,6 @@
     margin-top: 8px;
     padding: 16px;
     border-radius: 6px;
-
-    min-height: 190px;
 }
 
 .leader-name {
@@ -65,9 +63,11 @@
     color: var(--charcoal);
     font-weight: 500;
     margin-bottom: 12px;
-    min-height: 76px;
+    min-height: 55px;
 }
-
+.leader-role p {
+    margin-bottom: 0;
+}
 
 
 .leader-card:hover {

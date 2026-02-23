@@ -10,11 +10,19 @@
 .gwt-stat-number{font-size:42px;font-weight:800;color:var(--turquoise)}
 .gwt-stat-text{font-size:14px;margin-top:8px;color:var(--charcoal)}
 .gwt-footer{text-align:right;color:var(--charcoal); font-size:.875rem;background:#f6f6f6;padding:8px 16px;display:inline-block;float:right}
-@media (max-width:991px){
-.gwt-top{flex-direction:column}
-.gwt-icons{grid-template-columns:repeat(2,1fr)}
-.gwt-stats{flex-wrap:wrap;gap:30px}
+@media (max-width:767px){
+.gwt-top{flex-direction:column;gap: 40px;padding-bottom: 80px;position: relative;}
+.gwt-content .btn-primary {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    max-width: 225px;
 }
-@media (max-width:600px){
-.gwt-icons{grid-template-columns:1fr}
+.gwt-stats{flex-wrap:wrap;gap:30px}
+.gwt-icon-img img { max-height: 52px;}
+.gwt-content {text-align: center;}
+.gwt-icons{ display: flex; justify-content: center; width: 100%; gap: 1rem; flex-wrap: wrap; text-align: center;}
+.gwt-icon-item { flex: 0 0 calc(50% - 1rem); max-width: calc(50% - 1rem); }
 }

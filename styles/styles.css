@@ -432,7 +432,7 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .h2,h2{font-size:var(--fs-xlarge)}
 .h3,h3{font-size:var(--fs-medium)}
 .h4,h4{font-size:var(--fs-normal)}
-.h5,h5,p{font-size:var(--fs-regular)}
+.h5,h5{font-size:var(--fs-regular)}
 .page-corporate-governance .banner-overlay-text .col-md-7{width:80%}
 .sec-title,.sec-title h2{font-size:var(--fs-xlarge);line-height:1.4}
 .btn{height:40px;padding:0 1rem;font-size:var(--fs-regular)}
@@ -447,6 +447,8 @@ hr{margin-top:1rem;margin-bottom:1rem;border-color:#eee}
 .pt-0.message-from-leadership-container .mfl-runtime{padding-bottom:0}
 .mobile-filter-btn { padding: 8px 12px; font-size: 12px; }
 .mobile-filter-btn .arrow svg { max-width: 15px; }
+.job-fraud-sec .default-content-wrapper::before { left: 17px; }
+.job-fraud-sec .default-content-wrapper { flex-direction: column; justify-content: flex-start; align-items: flex-start;}
 }
 @media (max-width:640px){
 .page-sitemap .default-section.highlight .default-content-wrapper > ul { column-count: 1;}
