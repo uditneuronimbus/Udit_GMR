@@ -259,6 +259,10 @@
           {
             "name": "Swiper Slider",
             "value": "sec-swiper-slider"
+          },
+          {
+            "name": "Job Fraud",
+            "value": "job-fraud-sec"
           }
         ]
       }
