@@ -3515,6 +3515,18 @@
         "name": "description",
         "label": "Highlight Description",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "Link Text / Button Label",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "buttonUrl",
+        "label": "Link URL / Button Link",
+        "valueType": "string"
       }
     ]
   },

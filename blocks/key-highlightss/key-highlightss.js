@@ -33,12 +33,14 @@ export default function decorate(block) {
   items.forEach((item) => {
     if (!item || !item.children.length) return;
 
-    // Order: image cell, alt-text cell, title cell, description cell
-    const [imgCell, altCell, titleCell, descCell] = [...item.children];
+    // Order: image cell, alt-text cell, title cell, description cell, link text cell, link url cell
+    const [imgCell, altCell, titleCell, descCell, labelCell, urlCell] = [...item.children];
 
     const authoredAlt = altCell?.textContent?.trim() || "";
-    const cardTitle   = titleCell?.textContent?.trim() || "";
-    const cardDesc    = descCell ? descCell.innerHTML.trim() : "";
+    const cardTitle = titleCell?.textContent?.trim() || "";
+    const cardDesc = descCell ? descCell.innerHTML.trim() : "";
+    const btnLabel = labelCell?.textContent?.trim() || "";
+    const btnUrl = urlCell?.textContent?.trim() || "";
 
     // Fallback logic: alt = authoredAlt if exists, else cardTitle, else ""
     const finalAlt = authoredAlt || cardTitle || "";
@@ -70,11 +72,16 @@ export default function decorate(block) {
     }
 
     item.innerHTML = `
-    <div class="card card-ui-three">
+    <div class="card card-ui-three h-100">
       ${imgHtml ? `<div class="card-img">${imgHtml}</div>` : ""}
-      <div class="card-body">
+      <div class="card-body d-flex flex-column">
         ${cardTitle ? `<h3>${cardTitle}</h3>` : ""}
         ${cardDesc || ""}
+        ${(btnLabel && btnUrl) ? `
+          <div class="mt-auto pt-3">
+            <a href="${btnUrl}" class="btn btn-outline-primary btn-sm">${btnLabel}</a>
+          </div>
+        ` : ""}
       </div>
     </div>`;
   });
