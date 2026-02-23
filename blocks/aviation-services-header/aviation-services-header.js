@@ -121,25 +121,46 @@ export default function decorate(block) {
   });
 
   /* ================================
-     7️⃣ Scroll arrows
-  ================================ */
-  if (scrollContainer && leftArrow && rightArrow) {
-    const scrollAmount = 200;
+   7️⃣ Scroll arrows + visibility control
+================================ */
+if (scrollContainer && leftArrow && rightArrow) {
+  const scrollAmount = 200;
 
-    leftArrow.addEventListener("click", () => {
-      scrollContainer.scrollBy({
-        left: -scrollAmount,
-        behavior: "smooth",
-      });
-    });
+  const updateArrowVisibility = () => {
+    const scrollLeft = scrollContainer.scrollLeft;
+    const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
 
-    rightArrow.addEventListener("click", () => {
-      scrollContainer.scrollBy({
-        left: scrollAmount,
-        behavior: "smooth",
-      });
+    /* hide both if no overflow */
+    if (maxScroll <= 0) {
+      leftArrow.style.display = "none";
+      rightArrow.style.display = "none";
+      return;
+    }
+
+    /* show/hide based on position */
+    leftArrow.style.display = scrollLeft > 10 ? "block" : "none";
+    rightArrow.style.display = scrollLeft < maxScroll - 10 ? "block" : "none";
+  };
+
+  leftArrow.addEventListener("click", () => {
+    scrollContainer.scrollBy({
+      left: -scrollAmount,
+      behavior: "smooth",
     });
-  }
+  });
+
+  rightArrow.addEventListener("click", () => {
+    scrollContainer.scrollBy({
+      left: scrollAmount,
+      behavior: "smooth",
+    });
+  });
+
+  scrollContainer.addEventListener("scroll", updateArrowVisibility);
+  window.addEventListener("resize", updateArrowVisibility);
+
+  setTimeout(updateArrowVisibility, 100);
+}
 
   /* ================================
      8️⃣ Build dropdown
