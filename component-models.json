@@ -2141,6 +2141,12 @@
         "component": "text",
         "name": "imageAlt",
         "label": "Alt Text"
+      },
+      {
+        "component": "reference",
+        "name": "lottiePath",
+        "label": "Lottie Path",
+        "valueType": "string"
       }
     ]
   },
