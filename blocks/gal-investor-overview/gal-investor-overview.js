@@ -163,7 +163,7 @@ export default async function decorate(block) {
                 <div class="market-symbol">Loading market data...</div>
               </div>
 
-              <a class="gal-cta" href="#">Visit Website</a>
+              <a class="gal-cta" href="https://www.gmrgroup.in/gal/">Visit Website</a>
             </div>
 
             <div class="gal-right">
@@ -193,7 +193,7 @@ export default async function decorate(block) {
                 <div class="market-symbol">Click to load market data</div>
               </div>
 
-              <a class="gal-cta" href="#">Visit Website</a>
+              <a class="gal-cta" href="https://www.gmrgroup.in/gpuil/">Visit Website</a>
             </div>
 
             <div class="gal-right">
