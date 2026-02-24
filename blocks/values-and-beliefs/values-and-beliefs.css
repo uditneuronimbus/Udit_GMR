@@ -28,10 +28,10 @@
    GRID
 ================================ */
 .values-cards {
-  display: grid;
-  grid-template-columns: repeat(4, 260px);
-  gap: 24px;
-  justify-content: center;
+  display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 24px;
 }
 
 /* ===============================
@@ -41,7 +41,7 @@
   position: relative;
   cursor: pointer;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: hidden;     max-width: 260px;
 }
 
 /* ===============================
@@ -199,6 +199,8 @@
     height: auto;
     background: none;
   }
+  .value-card { max-width: 100%;
+}
 
   .value-card.active .value-card-content {
     transform: translateY(0);

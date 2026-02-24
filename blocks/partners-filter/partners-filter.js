@@ -79,7 +79,7 @@ export default function decorate(block) {
       <div class="partners-layout mobile-layout">
         <div class="mobile-filter-buttons">
           <button class="mobile-filter-btn category-btn" data-type="category">
-            Filter by - All Partners <span class="arrow">▼</span>
+            Filter by Category <span class="arrow">▼</span>
           </button>
         </div>
         <div class="partners-list"></div>
@@ -406,7 +406,7 @@ export default function decorate(block) {
   }
 
   function updateButtonText() {
-    let displayText = "All Partners";
+    let displayText = "Category";
     
     if (state.category !== "all") {
       // Get the display name from our categories map
