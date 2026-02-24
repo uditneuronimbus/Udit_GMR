@@ -13,11 +13,28 @@
 }
 .success-stories .swiper-slide {
     padding: 0.5rem 0;
+    height: auto;
 }
 .success-stories .card-ui:hover {
     background: #e5f2ff;
     border-color: #cce5ff;
 }
+
+.success-stories .card-img {
+    position: relative;
+    height: 100px;
+    padding: 0 0 70%;
+    overflow: hidden;
+}
+.success-stories .card-img img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 @media (max-width: 1199px) {
     .success-stories .inner-container {
         padding: 4rem;
@@ -45,6 +62,10 @@
     .success-stories-runtime .swiper-button {
         position: absolute;
         bottom: 2rem;
-        left: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .swiper-pagination-fraction {
+        white-space: nowrap;
     }
 }
