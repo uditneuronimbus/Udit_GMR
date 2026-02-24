@@ -195,6 +195,18 @@
     font-weight: 600;
   }
 
+  .value-card-image {
+    height: auto;
+    background: none;
+  }
+
+  .value-card.active .value-card-content {
+    transform: translateY(0);
+    background: url(../../img/mpatternw.svg) var(--blue);
+    background-repeat: no-repeat;
+    background-position: bottom right;
+  }
+
   /* .value-card-image {
     margin-bottom: 48px;
   } */
