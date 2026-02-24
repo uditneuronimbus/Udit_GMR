@@ -1643,7 +1643,7 @@ hr {
     }
     .sec-title,
     .sec-title h2 {
-        font-size: var(--fs-xlarge);
+        font-size: var(--fs-xxlarge);
         line-height: 1.4;
     }
     .btn {

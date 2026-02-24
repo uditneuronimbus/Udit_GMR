@@ -28,7 +28,6 @@
 }
 @media (max-width:767px){
 .global-leaders-aviation{padding:0}
-.global-leaders-aviation h2{font-size:var(--fs-xlarge)}
 .global-leaders-aviation .gla-description{font-size:var(--fs-normal)}
 .global-leaders-aviation .gla-stats { grid-template-columns: repeat(2, 1fr); display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
 .global-leaders-aviation .gla-stats .gla-stat { flex: 0 0 calc(50% - 24px); max-width: calc(50% - 24px); }
