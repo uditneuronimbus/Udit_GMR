@@ -1136,7 +1136,7 @@ hr {
     right: 100px;
 }
 .navigation-right.leadership-message {
-    margin-top: -177px;
+    margin-top: -178px;
     margin-bottom: 2rem;
 }
 .navigation-left.leadership-message p.button-container {
@@ -1439,6 +1439,11 @@ hr {
     right: 0.25rem;
 }
 
+@media (min-width: 1200px) {
+    .leadership-message.navigation-left .default-content-wrapper,
+.leadership-message.navigation-right .default-content-wrapper { min-height: 130px;
+}
+}
 @media (min-width: 768px) {
     .background-pink.message-from-leadership-container .mfl-section-header {
         margin-bottom: -60px !important;
@@ -1619,15 +1624,15 @@ hr {
     }
     .h2,
     h2 {
-        font-size: var(--fs-xlarge);
+        font-size: var(--fs-xxlarge);
     }
     .h3,
     h3 {
-        font-size: var(--fs-medium);
+        font-size: var(--fs-xlarge);
     }
     .h4,
     h4 {
-        font-size: var(--fs-normal);
+        font-size: var(--fs-medium);
     }
     .h5,
     h5 {
@@ -1638,7 +1643,7 @@ hr {
     }
     .sec-title,
     .sec-title h2 {
-        font-size: var(--fs-xlarge);
+        font-size: var(--fs-xxlarge);
         line-height: 1.4;
     }
     .btn {

@@ -59,11 +59,11 @@ export default function decorate(block) {
           (card) => `
         <article class="leader-card col-md-4 mb-4">
           <div class="leader-image">
-            ${card.image}
+            <a href="${card.actionLink}">${card.image}</a>
           </div>
 
           <div class="leader-content">
-            <h3 class="leader-name">${card.title}</h3>
+            <h3 class="leader-name"><a href="${card.actionLink}">${card.title}</a></h3>
             <div class="leader-role">${card.subtitle}</div>
             <div class="cta">
             <a href="${card.actionLink}" class="btn-link">
