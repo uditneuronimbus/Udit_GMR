@@ -406,7 +406,7 @@ export default function decorate(block) {
   }
 
   function updateButtonText() {
-    let displayText = "All Partners";
+    let displayText = "Category";
     
     if (state.category !== "all") {
       // Get the display name from our categories map
