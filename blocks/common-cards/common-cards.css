@@ -57,6 +57,14 @@
     margin: 0 0 8px;
     color: var(--black);
 }
+.leader-name a {
+    color: var(--black);
+    text-decoration: none;
+}
+.leader-name a:hover {
+    color: var(--yellow);
+    text-decoration: none;
+}
 
 .leader-role {
     font-size: var(--fs-medium);
