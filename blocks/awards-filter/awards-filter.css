@@ -40,6 +40,5 @@
 .mobile-filter-buttons{display:flex}
 .award-card{display:flex;flex-direction:column}
 .container{padding:0 16px}
-.awards-filter-runtime{padding:24px 0}
 .awards-filter-container.alignment-center .default-content-wrapper h2 {margin-bottom: 1rem !important;}
 }
