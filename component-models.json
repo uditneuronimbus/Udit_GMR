@@ -4000,6 +4000,14 @@
           {
             "name": "Hydro Energy",
             "value": "hydroEnergy"
+          },
+          {
+            "name": "Hyderabad International Airport",
+            "value": "hyderabadIntlAirport"
+          },
+          {
+            "name": "Goa International Airport",
+            "value": "goaIntlAirport"
           }
         ]
       },
