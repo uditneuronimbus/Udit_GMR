@@ -32,7 +32,6 @@
       }
     }
   ],
-
   "models": [
     {
       "id": "factsheet",
@@ -72,19 +71,41 @@
           "name": "category",
           "label": "Category",
           "options": [
-            { "name": "Environment", "value": "environment" },
-            { "name": "Social", "value": "social" },
-            { "name": "Governance", "value": "governance" }
+            {
+              "name": "Environment",
+              "value": "environment"
+            },
+            {
+              "name": "Social",
+              "value": "social"
+            },
+            {
+              "name": "Governance",
+              "value": "governance"
+            },
+            {
+              "name": "Tab1",
+              "value": "tab1"
+            },
+            {
+              "name": "Tab2",
+              "value": "tab2"
+            },
+            {
+              "name": "Tab3",
+              "value": "tab3"
+            }
           ]
         }
       ]
     }
   ],
-
   "filters": [
     {
       "id": "factsheet",
-      "components": ["factsheet-item"]
+      "components": [
+        "factsheet-item"
+      ]
     }
   ]
 }
