@@ -1624,15 +1624,15 @@ hr {
     }
     .h2,
     h2 {
-        font-size: var(--fs-xlarge);
+        font-size: var(--fs-xxlarge);
     }
     .h3,
     h3 {
-        font-size: var(--fs-medium);
+        font-size: var(--fs-xlarge);
     }
     .h4,
     h4 {
-        font-size: var(--fs-normal);
+        font-size: var(--fs-medium);
     }
     .h5,
     h5 {
