@@ -230,6 +230,7 @@ export default async function decorate(block) {
   new window.Swiper(section.querySelector(".gmr-brand-swiper"), {
     slidesPerView: 1,
     spaceBetween: 24,
+    centeredSlides: true,
     navigation: {
       nextEl: section.querySelector(".swiper-button-next"),
       prevEl: section.querySelector(".swiper-button-prev"),
