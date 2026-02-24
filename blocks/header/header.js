@@ -583,12 +583,16 @@ export default async function decorate(block) {
               const labelEl = second?.querySelector("p");
               const imgEl = first?.querySelector("img");
               if (!labelEl || !imgEl) return;
+
+              const originalImg = imgEl.src.split("?")[0]; // ✅ remove Franklin renditions
+
               const key = labelEl.textContent
                 .trim()
                 .toLowerCase()
                 .replace(/\u00A0/g, " ")
                 .replace(/\s+/g, "-");
-              imageMap.set(key, imgEl.src);
+
+              imageMap.set(key, originalImg);
             }
           });
           menuImgWrapper.remove();
@@ -975,7 +979,6 @@ export default async function decorate(block) {
 
     // FINAL STEP: The redundant link rewrite logic has been removed as it's now handled early
     // and correctly in the decoration process.
-
   } catch (e) {
     console.error("Navigation Decorate Failed:", e);
   } finally {
