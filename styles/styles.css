@@ -358,8 +358,8 @@ hr {
     height: 54px;
     padding: 0 1.75rem;
 }
-.btn-primary,
-.button.primary {
+.btn-primary, .btn-primary:focus,
+.button.primary, .button.primary:focus {
     background-color: var(--lorange);
     border: 1px solid var(--lorange);
     color: var(--black);
@@ -375,7 +375,7 @@ hr {
 .btn-primary:hover,
 .button.primary:focus,
 .button.primary:hover {
-    background-color: var(--white);
+    background-color: var(--lorange);
     border-color: var(--lorange);
     color: var(--black);
 }
