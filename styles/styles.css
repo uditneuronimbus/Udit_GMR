@@ -849,6 +849,10 @@ hr {
 .filter-group input[type="radio"]:checked {
     border-color: var(--blue);
 }
+.filter-group input[type="radio"]:checked + label {
+    font-weight: bold;
+    color: var(--blue);
+}
 .filter-group input[type="radio"]:checked::before {
     background: var(--blue);
 }
