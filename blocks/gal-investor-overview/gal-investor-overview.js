@@ -1,508 +1,151 @@
-// export default function decorate(block) {
-//   const isAuthorMode =
-//     document.body.classList.contains('aem-AuthorLayer-Edit') ||
-//     window.location.search.includes('wcmmode=edit');
-
-//   if (isAuthorMode) return;
-
-//   const rows = [...block.children];
-//   if (!rows.length) return;
-
-//   /* ===============================
-//      TOP SECTION
-//   =============================== */
-
-//   const topTitle = rows[0]?.textContent?.trim();
-//   const topDescription = rows[1]?.innerHTML?.trim();
-
-//   const primaryText = rows[2]?.textContent?.trim();
-//   const primaryLink = rows[3]?.querySelector('a')?.href;
-
-//   const secondaryText = rows[4]?.textContent?.trim();
-//   const secondaryLink = rows[5]?.querySelector('a')?.href;
+const STOCK_API_URL =
+  "https://gmr.itsneobot.com:4000/api/share/get-latest-share-price";
+
+const AUTH_TOKEN =
+  "U2FsdGVkX1+IAunex0zJueoZQpRBfpUm/DSQSMufK69HpTEh4abfdnhz0fQ+jbSmPrqojCZOhYZ6/mvA28aQxw";
+
+const CACHE_KEY = "gal-gpuil-stock-cache";
+const CACHE_TIME_KEY = "gal-gpuil-stock-cache-time";
+const CACHE_TTL = 60000;
+
+/* ===============================
+   FETCH STOCK WITH CACHE
+=============================== */
+
+async function fetchStockData() {
+  try {
+    const cached = localStorage.getItem(CACHE_KEY);
+    const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+
+    if (cached && cachedTime) {
+      const age = Date.now() - Number(cachedTime);
+      if (age < CACHE_TTL) {
+        return JSON.parse(cached);
+      }
+    }
+
+    const res = await fetch(STOCK_API_URL, {
+      method: "GET",
+      headers: {
+        Authorization: AUTH_TOKEN,
+        Accept: "application/json",
+      },
+    });
+
+    if (!res.ok) throw new Error("API failed");
+
+    const json = await res.json();
+
+    if (json.success && Array.isArray(json.data)) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(json.data));
+      localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+      return json.data;
+    }
+
+    return [];
+  } catch (e) {
+    console.error("Stock API error:", e);
+    const fallback = localStorage.getItem(CACHE_KEY);
+    return fallback ? JSON.parse(fallback) : [];
+  }
+}
+
+/* ===============================
+   FULL MARKET OVERVIEW (UPDATED)
+=============================== */
+
+function renderMarketHTML(companyData, displayName) {
+  if (!companyData || !companyData.exchanges?.length) {
+    return `<div class="stock-error">Market data unavailable</div>`;
+  }
+
+  let displayTime = "Latest";
+  if (companyData.fetchedAt) {
+    try {
+      const dt = new Date(companyData.fetchedAt);
+      displayTime = dt.toLocaleString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+    } catch {}
+  }
+
+  let html = `
+    <div class="market-title">${displayName} - MARKET OVERVIEW</div>
+    <div class="as-on">As on ${displayTime}</div>
+    <div class="exchanges">
+  `;
+
+  companyData.exchanges.slice(0, 2).forEach((ex) => {
+    const isNegative = ex.change < 0;
+    const arrow = isNegative ? "↓" : "↑";
+
+    html += `
+      <div class="exchange-row">
+        <div class="exchange">${ex.exchange}</div>
+        <div class="exchange_price">
+          <div class="price">
+            <span class="${isNegative ? "negative" : "positive"}">
+              ${arrow} ₹${ex.lastTradedPrice.toFixed(2)}
+            </span>
+          </div>
+          <div class="change ${isNegative ? "negative" : "positive"}">
+            ${Math.abs(ex.change).toFixed(2)} 
+            (${Math.abs(ex.changePercent).toFixed(2)}%)
+          </div>
+        </div>
+      </div>
+    `;
+  });
 
-//   /* ===============================
-//      LEFT SECTION
-//   =============================== */
+  const mainVolume =
+    companyData.exchanges[0]?.volume?.toLocaleString("en-IN") || "—";
 
-//   const companyTitle = rows[6]?.textContent?.trim();
-//   const companyDescription = rows[7]?.innerHTML?.trim();
+  html += `
+    </div>
+    <div class="volume">Volume ${mainVolume}</div>
+  `;
 
-//   const ctaText = rows[8]?.textContent?.trim();
-//   const ctaLink = rows[9]?.querySelector('a')?.href;
+  return html;
+}
 
-//   const stockSymbol = rows[10]?.textContent?.trim();
+/* ===============================
+   DECORATE
+=============================== */
 
-//   /* ===============================
-//      STAT CARDS (Dynamic — no fixed 6)
-//   =============================== */
-
-//   const stats = [];
-//   let index = 11;
-
-//   while (rows[index] || rows[index + 1]) {
-//     const statText = rows[index]?.innerHTML?.trim();
-//     const statImage = rows[index + 1]?.innerHTML?.trim();
-
-//     if (statText || statImage) {
-//       stats.push(`
-//         <div class="gal-stat-card">
-//           ${statImage ? `<div class="stat-image">${statImage}</div>` : ''}
-//           ${statText ? `<div class="stat-text">${statText}</div>` : ''}
-//         </div>
-//       `);
-//     }
-
-//     index += 2;
-//   }
-
-//   /* ===============================
-//      BUILD STRUCTURE
-//   =============================== */
-
-//   block.innerHTML = '';
-
-//   const wrapper = document.createElement('div');
-//   wrapper.className = 'gal-investor-wrapper';
-
-//   wrapper.innerHTML = `
-
-//     ${topTitle || topDescription || primaryText || secondaryText ? `
-//       <div class="investors-trust-wrapper">
-//         ${topTitle ? `<h2 class="investors-title">${topTitle}</h2>` : ''}
-//         ${topDescription ? `<div class="investors-desc">${topDescription}</div>` : ''}
-
-//         ${(primaryText && primaryLink) || (secondaryText && secondaryLink) ? `
-//           <div class="investors-cta">
-//             ${primaryText && primaryLink
-//               ? `<a class="cta primary" href="${primaryLink}">${primaryText}</a>`
-//               : ''}
-//             ${secondaryText && secondaryLink
-//               ? `<a class="cta secondary" href="${secondaryLink}">${secondaryText}</a>`
-//               : ''}
-//           </div>
-//         ` : ''}
-//       </div>
-//     ` : ''}
-
-//     ${(companyTitle || companyDescription || stockSymbol || ctaText || stats.length) ? `
-//       <div class="gal-main">
-
-//         <div class="gal-left">
-//           ${companyTitle ? `<h3>${companyTitle}</h3>` : ''}
-//           ${companyDescription ? `<div class="gal-desc">${companyDescription}</div>` : ''}
-
-//           ${stockSymbol ? `
-//             <div class="gal-market">
-//               <div class="market-symbol">
-//                 <strong>${stockSymbol}</strong>
-//               </div>
-//             </div>
-//           ` : ''}
-
-//           ${ctaText && ctaLink
-//             ? `<a class="gal-cta" href="${ctaLink}">${ctaText}</a>`
-//             : ''}
-//         </div>
-
-//         ${stats.length ? `
-//           <div class="gal-right">
-//             ${stats.join('')}
-//           </div>
-//         ` : ''}
-
-//       </div>
-//     ` : ''}
-
-//   `;
-
-//   block.appendChild(wrapper);
-// }
-
-
-
-// export default function decorate(block) {
-//   const isAuthorMode =
-//     document.body.classList.contains('aem-AuthorLayer-Edit') ||
-//     window.location.search.includes('wcmmode=edit');
-
-//   if (isAuthorMode) return;
-
-//   const rows = [...block.children];
-//   if (!rows.length) return;
-
-//   /* ===============================
-//      TOP SECTION
-//   =============================== */
-
-//   const topTitle = rows[0]?.textContent?.trim();
-//   const topDescription = rows[1]?.innerHTML?.trim();
-
-//   const primaryText = rows[2]?.textContent?.trim();
-//   const primaryLink = rows[3]?.querySelector('a')?.href;
-
-//   const secondaryText = rows[4]?.textContent?.trim();
-//   const secondaryLink = rows[5]?.querySelector('a')?.href;
-
-//   /* ===============================
-//      GAL SECTION DATA
-//   =============================== */
-
-//   const companyTitle = rows[6]?.textContent?.trim();
-//   const companyDescription = rows[7]?.innerHTML?.trim();
-//   const ctaText = rows[8]?.textContent?.trim();
-//   const ctaLink = rows[9]?.querySelector('a')?.href;
-//   const stockSymbol = rows[10]?.textContent?.trim();
-
-//   /* ===============================
-//      STAT CARDS
-//   =============================== */
-
-//   const stats = [];
-//   let index = 11;
-
-//   while (rows[index] || rows[index + 1]) {
-//     const statText = rows[index]?.innerHTML?.trim();
-//     const statImage = rows[index + 1]?.innerHTML?.trim();
-
-//     if (statText || statImage) {
-//       stats.push(`
-//         <div class="gal-stat-card">
-//           ${statImage ? `<div class="stat-image">${statImage}</div>` : ''}
-//           ${statText ? `<div class="stat-text">${statText}</div>` : ''}
-//         </div>
-//       `);
-//     }
-
-//     index += 2;
-//   }
-
-//   block.innerHTML = '';
-
-//   const wrapper = document.createElement('div');
-//   wrapper.className = 'gal-investor-wrapper';
-
-//   wrapper.innerHTML = `
-
-//     <div class="investors-trust-wrapper">
-//       ${topTitle ? `<h2 class="investors-title">${topTitle}</h2>` : ''}
-//       ${topDescription ? `<div class="investors-desc">${topDescription}</div>` : ''}
-
-//       <div class="investors-cta">
-//         ${primaryText ? `<button class="cta primary active">${primaryText}</button>` : ''}
-//         ${secondaryText ? `<button class="cta secondary">${secondaryText}</button>` : ''}
-//       </div>
-//     </div>
-
-//     <!-- GAL CONTENT (Default Visible) -->
-//     <div class="gal-content">
-
-//       <div class="gal-main">
-//         <div class="gal-left">
-//           ${companyTitle ? `<h3>${companyTitle}</h3>` : ''}
-//           ${companyDescription ? `<div class="gal-desc">${companyDescription}</div>` : ''}
-
-//           ${stockSymbol ? `
-//             <div class="gal-market">
-//               <div class="market-symbol">
-//                 <strong>${stockSymbol}</strong>
-//               </div>
-//             </div>
-//           ` : ''}
-
-//           ${ctaText && ctaLink
-//             ? `<a class="gal-cta" href="${ctaLink}">${ctaText}</a>`
-//             : ''}
-//         </div>
-
-//         ${stats.length ? `
-//           <div class="gal-right">
-//             ${stats.join('')}
-//           </div>
-//         ` : ''}
-//       </div>
-
-//     </div>
-
-//     <!-- GPIL CONTENT (Initially Hidden) -->
-//     <div class="gpil-content" style="display:none;">
-//       <!-- You can author separate GPIL rows later if needed -->
-//     </div>
-
-//   `;
-
-//   block.appendChild(wrapper);
-
-//   /* ===============================
-//      TOGGLE FUNCTIONALITY
-//   =============================== */
-
-//   const primaryBtn = wrapper.querySelector('.cta.primary');
-//   const secondaryBtn = wrapper.querySelector('.cta.secondary');
-//   const galContent = wrapper.querySelector('.gal-content');
-//   const gpilContent = wrapper.querySelector('.gpil-content');
-
-//   if (primaryBtn && secondaryBtn) {
-//     primaryBtn.addEventListener('click', () => {
-//       primaryBtn.classList.add('active');
-//       secondaryBtn.classList.remove('active');
-
-//       galContent.style.display = 'block';
-//       gpilContent.style.display = 'none';
-//     });
-
-//     secondaryBtn.addEventListener('click', () => {
-//       secondaryBtn.classList.add('active');
-//       primaryBtn.classList.remove('active');
-
-//       galContent.style.display = 'none';
-//       gpilContent.style.display = 'block';
-//     });
-//   }
-// }
-
-
-
-// export default function decorate(block) {
-//   const isAuthorMode =
-//     document.body.classList.contains('aem-AuthorLayer-Edit') ||
-//     window.location.search.includes('wcmmode=edit');
-
-//   if (isAuthorMode) return;
-
-//   const rows = [...block.children];
-//   if (!rows.length) return;
-
-//   /* ===============================
-//      TOP SECTION
-//   =============================== */
-
-//   const topTitle = rows[0]?.textContent?.trim();
-//   const topDescription = rows[1]?.innerHTML?.trim();
-
-//   const primaryText = rows[2]?.textContent?.trim();
-//   const primaryLink = rows[3]?.querySelector('a')?.href;
-
-//   const secondaryText = rows[4]?.textContent?.trim();
-//   const secondaryLink = rows[5]?.querySelector('a')?.href;
-
-//   /* ===============================
-//      GAL SECTION DATA
-//   =============================== */
-
-//   const galTitle = rows[6]?.textContent?.trim();
-//   const galDescription = rows[7]?.innerHTML?.trim();
-//   const galCtaText = rows[8]?.textContent?.trim();
-//   const galCtaLink = rows[9]?.querySelector('a')?.href;
-//   const galStockSymbol = rows[10]?.textContent?.trim();
-
-//   const galStats = [];
-//   let index = 11;
-
-//   while (rows[index] && rows[index + 1]) {
-//     if (rows[index].dataset?.section === "gpil") break;
-
-//     const statText = rows[index]?.innerHTML?.trim();
-//     const statImage = rows[index + 1]?.innerHTML?.trim();
-
-//     if (statText || statImage) {
-//       galStats.push(`
-//         <div class="gal-stat-card">
-//           ${statImage ? `<div class="stat-image">${statImage}</div>` : ''}
-//           ${statText ? `<div class="stat-text">${statText}</div>` : ''}
-//         </div>
-//       `);
-//     }
-
-//     index += 2;
-//   }
-
-//   /* ===============================
-//      GPIL SECTION DATA
-//   =============================== */
-
-//   const gpilTitle = rows[index]?.textContent?.trim();
-//   const gpilDescription = rows[index + 1]?.innerHTML?.trim();
-//   const gpilCtaText = rows[index + 2]?.textContent?.trim();
-//   const gpilCtaLink = rows[index + 3]?.querySelector('a')?.href;
-//   const gpilStockSymbol = rows[index + 4]?.textContent?.trim();
-
-//   const gpilStats = [];
-//   let gpilIndex = index + 5;
-
-//   while (rows[gpilIndex] && rows[gpilIndex + 1]) {
-//     const statText = rows[gpilIndex]?.innerHTML?.trim();
-//     const statImage = rows[gpilIndex + 1]?.innerHTML?.trim();
-
-//     if (statText || statImage) {
-//       gpilStats.push(`
-//         <div class="gal-stat-card">
-//           ${statImage ? `<div class="stat-image">${statImage}</div>` : ''}
-//           ${statText ? `<div class="stat-text">${statText}</div>` : ''}
-//         </div>
-//       `);
-//     }
-
-//     gpilIndex += 2;
-//   }
-
-//   /* ===============================
-//      RENDER HTML
-//   =============================== */
-
-//   block.innerHTML = '';
-
-//   const wrapper = document.createElement('div');
-//   wrapper.className = 'gal-investor-wrapper';
-
-//   wrapper.innerHTML = `
-
-//     <div class="investors-trust-wrapper">
-//       ${topTitle ? `<h2 class="investors-title">${topTitle}</h2>` : ''}
-//       ${topDescription ? `<div class="investors-desc">${topDescription}</div>` : ''}
-
-//       <div class="investors-cta">
-//         ${primaryText ? `<button class="cta primary active">${primaryText}</button>` : ''}
-//         ${secondaryText ? `<button class="cta secondary">${secondaryText}</button>` : ''}
-//       </div>
-//     </div>
-
-//     <!-- GAL CONTENT (Default Visible) -->
-//     <div class="gal-content">
-
-//       <div class="gal-main">
-//         <div class="gal-left">
-//           ${galTitle ? `<h3>${galTitle}</h3>` : ''}
-//           ${galDescription ? `<div class="gal-desc">${galDescription}</div>` : ''}
-
-//           ${galStockSymbol ? `
-//             <div class="gal-market">
-//               <div class="market-symbol">
-//                 <strong>${galStockSymbol}</strong>
-//               </div>
-//             </div>
-//           ` : ''}
-
-//           ${galCtaText && galCtaLink
-//             ? `<a class="gal-cta" href="${galCtaLink}">${galCtaText}</a>`
-//             : ''}
-//         </div>
-
-//         ${galStats.length ? `
-//           <div class="gal-right">
-//             ${galStats.join('')}
-//           </div>
-//         ` : ''}
-
-//       </div>
-
-//     </div>
-
-//     <!-- GPIL CONTENT (Initially Hidden) -->
-//     <div class="gpil-content" style="display:none;">
-
-//       <div class="gal-main">
-//         <div class="gal-left">
-//           ${gpilTitle ? `<h3>${gpilTitle}</h3>` : ''}
-//           ${gpilDescription ? `<div class="gal-desc">${gpilDescription}</div>` : ''}
-
-//           ${gpilStockSymbol ? `
-//             <div class="gal-market">
-//               <div class="market-symbol">
-//                 <strong>${gpilStockSymbol}</strong>
-//               </div>
-//             </div>
-//           ` : ''}
-
-//           ${gpilCtaText && gpilCtaLink
-//             ? `<a class="gal-cta" href="${gpilCtaLink}">${gpilCtaText}</a>`
-//             : ''}
-//         </div>
-
-//         ${gpilStats.length ? `
-//           <div class="gal-right">
-//             ${gpilStats.join('')}
-//           </div>
-//         ` : ''}
-
-//       </div>
-
-//     </div>
-//   `;
-
-//   block.appendChild(wrapper);
-
-//   /* ===============================
-//      TOGGLE FUNCTIONALITY
-//   =============================== */
-
-//   const primaryBtn = wrapper.querySelector('.cta.primary');
-//   const secondaryBtn = wrapper.querySelector('.cta.secondary');
-//   const galContent = wrapper.querySelector('.gal-content');
-//   const gpilContent = wrapper.querySelector('.gpil-content');
-
-//   if (primaryBtn && secondaryBtn) {
-//     primaryBtn.addEventListener('click', () => {
-//       primaryBtn.classList.add('active');
-//       secondaryBtn.classList.remove('active');
-
-//       galContent.style.display = 'block';
-//       gpilContent.style.display = 'none';
-//     });
-
-//     secondaryBtn.addEventListener('click', () => {
-//       secondaryBtn.classList.add('active');
-//       primaryBtn.classList.remove('active');
-
-//       galContent.style.display = 'none';
-//       gpilContent.style.display = 'block';
-//     });
-//   }
-// }
-
-
-
-
-export default function decorate(block) {
+export default async function decorate(block) {
   const isAuthorMode =
-    document.body.classList.contains('aem-AuthorLayer-Edit') ||
-    window.location.search.includes('wcmmode=edit');
+    document.body.classList.contains("aem-AuthorLayer-Edit") ||
+    window.location.search.includes("wcmmode=edit");
 
   if (isAuthorMode) return;
 
   const rows = [...block.children];
   if (!rows.length) return;
 
-  /* ===============================
-     TOP SECTION
-  =============================== */
-
   const topTitle = rows[0]?.textContent?.trim();
   const topDescription = rows[1]?.innerHTML?.trim();
-
-  const primaryText = rows[2]?.textContent?.trim();     // GMR Airport Limited
-  const secondaryText = rows[4]?.textContent?.trim();   // GPUIL
-
-  /* ===============================
-     RENDER BLOCK
-  =============================== */
+  const primaryText = rows[2]?.textContent?.trim();
+  const secondaryText = rows[4]?.textContent?.trim();
 
   block.innerHTML = `
     <div class="gal-investor-wrapper">
 
       <div class="investors-trust-wrapper">
-        ${topTitle ? `<h2 class="investors-title">${topTitle}</h2>` : ''}
-        ${topDescription ? `<div class="investors-desc">${topDescription}</div>` : ''}
+        ${topTitle ? `<h2 class="investors-title">${topTitle}</h2>` : ""}
+        ${topDescription ? `<div class="investors-desc">${topDescription}</div>` : ""}
 
         <div class="investors-cta">
-          ${primaryText ? `<button class="cta primary active">${primaryText}</button>` : ''}
-          ${secondaryText ? `<button class="cta secondary">${secondaryText}</button>` : ''}
+          ${primaryText ? `<button class="cta primary active">${primaryText}</button>` : ""}
+          ${secondaryText ? `<button class="cta secondary">${secondaryText}</button>` : ""}
         </div>
       </div>
 
-      <!-- ================= PRIMARY CONTENT (GAL) ================= -->
       <div class="company-content primary-content">
-
         <div class="gal-content">
           <div class="gal-main">
             <div class="gal-left">
@@ -517,69 +160,25 @@ export default function decorate(block) {
               </div>
 
               <div class="gal-market">
-                <div class="market-symbol">
-                  <strong>gal</strong>
-                </div>
+                <div class="market-symbol">Loading market data...</div>
               </div>
 
-              <a class="gal-cta" href="http://localhost:3000/en/investors#">
-                Visit Website
-              </a>
+              <a class="gal-cta" href="#">Visit Website</a>
             </div>
 
             <div class="gal-right">
-
-              <div class="gal-stat-card">
-                <div class="stat-text">
-                  <p><strong>#1 in Asia</strong></p>
-                  <p>Largest private airport operator</p>
-                </div>
-              </div>
-
-              <div class="gal-stat-card">
-                <div class="stat-text">
-                  <p><strong>120+ million</strong></p>
-                  <p>Passengers served FY25</p>
-                </div>
-              </div>
-
-              <div class="gal-stat-card">
-                <div class="stat-text">
-                  <p><strong>₹10,414 crore</strong></p>
-                  <p>FY25 airport revenue</p>
-                </div>
-              </div>
-
-              <div class="gal-stat-card">
-                <div class="stat-text">
-                  <p><strong>12% Year-on-year</strong></p>
-                  <p>Passenger growth</p>
-                </div>
-              </div>
-
-              <div class="gal-stat-card">
-                <div class="stat-text">
-                  <p><strong>22.5% Growth</strong></p>
-                  <p>in EBITDA to ₹4,188 crore</p>
-                </div>
-              </div>
-
-              <div class="gal-stat-card">
-                <div class="stat-text">
-                  <p><strong>9 World-class</strong></p>
-                  <p>Airport assets</p>
-                </div>
-              </div>
-
+              <div class="gal-stat-card"><div class="stat-text"><p><strong>#1 in Asia</strong></p><p>Largest private airport operator</p></div></div>
+              <div class="gal-stat-card"><div class="stat-text"><p><strong>120+ million</strong></p><p>Passengers served FY25</p></div></div>
+              <div class="gal-stat-card"><div class="stat-text"><p><strong>₹10,414 crore</strong></p><p>FY25 airport revenue</p></div></div>
+              <div class="gal-stat-card"><div class="stat-text"><p><strong>12% Year-on-year</strong></p><p>Passenger growth</p></div></div>
+              <div class="gal-stat-card"><div class="stat-text"><p><strong>22.5% Growth</strong></p><p>in EBITDA to ₹4,188 crore</p></div></div>
+              <div class="gal-stat-card"><div class="stat-text"><p><strong>9 World-class</strong></p><p>Airport assets</p></div></div>
             </div>
           </div>
         </div>
-
       </div>
 
-      <!-- ================= SECONDARY CONTENT (GPUIL) ================= -->
       <div class="company-content secondary-content" style="display:none;">
-
         <div class="gal-content">
           <div class="gal-main">
             <div class="gal-left">
@@ -587,98 +186,80 @@ export default function decorate(block) {
               <div class="gal-desc">
                 <p>
                   GPUIL is a leader in energy, urban infrastructure, and transportation sectors.
-                  The company runs power plants, manages highways, and develops industrial
-                  areas along key Indian growth corridors.
                 </p>
               </div>
 
               <div class="gal-market">
-                <div class="market-symbol">
-                  <strong>gpuil</strong>
-                </div>
+                <div class="market-symbol">Click to load market data</div>
               </div>
 
-              <a class="gal-cta" href="http://localhost:3000/en/investors#">
-                Visit Website
-              </a>
+              <a class="gal-cta" href="#">Visit Website</a>
             </div>
 
             <div class="gal-right">
-
-              <div class="gal-stat-card">
-                <div class="stat-text">
-                  <p><strong>₹6,344 crore</strong></p>
-                  <p>FY25 total revenue</p>
-                </div>
-              </div>
-
-              <div class="gal-stat-card">
-                <div class="stat-text">
-                  <p><strong>₹2,181 crore</strong></p>
-                  <p>EBITDA for FY25</p>
-                </div>
-              </div>
-
-              <div class="gal-stat-card">
-                <div class="stat-text">
-                  <p><strong>2,840 MW</strong></p>
-                  <p>Installed power capacity</p>
-                </div>
-              </div>
-
-              <div class="gal-stat-card">
-                <div class="stat-text">
-                  <p><strong>1,775 MW</strong></p>
-                  <p>Power projects under development</p>
-                </div>
-              </div>
-
-              <div class="gal-stat-card">
-                <div class="stat-text">
-                  <p><strong>2,400+ lane-km</strong></p>
-                  <p>Highways operated across India</p>
-                </div>
-              </div>
-
+              <div class="gal-stat-card"><div class="stat-text"><p><strong>₹6,344 crore</strong></p><p>FY25 total revenue</p></div></div>
+              <div class="gal-stat-card"><div class="stat-text"><p><strong>₹2,181 crore</strong></p><p>EBITDA for FY25</p></div></div>
+              <div class="gal-stat-card"><div class="stat-text"><p><strong>2,840 MW</strong></p><p>Installed power capacity</p></div></div>
+              <div class="gal-stat-card"><div class="stat-text"><p><strong>1,775 MW</strong></p><p>Power projects under development</p></div></div>
+              <div class="gal-stat-card"><div class="stat-text"><p><strong>2,400+ lane-km</strong></p><p>Highways operated across India</p></div></div>
             </div>
           </div>
         </div>
-
       </div>
 
     </div>
   `;
 
-  /* ===============================
-     TOGGLE FUNCTIONALITY
-  =============================== */
+  const primaryBtn = block.querySelector(".cta.primary");
+  const secondaryBtn = block.querySelector(".cta.secondary");
+  const primaryContent = block.querySelector(".primary-content");
+  const secondaryContent = block.querySelector(".secondary-content");
 
-  const primaryBtn = block.querySelector('.cta.primary');
-  const secondaryBtn = block.querySelector('.cta.secondary');
-  const primaryContent = block.querySelector('.primary-content');
-  const secondaryContent = block.querySelector('.secondary-content');
+  const galContainer = primaryContent.querySelector(".market-symbol");
+  const gpuilContainer = secondaryContent.querySelector(".market-symbol");
 
-  primaryBtn?.addEventListener('click', () => {
-    primaryBtn.classList.add('active');
-    secondaryBtn.classList.remove('active');
+  const codeMap = {
+    GAL: "15210029",
+    GPUIL: "15131133",
+  };
 
-    primaryContent.style.display = 'block';
-    secondaryContent.style.display = 'none';
+  let apiData = null;
+
+  async function loadStock(symbol, container) {
+    if (!container) return;
+
+    container.innerHTML = "Loading market data...";
+
+    if (!apiData) {
+      apiData = await fetchStockData();
+    }
+
+    const apiByCode = {};
+    apiData.forEach((item) => {
+      if (item.companyCode) {
+        apiByCode[String(item.companyCode)] = item;
+      }
+    });
+
+    const companyData = apiByCode[codeMap[symbol]];
+    container.innerHTML = renderMarketHTML(companyData, symbol);
+  }
+
+  primaryBtn?.addEventListener("click", async () => {
+    primaryBtn.classList.add("active");
+    secondaryBtn.classList.remove("active");
+    primaryContent.style.display = "block";
+    secondaryContent.style.display = "none";
+    await loadStock("GAL", galContainer);
   });
 
-  secondaryBtn?.addEventListener('click', () => {
-    secondaryBtn.classList.add('active');
-    primaryBtn.classList.remove('active');
-
-    primaryContent.style.display = 'none';
-    secondaryContent.style.display = 'block';
+  secondaryBtn?.addEventListener("click", async () => {
+    secondaryBtn.classList.add("active");
+    primaryBtn.classList.remove("active");
+    primaryContent.style.display = "none";
+    secondaryContent.style.display = "block";
+    await loadStock("GPUIL", gpuilContainer);
   });
+
+  await loadStock("GAL", galContainer);
 }
-
-
-
-
-
-
-
-
