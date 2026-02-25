@@ -273,10 +273,9 @@ export default async function decorate(block) {
         <div class="press-card-image">
         <a href="story-update?post=${link}">  
         <img
-            src="${item.cardImage?._publishUrl || ""}"
-            alt="${item.title || ""}"
-            loading="lazy"
-          />
+                src="${item.storyImage?._publishUrl || ""}"
+                alt="${item.title || ""}"
+              />
           </a>
         </div>
 
