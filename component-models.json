@@ -1637,6 +1637,18 @@
           {
             "name": "Governance",
             "value": "governance"
+          },
+          {
+            "name": "PRODUCT OFFERINGS",
+            "value": "product-offerings"
+          },
+          {
+            "name": "INFRASTRUCTURE",
+            "value": "infrastructure"
+          },
+          {
+            "name": "FACILITIES & SERVICES",
+            "value": "facilities-services"
           }
         ]
       }
@@ -4000,6 +4012,14 @@
           {
             "name": "Hydro Energy",
             "value": "hydroEnergy"
+          },
+          {
+            "name": "Hyderabad International Airport",
+            "value": "hyderabadIntlAirport"
+          },
+          {
+            "name": "Goa International Airport",
+            "value": "goaIntlAirport"
           }
         ]
       },

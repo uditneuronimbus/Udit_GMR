@@ -87,3 +87,10 @@
         margin-top: 0px;
     }
 }
+
+@media screen and (min-width: 1920.5px) {
+    .flat-banner {
+        height: 800px;
+        padding: 0;
+    }
+}

@@ -217,7 +217,7 @@ export default function decorate(block) {
     (configCells[4]?.textContent || '').trim() || 'View All Reports';
 
   const ctaLink =
-    (configCells[5]?.textContent || '').trim() || '#';
+    (configCells[5]?.textContent || '').trim() || 'https://www.gmrgroup.in/investor-relations/';
 
   /* ===============================
      COLLECT CARDS

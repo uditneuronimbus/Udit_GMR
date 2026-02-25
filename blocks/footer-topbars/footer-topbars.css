@@ -17,6 +17,9 @@
     min-height: 44px;
     padding: 0.5rem 1rem;
 }
+.group-btn .btn:focus:not(:focus-visible) {
+    background: var(--lorange);
+}
 .group-btn .btn span {
     content: "";
     width: 24px;
@@ -39,7 +42,8 @@
 .group-btn .btn span:after {
     transform: rotate(90deg);
 }
-.group-btn .btn[aria-expanded="true"] {
+.group-btn .btn[aria-expanded="true"],
+.group-btn .btn[aria-expanded="true"]:focus:not(:focus-visible) {
     background: var(--royal-blue);
     border-color: var(--royal-blue);
     color: var(--white);

@@ -145,8 +145,9 @@ export default async function decorate(block) {
      Load Swiper (UI Safe)
   ---------------------------------- */
   // await loadCSS('/libs/swiper/swiper-bundle.min.css');
-  await loadScript("https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js");
-
+  await loadScript(
+    "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js",
+  );
 
   const original = [...block.children];
   if (!original.length) return;
@@ -160,7 +161,7 @@ export default async function decorate(block) {
   block.classList.add("awards-recognitions");
 
   const wrapper = document.createElement("div");
-  wrapper.className = "awards-wrapper";
+  wrapper.className = "awards-wrapper container";
 
   /* ---------- Header ---------- */
   if (sectionTitle || sectionDesc) {
@@ -189,7 +190,8 @@ export default async function decorate(block) {
 
   /* ---------- Desktop Grid View ---------- */
   const grid = document.createElement("div");
-  grid.className = "row g-4 desktop-grid d-none d-md-flex justify-content-center";
+  grid.className =
+    "row g-4 desktop-grid d-none d-md-flex justify-content-center";
 
   items.forEach((item) => {
     if (!item || !item.children.length) return;
@@ -209,8 +211,7 @@ export default async function decorate(block) {
       const media = document.createElement("div");
       media.className = "award-media";
 
-      const altText =
-        fields[3]?.textContent?.trim() || sectionTitleText;
+      const altText = fields[3]?.textContent?.trim() || sectionTitleText;
 
       const img = fields[0].querySelector("img");
       if (img) {
@@ -278,8 +279,7 @@ export default async function decorate(block) {
       const media = document.createElement("div");
       media.className = "award-media";
 
-      const altText =
-        fields[3]?.textContent?.trim() || sectionTitleText;
+      const altText = fields[3]?.textContent?.trim() || sectionTitleText;
 
       const img = fields[0].querySelector("img");
       if (img) {
@@ -327,7 +327,7 @@ export default async function decorate(block) {
   swiper.append(pagination);
 
   wrapper.append(swiper);
-  
+
   // Clear the original block and append wrapper
   block.innerHTML = "";
   block.append(wrapper);
@@ -348,8 +348,8 @@ export default async function decorate(block) {
 
   // Handle window resize to initialize/destroy swiper
   let swiperInstance = null;
-  
-  window.addEventListener('resize', function() {
+
+  window.addEventListener("resize", function () {
     if (window.innerWidth < 768 && !swiperInstance) {
       swiperInstance = new Swiper(swiper, {
         loop: items.length > 1,

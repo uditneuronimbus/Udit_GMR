@@ -200,6 +200,92 @@
   color: #fff;
 }
 
+/* ===============================
+   MARKET DATA STYLING
+================================ */
+
+.gal-market .market-title {
+  font-weight: 600;
+  font-size: 12px;
+  color: #1c6fd5;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.gal-market .as-on {
+  font-size: 11px;
+  color: #666;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.gal-market .exchanges {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.gal-market .exchange-row {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 calc(50% - 8px);
+}
+
+.gal-market .exchange {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.gal-market .exchange_price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.gal-market .price {
+  font-weight: 700;
+  font-size: 16px;
+  color: #111;
+}
+
+.gal-market .change {
+  font-weight: 600;
+  font-size: 13px;
+  text-align: right;
+}
+
+.gal-market .positive {
+  color: #2e7d32;
+}
+
+.gal-market .negative {
+  color: #d32f2f;
+}
+
+.gal-market .volume {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+  opacity: 0.8;
+  margin-top: 8px;
+}
+
+/* Loading / Error */
+
+.gal-market .stock-error {
+  color: #d32f2f;
+  font-size: 13px;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.gal-market .loading {
+  text-align: center;
+  font-size: 13px;
+  color: #444;
+}
 
 
 
