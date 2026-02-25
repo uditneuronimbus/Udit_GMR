@@ -61,16 +61,14 @@ export default async function decorate(block) {
       cardsWrapper.innerHTML = "<p>No news found.</p>";
       return;
     }
+    console.log("_____________________", items);
+    
 
     /* ================================
       Render news cards
     ================================ */
     items.forEach((item) => {
-      const publishDateRaw =
-        item.publishDate?.iso ||
-        item.publishDate?.value ||
-        item.publishDate ||
-        "";
+      const publishDateRaw = item.publishMonth + " " + item.publishYear;  
 
       const publishDateFormatted = formatDate(publishDateRaw);
 
