@@ -38,6 +38,11 @@
   font-size: var(--fs-normal);
   line-height: 1.6;
 }
+.news-content::after {
+    content: "";
+    display: block;
+    clear: both;
+}
 
 .news-detail .badge {
   text-transform: capitalize;
