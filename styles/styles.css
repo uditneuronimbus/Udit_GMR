@@ -1340,6 +1340,7 @@ hr {
 .page-careers .awards-recognitions-container {
     padding-bottom: 80px;
 }
+.image-scroll-card-wrapper { overflow: hidden;}
 .bg-white.innovation-cards-container .sec-innovation,
 .bg-white.key-highlightss-container .sec-key {
     background-color: transparent;
