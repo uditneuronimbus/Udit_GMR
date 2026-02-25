@@ -41,7 +41,7 @@
   position: relative;
   cursor: pointer;
   border-radius: 8px;
-  overflow: hidden;     max-width: 260px;
+  overflow: hidden; min-width: 260px; max-width: 260px;
 }
 
 /* ===============================
@@ -55,7 +55,7 @@
   margin-bottom: 60px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center;     padding: 1.5rem;
 }
 
 .value-card-image img {
@@ -125,7 +125,8 @@
 .value-card-content .quote {
   font-size: 15px;
   line-height: 1.6;
-  margin-bottom: 16px;
+  margin-bottom: 16px;     height: 100%;
+    overflow: auto;
 }
 
 .value-card-content .quote h5 
