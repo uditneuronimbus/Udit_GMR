@@ -1639,16 +1639,16 @@
             "value": "governance"
           },
           {
-            "name": "Tab1",
-            "value": "tab1"
+            "name": "PRODUCT OFFERINGS",
+            "value": "product-offerings"
           },
           {
-            "name": "Tab2",
-            "value": "tab2"
+            "name": "INFRASTRUCTURE",
+            "value": "infrastructure"
           },
           {
-            "name": "Tab3",
-            "value": "tab3"
+            "name": "FACILITIES & SERVICES",
+            "value": "facilities-services"
           }
         ]
       }
