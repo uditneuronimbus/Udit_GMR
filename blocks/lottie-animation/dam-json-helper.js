@@ -1,6 +1,6 @@
 /**
  * Lottie JSON Helper - Project Repository Base
- * 
+ *
  * This helper fetches Lottie JSON files stored in the project's code repository
  * under /blocks/lottie-animation/lottie-data/
  */
@@ -8,12 +8,10 @@
 export async function fetchLottieJson(filename) {
     console.log('[Lottie Helper] Fetching animation:', filename);
 
-    // Validate input
     if (!filename) {
         throw new Error('Animation filename is required');
     }
 
-    // Determine the correct fetch URL
     const fetchUrl = getFetchUrl(filename);
     console.log('[Lottie Helper] Resolved URL:', fetchUrl);
 
@@ -43,8 +41,6 @@ export async function fetchLottieJson(filename) {
 }
 
 /**
-<<<<<<< HEAD
-<<<<<<< HEAD
  * Resolve filename to the local project path
  */
 export function getFetchUrl(filename) {
@@ -52,22 +48,6 @@ export function getFetchUrl(filename) {
     if (filename.startsWith('/')) {
         return filename;
     }
-=======
-* Alternative: Use FileReader API if you have the asset reference
-*/
-export async function readJsonFromAsset(assetReference) {
-   return new Promise((resolve, reject) => {
-       const reader = new FileReader();
->>>>>>> 4b853d2154689218ad99d6f5a24699fe93ba631d
-=======
- * Resolve filename to the local project path
- */
-export function getFetchUrl(filename) {
-    // If it's already a full path (starting with /), return it
-    if (filename.startsWith('/')) {
-        return filename;
-    }
->>>>>>> 724b8d2f8163fe85ee28f33b734ba23d7a95bcb2
 
     // Strip .json extension if provided by user
     const baseName = filename.replace(/\.json$/, '');

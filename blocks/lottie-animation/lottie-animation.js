@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-=======
-/**
- * Lottie Animation Component - Universal Editor Compatible
- * Properly handles JSON from AEM DAM assets
- */
-
->>>>>>> 4b853d2154689218ad99d6f5a24699fe93ba631d
 import { fetchLottieJson } from './dam-json-helper.js';
 
 export default async function decorate(block) {
@@ -116,7 +108,6 @@ function parseBlockProps(block) {
   rows.forEach(row => {
     const cells = row.querySelectorAll(':scope > div');
     if (cells.length === 2) {
-      // Normalize labels to lowercase keys (e.g. "Animation" -> "animation")
       const key = cells[0].textContent.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
 
       const valueCell = cells[1];
@@ -138,7 +129,6 @@ function parseBlockProps(block) {
 }
 
 function scanBlockForFilename(block) {
-  // Check for any text that looks like a filename (no spaces, no slashes)
   const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
   let node;
   while ((node = walker.nextNode())) {
@@ -146,7 +136,6 @@ function scanBlockForFilename(block) {
     if (text && !text.includes(' ') && !text.includes('/')) {
       return text;
     }
-    // Also check for full DAM paths to extract filename as fallback
     if (text.includes('/content/dam/') && text.endsWith('.json')) {
       return text.split('/').pop().replace('.json', '');
     }
@@ -170,13 +159,11 @@ async function loadLottieLibrary() {
 function buildAnimationUI(block, animationData, props, assetPath) {
   block.innerHTML = '';
 
-  // Info panel (shown during authoring)
   if (props.showcontrols) {
     const infoPanel = createInfoPanel(animationData, assetPath);
     block.appendChild(infoPanel);
   }
 
-  // Animation container
   const container = document.createElement('div');
   container.className = 'lottie-animation-container';
   container.id = `lottie-${Date.now()}`;
@@ -186,7 +173,6 @@ function buildAnimationUI(block, animationData, props, assetPath) {
 
   block.appendChild(container);
 
-  // Initialize Lottie
   const animation = window.lottie.loadAnimation({
     container: container,
     renderer: props.renderer || 'svg',
@@ -195,10 +181,8 @@ function buildAnimationUI(block, animationData, props, assetPath) {
     animationData: animationData
   });
 
-  // Store reference
   block.lottieAnimation = animation;
 
-  // Add controls if enabled
   if (props.showcontrols) {
     addControls(block, animation);
   }
@@ -254,7 +238,6 @@ function addControls(block, animation) {
   if (playPauseBtn) {
     playPauseBtn.addEventListener('click', () => {
       const state = playPauseBtn.dataset.state;
-
       if (state === 'playing') {
         animation.pause();
         playPauseBtn.innerHTML = '▶ Play';
@@ -299,8 +282,4 @@ function showError(block, filename, error) {
       </div>
     </div>
   `;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 4b853d2154689218ad99d6f5a24699fe93ba631d
