@@ -934,6 +934,7 @@ hr {
 .card-cta > div {
     flex: 1;
 }
+.success-stories-runtime .card-img, .success-stories-runtime .card-img-top { max-height: 260px; }
 .news-updates .card-title {
     display: -webkit-box;
     -webkit-line-clamp: 2;
