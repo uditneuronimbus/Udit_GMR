@@ -282,7 +282,7 @@ export default async function decorate(block) {
 
         <div class="press-card-body">
           <h3 class="press-card-title"><a href="story-update?post=${link}">${title}</a></h3>
-          <p class= "press-card-description"><a href="story-update?post=${link}">${description}</a></p>
+          <p class= "press-card-description">${description}</p>
           <div class="press-card-footer">
             <a href="story-update?post=${link}" class="btn-link">
               READ MORE
