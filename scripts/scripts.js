@@ -41,20 +41,21 @@ import { buildVisitHistory, getCachedVisitedPages } from "./target.js";
   }
 
   // 2. REDIRECT CHECK: If saved preference differs from URL 
-  // OR if English user is on a root path (redirect to /en/ for metadata/data loading)
-  const isEnOnRootPath = detectedLang === "en" && !segments.includes("en") && path !== "/" && !window.location.search.includes("adobe_ue");
-  const isEnOnEnPath = detectedLang === "en" && segments.includes("en") && !window.location.search.includes("adobe_ue");
+  // OR if English user is on a subpage path (redirect to /en/ for data loading, home "/" is exempt)
+  const isRoot = path === "/" || path === "";
+  // Redirection is needed for subpages OR if the root result in a 404 (isErrorPage)
+  const isEnOnRootPath = detectedLang === "en" && !segments.includes("en") && (!isRoot || window.isErrorPage) && !window.location.search.includes("adobe_ue");
 
-  if ((savedLang && savedLang !== detectedLang) || isEnOnRootPath) {
+  if ((savedLang && savedLang !== detectedLang && !window.location.search.includes("adobe_ue")) || isEnOnRootPath) {
     let newPath;
     if (isEnOnRootPath) {
-      // Push to /en/ path to ensure server-side data/metadata loads correctly
+      // Subpages MUST go to /en/ to avoid 404 if server mapping isn't recursive
       newPath = "/en" + path;
     } else if (langIndex !== -1) {
       segments[langIndex] = savedLang;
       newPath = segments.join("/");
     } else {
-      newPath = "/" + savedLang + (path === "/" ? "" : path);
+      newPath = "/" + savedLang + (isRoot ? "" : path);
     }
 
     const finalUrl =
@@ -62,16 +63,23 @@ import { buildVisitHistory, getCachedVisitedPages } from "./target.js";
       newPath.replace(/\/+/g, "/") +
       window.location.search +
       window.location.hash;
+
     if (finalUrl !== window.location.href) {
-      // Use replace() instead of href for instant redirect without browser history entry
       window.location.replace(finalUrl);
-      return; // Stop execution, browser will redirect
+      return;
     }
   }
 
-  // 3. BHASHINI JUMPSTART: If we are on a non-English path
+  // 3. SILENT URL CLEANUP: Immediately hide /en/ from address bar (visual only)
+  // This avoids the visual flash by running before the page is revealed
+  if (detectedLang === "en" && segments.includes("en") && !window.location.search.includes("adobe_ue")) {
+    const cleanPath = path.replace("/en/", "/").replace(/\/+/g, "/");
+    window.history.replaceState(null, "", cleanPath + window.location.search + window.location.hash);
+  }
+
+  // 4. BHASHINI JUMPSTART: If we are on a non-English path
   if (detectedLang !== "en" || (savedLang && savedLang !== "en")) {
-    const activeLang = detectedLang !== "en" ? detectedLang : savedLang;
+    const activeLang = detectedLang !== "en" ? detectedLang : (savedLang || "en");
     document.documentElement.lang = activeLang;
 
     if (!document.getElementById("bhashini-script")) {
@@ -82,13 +90,6 @@ import { buildVisitHistory, getCachedVisitedPages } from "./target.js";
       script.defer = true;
       document.head.appendChild(script);
     }
-  }
-
-  // 4. SILENT URL CLEANUP: Immediately hide /en/ from address bar (visual only)
-  // This avoids the visual flash by running before the page is revealed
-  if (detectedLang === "en" && segments.includes("en") && !window.location.search.includes("adobe_ue")) {
-    const cleanPath = path.replace("/en/", "/").replace(/\/+/g, "/");
-    window.history.replaceState(null, "", cleanPath + window.location.search + window.location.hash);
   }
 
   // Reveal function to be called when ready (usually by header.js)
