@@ -144,10 +144,20 @@ function scanBlockForFilename(block) {
   return null;
 }
 
-async function loadLottieLibrary() {
-  if (window.lottie) return;
+function loadLottieLibrary() {
+  // Already loaded
+  if (window.lottie || window.bodymovin) return Promise.resolve();
 
   return new Promise((resolve, reject) => {
+    // Script tag already injected by another block (e.g. global-airport-network)
+    // — attach to it instead of injecting a duplicate
+    const existing = document.querySelector('script[src*="lottie-web"]');
+    if (existing) {
+      existing.addEventListener('load', resolve);
+      existing.addEventListener('error', reject);
+      return;
+    }
+
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js';
     script.onload = resolve;

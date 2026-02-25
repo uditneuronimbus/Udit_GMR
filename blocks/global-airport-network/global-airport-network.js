@@ -1,4 +1,4 @@
-import { getFetchUrl } from '../lottie-animation/dam-json-helper.js';
+import { getFetchUrl, fetchLottieJson } from '../lottie-animation/dam-json-helper.js';
 
 export default function decorate(block) {
   const rows = [...block.children];
@@ -27,20 +27,26 @@ export default function decorate(block) {
 
   /* ================================
      2️⃣ Resolve Lottie JSON path
+     NOTE: Read only the VALUE cell (last div child), not
+     the whole row which includes the label cell too.
   ================================ */
 
   let finalLottiePath = "";
 
+  // Value cell is always the last child div of the row
+  const lottieValueCell = lottiePathRow?.querySelector("div:last-child") || lottiePathRow;
   const lottieLink = lottiePathRow?.querySelector("a");
-  const lottieText = lottiePathRow?.textContent?.trim();
+  // Read only value cell text, not label+value
+  const lottieText = lottieValueCell?.textContent?.trim();
 
   if (lottieLink) {
     const href = lottieLink.getAttribute("href") || "";
     finalLottiePath = getFetchUrl(href);
   } else if (lottieText) {
-    // Treat as repository filename
     finalLottiePath = getFetchUrl(lottieText);
   }
+
+  console.log('[GAN] Lottie path resolved:', finalLottiePath);
 
   /* ================================
      3️⃣ Layout
@@ -174,27 +180,58 @@ export default function decorate(block) {
   block.appendChild(wrapper);
 
   /* ================================
-     🔟 Initialize Lottie (bodymovin)
+     🔟 Initialize Lottie
+     Use animationData (pre-fetched JSON) — more reliable
+     than path: which can fail due to CORS / redirects.
   ================================ */
 
   if (finalLottiePath && window.innerWidth >= 768) {
     const lottieObserver = new IntersectionObserver((entries) => {
       if (entries.some((entry) => entry.isIntersecting)) {
         lottieObserver.disconnect();
-        if (window.bodymovin) {
-          window.bodymovin.loadAnimation({
-            container: lottieWrap,
-            renderer: "svg",
-            loop: true,
-            autoplay: true,
-            path: finalLottiePath,
-          });
-        } else {
-          console.warn("❌ bodymovin library not loaded");
-        }
+
+        Promise.all([
+          loadLottieLibrary(),
+          fetchLottieJson(finalLottiePath)
+        ]).then(([, animationData]) => {
+          const lottieLib = window.lottie || window.bodymovin;
+          if (lottieLib && animationData) {
+            lottieLib.loadAnimation({
+              container: lottieWrap,
+              renderer: "svg",
+              loop: true,
+              autoplay: true,
+              animationData: animationData,
+            });
+            console.log('[GAN] ✓ Lottie animation started');
+          } else {
+            console.warn("[GAN] Lottie library or animation data missing");
+          }
+        }).catch((err) => {
+          console.error("[GAN] Lottie init failed:", err);
+        });
       }
     }, { threshold: 0, rootMargin: '200px' });
 
     lottieObserver.observe(block);
   }
+}
+
+function loadLottieLibrary() {
+  if (window.lottie || window.bodymovin) return Promise.resolve();
+
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[src*="lottie-web"]');
+    if (existing) {
+      // Script already injected — wait for it
+      existing.addEventListener('load', resolve);
+      existing.addEventListener('error', reject);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js';
+    script.onload = resolve;
+    script.onerror = () => reject(new Error('Failed to load Lottie library'));
+    document.head.appendChild(script);
+  });
 }
