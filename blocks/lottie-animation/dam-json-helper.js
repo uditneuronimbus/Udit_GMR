@@ -46,7 +46,7 @@ export async function fetchLottieJson(filename) {
  * Resolve filename to the local project path
  */
 export function getFetchUrl(filename) {
-    // If it's already a full path (starting with /), return it directly
+    // If it's already a full path (starting with /), return it
     if (filename.startsWith('/')) {
         return filename;
     }
