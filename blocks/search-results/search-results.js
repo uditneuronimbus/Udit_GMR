@@ -39,11 +39,11 @@ function renderNoResults(container, query) {
         </div>
 
         <h2 class="no-results-title">
-          Your Search did not Return Any Results.
+          We couldn’t find any exact matches.
         </h2>
 
         <p class="no-results-subtext">
-          Please check the spelling or try broader terms.
+          Try checking the spelling or explore the sections below.
         </p>
 
         <p class="no-results-browse">
@@ -56,6 +56,16 @@ function renderNoResults(container, query) {
           <a href="/en/investors">INVESTOR RELATIONS</a>
           <a href="/en/sustainability">SUSTAINABILITY</a>
           <a href="/en/careers">CAREERS</a>
+        </div>
+
+        <div class="no-results-divider"></div>
+
+        <div class="no-results-links">
+          <a href="/en/airports-and-aero-services">AIRPORT &amp; AERO SERVICES</a>
+          <a href="/en/energy">ENERGY</a>
+          <a href="/en/transportation">TRANSPORTATION &amp; URBAN INFRA</a>
+          <a href="/en/sports">SPORTS</a>
+          <a href="/en/other-services">OTHER SERVICES</a>
         </div>
 
         <div class="no-results-divider"></div>
