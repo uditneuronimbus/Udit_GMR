@@ -19,25 +19,58 @@ import {
  */
 export async function loadFragment(path) {
   if (path && path.startsWith('/')) {
-    // eslint-disable-next-line no-param-reassign
-    path = path.replace(/(\.plain)?\.html/, '');
-    const resp = await fetch(`${path}.plain.html`);
-    if (resp.ok) {
-      const main = document.createElement('main');
-      main.innerHTML = await resp.text();
+    const rawPath = path.replace(/(\.plain)?\.html/, '');
 
-      // reset base path for media to fragment base
-      const resetAttributeBase = (tag, attr) => {
-        main.querySelectorAll(`${tag}[${attr}^="./media_"]`).forEach((elem) => {
-          elem[attr] = new URL(elem.getAttribute(attr), new URL(path, window.location)).href;
-        });
-      };
-      resetAttributeBase('img', 'src');
-      resetAttributeBase('source', 'srcset');
+    // 1. Standard normalization (Strip JCR)
+    const noJcr = rawPath.replace(/^\/content\/gmr(-prod)?/, '');
 
-      decorateMain(main);
-      await loadSections(main);
-      return main;
+    // 2. Identify language context
+    const lang = document.documentElement.lang || 'en';
+    const langPrefix = `/${lang}`;
+
+    // 3. Build variations to try
+    const variations = [
+      noJcr,                      // Try as-is (e.g. /en/dynamic-blocks/filter or /dynamic-blocks/filter)
+      path,                       // Try original full path
+    ];
+
+    // If it doesn't have the language prefix, try adding it
+    if (!noJcr.startsWith(langPrefix + '/') && noJcr !== langPrefix) {
+      variations.push(`${langPrefix}${noJcr}`);
+    }
+
+    // If it DOES have it, try stripping it (in case of total root mapping)
+    if (noJcr.startsWith(langPrefix + '/')) {
+      variations.push(noJcr.replace(langPrefix, ''));
+    }
+
+    // Remove duplicates and filter empty
+    const uniqueVariations = [...new Set(variations)].filter(v => v && v !== '/');
+
+    for (const v of uniqueVariations) {
+      const fetchUrl = `${v.replace(/\/+/g, '/')}.plain.html`;
+      try {
+        const resp = await fetch(fetchUrl);
+        if (resp.ok) {
+          const main = document.createElement('main');
+          main.innerHTML = await resp.text();
+
+          // reset base path for media to fragment base
+          const resetAttributeBase = (tag, attr) => {
+            main.querySelectorAll(`${tag}[${attr}^="./media_"]`).forEach((elem) => {
+              elem[attr] = new URL(elem.getAttribute(attr), new URL(v, window.location)).href;
+            });
+          };
+          resetAttributeBase('img', 'src');
+          resetAttributeBase('source', 'srcset');
+
+          decorateMain(main);
+          await loadSections(main);
+          return main;
+        }
+      } catch (e) {
+        // ignore
+      }
     }
   }
   return null;

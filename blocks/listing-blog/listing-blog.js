@@ -5,16 +5,16 @@ import { formatDate } from '../../scripts/common.js';
 
 export default async function decorate(block) {
   /* ================= Get Shared Filter Data ================= */
-  const data = getSharedData('pressFilters') || {};
+  let filterData = getSharedData('pressFilters') || {};
 
-  const dynamicYears = data.years || [];
-  const dynamicMonths = data.months || [];
-  const dynamicTags = data.tags || [];
-  const dynamicSubCats = data.subCategories || [];
+  let dynamicYears = filterData.years || [];
+  let dynamicMonths = filterData.months || [];
+  let dynamicTags = filterData.tags || [];
+  let dynamicSubCats = filterData.subCategories || [];
 
   const defaultYear = "All";
   const limit = 10;
-  
+
   /* ================= State Management ================= */
   let state = {
     year: "",
@@ -35,7 +35,31 @@ export default async function decorate(block) {
       <!-- Desktop Layout -->
       <div class="press-layout desktop-layout">
         <aside class="press-filter-panel">
-          <h4>Filter By</h4>  
+          <!-- Year -->
+          <div class="filter-group filter-group-collapsible">
+            <button class="filter-toggle active" data-target="year-options">
+              <span>Year - <span class="selected-year">${defaultYear}</span></span>
+              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="filter-options" id="year-options">
+              ${renderYearOptions(dynamicYears)}
+            </div>
+          </div>
+
+          <!-- Month -->
+          <div class="filter-group filter-group-collapsible">
+            <button class="filter-toggle" data-target="month-options">
+              <span>Month</span>
+              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="filter-options hidden" id="month-options">
+              ${renderMonthOptions(dynamicMonths)}
+            </div>
+          </div>
 
           <!-- Category -->
           <div class="filter-group filter-group-collapsible">
@@ -46,16 +70,7 @@ export default async function decorate(block) {
               </svg>
             </button>
             <div class="filter-options hidden" id="subcat-options">
-              <label class="filter-option active" data-category="all">
-                <input type="radio" name="desktop-subcat" value="" checked>
-                <span>All Categories</span>
-              </label>
-              ${dynamicSubCats.map(s =>
-                `<label class="filter-option">
-                  <input type="radio" name="desktop-subcat" value="${s}">
-                  <span>${s}</span>
-                </label>`
-              ).join("")}
+              ${renderCategoryOptions(dynamicSubCats)}
             </div>
           </div>
 
@@ -68,16 +83,7 @@ export default async function decorate(block) {
               </svg>
             </button>
             <div class="filter-options hidden" id="tag-options">
-              <label class="filter-option active">
-                <input type="radio" name="desktop-tag" value="" checked>
-                <span>All Tags</span>
-              </label>
-              ${dynamicTags.map(t =>
-                `<label class="filter-option">
-                  <input type="radio" name="desktop-tag" value="${t}">
-                  <span>${t}</span>
-                </label>`
-              ).join("")}
+              ${renderTagOptions(dynamicTags)}
             </div>
           </div>
         </aside>
@@ -119,6 +125,13 @@ export default async function decorate(block) {
       <!-- Mobile Layout -->
       <div class="press-layout mobile-layout">
         <div class="mobile-filter-buttons">
+          <button class="mobile-filter-btn year-btn" data-type="year-month">
+            Year & Month <span class="arrow">
+              <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+              </svg>
+            </span>
+          </button>
           <button class="mobile-filter-btn category-btn" data-type="category">
             Category <span class="arrow">
               <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -147,19 +160,20 @@ export default async function decorate(block) {
               <button class="close-modal">×</button>
             </div>
             <div class="modal-body">
+              <div class="filter-group year-group" style="display: none;">
+                ${renderMobileOptions('year', dynamicYears)}
+              </div>
+              
+              <div class="filter-group month-group" style="display: none;">
+                ${renderMobileOptions('month', dynamicMonths)}
+              </div>
               
               <div class="filter-group category-group" style="display: none;">
-                <label><input type="radio" name="mobile-subcat" value="" checked> All Categories</label>
-                ${dynamicSubCats.map(s =>
-                  `<label><input type="radio" name="mobile-subcat" value="${s}"> ${s}</label>`
-                ).join("")}
+                ${renderMobileOptions('subcat', dynamicSubCats)}
               </div>
               
               <div class="filter-group tag-group" style="display: none;">
-                <label><input type="radio" name="mobile-tag" value="" checked> All Tags</label>
-                ${dynamicTags.map(t =>
-                  `<label><input type="radio" name="mobile-tag" value="${t}"> ${t}</label>`
-                ).join("")}
+                ${renderMobileOptions('tag', dynamicTags)}
               </div>
             </div>
             <div class="apply-filter-btn">
@@ -182,7 +196,7 @@ export default async function decorate(block) {
   const mobilePagination = block.querySelector(".mobile-layout .press-pagination");
   const sortToggle = block.querySelector("#sort-toggle");
   const sortOptions = block.querySelector("#sort-options");
-  
+
   // Mobile elements
   const mobileFilterBtns = block.querySelectorAll('.mobile-filter-btn');
   const mobileModal = block.querySelector('.mobile-filter-modal');
@@ -198,9 +212,200 @@ export default async function decorate(block) {
 
   function updateHeader() {
     const parts = [];
+    if (state.year) parts.push(state.year);
+    if (state.month) {
+      // Month might be name or number, handle both
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+      const monthName = isNaN(state.month) ? state.month : (monthNames[parseInt(state.month) - 1] || state.month);
+      parts.push(monthName);
+    }
     if (state.subCategory) parts.push(slugToTitle(state.subCategory));
     if (state.tag) parts.push(state.tag);
-    summaryText.textContent = parts.length ? parts.join(" • ") : "All Categories";
+    summaryText.textContent = parts.length ? parts.join(" • ") : "All Years";
+  }
+
+  function renderYearOptions(years) {
+    return `
+      <label class="filter-option ${!state.year ? 'active' : ''}">
+        <input type="radio" name="desktop-year" value="" ${!state.year ? 'checked' : ''}>
+        <span>All Years</span>
+      </label>
+      ${years.map(y =>
+      `<label class="filter-option ${state.year === y ? 'active' : ''}">
+          <input type="radio" name="desktop-year" value="${y}" ${state.year === y ? 'checked' : ''}>
+          <span>${y}</span>
+        </label>`
+    ).join("")}`;
+  }
+
+  function renderMonthOptions(months) {
+    return `
+      <label class="filter-option ${!state.month ? 'active' : ''}">
+        <input type="radio" name="desktop-month" value="" ${!state.month ? 'checked' : ''}>
+        <span>All Months</span>
+      </label>
+      ${months.map(m =>
+      `<label class="filter-option ${state.month === m ? 'active' : ''}">
+          <input type="radio" name="desktop-month" value="${m}" ${state.month === m ? 'checked' : ''}>
+          <span>${m}</span>
+        </label>`
+    ).join("")}`;
+  }
+
+  function renderCategoryOptions(cats) {
+    return `
+      <label class="filter-option ${!state.subCategory ? 'active' : ''}" data-category="all">
+        <input type="radio" name="desktop-subcat" value="" ${!state.subCategory ? 'checked' : ''}>
+        <span>All Categories</span>
+      </label>
+      ${cats.map(s =>
+      `<label class="filter-option ${state.subCategory === s ? 'active' : ''}">
+          <input type="radio" name="desktop-subcat" value="${s}" ${state.subCategory === s ? 'checked' : ''}>
+          <span>${s}</span>
+        </label>`
+    ).join("")}`;
+  }
+
+  function renderTagOptions(tags) {
+    return `
+      <label class="filter-option ${!state.tag ? 'active' : ''}">
+        <input type="radio" name="desktop-tag" value="" ${!state.tag ? 'checked' : ''}>
+        <span>All Tags</span>
+      </label>
+      ${tags.map(t =>
+      `<label class="filter-option ${state.tag === t ? 'active' : ''}">
+          <input type="radio" name="desktop-tag" value="${t}" ${state.tag === t ? 'checked' : ''}>
+          <span>${t}</span>
+        </label>`
+    ).join("")}`;
+  }
+
+  function renderMobileOptions(type, items) {
+    const labels = {
+      year: 'All Years',
+      month: 'All Months',
+      subcat: 'All Categories',
+      tag: 'All Tags'
+    };
+    const stateKey = type === 'subcat' ? 'subCategory' : type;
+    const currentVal = state[stateKey];
+
+    return `
+      <label><input type="radio" name="mobile-${type}" value="" ${!currentVal ? 'checked' : ''}> ${labels[type]}</label>
+      ${items.map(item =>
+      `<label><input type="radio" name="mobile-${type}" value="${item}" ${currentVal === item ? 'checked' : ''}> ${item}</label>`
+    ).join("")}`;
+  }
+
+  function setupAllEventListeners() {
+    // Desktop Filter Toggles
+    block.querySelectorAll('.filter-toggle').forEach(toggle => {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const targetId = toggle.getAttribute('data-target');
+        const options = block.querySelector(`#${targetId}`);
+        toggle.classList.toggle('active');
+        options.classList.toggle('hidden');
+      });
+    });
+
+    // Desktop Radio Filters
+    setupRadioFilters('desktop-year', 'year');
+    setupRadioFilters('desktop-month', 'month');
+    setupRadioFilters('desktop-subcat', 'subCategory');
+    setupRadioFilters('desktop-tag', 'tag');
+
+    // Sort Toggle
+    const sortToggleBtn = block.querySelector("#sort-toggle");
+    const sortOpts = block.querySelector("#sort-options");
+    if (sortToggleBtn) {
+      sortToggleBtn.onclick = (e) => {
+        e.stopPropagation();
+        sortOpts.classList.toggle("show");
+        sortToggleBtn.classList.toggle('active');
+      };
+    }
+
+    // Sort Options
+    block.querySelectorAll('input[name="sort"]').forEach(radio => {
+      radio.addEventListener("change", () => {
+        state.sort = radio.value;
+        state.page = 1;
+        renderCards();
+        sortOpts.classList.remove("show");
+        sortToggleBtn.classList.remove('active');
+      });
+    });
+
+    // Mobile buttons
+    block.querySelectorAll('.mobile-filter-btn').forEach(btn => {
+      btn.onclick = () => openMobileModal(btn.dataset.type);
+    });
+  }
+
+  function refreshFilterUI() {
+    const yearOpts = block.querySelector('#year-options');
+    const monthOpts = block.querySelector('#month-options');
+    const subcatOpts = block.querySelector('#subcat-options');
+    const tagOpts = block.querySelector('#tag-options');
+
+    if (yearOpts) yearOpts.innerHTML = renderYearOptions(dynamicYears);
+    if (monthOpts) monthOpts.innerHTML = renderMonthOptions(dynamicMonths);
+    if (subcatOpts) subcatOpts.innerHTML = renderCategoryOptions(dynamicSubCats);
+    if (tagOpts) tagOpts.innerHTML = renderTagOptions(dynamicTags);
+
+    const mobileModalBody = block.querySelector('.mobile-filter-modal .modal-body');
+    if (mobileModalBody) {
+      mobileModalBody.querySelector('.year-group').innerHTML = renderMobileOptions('year', dynamicYears);
+      mobileModalBody.querySelector('.month-group').innerHTML = renderMobileOptions('month', dynamicMonths);
+      mobileModalBody.querySelector('.category-group').innerHTML = renderMobileOptions('subcat', dynamicSubCats);
+      mobileModalBody.querySelector('.tag-group').innerHTML = renderMobileOptions('tag', dynamicTags);
+    }
+
+    setupAllEventListeners();
+  }
+
+  window.addEventListener('press-filters-ready', (e) => {
+    filterData = e.detail || {};
+    dynamicYears = filterData.years || [];
+    dynamicMonths = filterData.months || [];
+    dynamicTags = filterData.tags || [];
+    dynamicSubCats = filterData.subCategories || [];
+    refreshFilterUI();
+  });
+
+  const setupRadioFilters = (name, property) => {
+    block.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+      r.addEventListener("change", () => {
+        state[property] = r.value;
+        state.page = 1;
+
+        // Update active state
+        const container = r.closest('.filter-options');
+        if (container) {
+          container.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('active'));
+          r.closest('.filter-option').classList.add('active');
+        }
+
+        if (property === 'year') {
+          const selectedYearText = block.querySelector('.selected-year');
+          if (selectedYearText) selectedYearText.textContent = r.value || "All";
+        }
+
+        updateHeader();
+        renderCards();
+      });
+    });
+  };
+
+  function scrollWithOffset(element, offset = 150) {
+    if (!element) return;
+    const top = element.offsetTop - offset;
+    window.scrollTo({
+      top: top > 0 ? top : 0,
+      behavior: "smooth"
+    });
   }
 
   function updateCountDisplay() {
@@ -220,7 +425,7 @@ export default async function decorate(block) {
     const link = item?.slugUrl || "#";
     const publishDateRaw = item.publishMonth + " " + item.publishYear;
     const publishDateFormatted = formatDate(publishDateRaw);
-    
+
     // Create badge class from subCategory
     const badgeClass = subCategory ? subCategory.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '') : '';
 
@@ -265,7 +470,7 @@ export default async function decorate(block) {
   }
 
   /* ================= Render Functions ================= */
-  
+
   async function renderCards() {
     try {
       desktopList.innerHTML = '<div class="loading">Loading...</div>';
@@ -383,14 +588,14 @@ export default async function decorate(block) {
   }
 
   /* ================= Mobile Modal Functions ================= */
-  
+
   function updateMobileFilterButtons() {
     mobileFilterBtns.forEach(btn => {
       const type = btn.dataset.type;
       let text = btn.textContent.split('<')[0].trim();
-      
-      switch(type) {
-        
+
+      switch (type) {
+
         case 'category':
           text = state.subCategory ? slugToTitle(state.subCategory) : 'Category';
           break;
@@ -398,7 +603,7 @@ export default async function decorate(block) {
           text = state.tag || 'Tags';
           break;
       }
-      
+
       btn.innerHTML = `${text} <span class="arrow">
         <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
@@ -410,13 +615,13 @@ export default async function decorate(block) {
   function openMobileModal(type) {
     mobileModal.classList.add('open');
     document.body.style.overflow = 'hidden';
-    
+
     // Hide all groups first
     categoryGroup.style.display = 'none';
     tagGroup.style.display = 'none';
-    
+
     // Show selected group based on button type
-    switch(type) {
+    switch (type) {
       case 'category':
         categoryGroup.style.display = 'block';
         break;
@@ -424,13 +629,13 @@ export default async function decorate(block) {
         tagGroup.style.display = 'block';
         break;
     }
-    
+
     // Set current values for each group
     // Category group
     const catRadio = categoryGroup.querySelector(`input[name="mobile-subcat"][value="${state.subCategory}"]`);
     if (catRadio) catRadio.checked = true;
     else categoryGroup.querySelector('input[name="mobile-subcat"][value=""]').checked = true;
-    
+
     // Tag group
     const tagRadio = tagGroup.querySelector(`input[name="mobile-tag"][value="${state.tag}"]`);
     if (tagRadio) tagRadio.checked = true;
@@ -446,19 +651,19 @@ export default async function decorate(block) {
     // Get values from all radio groups
     const selectedCat = categoryGroup.querySelector('input[name="mobile-subcat"]:checked');
     const selectedTag = tagGroup.querySelector('input[name="mobile-tag"]:checked');
-    
+
     // Update state if values changed
-    
+
     if (selectedCat && selectedCat.value !== state.subCategory) {
       state.subCategory = selectedCat.value;
       state.page = 1;
     }
-    
+
     if (selectedTag && selectedTag.value !== state.tag) {
       state.tag = selectedTag.value;
       state.page = 1;
     }
-    
+
     closeMobileModal();
     updateHeader();
     updateMobileFilterButtons();
@@ -466,68 +671,6 @@ export default async function decorate(block) {
   }
 
   /* ================= Event Listeners ================= */
-
-  // Desktop Filter Toggles
-  block.querySelectorAll('.filter-toggle').forEach(toggle => {
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const targetId = toggle.getAttribute('data-target');
-      const options = block.querySelector(`#${targetId}`);
-      toggle.classList.toggle('active');
-      options.classList.toggle('hidden');
-    });
-  });
-
-  // Desktop Radio Filters
-  const setupRadioFilters = (name, property) => {
-    block.querySelectorAll(`input[name="${name}"]`).forEach(r => {
-      r.addEventListener("change", () => {
-        state[property] = r.value;
-        state.page = 1;
-        
-        // Update active state
-        const container = r.closest('.filter-options');
-        if (container) {
-          container.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('active'));
-          r.closest('.filter-option').classList.add('active');
-        }
-        
-        
-        updateHeader();
-        renderCards();
-      });
-    });
-  };
-
-  
-  setupRadioFilters('desktop-subcat', 'subCategory');
-  setupRadioFilters('desktop-tag', 'tag');
-
-  // Sort Toggle
-  sortToggle.addEventListener("click", (e) => {
-    e.stopPropagation();
-    sortOptions.classList.toggle("show");
-    sortToggle.classList.toggle('active');
-  });
-
-  // Sort Options
-  block.querySelectorAll('input[name="sort"]').forEach(radio => {
-    radio.addEventListener("change", () => {
-      state.sort = radio.value;
-      state.page = 1;
-      renderCards();
-      sortOptions.classList.remove("show");
-      sortToggle.classList.remove('active');
-    });
-  });
-
-  // Close sort menu when clicking outside
-  document.addEventListener("click", (e) => {
-    if (!sortToggle.contains(e.target) && !sortOptions.contains(e.target)) {
-      sortOptions.classList.remove("show");
-      sortToggle.classList.remove('active');
-    }
-  });
 
   // Close filter options when clicking outside
   document.addEventListener('click', (e) => {
@@ -543,29 +686,20 @@ export default async function decorate(block) {
   });
 
   // Pagination clicks
-  desktopPagination.addEventListener("click", (e) => {
+  desktopPagination.addEventListener("click", async (e) => {
     const btn = e.target.closest(".page-btn");
     if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
-
     state.page = parseInt(btn.dataset.page, 10);
-    renderCards();
-    desktopList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    await renderCards();
+    scrollWithOffset(desktopList, 300);
   });
 
-  mobilePagination.addEventListener("click", (e) => {
+  mobilePagination.addEventListener("click", async (e) => {
     const btn = e.target.closest(".page-btn");
     if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
-
     state.page = parseInt(btn.dataset.page, 10);
-    renderCards();
-    mobileList.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-
-  // Mobile Filter Buttons
-  mobileFilterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      openMobileModal(btn.dataset.type);
-    });
+    await renderCards();
+    scrollWithOffset(mobileList, 300);
   });
 
   // Mobile Modal Events
@@ -579,6 +713,8 @@ export default async function decorate(block) {
       closeMobileModal();
     }
   });
+
+  setupAllEventListeners();
 
   /* ================= Initial Render ================= */
   renderCards();
@@ -596,15 +732,15 @@ async function fetchApiData(limit = 10, offset = 0, category = "blog", subCatego
     `&publishmonth=${encodeURIComponent(publishmonth.toLowerCase())}` +
     `&tag=${encodeURIComponent(tag.toLowerCase())}` +
     `&orderby=${encodeURIComponent(orderby)}`;
-  
-    
+
+
   const res = await fetch(apiUrl);
   if (!res.ok) throw new Error(`API error ${res.status}`);
-  
+
   const json = await res.json();
   const items = json?.data?.data?.newsList?.items || [];
-  
-  
+
+
   return items;
 }
 
@@ -616,13 +752,13 @@ async function fetchApiCount(category = "blog", subCategory = "", publishyear = 
     `&publishmonth=${encodeURIComponent(publishmonth.toLowerCase())}` +
     `&tag=${encodeURIComponent(tag.toLowerCase())}` +
     `&orderby=${encodeURIComponent(orderby)}`;
-  
-    
+
+
   const res = await fetch(apiUrl);
   if (!res.ok) throw new Error(`API error ${res.status}`);
-  
+
   const json = await res.json();
   const items = json?.data?.data?.newsList?.items || [];
-  
+
   return items.length;
 }

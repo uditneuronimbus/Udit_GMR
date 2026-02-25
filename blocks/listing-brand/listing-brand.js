@@ -62,12 +62,12 @@ function openVideoModal(url) {
 
 export default async function decorate(block) {
   /* ================= Get Shared Filter Data ================= */
-  const data = getSharedData("pressFilters") || {};
+  let filterData = getSharedData("pressFilters") || {};
 
-  const dynamicYears = data.years || [];
-  const dynamicMonths = data.months || [];
-  const dynamicTags = data.tags || [];
-  const dynamicSubCats = data.subCategories || [];
+  let dynamicYears = filterData.years || [];
+  let dynamicMonths = filterData.months || [];
+  let dynamicTags = filterData.tags || [];
+  let dynamicSubCats = filterData.subCategories || [];
 
   const defaultYear = "All";
   const limit = 6;
@@ -92,57 +92,57 @@ export default async function decorate(block) {
       <!-- Desktop Layout -->
       <div class="press-layout desktop-layout">
         <aside class="press-filter-panel">
-          <h4>Filter By</h4>  
+          <!-- Year -->
+          <div class="filter-group filter-group-collapsible">
+            <button class="filter-toggle active" data-target="year-options">
+              <span>Year - <span class="selected-year">${defaultYear}</span></span>
+              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="filter-options" id="year-options">
+              ${renderYearOptions(dynamicYears)}
+            </div>
+          </div>
+
+          <!-- Month -->
+          <div class="filter-group filter-group-collapsible">
+            <button class="filter-toggle" data-target="month-options">
+              <span>Month</span>
+              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="filter-options hidden" id="month-options">
+              ${renderMonthOptions(dynamicMonths)}
+            </div>
+          </div>
 
           <!-- Category -->
           <div class="filter-group filter-group-collapsible">
-            <button class="filter-toggle active" data-target="subcat-options">
+            <button class="filter-toggle" data-target="subcat-options">
               <span>Business Category</span>
               <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <div class="filter-options" id="subcat-options">
-              <label class="filter-option active" data-category="all">
-                <input type="radio" name="desktop-subcat" value="" checked>
-                <span>All Categories</span>
-              </label>
-              ${dynamicSubCats
-      .map(
-        (s) =>
-          `<label class="filter-option">
-                  <input type="radio" name="desktop-subcat" value="${s}">
-                  <span>${s}</span>
-                </label>`,
-      )
-      .join("")}
+            <div class="filter-options hidden" id="subcat-options">
+              ${renderCategoryOptions(dynamicSubCats)}
             </div>
           </div>
 
-          <!-- Comment out desktop tag filter since it doesn't exist in HTML -->
-          <!-- <div class="filter-group filter-group-collapsible">
-            <button class="filter-toggle active" data-target="tag-options">
+          <!-- Tags -->
+          <div class="filter-group filter-group-collapsible">
+            <button class="filter-toggle" data-target="tag-options">
               <span>Tags</span>
               <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <div class="filter-options" id="tag-options">
-              <label class="filter-option active">
-                <input type="radio" name="desktop-tag" value="" checked>
-                <span>All Tags</span>
-              </label>
-              ${dynamicTags
-      .map(
-        (t) =>
-          `<label class="filter-option">
-                  <input type="radio" name="desktop-tag" value="${t}">
-                  <span>${t}</span>
-                </label>`,
-      )
-      .join("")}
+            <div class="filter-options hidden" id="tag-options">
+              ${renderTagOptions(dynamicTags)}
             </div>
-          </div> -->
+          </div>
 
         </aside>
         
@@ -183,8 +183,22 @@ export default async function decorate(block) {
       <!-- Mobile Layout -->
       <div class="press-layout mobile-layout">
         <div class="mobile-filter-buttons">
+          <button class="mobile-filter-btn year-btn" data-type="year-month">
+            Year & Month <span class="arrow">
+              <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+              </svg>
+            </span>
+          </button>
           <button class="mobile-filter-btn category-btn" data-type="category">
             Category <span class="arrow">
+              <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+              </svg>
+            </span>
+          </button>
+          <button class="mobile-filter-btn tag-btn" data-type="tag">
+            Tags <span class="arrow">
               <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
               </svg>
@@ -204,25 +218,20 @@ export default async function decorate(block) {
               <button class="close-modal">×</button>
             </div>
             <div class="modal-body">
+              <div class="filter-group year-group" style="display: none;">
+                ${renderMobileOptions('year', dynamicYears)}
+              </div>
+              
+              <div class="filter-group month-group" style="display: none;">
+                ${renderMobileOptions('month', dynamicMonths)}
+              </div>
               
               <div class="filter-group category-group" style="display: none;">
-                <label><input type="radio" name="mobile-subcat" value="" checked> All Categories</label>
-                ${dynamicSubCats
-      .map(
-        (s) =>
-          `<label><input type="radio" name="mobile-subcat" value="${s}"> ${s}</label>`,
-      )
-      .join("")}
+                ${renderMobileOptions('subcat', dynamicSubCats)}
               </div>
               
               <div class="filter-group tag-group" style="display: none;">
-                <label><input type="radio" name="mobile-tag" value="" checked> All Tags</label>
-                ${dynamicTags
-      .map(
-        (t) =>
-          `<label><input type="radio" name="mobile-tag" value="${t}"> ${t}</label>`,
-      )
-      .join("")}
+                ${renderMobileOptions('tag', dynamicTags)}
               </div>
             </div>
             <div class="apply-filter-btn">
@@ -262,11 +271,200 @@ export default async function decorate(block) {
 
   function updateHeader() {
     const parts = [];
+    if (state.year) parts.push(state.year);
+    if (state.month) {
+      // Month might be name or number, handle both
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+      const monthName = isNaN(state.month) ? state.month : (monthNames[parseInt(state.month) - 1] || state.month);
+      parts.push(monthName);
+    }
     if (state.subCategory) parts.push(slugToTitle(state.subCategory));
     if (state.tag) parts.push(state.tag);
-    summaryText.textContent = parts.length
-      ? parts.join(" • ")
-      : "All Categories";
+    summaryText.textContent = parts.length ? parts.join(" • ") : "All Years";
+  }
+
+  function renderYearOptions(years) {
+    return `
+      <label class="filter-option ${!state.year ? 'active' : ''}">
+        <input type="radio" name="desktop-year" value="" ${!state.year ? 'checked' : ''}>
+        <span>All Years</span>
+      </label>
+      ${years.map(y =>
+      `<label class="filter-option ${state.year === y ? 'active' : ''}">
+          <input type="radio" name="desktop-year" value="${y}" ${state.year === y ? 'checked' : ''}>
+          <span>${y}</span>
+        </label>`
+    ).join("")}`;
+  }
+
+  function renderMonthOptions(months) {
+    return `
+      <label class="filter-option ${!state.month ? 'active' : ''}">
+        <input type="radio" name="desktop-month" value="" ${!state.month ? 'checked' : ''}>
+        <span>All Months</span>
+      </label>
+      ${months.map(m =>
+      `<label class="filter-option ${state.month === m ? 'active' : ''}">
+          <input type="radio" name="desktop-month" value="${m}" ${state.month === m ? 'checked' : ''}>
+          <span>${m}</span>
+        </label>`
+    ).join("")}`;
+  }
+
+  function renderCategoryOptions(cats) {
+    return `
+      <label class="filter-option ${!state.subCategory ? 'active' : ''}" data-category="all">
+        <input type="radio" name="desktop-subcat" value="" ${!state.subCategory ? 'checked' : ''}>
+        <span>All Categories</span>
+      </label>
+      ${cats.map(s =>
+      `<label class="filter-option ${state.subCategory === s ? 'active' : ''}">
+          <input type="radio" name="desktop-subcat" value="${s}" ${state.subCategory === s ? 'checked' : ''}>
+          <span>${s}</span>
+        </label>`
+    ).join("")}`;
+  }
+
+  function renderTagOptions(tags) {
+    return `
+      <label class="filter-option ${!state.tag ? 'active' : ''}">
+        <input type="radio" name="desktop-tag" value="" ${!state.tag ? 'checked' : ''}>
+        <span>All Tags</span>
+      </label>
+      ${tags.map(t =>
+      `<label class="filter-option ${state.tag === t ? 'active' : ''}">
+          <input type="radio" name="desktop-tag" value="${t}" ${state.tag === t ? 'checked' : ''}>
+          <span>${t}</span>
+        </label>`
+    ).join("")}`;
+  }
+
+  function renderMobileOptions(type, items) {
+    const labels = {
+      year: 'All Years',
+      month: 'All Months',
+      subcat: 'All Categories',
+      tag: 'All Tags'
+    };
+    const stateKey = type === 'subcat' ? 'subCategory' : type;
+    const currentVal = state[stateKey];
+
+    return `
+      <label><input type="radio" name="mobile-${type}" value="" ${!currentVal ? 'checked' : ''}> ${labels[type]}</label>
+      ${items.map(item =>
+      `<label><input type="radio" name="mobile-${type}" value="${item}" ${currentVal === item ? 'checked' : ''}> ${item}</label>`
+    ).join("")}`;
+  }
+
+  function setupAllEventListeners() {
+    // Desktop Filter Toggles
+    block.querySelectorAll('.filter-toggle').forEach(toggle => {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const targetId = toggle.getAttribute('data-target');
+        const options = block.querySelector(`#${targetId}`);
+        toggle.classList.toggle('active');
+        options.classList.toggle('hidden');
+      });
+    });
+
+    // Desktop Radio Filters
+    setupRadioFilters('desktop-year', 'year');
+    setupRadioFilters('desktop-month', 'month');
+    setupRadioFilters('desktop-subcat', 'subCategory');
+    setupRadioFilters('desktop-tag', 'tag');
+
+    // Sort Toggle
+    const sortToggleBtn = block.querySelector("#sort-toggle");
+    const sortOpts = block.querySelector("#sort-options");
+    if (sortToggleBtn) {
+      sortToggleBtn.onclick = (e) => {
+        e.stopPropagation();
+        sortOpts.classList.toggle("show");
+        sortToggleBtn.classList.toggle('active');
+      };
+    }
+
+    // Sort Options
+    block.querySelectorAll('input[name="sort"]').forEach(radio => {
+      radio.addEventListener("change", () => {
+        state.sort = radio.value;
+        state.page = 1;
+        renderCards();
+        sortOpts.classList.remove("show");
+        sortToggleBtn.classList.remove('active');
+      });
+    });
+
+    // Mobile buttons
+    block.querySelectorAll('.mobile-filter-btn').forEach(btn => {
+      btn.onclick = () => openMobileModal(btn.dataset.type);
+    });
+  }
+
+  function refreshFilterUI() {
+    const yearOpts = block.querySelector('#year-options');
+    const monthOpts = block.querySelector('#month-options');
+    const subcatOpts = block.querySelector('#subcat-options');
+    const tagOpts = block.querySelector('#tag-options');
+
+    if (yearOpts) yearOpts.innerHTML = renderYearOptions(dynamicYears);
+    if (monthOpts) monthOpts.innerHTML = renderMonthOptions(dynamicMonths);
+    if (subcatOpts) subcatOpts.innerHTML = renderCategoryOptions(dynamicSubCats);
+    if (tagOpts) tagOpts.innerHTML = renderTagOptions(dynamicTags);
+
+    const mobileModalBody = block.querySelector('.mobile-filter-modal .modal-body');
+    if (mobileModalBody) {
+      mobileModalBody.querySelector('.year-group').innerHTML = renderMobileOptions('year', dynamicYears);
+      mobileModalBody.querySelector('.month-group').innerHTML = renderMobileOptions('month', dynamicMonths);
+      mobileModalBody.querySelector('.category-group').innerHTML = renderMobileOptions('subcat', dynamicSubCats);
+      mobileModalBody.querySelector('.tag-group').innerHTML = renderMobileOptions('tag', dynamicTags);
+    }
+
+    setupAllEventListeners();
+  }
+
+  window.addEventListener('press-filters-ready', (e) => {
+    filterData = e.detail || {};
+    dynamicYears = filterData.years || [];
+    dynamicMonths = filterData.months || [];
+    dynamicTags = filterData.tags || [];
+    dynamicSubCats = filterData.subCategories || [];
+    refreshFilterUI();
+  });
+
+  const setupRadioFilters = (name, property) => {
+    block.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+      r.addEventListener("change", () => {
+        state[property] = r.value;
+        state.page = 1;
+
+        // Update active state
+        const container = r.closest('.filter-options');
+        if (container) {
+          container.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('active'));
+          r.closest('.filter-option').classList.add('active');
+        }
+
+        if (property === 'year') {
+          const selectedYearText = block.querySelector('.selected-year');
+          if (selectedYearText) selectedYearText.textContent = r.value || "All";
+        }
+
+        updateHeader();
+        renderCards();
+      });
+    });
+  };
+
+  function scrollWithOffset(element, offset = 150) {
+    if (!element) return;
+    const top = element.offsetTop - offset;
+    window.scrollTo({
+      top: top > 0 ? top : 0,
+      behavior: "smooth"
+    });
   }
 
   function updateCountDisplay() {
@@ -553,138 +751,49 @@ export default async function decorate(block) {
 
   /* ================= Event Listeners ================= */
 
-  // Desktop Filter Toggles
-  block.querySelectorAll(".filter-toggle").forEach((toggle) => {
-    toggle.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const targetId = toggle.getAttribute("data-target");
-      const options = block.querySelector(`#${targetId}`);
-      // if (options) {
-      //   toggle.classList.toggle("active");
-      //   options.classList.toggle("hidden");
-      // }
-    });
-  });
-
-  // Desktop Radio Filters - Only setup for subcat since tag doesn't exist
-  const setupRadioFilters = (name, property) => {
-    const radios = block.querySelectorAll(`input[name="${name}"]`);
-    radios.forEach((r) => {
-      r.addEventListener("change", () => {
-        state[property] = r.value;
-        state.page = 1;
-
-        // Update active state
-        const container = r.closest(".filter-options");
-        if (container) {
-          container
-            .querySelectorAll(".filter-option")
-            .forEach((opt) => opt.classList.remove("active"));
-          const parentOption = r.closest(".filter-option");
-          if (parentOption) parentOption.classList.add("active");
-        }
-
-        updateHeader();
-        renderCards();
-      });
-    });
-  };
-
-  // Only setup for subCategory since desktop tag filter doesn't exist
-  setupRadioFilters("desktop-subcat", "subCategory");
-  // Remove or comment out the tag filter setup
-  // setupRadioFilters("desktop-tag", "tag");
-
-  // Sort Toggle
-  if (sortToggle && sortOptions) {
-    sortToggle.addEventListener("click", (e) => {
-      e.stopPropagation();
-      sortOptions.classList.toggle("show");
-      sortToggle.classList.toggle("active");
-    });
-
-    // Sort Options
-    block.querySelectorAll('input[name="sort"]').forEach((radio) => {
-      radio.addEventListener("change", () => {
-        state.sort = radio.value;
-        state.page = 1;
-        renderCards();
-        sortOptions.classList.remove("show");
-        sortToggle.classList.remove("active");
-      });
-    });
-  }
-
-  // Close sort menu when clicking outside
-  document.addEventListener("click", (e) => {
-    if (sortToggle && sortOptions &&
-      !sortToggle.contains(e.target) &&
-      !sortOptions.contains(e.target)) {
-      sortOptions.classList.remove("show");
-      sortToggle.classList.remove("active");
-    }
-  });
-
   // Close filter options when clicking outside
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".filter-group-collapsible")) {
-      block.querySelectorAll(".filter-options").forEach((options) => {
-        // if (!options.classList.contains("hidden")) {
-        //   options.classList.add("hidden");
-        //   const toggle = block.querySelector(`[data-target="${options.id}"]`);
-        //   if (toggle) toggle.classList.remove("active");
-        // }
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.filter-group-collapsible')) {
+      block.querySelectorAll('.filter-options').forEach(options => {
+        if (!options.classList.contains('hidden')) {
+          options.classList.add('hidden');
+          const toggle = block.querySelector(`[data-target="${options.id}"]`);
+          if (toggle) toggle.classList.remove('active');
+        }
       });
     }
   });
 
   // Pagination clicks
-  if (desktopPagination) {
-    desktopPagination.addEventListener("click", (e) => {
-      const btn = e.target.closest(".page-btn");
-      if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
+  desktopPagination.addEventListener("click", async (e) => {
+    const btn = e.target.closest(".page-btn");
+    if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
+    state.page = parseInt(btn.dataset.page, 10);
+    await renderCards();
+    scrollWithOffset(desktopList, 300);
+  });
 
-      state.page = parseInt(btn.dataset.page, 10);
-      renderCards();
-      const desktopLayout = block.querySelector(".desktop-layout");
-      if (desktopLayout) {
-        desktopLayout.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    });
-  }
-
-  if (mobilePagination) {
-    mobilePagination.addEventListener("click", (e) => {
-      const btn = e.target.closest(".page-btn");
-      if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
-
-      state.page = parseInt(btn.dataset.page, 10);
-      renderCards();
-      const mobileLayout = block.querySelector(".mobile-layout");
-      if (mobileLayout) {
-        mobileLayout.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    });
-  }
-
-  // Mobile Filter Buttons
-  mobileFilterBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      openMobileModal(btn.dataset.type);
-    });
+  mobilePagination.addEventListener("click", async (e) => {
+    const btn = e.target.closest(".page-btn");
+    if (!btn || btn.classList.contains("disabled") || btn.disabled) return;
+    state.page = parseInt(btn.dataset.page, 10);
+    await renderCards();
+    scrollWithOffset(mobileList, 300);
   });
 
   // Mobile Modal Events
-  if (modalOverlay) modalOverlay.addEventListener("click", closeMobileModal);
-  if (closeModalBtn) closeModalBtn.addEventListener("click", closeMobileModal);
-  if (applyBtn) applyBtn.addEventListener("click", applyMobileFilters);
+  modalOverlay.addEventListener('click', closeMobileModal);
+  closeModalBtn.addEventListener('click', closeMobileModal);
+  applyBtn.addEventListener('click', applyMobileFilters);
 
   // Escape key to close modal
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && mobileModal && mobileModal.classList.contains("open")) {
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileModal.classList.contains('open')) {
       closeMobileModal();
     }
   });
+
+  setupAllEventListeners();
 
   /* ================= Initial Render ================= */
   renderCards();
