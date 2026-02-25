@@ -40,15 +40,22 @@ import { buildVisitHistory, getCachedVisitedPages } from "./target.js";
     }
   }
 
-  // 2. REDIRECT CHECK: If saved preference differs from URL
-  // Use location.replace() for instant redirect without adding to history
-  if (savedLang && savedLang !== detectedLang) {
+  // 2. REDIRECT CHECK: If saved preference differs from URL 
+  // OR if English user is on a subpage path (redirect to /en/ for data loading, home "/" is exempt)
+  const isRoot = path === "/" || path === "";
+  // Redirection is needed for subpages OR if the root result in a 404 (isErrorPage)
+  const isEnOnRootPath = detectedLang === "en" && !segments.includes("en") && (!isRoot || window.isErrorPage) && !window.location.search.includes("adobe_ue");
+
+  if ((savedLang && savedLang !== detectedLang && !window.location.search.includes("adobe_ue")) || isEnOnRootPath) {
     let newPath;
-    if (langIndex !== -1) {
+    if (isEnOnRootPath) {
+      // Subpages MUST go to /en/ to avoid 404 if server mapping isn't recursive
+      newPath = "/en" + path;
+    } else if (langIndex !== -1) {
       segments[langIndex] = savedLang;
       newPath = segments.join("/");
     } else {
-      newPath = "/" + savedLang + (path === "/" ? "" : path);
+      newPath = "/" + savedLang + (isRoot ? "" : path);
     }
 
     const finalUrl =
@@ -56,16 +63,23 @@ import { buildVisitHistory, getCachedVisitedPages } from "./target.js";
       newPath.replace(/\/+/g, "/") +
       window.location.search +
       window.location.hash;
+
     if (finalUrl !== window.location.href) {
-      // Use replace() instead of href for instant redirect without browser history entry
       window.location.replace(finalUrl);
-      return; // Stop execution, browser will redirect
+      return;
     }
   }
 
-  // 3. BHASHINI JUMPSTART: If we are on a non-English path
+  // 3. SILENT URL CLEANUP: Immediately hide /en/ from address bar (visual only)
+  // This avoids the visual flash by running before the page is revealed
+  if (detectedLang === "en" && segments.includes("en") && !window.location.search.includes("adobe_ue")) {
+    const cleanPath = path.replace("/en/", "/").replace(/\/+/g, "/");
+    window.history.replaceState(null, "", cleanPath + window.location.search + window.location.hash);
+  }
+
+  // 4. BHASHINI JUMPSTART: If we are on a non-English path
   if (detectedLang !== "en" || (savedLang && savedLang !== "en")) {
-    const activeLang = detectedLang !== "en" ? detectedLang : savedLang;
+    const activeLang = detectedLang !== "en" ? detectedLang : (savedLang || "en");
     document.documentElement.lang = activeLang;
 
     if (!document.getElementById("bhashini-script")) {
@@ -149,17 +163,14 @@ export function moveInstrumentation(from, to) {
   );
 }
 
-/**
- * Rewrites internal links within a container to preserve the current language.
- * @param {Element} container The container element containing links
- * @param {string} currentLang The current language code
- */
 export function localizeNavLinks(container, currentLang) {
-  if (!container || !currentLang || currentLang === "en") return;
+  if (!container || !currentLang) return;
   const links = container.querySelectorAll("a");
   links.forEach((a) => {
     const href = a.getAttribute("href");
-    if (href && href.startsWith("/") && !href.startsWith("//")) {
+    // Link must be internal (start with /), not absolute (starting with //), 
+    // and not a DAM link (/content/dam/)
+    if (href && href.startsWith("/") && !href.startsWith("//") && !href.startsWith("/content/dam/")) {
       const segments = href.split("/");
       let hasLang = false;
       let langIndex = -1;
@@ -173,12 +184,19 @@ export function localizeNavLinks(container, currentLang) {
       }
 
       if (hasLang) {
-        // Replace existing language segment
-        segments[langIndex] = currentLang;
-        a.href = segments.join("/").replace(/\/+/g, "/");
-      } else {
-        // Prepend language segment if not present
-        a.href = `/${currentLang}${href}`.replace(/\/+/g, "/");
+        // 1. If link has a language segment (like /en/)
+        if (currentLang === "en") {
+          // In English mode, remove /en/ prefix to make links "pretty" (root-relative)
+          const newHref = href.replace("/en/", "/").replace(/\/+/g, "/");
+          a.setAttribute("href", newHref);
+        } else if (segments[langIndex] !== currentLang) {
+          // In other languages, replace existing language segment with current
+          segments[langIndex] = currentLang;
+          a.setAttribute("href", segments.join("/").replace(/\/+/g, "/"));
+        }
+      } else if (currentLang !== "en") {
+        // 2. If link has NO language segment and we are NOT in English mode, prepend language
+        a.setAttribute("href", `/${currentLang}${href}`.replace(/\/+/g, "/"));
       }
     }
   });
@@ -263,11 +281,35 @@ function buildAutoBlocks(main) {
 }
 
 export function decorateMain(main) {
+  const pathParts = window.location.pathname.split("/");
+  let currentLang = "en";
+  for (const part of pathParts) {
+    if (/^[a-z]{2}(-[a-z]{2})?$/.test(part)) {
+      currentLang = part;
+      break;
+    }
+  }
+
   decorateButtons(main);
   decorateIcons(main);
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
+
+  // Initial localization for links authored in blocks
+  localizeNavLinks(main, currentLang);
+
+  // Dynamic localization for links added by blocks later (e.g. news lists, business section)
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          localizeNavLinks(node, currentLang);
+        }
+      });
+    });
+  });
+  observer.observe(main, { childList: true, subtree: true });
 }
 
 async function loadEager(doc) {
