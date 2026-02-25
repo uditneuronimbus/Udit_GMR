@@ -130,6 +130,12 @@
     ]
   },
   {
+    "id": "breadcrumbs",
+    "components": [
+      "breadcrumb-item"
+    ]
+  },
+  {
     "id": "businesses-section",
     "components": [
       "business-item"

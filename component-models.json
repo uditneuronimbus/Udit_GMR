@@ -669,7 +669,39 @@
   },
   {
     "id": "breadcrumbs",
-    "fields": []
+    "fields": [
+      {
+        "component": "text",
+        "name": "headerTitle",
+        "label": "Section Admin Title",
+        "valueType": "string",
+        "defaultValue": "Breadcrumb Header"
+      }
+    ]
+  },
+  {
+    "id": "breadcrumb-item",
+    "itemLabel": "itemName",
+    "fields": [
+      {
+        "component": "text",
+        "name": "itemName",
+        "label": "Item Name",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "navigationLink",
+        "label": "URL",
+        "valueType": "string"
+      },
+      {
+        "component": "checkbox",
+        "name": "isActive",
+        "label": "Show Underline (Active)",
+        "valueType": "boolean"
+      }
+    ]
   },
   {
     "id": "business-enablers",
