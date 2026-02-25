@@ -61,14 +61,6 @@ function openVideoModal(url) {
 }
 
 export default async function decorate(block) {
-  /* ================= Get Shared Filter Data ================= */
-  let filterData = getSharedData("pressFilters") || {};
-
-  let dynamicYears = filterData.years || [];
-  let dynamicMonths = filterData.months || [];
-  let dynamicTags = filterData.tags || [];
-  let dynamicSubCats = filterData.subCategories || [];
-
   const defaultYear = "All";
   const limit = 6;
 
@@ -84,6 +76,47 @@ export default async function decorate(block) {
     limit: limit,
     totalCount: 0,
   };
+
+  /* ================= Self-derived Filters from API ================= */
+  // Start with whatever the filter-by fragment block already provided
+  let filterData = getSharedData("pressFilters") || {};
+  let dynamicYears = filterData.years || [];
+  let dynamicMonths = filterData.months || [];
+  let dynamicTags = filterData.tags || [];
+  let dynamicSubCats = filterData.subCategories || [];
+
+  // If no filter data from fragment, derive it from the full API dataset
+  if (!dynamicYears.length && !dynamicMonths.length && !dynamicSubCats.length) {
+    try {
+      const allItems = await fetchAllItems();
+      const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+      const yearsSet = new Set();
+      const monthsSet = new Set();
+      const catsSet = new Set();
+      const tagsSet = new Set();
+
+      allItems.forEach(item => {
+        if (item.publishDate) {
+          const d = new Date(item.publishDate);
+          if (!isNaN(d)) {
+            yearsSet.add(String(d.getFullYear()));
+            monthsSet.add(monthNames[d.getMonth()]);
+          }
+        }
+        if (item.category) catsSet.add(item.category);
+        if (item.tags) {
+          String(item.tags).split(',').map(t => t.trim()).filter(Boolean).forEach(t => tagsSet.add(t));
+        }
+      });
+
+      dynamicYears = [...yearsSet].sort((a, b) => b - a);
+      dynamicMonths = [...monthsSet];
+      dynamicSubCats = [...catsSet];
+      dynamicTags = [...tagsSet];
+    } catch (e) {
+      // silently fall back to empty
+    }
+  }
 
   /* ================= Render HTML ================= */
   block.innerHTML = `
@@ -425,12 +458,13 @@ export default async function decorate(block) {
     setupAllEventListeners();
   }
 
+  // Handle late-arriving filter data from filter-by fragment (override API-derived data)
   window.addEventListener('press-filters-ready', (e) => {
-    filterData = e.detail || {};
-    dynamicYears = filterData.years || [];
-    dynamicMonths = filterData.months || [];
-    dynamicTags = filterData.tags || [];
-    dynamicSubCats = filterData.subCategories || [];
+    const fd = e.detail || {};
+    if (fd.years?.length) dynamicYears = fd.years;
+    if (fd.months?.length) dynamicMonths = fd.months;
+    if (fd.tags?.length) dynamicTags = fd.tags;
+    if (fd.subCategories?.length) dynamicSubCats = fd.subCategories;
     refreshFilterUI();
   });
 
@@ -842,5 +876,26 @@ async function fetchApiCount(category = "", publishyear = "", publishmonth = "",
   } catch (error) {
     console.error("Error in fetchApiCount:", error);
     return 0;
+  }
+}
+
+/**
+ * Fetches all film items (large limit) for deriving filter options.
+ * Used as a self-sufficient fallback when no filter-by fragment is present.
+ */
+async function fetchAllItems() {
+  try {
+    const apiUrl =
+      `${getApiHost()}/api/v1/web/gmr-api/films-list` +
+      `?limit=500&offset=0&category=&publishyear=&publishmonth=&tag=&orderby=desc`;
+
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(`API error ${res.status}`);
+
+    const json = await res.json();
+    return json?.data?.data?.filmsVisualsList?.items || [];
+  } catch (error) {
+    console.error("Error in fetchAllItems:", error);
+    return [];
   }
 }

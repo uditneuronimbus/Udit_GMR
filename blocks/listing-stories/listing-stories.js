@@ -4,14 +4,6 @@ import { slugToTitle } from '../../scripts/common.js';
 import { formatDate } from '../../scripts/common.js';
 
 export default async function decorate(block) {
-  /* ================= Get Shared Filter Data ================= */
-  let filterData = getSharedData('pressFilters') || {};
-
-  let dynamicYears = filterData.years || [];
-  let dynamicMonths = filterData.months || [];
-  let dynamicTags = filterData.tags || [];
-  let dynamicSubCats = filterData.subCategories || [];
-
   const defaultYear = "All";
   const limit = 10;
 
@@ -27,6 +19,154 @@ export default async function decorate(block) {
     limit: limit,
     totalCount: 0
   };
+
+  /* ================= Self-derived Filters from API ================= */
+  let filterData = getSharedData('pressFilters') || {};
+  let dynamicYears = filterData.years || [];
+  let dynamicMonths = filterData.months || [];
+  let dynamicTags = filterData.tags || [];
+  let dynamicSubCats = filterData.subCategories || [];
+
+  if (!dynamicYears.length && !dynamicMonths.length && !dynamicSubCats.length) {
+    try {
+      const allItems = await fetchAllItems();
+      const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+      const yearsSet = new Set(), monthsSet = new Set(), catsSet = new Set(), tagsSet = new Set();
+      allItems.forEach(item => {
+        if (item.publishDate) {
+          const d = new Date(item.publishDate);
+          if (!isNaN(d)) { yearsSet.add(String(d.getFullYear())); monthsSet.add(monthNames[d.getMonth()]); }
+        }
+        if (item.subCategory) catsSet.add(item.subCategory);
+        if (item.tags) String(item.tags).split(',').map(t => t.trim()).filter(Boolean).forEach(t => tagsSet.add(t));
+      });
+      dynamicYears = [...yearsSet].sort((a, b) => b - a);
+      dynamicMonths = [...monthsSet];
+      dynamicSubCats = [...catsSet];
+      dynamicTags = [...tagsSet];
+    } catch (e) { /* fall back to empty */ }
+  }
+  /* ================= Filter Render Helpers ================= */
+
+  function renderYearOptions(years) {
+    return `
+      <label class="filter-option ${!state.year ? 'active' : ''}">
+        <input type="radio" name="desktop-year" value="" ${!state.year ? 'checked' : ''}>
+        <span>All Years</span>
+      </label>
+      ${years.map(y =>
+      `<label class="filter-option ${state.year === y ? 'active' : ''}">
+          <input type="radio" name="desktop-year" value="${y}" ${state.year === y ? 'checked' : ''}>
+          <span>${y}</span>
+        </label>`
+    ).join('')}`;
+  }
+
+  function renderMonthOptions(months) {
+    return `
+      <label class="filter-option ${!state.month ? 'active' : ''}">
+        <input type="radio" name="desktop-month" value="" ${!state.month ? 'checked' : ''}>
+        <span>All Months</span>
+      </label>
+      ${months.map(m =>
+      `<label class="filter-option ${state.month === m ? 'active' : ''}">
+          <input type="radio" name="desktop-month" value="${m}" ${state.month === m ? 'checked' : ''}>
+          <span>${m.charAt(0).toUpperCase() + m.slice(1)}</span>
+        </label>`
+    ).join('')}`;
+  }
+
+  function renderCategoryOptions(cats) {
+    return `
+      <label class="filter-option ${!state.subCategory ? 'active' : ''}">
+        <input type="radio" name="desktop-subcat" value="" ${!state.subCategory ? 'checked' : ''}>
+        <span>All Categories</span>
+      </label>
+      ${cats.map(s =>
+      `<label class="filter-option ${state.subCategory === s ? 'active' : ''}">
+          <input type="radio" name="desktop-subcat" value="${s}" ${state.subCategory === s ? 'checked' : ''}>
+          <span>${s}</span>
+        </label>`
+    ).join('')}`;
+  }
+
+  function renderTagOptions(tags) {
+    return `
+      <label class="filter-option ${!state.tag ? 'active' : ''}">
+        <input type="radio" name="desktop-tag" value="" ${!state.tag ? 'checked' : ''}>
+        <span>All Tags</span>
+      </label>
+      ${tags.map(t =>
+      `<label class="filter-option ${state.tag === t ? 'active' : ''}">
+          <input type="radio" name="desktop-tag" value="${t}" ${state.tag === t ? 'checked' : ''}>
+          <span>${t}</span>
+        </label>`
+    ).join('')}`;
+  }
+
+  function renderMobileOptions(type, items) {
+    const labels = { year: 'All Years', month: 'All Months', subcat: 'All Categories', tag: 'All Tags' };
+    const stateKey = type === 'subcat' ? 'subCategory' : type;
+    const currentVal = state[stateKey];
+    return `
+      <label><input type="radio" name="mobile-${type}" value="" ${!currentVal ? 'checked' : ''}> ${labels[type]}</label>
+      ${items.map(item =>
+      `<label><input type="radio" name="mobile-${type}" value="${item}" ${currentVal === item ? 'checked' : ''}> ${item}</label>`
+    ).join('')}`;
+  }
+
+  const setupRadioFilters = (name, property) => {
+    block.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+      r.addEventListener("change", () => {
+        state[property] = r.value;
+        state.page = 1;
+        const container = r.closest('.filter-options');
+        if (container) {
+          container.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('active'));
+          r.closest('.filter-option')?.classList.add('active');
+        }
+        if (property === 'year') {
+          const selectedYearText = block.querySelector('.selected-year');
+          if (selectedYearText) selectedYearText.textContent = r.value || "All";
+        }
+        updateHeader();
+        renderCards();
+      });
+    });
+  };
+
+  function setupAllEventListeners() {
+    block.querySelectorAll('.filter-toggle').forEach(toggle => {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const targetId = toggle.getAttribute('data-target');
+        const options = block.querySelector(`#${targetId}`);
+        toggle.classList.toggle('active');
+        if (options) options.classList.toggle('hidden');
+      });
+    });
+    setupRadioFilters('desktop-year', 'year');
+    setupRadioFilters('desktop-month', 'month');
+    setupRadioFilters('desktop-subcat', 'subCategory');
+    setupRadioFilters('desktop-tag', 'tag');
+    const sortToggleBtn = block.querySelector("#sort-toggle");
+    const sortOpts = block.querySelector("#sort-options");
+    if (sortToggleBtn) {
+      sortToggleBtn.onclick = (e) => { e.stopPropagation(); sortOpts?.classList.toggle("show"); sortToggleBtn.classList.toggle('active'); };
+    }
+    block.querySelectorAll('input[name="sort"]').forEach(radio => {
+      radio.addEventListener("change", () => {
+        state.sort = radio.value;
+        state.page = 1;
+        renderCards();
+        sortOpts?.classList.remove("show");
+        sortToggleBtn?.classList.remove('active');
+      });
+    });
+    block.querySelectorAll('.mobile-filter-btn').forEach(btn => {
+      btn.onclick = () => openMobileModal(btn.dataset.type);
+    });
+  }
 
   /* ================= Render HTML ================= */
   block.innerHTML = `
@@ -300,106 +440,8 @@ export default async function decorate(block) {
     ).join("")}`;
   }
 
-  function setupAllEventListeners() {
-    // Desktop Filter Toggles
-    block.querySelectorAll('.filter-toggle').forEach(toggle => {
-      toggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const targetId = toggle.getAttribute('data-target');
-        const options = block.querySelector(`#${targetId}`);
-        toggle.classList.toggle('active');
-        options.classList.toggle('hidden');
-      });
-    });
 
-    // Desktop Radio Filters
-    setupRadioFilters('desktop-year', 'year');
-    setupRadioFilters('desktop-month', 'month');
-    setupRadioFilters('desktop-subcat', 'subCategory');
-    setupRadioFilters('desktop-tag', 'tag');
 
-    // Sort Toggle
-    const sortToggleBtn = block.querySelector("#sort-toggle");
-    const sortOpts = block.querySelector("#sort-options");
-    if (sortToggleBtn) {
-      sortToggleBtn.onclick = (e) => {
-        e.stopPropagation();
-        sortOpts.classList.toggle("show");
-        sortToggleBtn.classList.toggle('active');
-      };
-    }
-
-    // Sort Options
-    block.querySelectorAll('input[name="sort"]').forEach(radio => {
-      radio.addEventListener("change", () => {
-        state.sort = radio.value;
-        state.page = 1;
-        renderCards();
-        sortOpts.classList.remove("show");
-        sortToggleBtn.classList.remove('active');
-      });
-    });
-
-    // Mobile buttons
-    block.querySelectorAll('.mobile-filter-btn').forEach(btn => {
-      btn.onclick = () => openMobileModal(btn.dataset.type);
-    });
-  }
-
-  function refreshFilterUI() {
-    const yearOpts = block.querySelector('#year-options');
-    const monthOpts = block.querySelector('#month-options');
-    const subcatOpts = block.querySelector('#subcat-options');
-    const tagOpts = block.querySelector('#tag-options');
-
-    if (yearOpts) yearOpts.innerHTML = renderYearOptions(dynamicYears);
-    if (monthOpts) monthOpts.innerHTML = renderMonthOptions(dynamicMonths);
-    if (subcatOpts) subcatOpts.innerHTML = renderCategoryOptions(dynamicSubCats);
-    if (tagOpts) tagOpts.innerHTML = renderTagOptions(dynamicTags);
-
-    const mobileModalBody = block.querySelector('.mobile-filter-modal .modal-body');
-    if (mobileModalBody) {
-      mobileModalBody.querySelector('.year-group').innerHTML = renderMobileOptions('year', dynamicYears);
-      mobileModalBody.querySelector('.month-group').innerHTML = renderMobileOptions('month', dynamicMonths);
-      mobileModalBody.querySelector('.category-group').innerHTML = renderMobileOptions('subcat', dynamicSubCats);
-      mobileModalBody.querySelector('.tag-group').innerHTML = renderMobileOptions('tag', dynamicTags);
-    }
-
-    setupAllEventListeners();
-  }
-
-  window.addEventListener('press-filters-ready', (e) => {
-    filterData = e.detail || {};
-    dynamicYears = filterData.years || [];
-    dynamicMonths = filterData.months || [];
-    dynamicTags = filterData.tags || [];
-    dynamicSubCats = filterData.subCategories || [];
-    refreshFilterUI();
-  });
-
-  const setupRadioFilters = (name, property) => {
-    block.querySelectorAll(`input[name="${name}"]`).forEach(r => {
-      r.addEventListener("change", () => {
-        state[property] = r.value;
-        state.page = 1;
-
-        // Update active state
-        const container = r.closest('.filter-options');
-        if (container) {
-          container.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('active'));
-          r.closest('.filter-option').classList.add('active');
-        }
-
-        if (property === 'year') {
-          const selectedYearText = block.querySelector('.selected-year');
-          if (selectedYearText) selectedYearText.textContent = r.value || "All";
-        }
-
-        updateHeader();
-        renderCards();
-      });
-    });
-  };
 
   function scrollWithOffset(element, offset = 150) {
     if (!element) return;
@@ -733,6 +775,16 @@ export default async function decorate(block) {
 
   setupAllEventListeners();
 
+  // Handle late-arriving filter data from filter-by fragment (only override if richer)
+  // Note: initial render already populated from fetchAllItems(), so this is a secondary optional update
+  window.addEventListener('press-filters-ready', (e) => {
+    const fd = e.detail || {};
+    if (fd.years?.length) dynamicYears = fd.years;
+    if (fd.months?.length) dynamicMonths = fd.months;
+    if (fd.tags?.length) dynamicTags = fd.tags;
+    if (fd.subCategories?.length) dynamicSubCats = fd.subCategories;
+  });
+
   /* ================= Initial Render ================= */
   renderCards();
 }
@@ -774,4 +826,13 @@ async function fetchApiCount(category = "", subCategory = "", publishyear = "", 
   const items = json?.data?.data?.successStoryList?.items || [];
 
   return items.length;
+}
+
+async function fetchAllItems() {
+  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/success-stories` +
+    `?limit=500&offset=0&subcategory=&publishyear=&publishmonth=&tag=&orderby=desc`;
+  const res = await fetch(apiUrl);
+  if (!res.ok) throw new Error(`API error ${res.status}`);
+  const json = await res.json();
+  return json?.data?.data?.successStoryList?.items || [];
 }

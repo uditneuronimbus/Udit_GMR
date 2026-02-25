@@ -4,14 +4,6 @@ import { slugToTitle } from '../../scripts/common.js';
 import { formatDate } from '../../scripts/common.js';
 
 export default async function decorate(block) {
-  /* ================= Get Shared Filter Data ================= */
-  let filterData = getSharedData('pressFilters') || {};
-
-  let dynamicYears = filterData.years || [];
-  let dynamicMonths = filterData.months || [];
-  let dynamicTags = filterData.tags || [];
-  let dynamicSubCats = filterData.subCategories || [];
-
   const defaultYear = "All";
   const limit = 10;
 
@@ -27,6 +19,33 @@ export default async function decorate(block) {
     limit: limit,
     totalCount: 0
   };
+
+  /* ================= Self-derived Filters from API ================= */
+  let filterData = getSharedData('pressFilters') || {};
+  let dynamicYears = filterData.years || [];
+  let dynamicMonths = filterData.months || [];
+  let dynamicTags = filterData.tags || [];
+  let dynamicSubCats = filterData.subCategories || [];
+
+  if (!dynamicYears.length && !dynamicMonths.length && !dynamicSubCats.length) {
+    try {
+      const allItems = await fetchAllItems();
+      const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+      const yearsSet = new Set(), monthsSet = new Set(), catsSet = new Set(), tagsSet = new Set();
+      allItems.forEach(item => {
+        if (item.publishDate) {
+          const d = new Date(item.publishDate);
+          if (!isNaN(d)) { yearsSet.add(String(d.getFullYear())); monthsSet.add(monthNames[d.getMonth()]); }
+        }
+        if (item.subCategory) catsSet.add(item.subCategory);
+        if (item.tags) String(item.tags).split(',').map(t => t.trim()).filter(Boolean).forEach(t => tagsSet.add(t));
+      });
+      dynamicYears = [...yearsSet].sort((a, b) => b - a);
+      dynamicMonths = [...monthsSet];
+      dynamicSubCats = [...catsSet];
+      dynamicTags = [...tagsSet];
+    } catch (e) { /* fall back to empty */ }
+  }
 
   /* ================= Render HTML ================= */
   block.innerHTML = `
@@ -401,12 +420,13 @@ export default async function decorate(block) {
     setupAllEventListeners();
   }
 
+  // Handle late-arriving filter data from filter-by fragment (override API-derived data only if richer)
   window.addEventListener('press-filters-ready', (e) => {
-    filterData = e.detail || {};
-    dynamicYears = filterData.years || [];
-    dynamicMonths = filterData.months || [];
-    dynamicTags = filterData.tags || [];
-    dynamicSubCats = filterData.subCategories || [];
+    const fd = e.detail || {};
+    if (fd.years?.length) dynamicYears = fd.years;
+    if (fd.months?.length) dynamicMonths = fd.months;
+    if (fd.tags?.length) dynamicTags = fd.tags;
+    if (fd.subCategories?.length) dynamicSubCats = fd.subCategories;
     refreshFilterUI();
   });
 
@@ -791,4 +811,13 @@ async function fetchApiCount(category = "press-release", subCategory = "", publi
   const items = json?.data?.data?.newsList?.items || [];
 
   return items.length;
+}
+
+async function fetchAllItems() {
+  const apiUrl = `${getApiHost()}/api/v1/web/gmr-api/all-news` +
+    `?limit=500&offset=0&category=press-release&subcategory=&publishyear=&publishmonth=&tag=&orderby=desc`;
+  const res = await fetch(apiUrl);
+  if (!res.ok) throw new Error(`API error ${res.status}`);
+  const json = await res.json();
+  return json?.data?.data?.newsList?.items || [];
 }

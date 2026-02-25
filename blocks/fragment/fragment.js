@@ -18,8 +18,28 @@ import {
  * @returns {HTMLElement} The root element of the fragment
  */
 export async function loadFragment(path) {
-  if (path && path.startsWith('/')) {
-    const rawPath = path.replace(/(\.plain)?\.html/, '');
+  if (!path) return null;
+
+  let normalizedPath = path;
+  if (path.startsWith('http')) {
+    try {
+      const url = new URL(path);
+      const host = url.hostname;
+      const isInternal = host === window.location.hostname ||
+        host.endsWith('.aem.page') ||
+        host.endsWith('.aem.live') ||
+        host.endsWith('.hlx.page') ||
+        host.endsWith('.hlx.live');
+
+      if (!isInternal) return null; // Skip external
+      normalizedPath = url.pathname;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  if (normalizedPath.startsWith('/')) {
+    const rawPath = normalizedPath.replace(/(\.plain)?\.html/, '');
 
     // 1. Standard normalization (Strip JCR)
     const noJcr = rawPath.replace(/^\/content\/gmr(-prod)?/, '');
@@ -30,8 +50,8 @@ export async function loadFragment(path) {
 
     // 3. Build variations to try
     const variations = [
-      noJcr,                      // Try as-is (e.g. /en/dynamic-blocks/filter or /dynamic-blocks/filter)
-      path,                       // Try original full path
+      noJcr,                      // Try as-is
+      normalizedPath,             // Try original relative/normalized path
     ];
 
     // If it doesn't have the language prefix, try adding it
@@ -41,7 +61,8 @@ export async function loadFragment(path) {
 
     // If it DOES have it, try stripping it (in case of total root mapping)
     if (noJcr.startsWith(langPrefix + '/')) {
-      variations.push(noJcr.replace(langPrefix, ''));
+      const stripped = noJcr.slice(langPrefix.length);
+      if (stripped) variations.push(stripped);
     }
 
     // Remove duplicates and filter empty
@@ -49,6 +70,7 @@ export async function loadFragment(path) {
 
     for (const v of uniqueVariations) {
       const fetchUrl = `${v.replace(/\/+/g, '/')}.plain.html`;
+      console.info(`[Fragment] Fetching: ${fetchUrl}`);
       try {
         const resp = await fetch(fetchUrl);
         if (resp.ok) {
