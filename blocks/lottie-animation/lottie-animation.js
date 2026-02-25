@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+/**
+ * Lottie Animation Component - Universal Editor Compatible
+ * Properly handles JSON from AEM DAM assets
+ */
+
+>>>>>>> 4b853d2154689218ad99d6f5a24699fe93ba631d
 import { fetchLottieJson } from './dam-json-helper.js';
 
 export default async function decorate(block) {
@@ -291,4 +299,8 @@ function showError(block, filename, error) {
       </div>
     </div>
   `;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4b853d2154689218ad99d6f5a24699fe93ba631d

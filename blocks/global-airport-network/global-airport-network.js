@@ -1,23 +1,29 @@
 export default function decorate(block) {
   const rows = [...block.children];
-  if (rows.length < 2) return;
+  if (rows.length < 5) return;
 
   block.classList.add("global-airport-network");
 
   /* ================================
      1️⃣ Read authored content
-     ================================ */
+  ================================= */
 
-  let titleEl = rows[0];
-  let descEl = rows[1];
-  const itemRows = rows.slice(2);
+  const titleEl = rows[0];
+  const descEl = rows[1];
+  const mapImageRow = rows[2];
+  const imageAltRow = rows[3];
+  // rows[4] = lottiePath (ignored completely)
+  const itemRows = rows.slice(5);
 
-  const titleText = titleEl.textContent.trim();
+  const titleText = titleEl?.textContent?.trim() || "";
   const hasTitle = titleText.length > 0;
+
+  const mapImage = mapImageRow?.querySelector("img");
+  const imageAltText = imageAltRow?.textContent?.trim() || "";
 
   /* ================================
      2️⃣ Create wrapper
-     ================================ */
+  ================================= */
 
   const wrapper = document.createElement("div");
   wrapper.className = "gan-wrapper spacer";
@@ -28,10 +34,11 @@ export default function decorate(block) {
   const row = document.createElement("div");
   row.className = "row align-items-center";
 
+  /* ---------- Left Column ---------- */
+
   const leftCol = document.createElement("div");
   leftCol.className = "col-lg-4 col-md-5";
 
-  // Section Title (H2 only)
   if (hasTitle) {
     titleEl.remove();
     const h2 = document.createElement("h2");
@@ -40,11 +47,12 @@ export default function decorate(block) {
     leftCol.appendChild(h2);
   }
 
-  // Description
   descEl.remove();
   descEl.classList.add("sec-desc");
   descEl.removeAttribute("data-aue-label");
   leftCol.appendChild(descEl);
+
+  /* ---------- Right Column ---------- */
 
   const rightCol = document.createElement("div");
   rightCol.className = "col-lg-8 col-md-7";
@@ -52,18 +60,26 @@ export default function decorate(block) {
   const mapWrap = document.createElement("div");
   mapWrap.className = "gan-map-wrap";
 
-  // ✅ Lottie Animation (desktop) - working JSON
-  const lottieWrap = document.createElement("div");
-  lottieWrap.className = "gan-lottie";
-  lottieWrap.dataset.lottie =
-    "https://cdn.prod.website-files.com/6853ad13a6c94e060a70ac45/6953c9f3aafa31dfbbb24b96_mapanimation5.json"; // public working JSON
+  /* ================================
+     3️⃣ Background Map Image
+  ================================= */
 
-  // Locations (mobile)
+  if (mapImage) {
+    mapImage.removeAttribute("width");
+    mapImage.removeAttribute("height");
+    mapImage.classList.add("gan-map-image");
+    mapImage.setAttribute("alt", imageAltText || "");
+    mapWrap.appendChild(mapImage);
+  }
+
+  /* ================================
+     4️⃣ Locations Wrapper
+  ================================= */
+
   const locationsWrap = document.createElement("div");
   locationsWrap.className = "gan-locations";
   locationsWrap.setAttribute("data-aue-label", "Airport Locations");
 
-  mapWrap.appendChild(lottieWrap);
   mapWrap.appendChild(locationsWrap);
   rightCol.appendChild(mapWrap);
 
@@ -73,48 +89,53 @@ export default function decorate(block) {
   wrapper.appendChild(container);
 
   /* ================================
-     4️⃣ Process location items
-     ================================ */
+     5️⃣ Process Location Items
+     (airportName, countryName, flagIcon, imageAlt)
+  ================================= */
 
   itemRows.forEach((itemRow) => {
-    if (!itemRow || itemRow.children.length !== 3) return;
+    if (!itemRow || itemRow.children.length < 3) return;
 
-    const [airportEl, countryEl, flagEl] = [...itemRow.children];
+    const cells = [...itemRow.children];
 
+    const airportEl = cells[0];
+    const countryEl = cells[1];
+    const flagEl = cells[2];
+    const altCell = cells[3]; // optional
+
+    const authoredAlt = altCell?.textContent?.trim() || "";
+    const countryName = countryEl?.textContent?.trim() || "";
+    const finalAlt = authoredAlt || countryName;
+
+    const img = flagEl?.querySelector("img");
+    if (img) img.setAttribute("alt", finalAlt);
+
+    altCell?.remove();
     itemRow.remove();
+
     itemRow.className = "gan-location";
     itemRow.setAttribute("data-aue-behavior", "component");
 
-    airportEl.classList.add("gan-airport");
-    airportEl.removeAttribute("data-aue-label");
+    airportEl?.classList.add("gan-airport");
+    airportEl?.removeAttribute("data-aue-label");
 
-    countryEl.classList.add("gan-country");
-    countryEl.removeAttribute("data-aue-label");
+    countryEl?.classList.add("gan-country");
+    countryEl?.removeAttribute("data-aue-label");
 
-    flagEl.classList.add("gan-flag");
-    flagEl.removeAttribute("data-aue-label");
+    flagEl?.classList.add("gan-flag");
+    flagEl?.removeAttribute("data-aue-label");
 
     locationsWrap.appendChild(itemRow);
   });
 
   /* ================================
-     5️⃣ Replace block content
-     ================================ */
+     6️⃣ Cleanup Unused Rows
+  ================================= */
+
+  mapImageRow?.remove();
+  imageAltRow?.remove();
+  rows[4]?.remove(); // remove lottiePath row completely
 
   block.innerHTML = "";
   block.appendChild(wrapper);
-
-  /* ================================
-     6️⃣ Initialize Lottie
-     ================================ */
-
-  if (window.lottie && window.innerWidth >= 768) {
-    lottie.loadAnimation({
-      container: lottieWrap,
-      renderer: "svg",
-      loop: true,
-      autoplay: true,
-      path: lottieWrap.dataset.lottie,
-    });
-  }
-};
+}
