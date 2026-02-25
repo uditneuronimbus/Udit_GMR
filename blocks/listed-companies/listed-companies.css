@@ -168,7 +168,7 @@
     align-items: center;
     justify-content: space-between;
 }
-.companies-links .btn {
+.companies-links .btn,.companies-links .btn:focus {
     color: var(--white);
     text-transform: uppercase;
     font-size: var(--fs-normal);

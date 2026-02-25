@@ -215,6 +215,11 @@ export default async function decorate(block) {
       a.href = companyItem.children[4].textContent.trim() || "#";
       a.className = "btn btn-circle";
       a.textContent = companyItem.children[3].textContent.trim();
+
+      // Open in new tab
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+
       btnContainer.appendChild(a);
     }
 
