@@ -18,10 +18,22 @@ export default function decorate(block) {
   /* ================================
      2️⃣ Helpers
   ================================ */
-  const cleanPath = (url) =>
-    url?.replace(/^(https?:\/\/)?[^/]+/, "").replace(/\/$/, "");
+  const cleanPath = (url) => {
+  if (!url) return "";
 
-  const currentPath = cleanPath(window.location.href);
+  // remove domain
+  let path = url.replace(/^(https?:\/\/)?[^/]+/, "");
+
+  // remove trailing slash
+  path = path.replace(/\/$/, "");
+
+  // remove language prefix (/en or /fr)
+  path = path.replace(/^\/(en|fr)(?=\/)/, "");
+
+  return path;
+};
+
+const currentPath = cleanPath(window.location.href);
 
   /* ================================
      3️⃣ Resolve dropdown button text
