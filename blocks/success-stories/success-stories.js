@@ -91,6 +91,8 @@ export default async function decorate(block) {
       const slide = document.createElement("div");
       slide.className = "swiper-slide";
 
+      const link = item?.slugUrl || "#";
+
       slide.innerHTML = `
         <div class="card card-ui h-100 p-4">
           <div class="card-img">
