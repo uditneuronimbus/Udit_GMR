@@ -41,3 +41,17 @@
     align-items: center;
     justify-items: center;
 }
+
+@media screen and (max-width: 1400px) {
+    .logo-slider-swiper {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 767.5px) {
+    .image-scroll-card.spacer {
+        padding-bottom: 0;
+    }
+    .sec-grid-2 .cg-subtitle {
+        font-size: var(--fs-xxlarge);
+    }
+}
