@@ -1,8 +1,3 @@
-/**
- * Lottie Animation Component - Universal Editor Compatible
- * Properly handles JSON from AEM DAM assets
- */
-
 import { fetchLottieJson } from './dam-json-helper.js';
 
 export default async function decorate(block) {
@@ -24,7 +19,6 @@ export default async function decorate(block) {
     scanBlockForFilename(block);
 
   if (!assetPath) {
-    const isDAMWarning = block.classList.contains('lottie-animation-block');
     block.innerHTML = `
       <div class="animation-placeholder">
         <p>⚠️ No Lottie Animation Selected</p>
@@ -71,7 +65,7 @@ export default async function decorate(block) {
 async function initAnimation(block, finalPath, props) {
   try {
     // Parallelize library loading and JSON fetching
-    const [_, animationData] = await Promise.all([
+    const [, animationData] = await Promise.all([
       loadLottieLibrary(),
       fetchLottieJson(finalPath)
     ]);
@@ -91,7 +85,7 @@ function parseBlockProps(block) {
   const props = {
     loop: true,
     autoplay: true,
-    showcontrols: false, // Hidden by default now
+    showcontrols: false,
     renderer: 'svg',
     width: '100%',
     height: 'auto'
@@ -136,10 +130,10 @@ function parseBlockProps(block) {
 }
 
 function scanBlockForFilename(block) {
-  // Check for any text that looks like a filename
+  // Check for any text that looks like a filename (no spaces, no slashes)
   const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
   let node;
-  while (node = walker.nextNode()) {
+  while ((node = walker.nextNode())) {
     const text = node.textContent.trim();
     if (text && !text.includes(' ') && !text.includes('/')) {
       return text;
@@ -196,7 +190,7 @@ function buildAnimationUI(block, animationData, props, assetPath) {
   // Store reference
   block.lottieAnimation = animation;
 
-  // Add controls if in authoring mode
+  // Add controls if enabled
   if (props.showcontrols) {
     addControls(block, animation);
   }
