@@ -922,7 +922,7 @@ hr {
 .card-img,
 .card-img-top {
     border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem; max-height: 260px;
+    border-top-right-radius: 0.5rem;
 }
 .card-title {
     line-height: 1.4;
