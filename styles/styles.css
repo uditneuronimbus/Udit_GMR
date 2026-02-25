@@ -927,6 +927,8 @@ hr {
 .card-title {
     line-height: 1.4;
 }
+.card-title a { color:var(--black); text-decoration: none; }
+.card-title a:hover { color:var(--yellow); text-decoration: none; }
 .card-cta {
     display: flex;
     align-items: center;
@@ -1467,6 +1469,11 @@ hr {
     .background-pink.message-from-leadership-container .mfl-card {
         grid-template-columns: 1fr;
     }
+}
+@media (max-width: 1400px) {
+.card-text {
+    min-height: 65px;
+}
 }
 @media (max-width: 1300px) {
     .businesses-section.block,

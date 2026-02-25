@@ -81,25 +81,34 @@ export default async function decorate(block) {
     }
 
     /* -----------------------------
-       5️⃣ Build Slides
+       5️⃣ Build Slides with same linking style
        ----------------------------- */
     items.forEach((item) => {
       const slide = document.createElement("div");
       slide.className = "swiper-slide";
+      
+      // Create link from slugUrl or use default
+      const link = item?.slugUrl || "#";
 
       slide.innerHTML = `
         <div class="card card-ui h-100 p-4">
           <div class="card-img">
-            <img
-              src="${item.storyImage?._publishUrl || ""}"
-              alt="${item.title || ""}"
-            />
+            <a href="story-update?post=${link}">
+              <img
+                src="${item.storyImage?._publishUrl || ""}"
+                alt="${item.title || ""}"
+              />
+            </a>
           </div>
           <div class="card-body">
-            <h5 class="card-title">${item.title || ""}</h5>
-            <p class="card-text">${item.description?.plaintext || ""}</p>
-            <a href="${item.ctaLink || "#"}" class="btn-link">
-              ${item.ctaText?.plaintext || "READ MORE"}
+            <h5 class="card-title">
+              <a href="story-update?post=${link}">${item.title || ""}</a>
+            </h5>
+            <p class="card-text">
+              ${item.description?.plaintext || ""}
+            </p>
+            <a href="story-update?post=${link}" class="btn-link">
+              READ MORE
             </a>
           </div>
         </div>

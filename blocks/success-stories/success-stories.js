@@ -94,15 +94,17 @@ export default async function decorate(block) {
       slide.innerHTML = `
         <div class="card card-ui h-100 p-4">
           <div class="card-img">
-            <img
-              src="${item.storyImage?._publishUrl || ""}"
-              alt="${item.title || ""}"
-            />
+            <a href="story-update?post=${link}">
+              <img
+                src="${item.storyImage?._publishUrl || ""}"
+                alt="${item.title || ""}"
+              />
+            </a>
           </div>
           <div class="card-body">
-            <h5 class="card-title">${item.title || ""}</h5>
+            <a href="story-update?post=${link}">${item.title || ""}</a>
             <p class="card-text">${item.description?.plaintext || ""}</p>
-            <a href="${item.ctaLink || "#"}" class="btn-link">
+            <a href="story-update?post=${link}" class="btn-link">
               ${item.ctaText?.plaintext || "READ MORE"}
             </a>
           </div>
