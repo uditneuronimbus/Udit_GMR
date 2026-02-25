@@ -457,24 +457,22 @@ export default function decorate(block) {
         }
       );
 
-      const adobePromise = fetch(
-        "https://3842504-emailer-default.adobeioruntime.net/api/v1/web/eds-smtp-mailer/send-mail",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: `${payload.firstName} ${payload.lastName}`.trim(),
-            email: payload.email,
-            message: `NEW SUBMISSION\nEnquiry: ${payload.enquiryType}\nCountry: ${payload.country}\nPhone: ${payload.country_code}${payload.mobileNo}\n\nMessage:\n${payload.message}`,
-          }),
-        }
-      );
+      // SMTP email via Adobe IO Runtime — temporarily disabled
+      // const adobePromise = fetch(
+      //   "https://3842504-emailer-default.adobeioruntime.net/api/v1/web/eds-smtp-mailer/send-mail",
+      //   {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify({
+      //       name: `${payload.firstName} ${payload.lastName}`.trim(),
+      //       email: payload.email,
+      //       message: `NEW SUBMISSION\nEnquiry: ${payload.enquiryType}\nCountry: ${payload.country}\nPhone: ${payload.country_code}${payload.mobileNo}\n\nMessage:\n${payload.message}`,
+      //     }),
+      //   }
+      // );
 
-      const results = await Promise.allSettled([gmrPromise, adobePromise]);
-
-      const anySuccess = results.some(
-        (r) => r.status === "fulfilled" && (r.value.ok || r.value.status === 200)
-      );
+      const gmrResponse = await gmrPromise;
+      const anySuccess = gmrResponse.ok || gmrResponse.status === 200;
 
       if (anySuccess) {
         window.location.href = "/en/thankyou";

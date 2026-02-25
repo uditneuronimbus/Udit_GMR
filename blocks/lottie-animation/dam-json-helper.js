@@ -1,6 +1,6 @@
 /**
  * Lottie JSON Helper - Project Repository Base
- * 
+ *
  * This helper fetches Lottie JSON files stored in the project's code repository
  * under /blocks/lottie-animation/lottie-data/
  */
@@ -8,12 +8,10 @@
 export async function fetchLottieJson(filename) {
     console.log('[Lottie Helper] Fetching animation:', filename);
 
-    // Validate input
     if (!filename) {
         throw new Error('Animation filename is required');
     }
 
-    // Determine the correct fetch URL
     const fetchUrl = getFetchUrl(filename);
     console.log('[Lottie Helper] Resolved URL:', fetchUrl);
 
@@ -46,7 +44,7 @@ export async function fetchLottieJson(filename) {
  * Resolve filename to the local project path
  */
 export function getFetchUrl(filename) {
-    // If it's already a full path (starting with /), return it
+    // If it's already a full path (starting with /), return it directly
     if (filename.startsWith('/')) {
         return filename;
     }

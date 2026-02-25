@@ -1,8 +1,3 @@
-/**
- * Lottie Animation Component - Universal Editor Compatible
- * Properly handles JSON from AEM DAM assets
- */
-
 import { fetchLottieJson } from './dam-json-helper.js';
 
 export default async function decorate(block) {
@@ -24,7 +19,6 @@ export default async function decorate(block) {
     scanBlockForFilename(block);
 
   if (!assetPath) {
-    const isDAMWarning = block.classList.contains('lottie-animation-block');
     block.innerHTML = `
       <div class="animation-placeholder">
         <p>⚠️ No Lottie Animation Selected</p>
@@ -71,7 +65,7 @@ export default async function decorate(block) {
 async function initAnimation(block, finalPath, props) {
   try {
     // Parallelize library loading and JSON fetching
-    const [_, animationData] = await Promise.all([
+    const [, animationData] = await Promise.all([
       loadLottieLibrary(),
       fetchLottieJson(finalPath)
     ]);
@@ -91,7 +85,7 @@ function parseBlockProps(block) {
   const props = {
     loop: true,
     autoplay: true,
-    showcontrols: false, // Hidden by default now
+    showcontrols: false,
     renderer: 'svg',
     width: '100%',
     height: 'auto'
@@ -114,7 +108,6 @@ function parseBlockProps(block) {
   rows.forEach(row => {
     const cells = row.querySelectorAll(':scope > div');
     if (cells.length === 2) {
-      // Normalize labels to lowercase keys (e.g. "Animation" -> "animation")
       const key = cells[0].textContent.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
 
       const valueCell = cells[1];
@@ -136,15 +129,13 @@ function parseBlockProps(block) {
 }
 
 function scanBlockForFilename(block) {
-  // Check for any text that looks like a filename
   const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
   let node;
-  while (node = walker.nextNode()) {
+  while ((node = walker.nextNode())) {
     const text = node.textContent.trim();
     if (text && !text.includes(' ') && !text.includes('/')) {
       return text;
     }
-    // Also check for full DAM paths to extract filename as fallback
     if (text.includes('/content/dam/') && text.endsWith('.json')) {
       return text.split('/').pop().replace('.json', '');
     }
@@ -168,13 +159,11 @@ async function loadLottieLibrary() {
 function buildAnimationUI(block, animationData, props, assetPath) {
   block.innerHTML = '';
 
-  // Info panel (shown during authoring)
   if (props.showcontrols) {
     const infoPanel = createInfoPanel(animationData, assetPath);
     block.appendChild(infoPanel);
   }
 
-  // Animation container
   const container = document.createElement('div');
   container.className = 'lottie-animation-container';
   container.id = `lottie-${Date.now()}`;
@@ -184,7 +173,6 @@ function buildAnimationUI(block, animationData, props, assetPath) {
 
   block.appendChild(container);
 
-  // Initialize Lottie
   const animation = window.lottie.loadAnimation({
     container: container,
     renderer: props.renderer || 'svg',
@@ -193,10 +181,8 @@ function buildAnimationUI(block, animationData, props, assetPath) {
     animationData: animationData
   });
 
-  // Store reference
   block.lottieAnimation = animation;
 
-  // Add controls if in authoring mode
   if (props.showcontrols) {
     addControls(block, animation);
   }
@@ -252,7 +238,6 @@ function addControls(block, animation) {
   if (playPauseBtn) {
     playPauseBtn.addEventListener('click', () => {
       const state = playPauseBtn.dataset.state;
-
       if (state === 'playing') {
         animation.pause();
         playPauseBtn.innerHTML = '▶ Play';
