@@ -33,7 +33,7 @@ async function fetchGeo() {
         country: d.country_name || 'unknown'
       };
     }
-  } catch (e) {}
+  } catch (e) { }
   return { city: 'unknown', region: 'unknown', country: 'unknown' };
 }
 
@@ -55,7 +55,7 @@ function applyConsents(prefs) {
 
       script.onload = () => {
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-BSTN6PSHZG');
         gtag('consent', 'update', { 'analytics_storage': 'granted' });
@@ -84,12 +84,12 @@ function applyConsents(prefs) {
 
 function getBlockConfig(block) {
   if (!block) return {};
-  
+
   // Extract text from block children (AEM structure)
   // Find the container we created during decorate()
   const container = block.querySelector('.cookie-consent-data');
   const rows = container ? [...container.children] : [...block.children];
-  
+
   const conf = {};
 
   // Helper function to get text content safely
@@ -108,39 +108,39 @@ function getBlockConfig(block) {
   try {
     // Title
     conf.title = getText(rows[0]) || 'Your Privacy Matters';
-    
+
     // Description
     conf.note = getHTML(rows[1]) || 'We use cookies to ensure the website works properly, understand how it\'s used, and remember your preferences. We do not use cookies for advertising, cross-site tracking, or profiling.';
-    
+
     // Essential Cookies Title
     conf.essentialTitle = getText(rows[2]) || 'Essential Cookies';
-    
+
     // Analytics Cookies (ON/OFF text) - row 4
     conf.analyticsCookies = getText(rows[4]) || 'Analytics Cookies';
     const analyticsText = getText(rows[4])?.toUpperCase() || 'OFF';
     conf.isAnalyticsOn = analyticsText.includes('ON');
-    
+
     // Analytics Description - row 5
     conf.analyticsDescription = getHTML(rows[5]) || '<p>Analytics cookies help us understand how visitors interact with the website by collecting and reporting information anonymously.</p>';
-    
+
     // Preference Cookies (ON/OFF text) - row 6
     conf.preferenceCookies = getText(rows[6]) || 'Preference Cookies';
     const preferenceText = getText(rows[6])?.toUpperCase() || 'OFF';
     conf.isPreferenceOn = preferenceText.includes('ON');
-    
+
     // Preference Description - row 7
     conf.preferenceDescription = getHTML(rows[7]) || '<p>Preference cookies allow the website to remember choices you make, such as language or region, to provide a more personalized experience.</p>';
-    
+
     // Buttons
     conf.acceptAllLabel = getText(rows[8]) || 'Accept All';
     conf.saveLabel = getText(rows[9]) || 'Save Preferences & Close';
-    
+
     // Essential is always ON
     conf.essentialStatus = 'ON';
-    
+
     // Additional fields
     conf.deleteLabel = 'Delete My Data';
-    
+
   } catch (error) {
     console.warn('[Cookies] Error extracting config, using defaults:', error);
     // Fallback to defaults
@@ -176,7 +176,8 @@ async function sendConsent(type, prefs, block) {
     timestamp: new Date().toISOString(),
     userAgent: navigator.userAgent,
     consentType: type,
-    customPreferences: prefs
+    customPreferences: prefs,
+    uuid: localStorage.getItem('uuid') || null // Include existing UUID if available
   };
 
   try {
@@ -195,12 +196,13 @@ async function sendConsent(type, prefs, block) {
       console.log('[Cookies] API Response:', result);
 
       // --- FIXED ID EXTRACTION ---
-      // Checks all possible locations for the ID
-      const savedId = result.id || result._id || result.data?.id || result.data?._id;
+      // Checks all possible locations for the ID, prioritizing the new structure
+      const savedId = result.data?._id || result._id || result.id || result.data?.id;
 
       if (savedId) {
         localStorage.setItem('gmr-privacy-id', savedId);
-        console.log('[Cookies] Saved Privacy ID:', savedId);
+        localStorage.setItem('uuid', savedId); // Also save as specifically named 'uuid'
+        console.log('[Cookies] Saved Privacy ID & UUID:', savedId);
       } else {
         console.warn('[Cookies] Warning: No ID returned from API');
       }
@@ -268,7 +270,7 @@ async function deleteRecord(block) {
   applyConsents({ analytics: false, preference: false });
 
   // 2. Get ID
-  const id = localStorage.getItem('gmr-privacy-id');
+  const id = localStorage.getItem('uuid') || localStorage.getItem('gmr-privacy-id');
   console.log('[Cookies] Attempting delete for ID:', id);
 
   if (id) {
@@ -302,6 +304,7 @@ async function deleteRecord(block) {
   localStorage.removeItem('gmr-cookie-consent');
   localStorage.removeItem('gmr-custom-preferences');
   localStorage.removeItem('gmr-privacy-id');
+  localStorage.removeItem('uuid');
 
   // 4. Reset UI
   document.querySelectorAll('.cookie-consent-modal').forEach(m => m.remove());
@@ -478,7 +481,7 @@ function openConsentModal(block) {
   const delBtn = document.getElementById('deletePrefs');
   if (delBtn) {
     delBtn.onclick = () => {
-      if(confirm('Are you sure you want to delete your data? This action cannot be undone.')) deleteRecord(block);
+      if (confirm('Are you sure you want to delete your data? This action cannot be undone.')) deleteRecord(block);
     };
   }
 
@@ -493,62 +496,62 @@ function findCookieConsentBlock() {
   // Find the cookie consent block by its marker class
   const blocks = document.querySelectorAll('.cookie-consent-component');
   if (blocks.length > 0) return blocks[0];
-  
+
   // Alternative: look for the hidden data container
   const dataContainers = document.querySelectorAll('.cookie-consent-data');
   if (dataContainers.length > 0) {
     return dataContainers[0].closest('.block') || dataContainers[0].parentElement;
   }
-  
+
   return null;
 }
 
 function setupCookiePolicyLinks() {
   // Find all links with title containing "Customize Cookies" (exact match)
   const allLinks = document.querySelectorAll('a[title]');
-  
+
   allLinks.forEach(link => {
     const title = link.getAttribute('title') || '';
-    
+
     // Check if this is exactly "Customize Cookies" (case-insensitive)
     if (title.toLowerCase() === 'customize cookies') {
-      
+
       // Check if we've already added a handler
       if (link.dataset.cookieHandlerAdded) return;
-      
+
       // Mark as processed
       link.dataset.cookieHandlerAdded = 'true';
-      
+
       // Add click event listener
-      link.addEventListener('click', function(e) {
+      link.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        
+
         console.log('[Cookies] Cookie policy link clicked');
-        
+
         const block = findCookieConsentBlock();
-        
+
         if (block) {
           // Remove any existing modal first
           document.querySelectorAll('.cookie-consent-modal').forEach(m => m.remove());
-          
+
           // Open the consent modal
           openConsentModal(block);
-          
+
           // Optional: Scroll to modal
           setTimeout(() => {
             const modal = document.querySelector('.cookie-consent-modal');
             if (modal) {
-              modal.scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'center' 
+              modal.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
               });
             }
           }, 100);
         } else {
           console.warn('[Cookies] Cookie consent block not found');
         }
-        
+
         return false;
       });
     }
@@ -560,7 +563,7 @@ function setupLinkObserver() {
   if (typeof MutationObserver !== 'undefined') {
     const observer = new MutationObserver((mutations) => {
       let shouldSetupLinks = false;
-      
+
       mutations.forEach((mutation) => {
         if (mutation.addedNodes.length) {
           // Check if any added nodes are links or contain links
@@ -573,12 +576,12 @@ function setupLinkObserver() {
           });
         }
       });
-      
+
       if (shouldSetupLinks) {
         setupCookiePolicyLinks();
       }
     });
-    
+
     observer.observe(document.body, {
       childList: true,
       subtree: true
@@ -595,22 +598,22 @@ export default function decorate(block) {
   const dataContainer = document.createElement('div');
   dataContainer.className = 'cookie-consent-data';
   dataContainer.style.cssText = 'position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden;';
-  
+
   // Copy all children to the hidden container
   [...block.children].forEach(row => {
     const clone = row.cloneNode(true);
     dataContainer.appendChild(clone);
   });
-  
+
   // Add the data container to the block (not visible but accessible)
   block.appendChild(dataContainer);
-  
+
   // Clear the visible block content
   block.innerHTML = '';
-  
+
   // Add a marker for the component (optional, for Universal Editor)
   block.classList.add('cookie-consent-component');
-  
+
   // Load CSS only once per page
   if (!document.getElementById('cookie-consent-css')) {
     const link = document.createElement('link');
@@ -638,7 +641,7 @@ export default function decorate(block) {
     //openConsentModal(block);
     showCookieBanner(block);
   }
-  
+
   // Setup cookie policy links
   setTimeout(() => {
     setupCookiePolicyLinks();
@@ -647,7 +650,7 @@ export default function decorate(block) {
 }
 
 // Make openConsentModal available globally for debugging if needed
-window.openCookieConsentModal = function() {
+window.openCookieConsentModal = function () {
   const block = findCookieConsentBlock();
   if (block) {
     openConsentModal(block);
