@@ -70,12 +70,6 @@ import { buildVisitHistory, getCachedVisitedPages } from "./target.js";
     }
   }
 
-  // 3. SILENT URL CLEANUP: Immediately hide /en/ from address bar (visual only)
-  // This avoids the visual flash by running before the page is revealed
-  if (detectedLang === "en" && segments.includes("en") && !window.location.search.includes("adobe_ue")) {
-    const cleanPath = path.replace("/en/", "/").replace(/\/+/g, "/");
-    window.history.replaceState(null, "", cleanPath + window.location.search + window.location.hash);
-  }
 
   // 4. BHASHINI JUMPSTART: If we are on a non-English path
   if (detectedLang !== "en" || (savedLang && savedLang !== "en")) {
@@ -185,11 +179,7 @@ export function localizeNavLinks(container, currentLang) {
 
       if (hasLang) {
         // 1. If link has a language segment (like /en/)
-        if (currentLang === "en") {
-          // In English mode, remove /en/ prefix to make links "pretty" (root-relative)
-          const newHref = href.replace("/en/", "/").replace(/\/+/g, "/");
-          a.setAttribute("href", newHref);
-        } else if (segments[langIndex] !== currentLang) {
+        if (currentLang !== "en" && segments[langIndex] !== currentLang) {
           // In other languages, replace existing language segment with current
           segments[langIndex] = currentLang;
           a.setAttribute("href", segments.join("/").replace(/\/+/g, "/"));
