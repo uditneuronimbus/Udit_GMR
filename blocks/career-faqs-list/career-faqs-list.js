@@ -10,6 +10,31 @@ export default function decorate(block) {
   if (!rows.length) return;
 
   /* ===============================
+   5️⃣ External Links → Open in New Tab
+================================ */
+
+const links = block.querySelectorAll('a[href]');
+
+links.forEach((link) => {
+  const href = link.getAttribute('href');
+
+  if (!href) return;
+
+  // If link starts with http or https → external
+  if (href.startsWith('http://') || href.startsWith('https://')) {
+    
+    // Optional: skip same domain links
+    const currentHost = window.location.hostname;
+    const linkHost = new URL(href).hostname;
+
+    if (linkHost !== currentHost) {
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener noreferrer');
+    }
+  }
+});
+
+  /* ===============================
      1️⃣ Section Title + Description
   =============================== */
 
