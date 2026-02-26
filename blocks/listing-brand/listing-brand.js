@@ -63,7 +63,11 @@ function openVideoModal(url) {
 export default async function decorate(block) {
   /* ================= Get Shared Filter Data ================= */
   const data = getSharedData("pressFilters") || {};
-  const dynamicSubCats = data.subCategories || []; 
+
+  const dynamicYears = data.years || [];
+  const dynamicMonths = data.months || [];
+  const dynamicTags = data.tags || [];
+  const dynamicSubCats = data.subCategories || [];
 
   const defaultYear = "All";
   const limit = 6;
@@ -103,12 +107,42 @@ export default async function decorate(block) {
                 <input type="radio" name="desktop-subcat" value="" checked>
                 <span>All Categories</span>
               </label>
-              ${dynamicSubCats.map((s) =>`<label class="filter-option">
+              ${dynamicSubCats
+      .map(
+        (s) =>
+          `<label class="filter-option">
                   <input type="radio" name="desktop-subcat" value="${s}">
                   <span>${s}</span>
-                </label>`,).join("")}
+                </label>`,
+      )
+      .join("")}
             </div>
           </div>
+
+          <!-- Comment out desktop tag filter since it doesn't exist in HTML -->
+          <!-- <div class="filter-group filter-group-collapsible">
+            <button class="filter-toggle active" data-target="tag-options">
+              <span>Tags</span>
+              <svg class="icon-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="filter-options" id="tag-options">
+              <label class="filter-option active">
+                <input type="radio" name="desktop-tag" value="" checked>
+                <span>All Tags</span>
+              </label>
+              ${dynamicTags
+      .map(
+        (t) =>
+          `<label class="filter-option">
+                  <input type="radio" name="desktop-tag" value="${t}">
+                  <span>${t}</span>
+                </label>`,
+      )
+      .join("")}
+            </div>
+          </div> -->
 
         </aside>
         
@@ -173,7 +207,22 @@ export default async function decorate(block) {
               
               <div class="filter-group category-group" style="display: none;">
                 <label><input type="radio" name="mobile-subcat" value="" checked> All Categories</label>
-                ${dynamicSubCats.map((s) => `<label><input type="radio" name="mobile-subcat" value="${s}"> ${s}</label>`).join("")}
+                ${dynamicSubCats
+      .map(
+        (s) =>
+          `<label><input type="radio" name="mobile-subcat" value="${s}"> ${s}</label>`,
+      )
+      .join("")}
+              </div>
+              
+              <div class="filter-group tag-group" style="display: none;">
+                <label><input type="radio" name="mobile-tag" value="" checked> All Tags</label>
+                ${dynamicTags
+      .map(
+        (t) =>
+          `<label><input type="radio" name="mobile-tag" value="${t}"> ${t}</label>`,
+      )
+      .join("")}
               </div>
             </div>
             <div class="apply-filter-btn">
