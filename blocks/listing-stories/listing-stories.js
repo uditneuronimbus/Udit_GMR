@@ -257,6 +257,7 @@ export default async function decorate(block) {
   }
 
   function createCardHTML(item) {
+
     const title = item?.title || "Untitled";
     const description = item?.description?.plaintext || "";
     const subCategory = item?.subCategory || "";
@@ -264,7 +265,6 @@ export default async function decorate(block) {
     const link = item?.slugUrl || "#";
     const publishDateRaw = item.publishMonth + " " + item.publishYear;  
     const publishDateFormatted = formatDate(publishDateRaw);
-    
     // Create badge class from subCategory
     const badgeClass = subCategory ? subCategory.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '') : '';
 
@@ -273,7 +273,7 @@ export default async function decorate(block) {
         <div class="press-card-image">
         <a href="story-update?post=${link}">  
         <img
-            src="${item.cardImage?._publishUrl || ""}"
+            src="${item.storyImage?._publishUrl || ""}"
             alt="${item.title || ""}"
             loading="lazy"
           />
