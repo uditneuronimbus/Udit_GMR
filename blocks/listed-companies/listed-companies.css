@@ -1,6 +1,6 @@
-.entry-container.fullCont {
+/* .entry-container.fullCont {
     max-width: 100%;
-}
+} */
 .listed-companies-container {
     background: var(--blue);
     background: linear-gradient(180deg, #06c 0, #1e3c6b 100%);
