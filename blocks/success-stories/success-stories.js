@@ -94,7 +94,7 @@ export default async function decorate(block) {
       const link = item?.slugUrl || "#";
 
       slide.innerHTML = `
-        <div class="card card-ui h-100 p-4">
+        <div class="card card-ui h-100 p-4 asdf">
           <div class="card-img">
             <a href="story-update?post=${link}">
               <img
