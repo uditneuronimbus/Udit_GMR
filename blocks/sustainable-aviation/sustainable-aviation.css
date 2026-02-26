@@ -78,7 +78,7 @@ display: block;
 }
 
 .sa-card-content {
-  padding: 20px 61px 10px;
+  padding: 1.25rem;
   background-color: var(--white );
   /* min-height: 230px; */
 }
@@ -102,14 +102,13 @@ display: block;
 }
 
 .sa-card-content h3 {
-  font-size: 22px;
-  margin-bottom: 12px;
-  color: #0b2e2a;
+      font-size: var(--fs-medium);
+    font-weight: var(--fw-semi-bold);
 }
 
 .sa-card-content p {
   font-size: 16px;
-  color: #333333;
+  color: var(--charcoal);
 }
 
 

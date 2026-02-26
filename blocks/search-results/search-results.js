@@ -46,10 +46,6 @@ function renderNoResults(container, query) {
           Try checking the spelling or explore the sections below.
         </p>
 
-        <p class="no-results-browse">
-           You can also browse key sections below.
-        </p>
-
         <div class="no-results-divider"></div>
 
         <div class="no-results-links">

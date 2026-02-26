@@ -1,5 +1,8 @@
 export function slugToTitle(str) {
   if (!str || typeof str !== 'string') return "";
+  if(str.toLowerCase() === "transport-urban-infrastructure") return "Transport & Urban Infrastructure";
+  if(str.toLowerCase() === "airport-aero-services") return "Airport & Aero Services";
+  if(str.toLowerCase() === "other") return "Other Services";
   return str
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))

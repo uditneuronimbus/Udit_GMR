@@ -104,7 +104,9 @@ export default async function decorate(block) {
             </a>
           </div>
           <div class="card-body">
+            <h5 class="card-title">
             <a href="story-update?post=${link}">${item.title || ""}</a>
+            </h5>
             <p class="card-text">${item.description?.plaintext || ""}</p>
             <a href="story-update?post=${link}" class="btn-link">
               ${item.ctaText?.plaintext || "READ MORE"}
