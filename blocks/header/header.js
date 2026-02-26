@@ -574,28 +574,37 @@ export default async function decorate(block) {
         }
 
         // Process menu images
-        const menuImgWrapper = navBrand.querySelector(":scope > div > div");
-        if (menuImgWrapper) {
-          [...menuImgWrapper.children].forEach((div) => {
-            if (div.children.length >= 2) {
-              const first = div.children[0];
-              const second = div.children[1];
-              const labelEl = second?.querySelector("p");
-              const imgEl = first?.querySelector("img");
-              if (!labelEl || !imgEl) return;
+        // Look for the header-image block anywhere in navBrand
+        const headerImageBlock = navBrand.querySelector(".header-image");
+        const menuImgItems = headerImageBlock ? headerImageBlock.querySelectorAll(":scope > div") : navBrand.querySelectorAll(":scope > div > div");
 
-              const originalImg = imgEl.src.split("?")[0]; // ✅ remove Franklin renditions
+        if (menuImgItems && menuImgItems.length > 0) {
+          menuImgItems.forEach((div) => {
+            const first = div.children[0];
+            const second = div.children[1];
+            const labelEl = second?.querySelector("p") || second;
+            const imgEl = first?.querySelector("img");
+            if (!labelEl || !imgEl) return;
 
-              const key = labelEl.textContent
-                .trim()
-                .toLowerCase()
-                .replace(/\u00A0/g, " ")
-                .replace(/\s+/g, "-");
+            const originalImg = imgEl.src.split("?")[0]; // ✅ remove Franklin renditions
 
-              imageMap.set(key, originalImg);
-            }
+            const key = labelEl.textContent
+              .trim()
+              .toLowerCase()
+              .replace(/\u00A0/g, " ")
+              .replace(/\s+/g, "-");
+
+            console.log(`Setting imageMap key: ${key}`);
+            imageMap.set(key, originalImg);
           });
-          menuImgWrapper.remove();
+
+          // Clean up the block/wrapper if it exists
+          if (headerImageBlock) {
+            headerImageBlock.closest('.header-image-wrapper')?.remove() || headerImageBlock.remove();
+          } else {
+            // Fallback cleanup for legacy structure
+            navBrand.querySelector(":scope > div > div")?.remove();
+          }
         }
 
         // Get the main UL for navigation
@@ -646,16 +655,31 @@ export default async function decorate(block) {
             });
 
             if (customTitleEl) menuTitleText = customTitleEl.textContent.trim();
-            if (!menuTitleText && li.firstChild)
-              menuTitleText = li.firstChild.textContent.trim();
+            const getImageUrl = (title, link) => {
+              const keys = [];
+              if (title) keys.push(title.toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-"));
+              if (link) {
+                const linkText = link.textContent.trim();
+                if (linkText) keys.push(linkText.toLowerCase().replace(/\u00A0/g, " ").replace(/\s+/g, "-"));
 
-            const mainLabelKey = menuTitleText
-              .toLowerCase()
-              .replace(/\u00A0/g, " ")
-              .replace(/\s+/g, "-");
-            const mainImgSrc = imageMap.get(mainLabelKey);
+                try {
+                  const url = new URL(link.href, window.location.origin);
+                  const slug = url.pathname.split('/').filter(Boolean).pop();
+                  if (slug) keys.push(slug.toLowerCase().replace(/\s+/g, "-"));
+                } catch (e) {
+                  // ignore invalid URLs
+                }
+              }
+
+              for (const k of keys) {
+                if (imageMap.has(k)) return imageMap.get(k);
+              }
+              return null;
+            };
 
             li.classList.add("has-mega");
+
+            const mainImgSrc = getImageUrl(menuTitleText, mainLinkEl);
 
             const mega = document.createElement("div");
             mega.className = "mega-wrapper";
@@ -692,18 +716,25 @@ export default async function decorate(block) {
             }
 
             const updateDetailsPanel = (
-              primaryKey,
-              parentKey1 = null,
-              parentKey2 = null,
+              primaryLi,
+              parentLi1 = null,
+              parentLi2 = null,
               subListNode = null,
             ) => {
               colDetails
                 .querySelectorAll(".nested-list")
                 .forEach((el) => el.remove());
 
-              let imgSrc = imageMap.get(primaryKey);
-              if (!imgSrc && parentKey1) imgSrc = imageMap.get(parentKey1);
-              if (!imgSrc && parentKey2) imgSrc = imageMap.get(parentKey2);
+              const getImgForLi = (li) => {
+                if (!li) return null;
+                const title = li.querySelector('h4, .menu-title')?.textContent.trim() || li.firstChild?.textContent.trim();
+                const link = li.querySelector('a');
+                return getImageUrl(title, link);
+              };
+
+              let imgSrc = getImgForLi(primaryLi);
+              if (!imgSrc && parentLi1) imgSrc = getImgForLi(parentLi1);
+              if (!imgSrc && parentLi2) imgSrc = getImgForLi(parentLi2);
               if (!imgSrc) imgSrc = mainImgSrc;
 
               if (imgSrc) {
@@ -755,7 +786,7 @@ export default async function decorate(block) {
                   colRightList.innerHTML = "";
                   colRightList.style.display = "none";
 
-                  updateDetailsPanel(l1Key);
+                  updateDetailsPanel(level1Li);
 
                   const level2Ul = level1Li.querySelector("ul");
                   if (level2Ul) {
@@ -792,7 +823,7 @@ export default async function decorate(block) {
 
                           colRightList.innerHTML = "";
                           colRightList.style.display = "none";
-                          updateDetailsPanel(l2Key, l1Key);
+                          updateDetailsPanel(level2Li, level1Li);
 
                           const level3Ul = level2Li.querySelector("ul");
                           if (level3Ul) {
@@ -844,9 +875,9 @@ export default async function decorate(block) {
                                   }
 
                                   updateDetailsPanel(
-                                    l3Key,
-                                    l2Key,
-                                    l1Key,
+                                    level3Li,
+                                    level2Li,
+                                    level1Li,
                                     l4List,
                                   );
                                 }
