@@ -253,10 +253,6 @@
 ===================================== */
 @media (max-width: 768px) {
 
-  .ish-swiper {
-    /* height: auto; */
-  }
-
   .inner-slider-horizontal .ish-wrapper {
     width: 100%;
     height: auto;
