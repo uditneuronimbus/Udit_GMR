@@ -110,3 +110,10 @@
         margin-top: 40px;
     }
 }
+
+
+.page-our-portfolio .award-card-body {
+    padding: 0;
+    background: none;
+    text-align: center;
+}

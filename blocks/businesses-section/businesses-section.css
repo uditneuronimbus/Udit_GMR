@@ -330,3 +330,13 @@
         height: auto !important;
     }
 }
+
+
+.page-our-portfolio .business-accordion-wrapper {
+    background: none;
+    padding: 0;
+}
+
+.page-our-portfolio .businesses-section-container {
+    background-color: var(--lpink);
+}
