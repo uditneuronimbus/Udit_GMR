@@ -16,7 +16,7 @@
 .global-leaders-aviation .gla-footer p{font-size:.875rem;color:var(--charcoal);margin-bottom:0}
 .global-leaders-aviation .gla-footer>div{background-color:#f8f8f8;padding:8px 16px}
 @media (max-width:1400px){ 
-.gla-stat { max-width: 230px; }
+.gla-stat { max-width: 220px; }
 .global-leaders-aviation .gla-stats { gap: 16px; }
 }
 @media (max-width:1199px){
