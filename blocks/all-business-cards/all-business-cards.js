@@ -57,7 +57,7 @@ export default async function decorate(block) {
     const img = cells[0]?.querySelector("img");
     const altText = cells[1]?.textContent?.trim() || "";
     const title = cells[2]?.textContent?.trim() || "";
-    const desc = cells[3]?.textContent?.trim() || "";
+    const desc = cells[3]?.innerHTML?.trim() || "";
 
     const col = document.createElement("div");
     col.className = "col-md-6 col-lg-4 mt-4";

@@ -8,7 +8,7 @@ export default function decorate(block) {
      1️⃣ Header content
      ================================ */
   const title = rows[0]?.textContent?.trim() || "";
-  const description = rows[1]?.textContent?.trim() || "";
+  const description = rows[1]?.innerHTML?.trim() || "";
 
   /* ================================
      2️⃣ Card rows

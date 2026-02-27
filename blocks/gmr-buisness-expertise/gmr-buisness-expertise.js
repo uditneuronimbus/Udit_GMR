@@ -64,7 +64,7 @@ export default function decorate(block) {
 
     const authoredAlt = altCell?.textContent?.trim() || "";
     const title = titleCell?.textContent?.trim() || "";
-    const desc = descCell?.textContent?.trim() || "";
+    const desc = descCell?.innerHTML?.trim() || "";
     const finalAlt = authoredAlt || title || "";
 
     /* ================================
