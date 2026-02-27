@@ -76,7 +76,7 @@ export default async function decorate(block) {
           ${
           desc
             ? `
-          <p class="card-desc">${desc}</p>
+          <div class="card-desc">${desc}</div>
           `
             : ""
         }

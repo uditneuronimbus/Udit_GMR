@@ -82,7 +82,7 @@ export default function decorate(block) {
       <div class="airport-overview-header text-center mb-4">
         <div class="airport-overview-headerHead">
           ${title ? `<h2 class="sec-title">${title}</h2>` : ""}
-          ${description ? `<p class="sec-desc mb-0">${description}</p>` : ""}
+          ${description ? `<div class="sec-desc mb-0">${description}</div>` : ""}
         </div>
 
         ${

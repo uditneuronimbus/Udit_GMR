@@ -117,7 +117,7 @@ export default function decorate(block) {
 
     content.innerHTML = `
       ${title ? `<h3 class="card-title">${title}</h3>` : ""}
-      <p class="card-desc">${desc}</p>
+      <div class="card-desc">${desc}</div>
       ${
         ctaText && ctaHref
           ? `<div class="card-cta">
