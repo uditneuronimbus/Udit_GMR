@@ -62,7 +62,7 @@
 .inner-hero h2 {
     font-weight: 300;
     margin: 0 0 1rem;
-    font-size: var(--fs-xxl);
+    font-size: var(--fs-xxl); text-transform: capitalize;
 }
 .inner-hero p {
     font-weight: 400;
