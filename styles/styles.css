@@ -1466,8 +1466,18 @@ hr {
     }
 }
 @media (max-width: 767px) {
+    .mobile-filter-content .close-modal {
+    position: absolute;
+    top: 18px !important;
+    right: 15px !important;
+    font-size: 40px !important;
+}
     .background-pink.message-from-leadership-container .mfl-card {
         grid-template-columns: 1fr;
+    }
+
+    .language-dropdown-menu.show{
+        left:0;
     }
 }
 @media (max-width: 1400px) {

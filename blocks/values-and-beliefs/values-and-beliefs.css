@@ -194,12 +194,27 @@
   .value-card-overlay {
     font-size: 18px;
     font-weight: 600;
-  }
-
-  .value-card-image {
+    border-radius: 8px;
+}
+.value-card-content .quote h5 {
+    font-size: 20px;
+    line-height: 25px;
+}
+.value-card-content .quote p strong {
+    font-size: 22px;
+}
+.value-card-content .quote {
+    height: auto;
+}
+.value-card-content {
+    padding: 48px 15px 20px;
+    justify-content: start;
+}
+ .value-card-image {
     height: auto;
     background: none;
-  }
+    padding: 0 0;
+}
   .value-card { max-width: 100%;
 }
 
