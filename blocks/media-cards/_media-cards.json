@@ -66,8 +66,8 @@
                             "value": "none"
                         },
                         {
-                            "name": "Group Holdings Board",
-                            "value": "groupHoldingsBoard"
+                            "name": "Group Holding Board",
+                            "value": "groupHoldingBoard"
                         },
                         {
                             "name": "Other Images",
