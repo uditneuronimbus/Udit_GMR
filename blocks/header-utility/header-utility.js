@@ -177,47 +177,51 @@ export default async function decorate(block) {
      4️⃣ INITIALIZE UTILITIES (NON-BLOCKING)
      =============================== */
 
-  // 1. Fetch stock data (Async, non-blocking with SWR)
-  (async () => {
-    const CACHE_KEY = "header-stock-data";
-    const CACHE_TIME_KEY = "header-stock-data-time";
-    const TTL = 60000; // 60 seconds
-
-    const cached = localStorage.getItem(CACHE_KEY);
-    const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
-    let isStale = true;
-
-    if (cached && cachedTime) {
-      try {
-        const data = JSON.parse(cached);
-        renderStocks(stockTrack, stockSymbols, data, STOCK_CODES);
-        const age = Date.now() - Number(cachedTime);
-        if (age < TTL) isStale = false;
-        console.log(`Stocks SWR: Cache found (age: ${Math.round(age / 1000)}s), stale: ${isStale}`);
-      } catch (e) {
-        console.error("Cache Parse Error:", e);
-      }
-    }
-
-    // Always revalidate if stale or missing
-    if (isStale || !cached) {
-      try {
-        const freshData = await fetchStockData(true);
-        renderStocks(stockTrack, stockSymbols, freshData, STOCK_CODES);
-        console.log("Stocks SWR: UI refreshed with fresh data");
-      } catch (e) {
-        console.error("Stock Refresh Error:", e);
-        if (!cached) {
-          stockTrack.innerHTML = `<div class="stock-error">Market data unavailable</div>`;
-        }
-      }
-    }
-  })();
-
-  // 2. Initialize components in parallel
+  // 2. Initialize components in parallel (these are fast, run immediately)
   initBhashini(wrapper);
   initAccessibilityModal();
   initLanguageDropdown(wrapper);
+
+  // 1. Fetch stock data — deferred via setTimeout(0) so decorate() resolves
+  //    immediately and does NOT block header or other blocks from rendering.
+  setTimeout(() => {
+    (async () => {
+      const CACHE_KEY = "header-stock-data";
+      const CACHE_TIME_KEY = "header-stock-data-time";
+      const TTL = 60000; // 60 seconds
+
+      const cached = localStorage.getItem(CACHE_KEY);
+      const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+      let isStale = true;
+
+      // STEP 1: Always render from cache first (instant, no network wait)
+      if (cached && cachedTime) {
+        try {
+          const data = JSON.parse(cached);
+          renderStocks(stockTrack, stockSymbols, data, STOCK_CODES);
+          const age = Date.now() - Number(cachedTime);
+          if (age < TTL) isStale = false;
+          console.log(`Stocks SWR: Cache found (age: ${Math.round(age / 1000)}s), stale: ${isStale}`);
+        } catch (e) {
+          console.error("Cache Parse Error:", e);
+        }
+      }
+
+      // STEP 2: Revalidate in background only if stale or no cache exists
+      if (isStale || !cached) {
+        try {
+          const freshData = await fetchStockData(true);
+          renderStocks(stockTrack, stockSymbols, freshData, STOCK_CODES);
+          console.log("Stocks SWR: UI refreshed with fresh data");
+        } catch (e) {
+          console.error("Stock Refresh Error:", e);
+          if (!cached) {
+            stockTrack.innerHTML = `<div class="stock-error">Market data unavailable</div>`;
+          }
+        }
+      }
+    })();
+  }, 0);
 
   console.log("Header Utility initialized (optimized)");
 }
@@ -1038,6 +1042,7 @@ async function fetchStockData(skipCache = false) {
   const CACHE_KEY = "header-stock-data";
   const CACHE_TIME_KEY = "header-stock-data-time";
   const CACHE_TTL = 60000;
+  const FETCH_TIMEOUT_MS = 5000; // 5-second hard timeout — prevents hanging if API is slow/down
 
   try {
     // Check internal cache logic if not skipping
@@ -1050,12 +1055,27 @@ async function fetchStockData(skipCache = false) {
       }
     }
 
-    const response = await fetch(API_URL, {
-      headers: {
-        Authorization: AUTH_TOKEN,
-        "Content-Type": "application/json",
-      },
-    });
+    // Use AbortController to enforce a fetch timeout.
+    // If the stock API takes longer than 5s (e.g. backend is down), we abort
+    // and fall back to cached data rather than keeping the page waiting.
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => {
+      controller.abort();
+      console.warn(`Stock API timed out after ${FETCH_TIMEOUT_MS / 1000}s — using cached data`);
+    }, FETCH_TIMEOUT_MS);
+
+    let response;
+    try {
+      response = await fetch(API_URL, {
+        headers: {
+          Authorization: AUTH_TOKEN,
+          "Content-Type": "application/json",
+        },
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeoutId);
+    }
 
     if (!response.ok) throw new Error(`API Error ${response.status}`);
 
@@ -1070,7 +1090,11 @@ async function fetchStockData(skipCache = false) {
 
     return data;
   } catch (error) {
-    console.error("Stock fetch failed:", error);
+    if (error.name === "AbortError") {
+      console.warn("Stock fetch aborted (timeout) — serving stale cache if available");
+    } else {
+      console.error("Stock fetch failed:", error);
+    }
     const fallback = localStorage.getItem(CACHE_KEY);
     return fallback ? JSON.parse(fallback) : [];
   }

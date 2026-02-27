@@ -12,6 +12,8 @@ const CACHE_TTL = 60000;
    FETCH STOCK WITH CACHE
 =============================== */
 
+const FETCH_TIMEOUT_MS = 5000; // 5-second hard timeout — prevents page hang when API is down
+
 async function fetchStockData() {
   try {
     const cached = localStorage.getItem(CACHE_KEY);
@@ -24,13 +26,27 @@ async function fetchStockData() {
       }
     }
 
-    const res = await fetch(STOCK_API_URL, {
-      method: "GET",
-      headers: {
-        Authorization: AUTH_TOKEN,
-        Accept: "application/json",
-      },
-    });
+    // AbortController enforces a 5-second timeout so a slow/down backend
+    // fails fast instead of occupying the browser for 30+ seconds.
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => {
+      controller.abort();
+      console.warn(`GAL investor stock API timed out after ${FETCH_TIMEOUT_MS / 1000}s — using cached data`);
+    }, FETCH_TIMEOUT_MS);
+
+    let res;
+    try {
+      res = await fetch(STOCK_API_URL, {
+        method: "GET",
+        headers: {
+          Authorization: AUTH_TOKEN,
+          Accept: "application/json",
+        },
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeoutId);
+    }
 
     if (!res.ok) throw new Error("API failed");
 
@@ -44,7 +60,11 @@ async function fetchStockData() {
 
     return [];
   } catch (e) {
-    console.error("Stock API error:", e);
+    if (e.name === "AbortError") {
+      console.warn("GAL investor stock fetch aborted (timeout) — serving stale cache if available");
+    } else {
+      console.error("Stock API error:", e);
+    }
     const fallback = localStorage.getItem(CACHE_KEY);
     return fallback ? JSON.parse(fallback) : [];
   }
@@ -71,7 +91,7 @@ function renderMarketHTML(companyData, displayName) {
         minute: "2-digit",
         hour12: true,
       });
-    } catch {}
+    } catch { }
   }
 
   let html = `
@@ -261,5 +281,10 @@ export default async function decorate(block) {
     await loadStock("GPUIL", gpuilContainer);
   });
 
-  await loadStock("GAL", galContainer);
+  // Defer initial stock load via setTimeout(0) so decorate() resolves immediately.
+  // This prevents the /en/investors page from hanging while the stock API responds.
+  // The market data will populate as soon as the API responds (or timeout after 5s).
+  setTimeout(() => {
+    loadStock("GAL", galContainer);
+  }, 0);
 }
