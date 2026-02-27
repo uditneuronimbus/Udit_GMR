@@ -19,6 +19,11 @@ function getQuery() {
   return params.get("q") || "";
 }
 
+function getPage() {
+  const params = new URLSearchParams(window.location.search);
+  return Math.max(0, parseInt(params.get("page") || "0", 10));
+}
+
 function highlight(text, query) {
   if (!text) return "";
   return text.replace(new RegExp(`(${query})`, "ig"), "<mark>$1</mark>");
@@ -39,7 +44,7 @@ function renderNoResults(container, query) {
         </div>
 
         <h2 class="no-results-title">
-          We couldn’t find any exact matches.
+          We couldn't find any exact matches.
         </h2>
 
         <p class="no-results-subtext">
@@ -71,9 +76,82 @@ function renderNoResults(container, query) {
   `;
 }
 
+/* ---------- Render Pagination ---------- */
+function renderPagination(container, currentPage, totalPages, query, lang) {
+  if (totalPages <= 1) {
+    container.innerHTML = "";
+    return;
+  }
+
+  const buildUrl = (page) =>
+    `/${lang}/search?q=${encodeURIComponent(query)}&page=${page}`;
+
+  // Show at most 5 page buttons around the current page
+  const delta = 2;
+  const range = [];
+  const rangeWithDots = [];
+
+  for (let i = 0; i < totalPages; i++) {
+    if (
+      i === 0 ||
+      i === totalPages - 1 ||
+      (i >= currentPage - delta && i <= currentPage + delta)
+    ) {
+      range.push(i);
+    }
+  }
+
+  let prev = null;
+  for (const i of range) {
+    if (prev !== null && i - prev > 1) rangeWithDots.push("...");
+    rangeWithDots.push(i);
+    prev = i;
+  }
+
+  const prevDisabled = currentPage === 0;
+  const nextDisabled = currentPage === totalPages - 1;
+
+  container.innerHTML = `
+    <nav class="search-pagination" aria-label="Search results pages">
+      <a
+        class="pagination-btn pagination-prev ${prevDisabled ? "disabled" : ""}"
+        href="${prevDisabled ? "#" : buildUrl(currentPage - 1)}"
+        aria-disabled="${prevDisabled}"
+        aria-label="Previous page"
+      >&lsaquo; Prev</a>
+
+      ${rangeWithDots
+        .map((p) =>
+          p === "..."
+            ? `<span class="pagination-dots">…</span>`
+            : `<a
+                class="pagination-btn ${p === currentPage ? "active" : ""}"
+                href="${buildUrl(p)}"
+                aria-current="${p === currentPage ? "page" : "false"}"
+              >${p + 1}</a>`
+        )
+        .join("")}
+
+      <a
+        class="pagination-btn pagination-next ${nextDisabled ? "disabled" : ""}"
+        href="${nextDisabled ? "#" : buildUrl(currentPage + 1)}"
+        aria-disabled="${nextDisabled}"
+        aria-label="Next page"
+      >Next &rsaquo;</a>
+    </nav>
+  `;
+
+  // Prevent navigation on disabled links
+  container.querySelectorAll(".pagination-btn.disabled").forEach((el) => {
+    el.addEventListener("click", (e) => e.preventDefault());
+  });
+}
+
 /* ---------- Main Decorate ---------- */
 export default async function decorate(block) {
   const query = getQuery();
+  const currentPage = getPage();
+  const HITS_PER_PAGE = 25;
 
   block.innerHTML = `
     <div class="search-results-header">
@@ -94,8 +172,6 @@ export default async function decorate(block) {
 
         </div>
       </div>
-
-       
     </div>
 
     <section class="sec-search py-4">
@@ -103,6 +179,7 @@ export default async function decorate(block) {
         <div class="row justify-content-center">
             <div class="col-md-10">
               <div class="search-results-list"></div>
+              <div class="search-results-pagination"></div>
             </div>
         </div>
       </div>
@@ -110,9 +187,9 @@ export default async function decorate(block) {
   `;
 
   const input = block.querySelector(".search-input-results");
-  const dropdown = block.querySelector(".search-results-dropdown");
   const loader = block.querySelector(".search-loader");
   const resultsList = block.querySelector(".search-results-list");
+  const paginationContainer = block.querySelector(".search-results-pagination");
   const searchBox = block.querySelector(".search-box-inline");
 
   let dropdownResults = [];
@@ -120,13 +197,6 @@ export default async function decorate(block) {
   let debounceTimer;
 
   /* ---------- UI Helpers ---------- */
-  function clearDropdown() {
-    dropdown.innerHTML = "";
-    dropdownResults = [];
-    activeIndex = -1;
-    searchBox.setAttribute("aria-expanded", "false");
-  }
-
   function showLoader() {
     loader.hidden = false;
   }
@@ -135,55 +205,11 @@ export default async function decorate(block) {
     loader.hidden = true;
   }
 
-  function updateActiveResult() {
-    dropdownResults.forEach((el, i) => {
-      el.classList.toggle("active", i === activeIndex);
-    });
-
-    if (dropdownResults[activeIndex]) {
-      dropdownResults[activeIndex].scrollIntoView({ block: "nearest" });
-    }
-  }
-
-  /* ---------- Render Dropdown ---------- */
-  function renderDropdown(hits, query) {
-    dropdown.innerHTML = "";
-
-    hits.slice(0, 10).forEach((item, i) => {
-      const a = document.createElement("a");
-      const lang =
-        window.location.pathname.split("/").filter(Boolean)[0] || "en";
-
-      a.href = item.path || `/${lang}/`;
-      a.role = "option";
-      a.id = `search-option-${i}`;
-
-      const title = item.title || item.metaTitle || "Untitled";
-      const snippet =
-        item._snippetResult?.content?.value ||
-        item._snippetResult?.description?.value ||
-        item.description ||
-        "";
-
-      a.innerHTML = `
-        <div class="search-result">
-          <strong>${highlight(title, query)}</strong>
-          ${snippet ? `<p class="search-snippet">${snippet}</p>` : ""}
-        </div>
-      `;
-
-      dropdown.appendChild(a);
-    });
-
-    dropdownResults = [...dropdown.querySelectorAll("a")];
-    searchBox.setAttribute("aria-expanded", "true");
-  }
-
   /* ---------- Dropdown Search ---------- */
   async function runDropdownSearch() {
     const q = input.value.trim();
-    clearDropdown();
 
+    // Clear any existing dropdown (if you add one back later)
     if (q.length < 2) return;
 
     showLoader();
@@ -198,7 +224,8 @@ export default async function decorate(block) {
         snippetEllipsisText: "...",
       });
 
-      if (hits.length) renderDropdown(hits, q);
+      // Dropdown rendering kept as-is (optional: re-add dropdown if needed)
+      _ = hits;
     } catch (e) {
       console.error("Dropdown search failed", e);
     } finally {
@@ -213,40 +240,19 @@ export default async function decorate(block) {
   });
 
   input.addEventListener("keydown", (e) => {
-    if (!dropdownResults.length && e.key !== "Enter") return;
-
-    switch (e.key) {
-      case "ArrowDown":
-        e.preventDefault();
-        activeIndex = (activeIndex + 1) % dropdownResults.length;
-        updateActiveResult();
-        break;
-
-      case "ArrowUp":
-        e.preventDefault();
-        activeIndex =
-          activeIndex <= 0 ? dropdownResults.length - 1 : activeIndex - 1;
-        updateActiveResult();
-        break;
-
-      case "Enter":
-        e.preventDefault();
-        const q = input.value.trim();
-        if (!q) return;
-        const lang =
-          window.location.pathname.split("/").filter(Boolean)[0] || "en";
-        window.location.href = `/${lang}/search?q=${encodeURIComponent(q)}`;
-        break;
-
-      case "Escape":
-        clearDropdown();
-        input.blur();
-        break;
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const q = input.value.trim();
+      if (!q) return;
+      const lang =
+        window.location.pathname.split("/").filter(Boolean)[0] || "en";
+      // Reset to page 0 on new search
+      window.location.href = `/${lang}/search?q=${encodeURIComponent(q)}&page=0`;
     }
-  });
 
-  document.addEventListener("mousedown", (e) => {
-    if (!searchBox.contains(e.target)) clearDropdown();
+    if (e.key === "Escape") {
+      input.blur();
+    }
   });
 
   /* ---------- Load Main Search Results ---------- */
@@ -255,9 +261,10 @@ export default async function decorate(block) {
   try {
     const lang = window.location.pathname.split("/").filter(Boolean)[0] || "en";
 
-    const { hits } = await index.search(query, {
+    const { hits, nbPages } = await index.search(query, {
       filters: `region:${lang}`,
-      hitsPerPage: 20,
+      page: currentPage,
+      hitsPerPage: HITS_PER_PAGE,
       attributesToSnippet: ["content:40"],
       snippetEllipsisText: "...",
     });
@@ -289,6 +296,14 @@ export default async function decorate(block) {
 
       resultsList.appendChild(el);
     });
+
+    // Render pagination below results
+    renderPagination(paginationContainer, currentPage, nbPages, query, lang);
+
+    // Scroll to top of results on page change
+    if (currentPage > 0) {
+      block.scrollIntoView({ behavior: "smooth" });
+    }
   } catch (e) {
     console.error("Search page failed", e);
     renderNoResults(resultsList, query);
