@@ -70,6 +70,21 @@
     background: url(../../icons/arrow-right-black.svg) no-repeat calc(100% - 0.5rem) center;
 }
 
+/* Remove italic from Algolia snippet <em> tags */
+.sec-search .search-result-item p em {
+    font-style: normal;
+}
+
+/* Highlight matched terms in results */
+.sec-search .search-result-item p em,
+.sec-search .search-result-item mark {
+    background-color: #ddeeff;
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 2px;
+    font-style: normal;
+}
+
 /* ===== Layout ===== */
 .no-results-section {
     padding: 80px 20px;
@@ -168,7 +183,74 @@
     color: var(--black);
 }
 
-/* responsive */
+/* ===== Pagination ===== */
+.search-results-pagination {
+    margin: 2rem 0 1rem;
+}
+
+.search-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.pagination-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--charcoal);
+    text-decoration: none;
+    border: 1.5px solid transparent;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    cursor: pointer;
+}
+
+.pagination-btn:hover:not(.disabled):not(.active) {
+    background: #f0f4ff;
+    border-color: var(--blue);
+    color: var(--blue);
+}
+
+.pagination-btn.active {
+    background: var(--blue);
+    color: var(--white);
+    border-color: var(--blue);
+    pointer-events: none;
+}
+
+.pagination-btn.disabled {
+    color: #bbb;
+    border-color: transparent;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.pagination-prev,
+.pagination-next {
+    font-size: 14px;
+    letter-spacing: 0.3px;
+}
+
+.pagination-dots {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    font-size: 16px;
+    color: #999;
+    user-select: none;
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
     .no-results-title {
         font-size: 28px;
@@ -180,5 +262,16 @@
 
     .no-results-links {
         gap: 25px;
+    }
+
+    .pagination-btn {
+        min-width: 36px;
+        height: 36px;
+        font-size: 13px;
+        padding: 0 10px;
+    }
+
+    .search-pagination {
+        gap: 4px;
     }
 }
